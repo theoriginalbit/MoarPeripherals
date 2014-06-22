@@ -1,0 +1,17 @@
+[
+    {
+        "modid": "moarperipherals",
+        "name": "MoarPeripherals",
+        "version": "@VERSION@",
+        "url": "",
+        "credits": "",
+        "authors": [
+            "theoriginalbit"
+        ],
+        "description": "Adds more peripherals to ComputerCraft",
+        "logoFile": "",
+        "updateUrl": "https://github.com/theoriginalbit/MoarPeripherals/releases",
+        "parent": "",
+        "screenshots": []
+    }
+]
