@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public final class InventoryUtil {
-	public static final void explodeInventory(IInventory inv, World world, int x, int y, int z) {
+	public final static void explodeInventory(IInventory inv, World world, int x, int y, int z) {
 		Random rand = new Random();
 		for (int i = 0; i < inv.getSizeInventory(); ++i) {
 			ItemStack item = inv.getStackInSlot(i);

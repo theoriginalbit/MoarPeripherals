@@ -1,8 +1,7 @@
-package com.theoriginalbit.minecraft.moarperipherals.playerdetector;
+package com.theoriginalbit.minecraft.moarperipherals.block;
 
-import com.theoriginalbit.minecraft.moarperipherals.generic.BlockGeneric;
-import com.theoriginalbit.minecraft.moarperipherals.playerdetector.TilePlayerDetector;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TilePlayerDetector;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

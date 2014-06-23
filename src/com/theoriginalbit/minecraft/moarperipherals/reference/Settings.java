@@ -1,6 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.reference;
 
-public class Settings {
+public final class Settings {
 	private static int startBlockID = 3470;
 	
 	// Player Detector
@@ -15,4 +15,8 @@ public class Settings {
 	public static int chatRangeTell = 64;
 	public static int chatRangeRead = -1;
 	public static int chatSayRate = 1;
+	
+	// Iron Note Block
+	public static boolean enableIronNote;
+	public static int blockIronNoteID = startBlockID++;
 }

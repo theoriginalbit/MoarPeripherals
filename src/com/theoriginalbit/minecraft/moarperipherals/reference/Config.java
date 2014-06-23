@@ -4,38 +4,39 @@ import java.io.File;
 
 import net.minecraftforge.common.Configuration;
 
-public class Config {
+public final class Config {
 	private static final String ENABLED = "enabled";
 	private static final String BLOCKID = "blockId";
 	private static final String ENABLEFORMAT = "Enable the %s Block";
 	private static final String BLOCKIDFORMAT = "The Block ID of the %s Block";
 	
-	private static final String PLAYERDETECTOR = "Player Detector";
 	private static final String CHATBOX = "ChatBox";
+	private static final String IRONNOTE = "Iron Note";
+	private static final String PLAYERDETECTOR = "Player Detector";
 	
 	private static Configuration config;
 	
-	private static boolean getBoolean(String cat, String key, boolean defBool, String desc) {
+	private static final boolean getBoolean(String cat, String key, boolean defBool, String desc) {
 		return config.get(cat, key, defBool, desc).getBoolean(defBool);
 	}
 	
-	private static boolean getBoolean(String cat, String key, String desc) {
+	private static final boolean getBoolean(String cat, String key, String desc) {
 		return getBoolean(cat, key, true, desc);
 	}
 	
-	private static int getInt(String cat, String key, int defInt, String desc) {
+	private static final int getInt(String cat, String key, int defInt, String desc) {
 		return config.get(cat, key, defInt, desc).getInt();
 	}
 	
-	private static boolean getEnabled(String cat) {
+	private static final boolean getEnabled(String cat) {
 		return getBoolean(cat, ENABLED, String.format(ENABLEFORMAT, cat));
 	}
 	
-	private static int getBlockId(String cat, int id) {
+	private static final int getBlockId(String cat, int id) {
 		return getInt(cat, BLOCKID, id, String.format(BLOCKIDFORMAT, cat));
 	}
 	
-	public static void init(File c) {
+	public static final void init(File c) {
 		config = new Configuration(c);
 		
 		// Player Detector
@@ -51,9 +52,12 @@ public class Config {
 		Settings.chatRangeRead = getInt(CHATBOX, "readRange", Settings.chatRangeRead, "Range for the ChatBox peripheral's ability to 'hear' the chat, set to -1 for infinite");
 		Settings.chatSayRate = getInt(CHATBOX, "sayRate", Settings.chatSayRate, "Maximum number of messages per second a ChatBox peripheral can 'say'");
 		
+		// Iron Note Block
+		Settings.enableIronNote = getEnabled(IRONNOTE);
+		Settings.blockIronNoteID = getBlockId(IRONNOTE, Settings.blockIronNoteID);
+		
 		if (config.hasChanged()) {
 			config.save();
 		}
 	}
-
 }

@@ -1,6 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.reference;
 
-public class ModInfo {	
+public final class ModInfo {	
 	public static final String ID = "moarperipherals";
 	public static final String NAME = "MoarPeripherals";
 	public static final String VERSION = "@VERSION@";

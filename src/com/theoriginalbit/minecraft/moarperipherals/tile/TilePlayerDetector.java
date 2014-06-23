@@ -1,7 +1,6 @@
-package com.theoriginalbit.minecraft.moarperipherals.playerdetector;
+package com.theoriginalbit.minecraft.moarperipherals.tile;
 
 import com.theoriginalbit.minecraft.moarperipherals.api.aware.IActivateAwareTile;
-import com.theoriginalbit.minecraft.moarperipherals.generic.TilePeripheral;
 
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;

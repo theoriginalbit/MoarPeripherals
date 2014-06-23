@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.generic;
+package com.theoriginalbit.minecraft.moarperipherals.block;
 
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.api.IHasGui;
@@ -27,7 +27,7 @@ public abstract class BlockGeneric extends BlockContainer {
 	protected Icon icon;
 	private String name;
 
-	protected BlockGeneric(int id, Material material, String blockName) {
+	public BlockGeneric(int id, Material material, String blockName) {
 		super(id, material);
 		setHardness(0.5f);
 		setResistance(10.0f);

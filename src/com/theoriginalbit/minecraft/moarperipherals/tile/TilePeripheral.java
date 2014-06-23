@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.generic;
+package com.theoriginalbit.minecraft.moarperipherals.tile;
 
 import java.util.ArrayList;
 
