@@ -1,5 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals;
 
+import com.theoriginalbit.minecraft.moarperipherals.generic.TilePeripheral;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import dan200.computercraft.api.peripheral.IPeripheral;

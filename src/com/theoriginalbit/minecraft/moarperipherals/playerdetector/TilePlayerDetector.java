@@ -1,6 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.playerdetector;
 
-import com.theoriginalbit.minecraft.moarperipherals.TilePeripheral;
+import com.theoriginalbit.minecraft.moarperipherals.generic.TilePeripheral;
 
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;

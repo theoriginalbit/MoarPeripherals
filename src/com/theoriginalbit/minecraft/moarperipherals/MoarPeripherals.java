@@ -7,10 +7,13 @@ import net.minecraft.item.ItemStack;
 
 import com.theoriginalbit.minecraft.moarperipherals.playerdetector.BlockPlayerDetector;
 import com.theoriginalbit.minecraft.moarperipherals.playerdetector.TilePlayerDetector;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Config;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -21,6 +24,9 @@ import dan200.computercraft.api.ComputerCraftAPI;
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
 @NetworkMod(clientSideRequired = ModInfo.REQUIRED_CLIENT, serverSideRequired = ModInfo.REQUIRED_SERVER)
 public class MoarPeripherals {
+	
+	@Instance(ModInfo.ID)
+	MoarPeripherals instance;
 
 	public static final CreativeTabs creativeTab = new CreativeTabs("tabMoarPeripherals") {
 		@Override
@@ -29,16 +35,18 @@ public class MoarPeripherals {
 		}
 	};
 	
-	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event) {}
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		Config.init(event.getSuggestedConfigurationFile());
+	}
 	
-	@Mod.EventHandler
+	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		Blocks.init();
 		ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
 	}
 	
-	@Mod.EventHandler
+	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {}
 	
 	public static class Blocks {
