@@ -17,7 +17,7 @@
 
   <property name="mc.version"     value="1.6.4"/>
   <property name="forge.version"  value="9.11.1.965"/>
-  <property name="mod.version"    value="0.2-alpha.1"/>
+  <property name="mod.version"    value="0.2-beta.1"/>
   <property name="mod.name"       value="MoarPeripherals"/>
   <property name="mod.dir"        value="com/theoriginalbit/minecraft/moarperipherals"/>
   <property name="mod.assets"     value="assets/moarperipherals"/>

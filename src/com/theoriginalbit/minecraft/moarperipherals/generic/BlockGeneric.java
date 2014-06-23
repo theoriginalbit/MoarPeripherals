@@ -31,8 +31,9 @@ public abstract class BlockGeneric extends BlockContainer {
 		super(id, material);
 		setHardness(0.5f);
 		setResistance(10.0f);
-		setUnlocalizedName(ModInfo.ID + "." + name);
+		setUnlocalizedName(ModInfo.ID + "." + blockName);
 		setCreativeTab(MoarPeripherals.creativeTab);
+		name = blockName;
 	}
 	
 	@Override

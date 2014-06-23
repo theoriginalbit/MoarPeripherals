@@ -11,6 +11,7 @@ public class Config {
 	private static final String BLOCKIDFORMAT = "The Block ID of the %s Block";
 	
 	private static final String PLAYERDETECTOR = "Player Detector";
+	private static final String CHATBOX = "ChatBox";
 	
 	private static Configuration config;
 	
@@ -40,6 +41,15 @@ public class Config {
 		// Player Detector
 		Settings.enablePlayerDetector = getEnabled(PLAYERDETECTOR);
 		Settings.blockPlayerDetectorID = getBlockId(PLAYERDETECTOR, Settings.blockPlayerDetectorID);
+		
+		// ChatBox
+		Settings.enableChatBox = getEnabled(CHATBOX);
+		Settings.blockChatBoxID = getBlockId(CHATBOX, Settings.blockChatBoxID);
+		Settings.displayChatBoxCoords = getBoolean(CHATBOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
+		Settings.chatRangeSay = getInt(CHATBOX, "sayRange", Settings.chatRangeSay, "Range for the ChatBox peripheral's say function, set to -1 for infinite");
+		Settings.chatRangeTell = getInt(CHATBOX, "tellRange", Settings.chatRangeSay, "Range for the ChatBox peripheral's tell (private message) function, set to -1 for infinite");
+		Settings.chatRangeRead = getInt(CHATBOX, "readRange", Settings.chatRangeRead, "Range for the ChatBox peripheral's ability to 'hear' the chat, set to -1 for infinite");
+		Settings.chatSayRate = getInt(CHATBOX, "sayRate", Settings.chatSayRate, "Maximum number of messages per second a ChatBox peripheral can 'say'");
 		
 		if (config.hasChanged()) {
 			config.save();

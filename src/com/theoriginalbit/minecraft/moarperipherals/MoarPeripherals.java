@@ -4,7 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
+import com.theoriginalbit.minecraft.moarperipherals.chatbox.BlockChatBox;
+import com.theoriginalbit.minecraft.moarperipherals.chatbox.ChatListener;
+import com.theoriginalbit.minecraft.moarperipherals.chatbox.TileChatBox;
 import com.theoriginalbit.minecraft.moarperipherals.playerdetector.BlockPlayerDetector;
 import com.theoriginalbit.minecraft.moarperipherals.playerdetector.TilePlayerDetector;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Config;
@@ -28,16 +32,22 @@ public class MoarPeripherals {
 	@Instance(ModInfo.ID)
 	public static MoarPeripherals instance;
 
-	public static final CreativeTabs creativeTab = new CreativeTabs("tabMoarPeripherals") {
+	public static CreativeTabs creativeTab = new CreativeTabs("tabMoarPeripherals") {
 		@Override
 		public int getTabIconItemIndex() {
-			return Settings.blockPlayerDetectorID;
+			if (Settings.enableChatBox) {
+				return Settings.blockChatBoxID;
+			} else if (Settings.enablePlayerDetector) {
+				return Settings.blockPlayerDetectorID;
+			}
+			return Item.skull.itemID;
 		}
 	};
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		Config.init(event.getSuggestedConfigurationFile());
+		MinecraftForge.EVENT_BUS.register(ChatListener.instance);
 	}
 	
 	@EventHandler
@@ -50,6 +60,8 @@ public class MoarPeripherals {
 	public void postInit(FMLPostInitializationEvent event) {}
 	
 	public static class Blocks {
+		// we always create this one, its the creative tab icon
+		public static BlockChatBox blockChatBox = new BlockChatBox();
 		public static BlockPlayerDetector blockPlayerDetector;
 		
 		public static void init() {
@@ -58,6 +70,12 @@ public class MoarPeripherals {
 				GameRegistry.registerBlock(blockPlayerDetector, blockPlayerDetector.getUnlocalizedName());
 				GameRegistry.registerTileEntity(TilePlayerDetector.class, "MoarPeripherals Player Detector");
 				GameRegistry.addRecipe(new ItemStack(blockPlayerDetector), "SBS", "BRB", "SBS", 'S', Block.stone, 'B', Block.stoneButton, 'R', Item.redstone);
+			}
+			
+			if (Settings.enableChatBox) {
+				GameRegistry.registerBlock(blockChatBox, blockChatBox.getUnlocalizedName());
+				GameRegistry.registerTileEntity(TileChatBox.class, "MoarPeripherals ChatBox");
+				GameRegistry.addRecipe(new ItemStack(blockChatBox), "GGG", "GNG", "GRG", 'G', Item.ingotGold, 'N', Block.music, 'R', Item.redstone);
 			}
 		}
 	}

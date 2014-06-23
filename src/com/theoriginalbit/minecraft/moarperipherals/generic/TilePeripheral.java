@@ -13,14 +13,25 @@ import net.minecraft.tileentity.TileEntity;
 public abstract class TilePeripheral extends TileEntity implements IPeripheral {
 	protected ArrayList<IComputerAccess> computers = Lists.newArrayList();
 	protected String type;
-
+	protected String[] methods;
+	
 	public TilePeripheral(String peripheralType) {
+		this(peripheralType, new String[0]);
+	}
+	
+	public TilePeripheral(String peripheralType, String[] methodNames) {
 		type = peripheralType;
+		methods = methodNames;
 	}
 
 	@Override
 	public String getType() {
 		return type;
+	}
+	
+	@Override
+	public String[] getMethodNames() {
+		return methods;
 	}
 
 	@Override
