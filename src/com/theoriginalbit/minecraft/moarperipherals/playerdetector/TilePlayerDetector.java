@@ -16,6 +16,9 @@ public class TilePlayerDetector extends TilePeripheral {
 	}
 
 	public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (player.isSneaking()) {
+			return false;
+		}
 		computerQueueEvent(EVENT_PLAYER, player.username);
 		return true;
 	}

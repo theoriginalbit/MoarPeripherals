@@ -26,7 +26,7 @@ import dan200.computercraft.api.ComputerCraftAPI;
 public class MoarPeripherals {
 	
 	@Instance(ModInfo.ID)
-	MoarPeripherals instance;
+	public static MoarPeripherals instance;
 
 	public static final CreativeTabs creativeTab = new CreativeTabs("tabMoarPeripherals") {
 		@Override
