@@ -1,11 +1,13 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import com.theoriginalbit.minecraft.moarperipherals.api.aware.IActivateAwareTile;
+import openperipheral.api.Ignore;
 
-import dan200.computercraft.api.lua.ILuaContext;
-import dan200.computercraft.api.peripheral.IComputerAccess;
+import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
+
 import net.minecraft.entity.player.EntityPlayer;
 
+@Ignore
 public class TilePlayerDetector extends TilePeripheral implements IActivateAwareTile {
 	private static final String TYPE = "player_detector";
 	private static final String EVENT_PLAYER = "player";
@@ -22,10 +24,4 @@ public class TilePlayerDetector extends TilePeripheral implements IActivateAware
 		computerQueueEvent(EVENT_PLAYER, player.username);
 		return true;
 	}
-
-	@Override
-	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-		return null;
-	}
-
 }
