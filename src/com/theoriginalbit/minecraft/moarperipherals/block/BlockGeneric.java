@@ -1,13 +1,13 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.minecraft.moarperipherals.api.IHasGui;
-import com.theoriginalbit.minecraft.moarperipherals.api.aware.IActivateAwareTile;
-import com.theoriginalbit.minecraft.moarperipherals.api.aware.IBreakAwareTile;
-import com.theoriginalbit.minecraft.moarperipherals.api.aware.INeighborAwareTile;
-import com.theoriginalbit.minecraft.moarperipherals.api.aware.IPlaceAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.IHasGui;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.INeighborAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.minecraft.moarperipherals.utils.InventoryUtil;
+import com.theoriginalbit.minecraft.moarperipherals.utils.InventoryUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -34,7 +34,10 @@ public abstract class BlockGeneric extends BlockContainer {
 		setUnlocalizedName(ModInfo.ID + "." + blockName);
 		setCreativeTab(MoarPeripherals.creativeTab);
 		name = blockName;
+		init();
 	}
+	
+	protected abstract void init();
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -86,7 +89,7 @@ public abstract class BlockGeneric extends BlockContainer {
 			((IBreakAwareTile) tile).onBreak(x, y, z);
 		
 		if (tile instanceof IInventory)
-			InventoryUtil.explodeInventory((IInventory)tile, world, x, y, z);
+			InventoryUtils.explodeInventory((IInventory)tile, world, x, y, z);
 		
 		super.breakBlock(world, x, y, z, id, meta);
 	}
@@ -100,5 +103,4 @@ public abstract class BlockGeneric extends BlockContainer {
 		
 		super.onNeighborBlockChange(world, x, y, z, blockId);
 	}
-
 }

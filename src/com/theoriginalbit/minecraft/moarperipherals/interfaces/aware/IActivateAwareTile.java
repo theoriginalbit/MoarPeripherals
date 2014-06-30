@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.api.aware;
+package com.theoriginalbit.minecraft.moarperipherals.interfaces.aware;
 
 import net.minecraft.entity.player.EntityPlayer;
 

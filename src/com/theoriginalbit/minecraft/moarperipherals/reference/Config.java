@@ -36,7 +36,7 @@ public final class Config {
 		return getInt(cat, BLOCKID, id, String.format(BLOCKIDFORMAT, cat));
 	}
 	
-	public static final void init(File c) {
+	public static final void load(File c) {
 		config = new Configuration(c);
 		
 		// Player Detector
