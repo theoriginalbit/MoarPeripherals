@@ -19,7 +19,7 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
 import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Arg;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
-import com.theoriginalbit.minecraft.moarperipherals.ChatListener;
+import com.theoriginalbit.minecraft.moarperipherals.ChatInteceptor;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IChatListener;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IDeathListener;
@@ -40,8 +40,8 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 		super(TYPE);
 		// add the ChatBox to the ChatListener
 		if (!world.isRemote) {
-			ChatListener.instance.addChatListener(this);
-			ChatListener.instance.addDeathListener(this);
+			ChatInteceptor.instance.addChatListener(this);
+			ChatInteceptor.instance.addDeathListener(this);
 		}
 	}
 	
@@ -49,8 +49,8 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 	public void onBreak(int x, int y, int z) {
 		// remove the ChatBox to the ChatListener
 		if (!worldObj.isRemote) {
-			ChatListener.instance.removeChatListener(this);
-			ChatListener.instance.removeDeathListener(this);
+			ChatInteceptor.instance.removeChatListener(this);
+			ChatInteceptor.instance.removeDeathListener(this);
 		}
 	}
 	

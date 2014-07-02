@@ -3,6 +3,8 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
 import openperipheral.api.Ignore;
 
 import com.google.common.base.Preconditions;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
@@ -22,13 +24,19 @@ public class TileIronNote extends TilePeripheral {
 	}
 	
 	@LuaFunction
-	public boolean playNote(int instrument, int pitch) throws Exception {
+	public void playNote(int instrument, int pitch) throws Exception {
 		Preconditions.checkArgument(instrument >= MIN_INST && instrument <= MAX_INST, "Expected instrument 0-4");
 		Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch 0-24");
 		Preconditions.checkArgument(ticker++ <= MAX_TICK, "Too many notes (over " + MAX_TICK + " per tick)");
 		
 		worldObj.addBlockEvent(xCoord, yCoord, zCoord, Settings.blockIronNoteID, instrument, pitch);
-		return true;
+		
+		ByteArrayDataOutput stream = ByteStreams.newDataOutput();
+		stream.writeDouble(xCoord);
+		stream.writeDouble(yCoord);
+		stream.writeDouble(zCoord);
+		stream.writeByte(instrument);
+		stream.writeByte(pitch);
 	}
 	
 	@Override

@@ -43,7 +43,7 @@ public class MoarPeripherals {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		Config.load(event.getSuggestedConfigurationFile());
-		MinecraftForge.EVENT_BUS.register(ChatListener.instance);
+		MinecraftForge.EVENT_BUS.register(ChatInteceptor.instance);
 	}
 	
 	@EventHandler
