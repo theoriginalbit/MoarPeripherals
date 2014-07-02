@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
+import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Alias;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ILuaPeripheral;
 
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -16,9 +16,9 @@ public class MethodWrapper {
 	private final String name;
 	private final Method method;
 	private final Class<?>[] javaParams;
-	private final ILuaPeripheral instance;
+	private final TilePeripheral instance;
 	
-	public MethodWrapper(ILuaPeripheral peripheral, Method method, LuaFunction function) {
+	public MethodWrapper(TilePeripheral peripheral, Method method, LuaFunction function) {
 		Preconditions.checkArgument(method.isAnnotationPresent(LuaFunction.class));
 		
 		instance = peripheral;

@@ -4,19 +4,19 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ILuaPeripheral;
 
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 
 public class PeripheralWrapper implements IPeripheral {
-	private final ILuaPeripheral instance;
+	private final TilePeripheral instance;
 	private final List<MethodWrapper> methods = Lists.newArrayList();
 	private final String[] methodNames;
 	
-	public PeripheralWrapper(ILuaPeripheral peripheral) {
+	public PeripheralWrapper(TilePeripheral peripheral) {
 		instance = peripheral;
 		
 		List<String> names = Lists.newArrayList();

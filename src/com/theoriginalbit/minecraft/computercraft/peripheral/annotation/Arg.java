@@ -7,6 +7,12 @@ import java.lang.annotation.Target;
 
 import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
 
+/**
+ * Allows you to specify the Lua type of a method, for argument type enforcement
+ * and conversion
+ * 
+ * @author theoriginalbit
+ */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Arg {
