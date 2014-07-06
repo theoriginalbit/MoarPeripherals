@@ -1,5 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.proxy;
 
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 

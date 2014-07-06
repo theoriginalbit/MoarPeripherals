@@ -1,5 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.proxy;
 
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;

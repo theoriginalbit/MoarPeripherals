@@ -10,8 +10,8 @@ import com.theoriginalbit.minecraft.moarperipherals.block.BlockIronNote;
 import com.theoriginalbit.minecraft.moarperipherals.block.BlockPlayerDetector;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ChatHandler;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ConfigurationHandler;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.network.TinyPacketHandler;
-import com.theoriginalbit.minecraft.moarperipherals.proxy.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 

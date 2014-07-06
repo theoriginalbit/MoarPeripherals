@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.proxy;
+package com.theoriginalbit.minecraft.moarperipherals.interfaces;
 
 import net.minecraft.world.World;
 
