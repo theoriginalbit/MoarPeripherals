@@ -10,12 +10,15 @@ import com.theoriginalbit.minecraft.moarperipherals.block.BlockIronNote;
 import com.theoriginalbit.minecraft.moarperipherals.block.BlockPlayerDetector;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ChatHandler;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ConfigurationHandler;
+import com.theoriginalbit.minecraft.moarperipherals.network.TinyPacketHandler;
+import com.theoriginalbit.minecraft.moarperipherals.proxy.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -23,11 +26,14 @@ import cpw.mods.fml.common.network.NetworkMod;
 import dan200.computercraft.api.ComputerCraftAPI;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
-@NetworkMod(clientSideRequired = ModInfo.REQUIRED_CLIENT, serverSideRequired = ModInfo.REQUIRED_SERVER)
+@NetworkMod(clientSideRequired = ModInfo.REQUIRED_CLIENT, serverSideRequired = ModInfo.REQUIRED_SERVER, tinyPacketHandler = TinyPacketHandler.class)
 public class MoarPeripherals {
 	
 	@Instance(ModInfo.ID)
 	public static MoarPeripherals instance;
+	
+	@SidedProxy(clientSide = ModInfo.PROXY_CLIENT, serverSide = ModInfo.PROXY_SERVER)
+	public static IProxy proxy;
 
 	public static CreativeTabs creativeTab = new CreativeTabs("tabMoarPeripherals") {
 		@Override
@@ -50,7 +56,6 @@ public class MoarPeripherals {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		Blocks.init();
-		
 		ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
 	}
 	

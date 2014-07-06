@@ -46,29 +46,26 @@ public final class ConfigurationHandler {
 	}
 	
 	private static void load() {
-		try {
-			// Player Detector
-			Settings.enablePlayerDetector = getEnabled(PLAYERDETECTOR);
-			Settings.blockPlayerDetectorID = getBlockId(PLAYERDETECTOR, Settings.blockPlayerDetectorID);
-			
-			// ChatBox
-			Settings.enableChatBox = getEnabled(CHATBOX);
-			Settings.blockChatBoxID = getBlockId(CHATBOX, Settings.blockChatBoxID);
-			Settings.displayChatBoxCoords = getBoolean(CHATBOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
-			Settings.chatRangeSay = getInt(CHATBOX, "sayRange", Settings.chatRangeSay, "Range for the ChatBox peripheral's say function, set to -1 for infinite");
-			Settings.chatRangeTell = getInt(CHATBOX, "tellRange", Settings.chatRangeSay, "Range for the ChatBox peripheral's tell (private message) function, set to -1 for infinite");
-			Settings.chatRangeRead = getInt(CHATBOX, "readRange", Settings.chatRangeRead, "Range for the ChatBox peripheral's ability to 'hear' the chat, set to -1 for infinite");
-			Settings.chatSayRate = getInt(CHATBOX, "sayRate", Settings.chatSayRate, "Maximum number of messages per second a ChatBox peripheral can 'say'");
-			
-			// Iron Note Block
-			Settings.enableIronNote = getEnabled(IRONNOTE);
-			Settings.blockIronNoteID = getBlockId(IRONNOTE, Settings.blockIronNoteID);
-		} catch (Exception e) {
-			// Log exception
-		} finally {
-			if (config.hasChanged()) {
-				config.save();
-			}
+		// Player Detector
+		Settings.enablePlayerDetector = getEnabled(PLAYERDETECTOR);
+		Settings.blockPlayerDetectorID = getBlockId(PLAYERDETECTOR, Settings.blockPlayerDetectorID);
+		
+		// ChatBox
+		Settings.enableChatBox = getEnabled(CHATBOX);
+		Settings.blockChatBoxID = getBlockId(CHATBOX, Settings.blockChatBoxID);
+		Settings.displayChatBoxCoords = getBoolean(CHATBOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
+		Settings.chatRangeSay = getInt(CHATBOX, "sayRange", Settings.chatRangeSay, "Range for the ChatBox peripheral's say function, set to -1 for infinite");
+		Settings.chatRangeTell = getInt(CHATBOX, "tellRange", Settings.chatRangeSay, "Range for the ChatBox peripheral's tell (private message) function, set to -1 for infinite");
+		Settings.chatRangeRead = getInt(CHATBOX, "readRange", Settings.chatRangeRead, "Range for the ChatBox peripheral's ability to 'hear' the chat, set to -1 for infinite");
+		Settings.chatSayRate = getInt(CHATBOX, "sayRate", Settings.chatSayRate, "Maximum number of messages per second a ChatBox peripheral can 'say'");
+		
+		// Iron Note Block
+		Settings.enableIronNote = getEnabled(IRONNOTE);
+		Settings.blockIronNoteID = getBlockId(IRONNOTE, Settings.blockIronNoteID);
+		Settings.noteRange = getInt(IRONNOTE, "noteRange", Settings.noteRange, "The range at which the note can be heard. Note: Does not seem to work for audio, yet (?).");
+	
+		if (config.hasChanged()) {
+			config.save();
 		}
 	}
 }

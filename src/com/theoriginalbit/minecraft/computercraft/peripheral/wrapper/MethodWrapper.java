@@ -61,7 +61,7 @@ public class MethodWrapper {
 			Throwable cause = e;
 			while ((message = cause.getMessage()) == null
 					&& (cause = cause.getCause()) != null) {}
-			throw new Exception("Developer problem, InvocationTargetException " + message);
+			throw new Exception(message);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}

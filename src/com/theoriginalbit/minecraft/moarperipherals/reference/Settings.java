@@ -19,4 +19,5 @@ public final class Settings {
 	// Iron Note Block
 	public static boolean enableIronNote;
 	public static int blockIronNoteID = startBlockID++;
+	public static int noteRange = 64;
 }
