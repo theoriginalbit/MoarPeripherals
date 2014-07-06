@@ -15,7 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class BlockIronNote extends BlockGeneric {
 
 	public BlockIronNote() {
-		super(Settings.blockIronNoteID, Material.iron, "ironnote", Block.soundMetalFootstep);
+		super(Settings.blockIdIronNote, Material.iron, "ironnote", Block.soundMetalFootstep);
 		
 		GameRegistry.registerTileEntity(TileIronNote.class, "MoarPeripherals Iron Note Block");
 		GameRegistry.addRecipe(new ItemStack(this), "III", "INI", "IRI", 'I', Item.ingotIron, 'N', Block.music, 'R', Item.redstone);

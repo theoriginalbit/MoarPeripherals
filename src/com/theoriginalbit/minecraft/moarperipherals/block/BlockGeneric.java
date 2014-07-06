@@ -21,13 +21,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class BlockGeneric extends BlockContainer {
-	protected Icon icon;
-	private String name;
+	
+	private final String name;
 	
 	public BlockGeneric(int id, Material material, String blockName) {
 		this(id, material, blockName, null);
@@ -35,34 +33,22 @@ public abstract class BlockGeneric extends BlockContainer {
 
 	public BlockGeneric(int id, Material material, String blockName, StepSound stepSound) {
 		super(id, material);
+		name = blockName;
+		
 		setHardness(0.5f);
 		setResistance(10.0f);
-		setUnlocalizedName(ModInfo.ID + "." + blockName);
+		setUnlocalizedName(ModInfo.RESOURCE_DOMAIN + "." + name);
 		setCreativeTab(MoarPeripherals.creativeTab);
 		if (stepSound != null) {
 			setStepSound(stepSound);
 		}
-		name = blockName;
 		GameRegistry.registerBlock(this, getUnlocalizedName());
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
-		icon = registry.registerIcon(ModInfo.ID + ":" + name);
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta) {
-		return icon;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getBlockTexture(IBlockAccess access, int x, int y, int z, int side) {
-		int meta = access.getBlockMetadata(x, y, z);
-		return getIcon(meta, side);
+		blockIcon = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":" + name);
 	}
 	
 	@Override

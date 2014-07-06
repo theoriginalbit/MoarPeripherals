@@ -15,7 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class BlockChatBox extends BlockGeneric {
 	
 	public BlockChatBox() {
-		super(Settings.blockChatBoxID, Material.iron, "chatbox", Block.soundMetalFootstep);
+		super(Settings.blockIdChatBox, Material.iron, "chatbox", Block.soundMetalFootstep);
 		
 		GameRegistry.registerTileEntity(TileChatBox.class, "MoarPeripherals ChatBox");
 		GameRegistry.addRecipe(new ItemStack(this), "GGG", "GNG", "GRG", 'G', Item.ingotGold, 'N', Block.music, 'R', Item.redstone);

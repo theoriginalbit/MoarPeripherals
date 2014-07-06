@@ -13,9 +13,9 @@ public class CreativeTabMoarPeripheral extends CreativeTabs {
 	@Override
 	public int getTabIconItemIndex() {
 		if (Settings.enableChatBox) {
-			return Settings.blockChatBoxID;
+			return Settings.blockIdChatBox;
 		} else if (Settings.enablePlayerDetector) {
-			return Settings.blockPlayerDetectorID;
+			return Settings.blockIdPlayerDetector;
 		}
 		return Item.skull.itemID;
 	}

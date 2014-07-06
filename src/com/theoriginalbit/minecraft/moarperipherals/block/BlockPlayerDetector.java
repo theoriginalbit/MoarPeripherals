@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class BlockPlayerDetector extends BlockGeneric {
 	
 	public BlockPlayerDetector() {
-		super(Settings.blockPlayerDetectorID, Material.rock, "playerdetector", Block.soundStoneFootstep);
+		super(Settings.blockIdPlayerDetector, Material.rock, "playerdetector", Block.soundStoneFootstep);
 		
 		GameRegistry.registerTileEntity(TilePlayerDetector.class, "MoarPeripherals Player Detector");
 		GameRegistry.addRecipe(new ItemStack(this), "SBS", "BRB", "SBS", 'S', Block.stone, 'B', Block.stoneButton, 'R', Item.redstone);
