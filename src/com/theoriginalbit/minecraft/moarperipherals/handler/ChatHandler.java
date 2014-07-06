@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals;
+package com.theoriginalbit.minecraft.moarperipherals.handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.*;
 
-public final class ChatInteceptor {
-	public static final ChatInteceptor instance = new ChatInteceptor();
+public final class ChatHandler {
+	public static final ChatHandler instance = new ChatHandler();
 	
 	private final ArrayList<IChatListener> chatListeners = Lists.newArrayList();
 	private final ArrayList<IDeathListener> deathListeners = Lists.newArrayList();

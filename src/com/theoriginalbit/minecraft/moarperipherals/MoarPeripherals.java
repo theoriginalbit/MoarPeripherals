@@ -8,7 +8,8 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.PeripheralProvider;
 import com.theoriginalbit.minecraft.moarperipherals.block.BlockChatBox;
 import com.theoriginalbit.minecraft.moarperipherals.block.BlockIronNote;
 import com.theoriginalbit.minecraft.moarperipherals.block.BlockPlayerDetector;
-import com.theoriginalbit.minecraft.moarperipherals.reference.Config;
+import com.theoriginalbit.minecraft.moarperipherals.handler.ChatHandler;
+import com.theoriginalbit.minecraft.moarperipherals.handler.ConfigurationHandler;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 
@@ -42,13 +43,14 @@ public class MoarPeripherals {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		Config.load(event.getSuggestedConfigurationFile());
-		MinecraftForge.EVENT_BUS.register(ChatInteceptor.instance);
+		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+		MinecraftForge.EVENT_BUS.register(ChatHandler.instance);
 	}
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		Blocks.init();
+		
 		ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
 	}
 	
