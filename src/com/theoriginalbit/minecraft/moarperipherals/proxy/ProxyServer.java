@@ -17,4 +17,6 @@ public class ProxyServer implements IProxy {
 		return true;
 	}
 
+	@Override
+	public void registerRenderInfo() {}
 }

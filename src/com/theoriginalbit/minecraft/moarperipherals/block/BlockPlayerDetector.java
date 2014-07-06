@@ -14,17 +14,12 @@ import net.minecraft.world.World;
 public class BlockPlayerDetector extends BlockGeneric {
 	
 	public BlockPlayerDetector() {
-		super(Settings.blockPlayerDetectorID, Material.rock, "playerdetector");
-	}
-	
-	@Override
-	protected void init() {
-		setStepSound(Block.soundStoneFootstep);
-		GameRegistry.registerBlock(this, getUnlocalizedName());
+		super(Settings.blockPlayerDetectorID, Material.rock, "playerdetector", Block.soundStoneFootstep);
+		
 		GameRegistry.registerTileEntity(TilePlayerDetector.class, "MoarPeripherals Player Detector");
 		GameRegistry.addRecipe(new ItemStack(this), "SBS", "BRB", "SBS", 'S', Block.stone, 'B', Block.stoneButton, 'R', Item.redstone);
 	}
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return new TilePlayerDetector();

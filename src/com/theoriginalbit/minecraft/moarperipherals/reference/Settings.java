@@ -2,6 +2,8 @@ package com.theoriginalbit.minecraft.moarperipherals.reference;
 
 public final class Settings {
 	private static int startBlockID = 3470;
+	private static int startItemID = 2470;
+	private static int startFluidID = 1470;
 	
 	// Player Detector
 	public static boolean enablePlayerDetector;

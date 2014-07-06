@@ -6,7 +6,7 @@
   <target name="set-env">
     <property name="env.BUILD_NUMBER" value="0" />
     <property name="env.JOB_NAME" value="MoarPeripherals" />
-    <property name="mod.version" value="0.2" />
+    <property name="mod.version" value="1.6.4-1.63-1.0" />
     <property name="mod.name" value="MoarPeripherals" />
     <property name="mod.dir" value="com/theoriginalbit/" />
     <echo message="Starting build for ${mod.name} v${mod.version}" />

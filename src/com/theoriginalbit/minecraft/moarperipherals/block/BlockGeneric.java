@@ -9,9 +9,11 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAware
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.utils.InventoryUtils;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.StepSound;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,18 +28,23 @@ import net.minecraft.world.World;
 public abstract class BlockGeneric extends BlockContainer {
 	protected Icon icon;
 	private String name;
-
+	
 	public BlockGeneric(int id, Material material, String blockName) {
+		this(id, material, blockName, null);
+	}
+
+	public BlockGeneric(int id, Material material, String blockName, StepSound stepSound) {
 		super(id, material);
 		setHardness(0.5f);
 		setResistance(10.0f);
 		setUnlocalizedName(ModInfo.ID + "." + blockName);
 		setCreativeTab(MoarPeripherals.creativeTab);
+		if (stepSound != null) {
+			setStepSound(stepSound);
+		}
 		name = blockName;
-		init();
+		GameRegistry.registerBlock(this, getUnlocalizedName());
 	}
-	
-	protected abstract void init();
 	
 	@Override
 	@SideOnly(Side.CLIENT)
