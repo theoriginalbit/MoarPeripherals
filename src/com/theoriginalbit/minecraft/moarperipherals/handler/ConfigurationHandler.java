@@ -88,6 +88,7 @@ public final class ConfigurationHandler {
 		Settings.enableFluidInk = getBoolean(PRINTER, "fluidInk", false, "Enable inks, ink cartridges will need to be filled with ink, not dyes. Note: Not yet implemented");
 		Settings.itemIdInkCartridgeEmpty = getItemId(PRINTER, "inkCartridgeEmpty", Settings.itemIdInkCartridgeEmpty, "Empty Ink Cartridge");
 		Settings.itemIdInkCartridgeFilled = getItemId(PRINTER, "inkCartridgeFilled", Settings.itemIdInkCartridgeFilled, "Filled Ink Cartridge");
+		Settings.enableInkCartridgeModel = getBoolean(PRINTER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered in the players hand as a model or texture");
 		
 		// Fluids
 		Settings.fluidInkWhiteID = getFluidId("fluidInkWhiteID", Settings.fluidInkWhiteID);

@@ -4,7 +4,7 @@ public final class Settings {
 	private static int startBlockID = 3470;
 	private static int startItemID = 4470;
 	private static int startFluidID = 5470;
-	
+
 	// Player Detector
 	public static boolean enablePlayerDetector;
 	public static int blockIdPlayerDetector = startBlockID++;
@@ -17,19 +17,20 @@ public final class Settings {
 	public static int chatRangeTell = 64;
 	public static int chatRangeRead = -1;
 	public static int chatSayRate = 1;
-	
+
 	// Iron Note Block
 	public static boolean enableIronNote;
 	public static int blockIdIronNote = startBlockID++;
 	public static int noteRange = 64;
-	
+
 	// Printer
 	public static boolean enablePrinter;
 	public static int blockIdPrinter = startBlockID++;
 	public static boolean enableFluidInk;
 	public static int itemIdInkCartridgeEmpty = startItemID++;
 	public static int itemIdInkCartridgeFilled = startItemID++;
-	
+	public static boolean enableInkCartridgeModel;
+
 	// Fluids
 	public static int fluidInkWhiteID = startFluidID++;
 	public static int fluidInkOrangeID = startFluidID++;
