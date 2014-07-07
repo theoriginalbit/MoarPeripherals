@@ -13,7 +13,7 @@ public class ItemGeneric extends Item {
 	private final String name;
 
 	public ItemGeneric(int itemId, String itemName) {
-		super(itemId);
+		super(itemId - 256);
 		name = itemName;
 		
 		setUnlocalizedName(ModInfo.RESOURCE_DOMAIN + "." + name);
