@@ -53,7 +53,7 @@ public class ItemInkCartridge extends ItemGeneric {
 			}
 			
 			// Add the cartridge cleaning recipe
-			GameRegistry.addShapelessRecipe(emptyCartridge, stack, Item.bucketWater);
+			GameRegistry.addShapelessRecipe(emptyCartridge, stack, new ItemStack(Item.bucketWater.setContainerItem(Item.bucketEmpty)));
 			
 			inkCartridges[i] = stack;
 		}
