@@ -2,6 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 
 import org.lwjgl.opengl.GL11;
 
+import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.model.item.ModelItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
@@ -18,22 +19,19 @@ public class ItemRenderInkCartridge implements IItemRenderer {
 	private static final ResourceLocation[] textures;
 	private static final String TEXTURE_PATH = "/textures/models/InkCartridge%s.png";
 	
-	protected ModelBase cartridgeModel;
+	protected ModelBase modelCartridgeEmpty, modelCartridgeFilled;
 	protected boolean cartridgeEmpty;
 	
-	public ItemRenderInkCartridge(boolean empty) {
-		cartridgeModel = new ModelItemInkCartridge(empty);
-		cartridgeEmpty = empty;
+	public ItemRenderInkCartridge() {
+		modelCartridgeEmpty = new ModelItemInkCartridge(true);
+		modelCartridgeFilled = new ModelItemInkCartridge(false);
 	}
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		switch (type) {
-			case EQUIPPED: return Settings.enableInkCartridgeModel;
-			case EQUIPPED_FIRST_PERSON: return Settings.enableInkCartridgeModel;
-			case INVENTORY: return Settings.enableInkCartridgeModel;
-			default: return false;
-		}
+		return Settings.enableInkCartridgeModel
+				&& (type == ItemRenderType.EQUIPPED
+						|| type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.INVENTORY);
 	}
 
 	@Override
@@ -42,9 +40,10 @@ public class ItemRenderInkCartridge implements IItemRenderer {
 	}
 
 	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		// find the right texture
-		ResourceLocation location = cartridgeEmpty ? textures[textures.length-1] : textures[item.getItemDamage()];
+	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+		boolean isEmpty = ItemInkCartridge.isCartridgeEmpty(stack);
+		int inkColor = ItemInkCartridge.getInkColor(stack);
+		ResourceLocation location = textures[inkColor];
 		float scale;
 		
 		switch (type) {
@@ -60,7 +59,11 @@ public class ItemRenderInkCartridge implements IItemRenderer {
 				// move it around on the hand
 				GL11.glTranslatef(1.4F, 0.1F, -0.3F);
 				// render
-				cartridgeModel.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				if (isEmpty) {
+					modelCartridgeEmpty.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				} else {
+					modelCartridgeFilled.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				}
 				GL11.glPopMatrix();
 				break;
 			case EQUIPPED_FIRST_PERSON:
@@ -77,7 +80,11 @@ public class ItemRenderInkCartridge implements IItemRenderer {
 				// move it around in the camera (left/right, close/far, up/down)
 				GL11.glTranslatef(1F, 0.25F, -2.1F);
 				// render
-				cartridgeModel.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				if (isEmpty) {
+					modelCartridgeEmpty.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				} else {
+					modelCartridgeFilled.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				}
 				GL11.glPopMatrix();
 				break;
 			case INVENTORY:
@@ -89,7 +96,11 @@ public class ItemRenderInkCartridge implements IItemRenderer {
 				// centre it in the inventory slot
 				GL11.glTranslatef(0f, -0.5f, 0f);
 				// render
-				cartridgeModel.render((Entity) null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				if (isEmpty) {
+					modelCartridgeEmpty.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				} else {
+					modelCartridgeFilled.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
+				}
 				GL11.glPopMatrix();
 				break;
 			default: break;

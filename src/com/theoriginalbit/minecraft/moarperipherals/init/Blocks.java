@@ -1,9 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.init;
 
-import com.theoriginalbit.minecraft.moarperipherals.block.BlockChatBox;
-import com.theoriginalbit.minecraft.moarperipherals.block.BlockGeneric;
-import com.theoriginalbit.minecraft.moarperipherals.block.BlockIronNote;
-import com.theoriginalbit.minecraft.moarperipherals.block.BlockPlayerDetector;
+import com.theoriginalbit.minecraft.moarperipherals.block.*;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 
 public final class Blocks {

@@ -27,8 +27,7 @@ public final class Settings {
 	public static boolean enablePrinter;
 	public static int blockIdPrinter = startBlockID++;
 	public static boolean enableFluidInk;
-	public static int itemIdInkCartridgeEmpty = startItemID++;
-	public static int itemIdInkCartridgeFilled = startItemID++;
+	public static int itemIdInkCartridge = startItemID++;
 	public static boolean enableInkCartridgeModel;
 
 	// Fluids

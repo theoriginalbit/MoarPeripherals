@@ -28,7 +28,6 @@ public class ProxyClient implements IProxy {
 
 	@Override
 	public void registerRenderInfo() {
-		MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridgeEmpty, new ItemRenderInkCartridge(true));
-		MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridgeFilled, new ItemRenderInkCartridge(false));
+		MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new ItemRenderInkCartridge());
 	}
 }
