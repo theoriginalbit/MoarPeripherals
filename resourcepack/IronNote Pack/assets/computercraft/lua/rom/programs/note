@@ -20,7 +20,7 @@
 -- Doing so exposes the following functions:
 
 -- < note.playSong(fileName) >
--- Plays the specified NBS file.
+-- Simply plays the specified NBS file.
 
 -- < note.songEngine([fileName]) >
 -- Plays the optionally specified NBS file, but whether one is specified or not, does
@@ -122,8 +122,6 @@ if not shell then
     return cdn
   end
 
-  assert(ironnote[1], "Could not find an Iron Note Block attached to the computer", 0)
-  
   -- Returns the song length.
   function getSongLength()
     if type(song) == "table" then return song.length end
@@ -151,11 +149,12 @@ if not shell then
   
   -- Switches to a different playback device.
   function setPeripheral(...)
-    args = {...}
     local newironnote = {}
     
-    for i=1,#args do if peripheral.getType(args[i]) == "iron_note" then
-      newironnote[#newironnote+1] = peripheral.wrap(args[i])
+    for i=1,#arg do if type(arg[i]) == "string" and peripheral.getType(arg[i]) == "iron_note" then
+      newironnote[#newironnote+1] = peripheral.wrap(arg[i])
+    elseif type(arg[i]) == "table" and arg[i].playNote then
+      newironnote[#newironnote+1] = arg[i]
     end end
     
     if #newironnote > 0 then
@@ -196,7 +195,7 @@ if not shell then
   
   local function byte_lsb(handle)
     local byte = handle.read()
-    return assert(byte, "unexpected EOF (end of file)", 2)
+    return assert(byte, "Note NBS loading error: Unexpected EOF (end of file).", 2)
   end
 
   local function byte_msb(handle)
@@ -251,8 +250,8 @@ if not shell then
   end
 
   local function readNbs(path)
-    assert(fs.exists(path), "file not found", 0)
-    assert(not fs.isDir(path), "cannot load folder", 0)
+    assert(fs.exists(path), "Note NBS loading error: File \""..path.."\" not found. Did you forget to specify the containing folder?", 0)
+    assert(not fs.isDir(path), "Note NBS loading error: Specified file \""..path.."\" is actually a folder.", 0)
     local handle = fs.open(path, "rb")
 
     song = { notes = {}; }
@@ -312,11 +311,13 @@ if not shell then
     handle.close()
   end
 
-  function songEngine(thisSong)
+  function songEngine(targetSong)
+    assert(ironnote[1], "Note songEngine failure: No Iron Note Blocks assigned.", 0)
+    
     local tTick, notes = os.startTimer(0.1)
     
-    if thisSong then
-      readNbs(thisSong)
+    if targetSong then
+      readNbs(targetSong)
       notes = song.notes
       cTick = 0
       paused = false
@@ -369,8 +370,8 @@ if not shell then
     end
   end
   
-  function playSong(thisSong)
-    parallel.waitForAny(function () songEngine(thisSong) end, function () os.pullEvent("musicFinished") end)
+  function playSong(targetSong)
+    parallel.waitForAny(function () songEngine(targetSong) end, function () os.pullEvent("musicFinished") end)
   end
 else
   -- -----------------------
@@ -396,10 +397,7 @@ else
   
   local startDir = shell.resolve(".")
   
-  if not os.loadAPI(shell.getRunningProgram()) then
-    os.unloadAPI("note")
-    os.loadAPI(shell.getRunningProgram())
-  end
+  os.loadAPI(shell.getRunningProgram())
     
   local playmode, lastSong, marqueePos, myEvent, bump, marquee = 0, {}, 1
   local cursor = {{">>  ","  <<"},{"> > "," < <"},{" >> "," << "},{"> > "," < <"}}
@@ -600,6 +598,7 @@ else
           -- Music finished; wait a second or two before responding.
           elseif myEvent[1] == "musicFinished" then
             gapTimer = os.startTimer(2)
+            lastPauseState = "maybe"
             marquee = ""
 
           -- Skip back to start of the song (or to the previous song, if the current song just started).
@@ -628,6 +627,7 @@ else
             if note.getSongAuthor() ~= "" then marquee = marquee.." [NBS Author: "..note.getSongAuthor().."]" end
             marquee = marquee.." [Tempo: "..note.getSongTempo().."]"
             if note.getSongDescription() ~= "" then marquee = marquee.." [Description: "..note.getSongDescription().."]" end
+            lastPauseState = "maybe"
           end
         end
         
@@ -752,11 +752,24 @@ else
     playmode = 2
   elseif args[i]:lower() == "-m" then
     playmode = 3
+  elseif fs.isDir(shell.resolve(".\\"..args[i])) then
+    shell.setDir(shell.resolve(".\\"..args[i]))
   elseif fs.isDir(args[i]) then
     shell.setDir(args[i])
+  elseif fs.exists(shell.resolve(".\\"..args[i])) then
+    local filePath = shell.resolve(".\\"..args[i])
+    shell.setDir(fs.getDir(filePath))
+    startSong(filePath)
+  elseif fs.exists(shell.resolve(".\\"..args[i]..".nbs")) then
+    local filePath = shell.resolve(".\\"..args[i]..".nbs")
+    shell.setDir(fs.getDir(filePath))
+    startSong(filePath)
   elseif fs.exists(args[i]) then
     shell.setDir(fs.getDir(args[i]))
     startSong(args[i])
+  elseif fs.exists(args[i]..".nbs") then
+    shell.setDir(fs.getDir(args[i]))
+    startSong(args[i]..".nbs")
   end end end
   
   if playmode > 1 then os.queueEvent("key",keys.right) end
@@ -764,5 +777,5 @@ else
   term.setBackgroundColour(colours.black)
   term.clear()
 
-  parallel.waitForAny(noteMenu, note.songEngine)
+  parallel.waitForAny(note.songEngine, noteMenu)
 end
