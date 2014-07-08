@@ -1,6 +1,13 @@
 itemGroup.tabMoarPeripherals=MoarPeripherals
 
+tile.moarperipherals.playerdetector.name=Player Detector
+tile.moarperipherals.chatbox.name=ChatBox
+tile.moarperipherals.ironnote.name=Iron Note Block
+tile.moarperipherals.keyboard.name=Keyboard
+
 item.moarperipherals.inkCartridge.name=Ink Cartridge
+item.moarperipherals.itemKeyboard.name=Keyboard
+
 moarperipherals.tooltip.inkCartridge.contents=Ink Colour
 moarperipherals.tooltip.inkCartridge.level=Ink Level
 moarperipherals.tooltip.inkCartridge.ink.0=White
@@ -20,7 +27,3 @@ moarperipherals.tooltip.inkCartridge.ink.13=Green
 moarperipherals.tooltip.inkCartridge.ink.14=Red
 moarperipherals.tooltip.inkCartridge.ink.15=Black
 moarperipherals.tooltip.inkCartridge.ink.16=Empty
-
-tile.moarperipherals.playerdetector.name=Player Detector
-tile.moarperipherals.chatbox.name=ChatBox
-tile.moarperipherals.ironnote.name=Iron Note Block

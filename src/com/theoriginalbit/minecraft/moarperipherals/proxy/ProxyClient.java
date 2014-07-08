@@ -2,8 +2,12 @@ package com.theoriginalbit.minecraft.moarperipherals.proxy;
 
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-import com.theoriginalbit.minecraft.moarperipherals.render.ItemRenderInkCartridge;
+import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemInkCartridge;
+import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.render.RendererTileKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
@@ -28,6 +32,11 @@ public class ProxyClient implements IProxy {
 
 	@Override
 	public void registerRenderInfo() {
-		MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new ItemRenderInkCartridge());
+		// Register Item Renderers
+		MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new RendererItemInkCartridge());
+		MinecraftForgeClient.registerItemRenderer(Settings.blockIdKeyboard, new RendererItemKeyboard());
+		
+		// Register Block/Tile Renderers
+		ClientRegistry.bindTileEntitySpecialRenderer(TileKeyboard.class, new RendererTileKeyboard());
 	}
 }

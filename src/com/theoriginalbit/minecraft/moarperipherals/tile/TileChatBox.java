@@ -4,6 +4,7 @@ import java.util.List;
 
 import openperipheral.api.Ignore;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -22,15 +23,18 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunct
 import com.theoriginalbit.minecraft.moarperipherals.handler.ChatHandler;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IChatListener;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.ICommandListener;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IDeathListener;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ChatUtils;
 
 @Ignore
-public class TileChatBox extends TilePeripheral implements IBreakAwareTile, IChatListener, IDeathListener {
+public class TileChatBox extends TilePeripheral implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
 	private static final String TYPE = "chatbox";
 	private static final String EVENT_CHAT = "chat_message";
 	private static final String EVENT_DEATH = "death_message";
+	private static final String EVENT_COMMAND = "chatbox_command";
+	private static final String COMMAND_TOKEN = "##";
 	private static final int TICKER_INTERVAL = 20;
 	
 	private int ticker = 0;
@@ -42,6 +46,9 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 		if (!world.isRemote) {
 			ChatHandler.instance.addChatListener(this);
 			ChatHandler.instance.addDeathListener(this);
+			try {
+				ChatHandler.instance.addCommandListener(this);
+			} catch (Exception e) {}
 		}
 	}
 	
@@ -51,6 +58,7 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 		if (!worldObj.isRemote) {
 			ChatHandler.instance.removeChatListener(this);
 			ChatHandler.instance.removeDeathListener(this);
+			ChatHandler.instance.removeCommandListener(this);
 		}
 	}
 	
@@ -85,6 +93,17 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 		}
 	}
 	
+	// IChatListener
+	
+	@Override
+	public void onServerChatEvent(ServerChatEvent event) {
+		if (Settings.chatRangeRead < 0 || entityInRange(event.player, Settings.chatRangeRead)) {
+			computerQueueEvent(EVENT_CHAT, event.player.username, event.message);
+		}
+	}
+	
+	// IDeathListener
+	
 	@Override
 	public void onDeathEvent(LivingDeathEvent event) {
 		if (event.entity instanceof EntityPlayerMP) {
@@ -101,13 +120,22 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 			}
 		}
 	}
-
+	
+	// ICommandListener
+	
 	@Override
-	public void onServerChatEvent(ServerChatEvent event) {
-		if (Settings.chatRangeRead < 0 || entityInRange(event.player, Settings.chatRangeRead)) {
-			computerQueueEvent(EVENT_CHAT, event.player.username, event.message);
+	public String getToken() {
+		return COMMAND_TOKEN;
+	}
+	
+	@Override
+	public void onServerChatEvent(String message, EntityPlayer player) {
+		if (Settings.chatRangeRead < 0 || entityInRange(player, Settings.chatRangeRead)) {
+			computerQueueEvent(EVENT_COMMAND, player.username, message);
 		}
 	}
+	
+	// Private methods
 	
 	private boolean entityInRange(Entity entity, int range) {
 		return entity != null && (entity.getDistance(xCoord, yCoord, zCoord) <= range);

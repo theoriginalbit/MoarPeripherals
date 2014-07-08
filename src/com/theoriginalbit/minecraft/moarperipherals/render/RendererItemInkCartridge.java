@@ -3,7 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 import org.lwjgl.opengl.GL11;
 
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
-import com.theoriginalbit.minecraft.moarperipherals.model.item.ModelItemInkCartridge;
+import com.theoriginalbit.minecraft.moarperipherals.model.ModelItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 
@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
-public class ItemRenderInkCartridge implements IItemRenderer {
+public class RendererItemInkCartridge implements IItemRenderer {
 	
 	private static final ResourceLocation[] textures;
 	private static final String TEXTURE_PATH = "/textures/models/InkCartridge%s.png";
@@ -22,7 +22,7 @@ public class ItemRenderInkCartridge implements IItemRenderer {
 	protected ModelBase modelCartridgeEmpty, modelCartridgeFilled;
 	protected boolean cartridgeEmpty;
 	
-	public ItemRenderInkCartridge() {
+	public RendererItemInkCartridge() {
 		modelCartridgeEmpty = new ModelItemInkCartridge(true);
 		modelCartridgeFilled = new ModelItemInkCartridge(false);
 	}

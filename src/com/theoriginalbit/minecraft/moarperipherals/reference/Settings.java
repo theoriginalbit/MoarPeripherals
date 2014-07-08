@@ -48,4 +48,8 @@ public final class Settings {
 	public static int fluidInkRedID = startFluidID++;
 	public static int fluidInkBlackID = startFluidID++;
 	public static int fluidPlasticID = startFluidID++;
+	
+	// Keyboard
+	public static boolean enableKeyboard;
+	public static int blockIdKeyboard = startBlockID++;
 }

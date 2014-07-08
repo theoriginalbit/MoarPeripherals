@@ -17,6 +17,7 @@ public final class ConfigurationHandler {
 	private static final String FLUIDS = "Fluids";
 	private static final String CHATBOX = "ChatBox";
 	private static final String PRINTER = "Printer";
+	private static final String KEYBOARD = "Keyboard";
 	private static final String IRONNOTE = "Iron Note";
 	private static final String PLAYERDETECTOR = "Player Detector";
 	
@@ -107,6 +108,10 @@ public final class ConfigurationHandler {
 		Settings.fluidInkRedID = getFluidId("fluidInkRedID", Settings.fluidInkRedID);
 		Settings.fluidInkBlackID = getFluidId("fluidInkBlackID", Settings.fluidInkBlackID);
 		Settings.fluidPlasticID = getFluidId("fluidPlasticID", Settings.fluidPlasticID, "Plastic");
+		
+		// Keyboard
+		Settings.enableKeyboard = getEnabled(KEYBOARD);
+		Settings.blockIdKeyboard = getBlockId(KEYBOARD, Settings.blockIdKeyboard);
 	
 		if (config.hasChanged()) {
 			config.save();
