@@ -5,106 +5,69 @@ import org.lwjgl.opengl.GL11;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
-public class RendererItemInkCartridge implements IItemRenderer {
+public final class RendererItemInkCartridge extends CustomItemRenderer {
 	
 	private static final ResourceLocation[] textures;
 	private static final String TEXTURE_PATH = "/textures/models/InkCartridge%s.png";
-	
-	protected ModelBase modelCartridgeEmpty, modelCartridgeFilled;
-	protected boolean cartridgeEmpty;
+	private static final ModelBase modelCartridgeEmpty = new ModelItemInkCartridge(true);
+	private static final ModelBase modelCartridgeFilled = new ModelItemInkCartridge(false);
 	
 	public RendererItemInkCartridge() {
-		modelCartridgeEmpty = new ModelItemInkCartridge(true);
-		modelCartridgeFilled = new ModelItemInkCartridge(false);
+		super(modelCartridgeEmpty);
 	}
-
+	
 	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return Settings.enableInkCartridgeModel
-				&& (type == ItemRenderType.EQUIPPED
-						|| type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.INVENTORY);
-	}
-
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		return helper == ItemRendererHelper.INVENTORY_BLOCK;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
-		boolean isEmpty = ItemInkCartridge.isCartridgeEmpty(stack);
+	protected ResourceLocation getTexture(ItemStack stack) {
 		int inkColor = ItemInkCartridge.getInkColor(stack);
-		ResourceLocation location = textures[inkColor];
-		float scale;
-		
-		switch (type) {
-			case EQUIPPED:
-				GL11.glPushMatrix();
-				// load the texture
-				Minecraft.getMinecraft().getTextureManager().bindTexture(location);
-				// make it smaller, the model is too big, higher res though
-				scale = 0.3f;
-				GL11.glScalef(scale, scale, scale);
-				// rotate it to an upward direction
-				GL11.glRotatef(75, 1, 0, 0);
-				// move it around on the hand
-				GL11.glTranslatef(1.4F, 0.1F, -0.3F);
-				// render
-				if (isEmpty) {
-					modelCartridgeEmpty.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
-				} else {
-					modelCartridgeFilled.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
-				}
-				GL11.glPopMatrix();
-				break;
-			case EQUIPPED_FIRST_PERSON:
-				GL11.glPushMatrix();
-				// load the texture
-				Minecraft.getMinecraft().getTextureManager().bindTexture(location);
-				// make it smaller, the model is too big, higher res though
-				scale = 0.25f;
-				GL11.glScalef(scale, scale, scale);
-				// rotate it to a direction more suited to the camera
-				GL11.glRotatef(170, 0, 1, 0);
-				GL11.glRotatef(90, 1, 0, 0);
-				GL11.glRotatef(75, 0, 0, 1);
-				// move it around in the camera (left/right, close/far, up/down)
-				GL11.glTranslatef(1F, 0.25F, -2.1F);
-				// render
-				if (isEmpty) {
-					modelCartridgeEmpty.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
-				} else {
-					modelCartridgeFilled.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
-				}
-				GL11.glPopMatrix();
-				break;
-			case INVENTORY:
-				GL11.glPushMatrix();
-				// load the texture
-				Minecraft.getMinecraft().getTextureManager().bindTexture(location);
-				// for some reason it is upside down, so lets flip it
-				GL11.glRotatef(180, 1, 0, 0);
-				// centre it in the inventory slot
-				GL11.glTranslatef(0f, -0.5f, 0f);
-				// render
-				if (isEmpty) {
-					modelCartridgeEmpty.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
-				} else {
-					modelCartridgeFilled.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
-				}
-				GL11.glPopMatrix();
-				break;
-			default: break;
-		}
+		return textures[inkColor];
+	}
+
+	@Override
+	protected void manipulateEntityRender(ItemStack stack) {
+		selectModel(stack);
+		float scale = 0.24f;
+		GL11.glScalef(scale, scale, scale);
+		GL11.glRotatef(180, 1, 0, 0);
+		GL11.glTranslatef(0f, -0.5f, 0f);
+	}
+
+	@Override
+	protected void manipulateInventoryRender(ItemStack stack) {
+		selectModel(stack);
+		float scale = 0.6f;
+		GL11.glScalef(scale, scale, scale);
+		GL11.glRotatef(180, 1, 0, 0);
+	}
+
+	@Override
+	protected void manipulateThirdPersonRender(ItemStack stack) {
+		selectModel(stack);
+		float scale = 0.3f;
+		GL11.glScalef(scale, scale, scale);
+		GL11.glRotatef(120, 1, 0, 0);
+		GL11.glRotatef(-55, 0, 0, 1);
+		GL11.glRotatef(-40, 0, 1, 0);
+		GL11.glTranslatef(-3.2f, 2.1f, -1.7f);
+	}
+
+	@Override
+	protected void manipulateFirstPersonRender(ItemStack stack) {
+		selectModel(stack);
+		float scale = 0.5f;
+		GL11.glScalef(scale, scale, scale);
+		GL11.glRotatef(170, 0, 0, 1);
+		GL11.glRotatef(40, 0, 1, 0);
+		GL11.glRotatef(-60, 1, 0, 0);
+		GL11.glTranslatef(-2.2f, -1f, -1.5f);
+	}
+	
+	private void selectModel(ItemStack stack) {
+		modelItem = ItemInkCartridge.isCartridgeEmpty(stack) ? modelCartridgeEmpty : modelCartridgeFilled;
 	}
 	
 	static {

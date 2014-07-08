@@ -4,14 +4,14 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelTileKeyboard extends ModelBase {
+public class ModelKeyboard extends ModelBase {
 	
 	protected ModelRenderer base, stand, key1, key2, key3, key4, key5, key6, key7, key8,
 			key9, key10, key11, key12, key13, key14, key15, key16, key17,
 			key18, key19, key20, key21, key22, key23, key24, key25, key26,
 			key27, key28, key29, key30, key31, key32, key33, key34, key35;
 
-	public ModelTileKeyboard() {
+	public ModelKeyboard() {
 		textureWidth = 128;
 		textureHeight = 64;
 

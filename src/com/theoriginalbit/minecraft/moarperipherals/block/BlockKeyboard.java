@@ -9,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -44,26 +43,19 @@ public class BlockKeyboard extends BlockGeneric {
 	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return null;
-	}
-	
-	@Override
 	public final boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
 		return isOnTopOfSolidBlock(world, x, y, z, ForgeDirection.getOrientation(side).getOpposite());
 	}
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-		// rotate the block to be facing N, S, E, or W
-		int face = MathHelper.floor_double((double)(entity.rotationYaw * 4.0f / 360.0f) + 0.5d) & 3;
+		int face = MathHelper.floor_double((double) (entity.rotationYaw * 4.0f / 360.0f) + 0.5d) & 3;
 		int meta = ForgeDirection.getOrientation(face).getOpposite().ordinal();
 		world.setBlockMetadataWithNotify(x, y, z, meta, 2);
 	}
 	
 	private final boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
-		return side == ForgeDirection.DOWN
-				&& isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
+		return side == ForgeDirection.DOWN && isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
 	}
 	
 	private final static boolean isNeighborBlockSolid(World world, int x, int y, int z, ForgeDirection side) {

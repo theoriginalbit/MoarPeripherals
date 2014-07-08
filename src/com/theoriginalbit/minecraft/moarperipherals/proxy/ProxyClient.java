@@ -3,8 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.proxy;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemInkCartridge;
-import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemKeyboard;
-import com.theoriginalbit.minecraft.moarperipherals.render.RendererTileKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.render.RendererKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -32,11 +31,16 @@ public class ProxyClient implements IProxy {
 
 	@Override
 	public void registerRenderInfo() {
-		// Register Item Renderers
-		MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new RendererItemInkCartridge());
-		MinecraftForgeClient.registerItemRenderer(Settings.blockIdKeyboard, new RendererItemKeyboard());
+		// Register Ink Cartridge renderer
+		if (Settings.enablePrinter && Settings.enableInkCartridgeModel) {
+			MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new RendererItemInkCartridge());
+		}
 		
-		// Register Block/Tile Renderers
-		ClientRegistry.bindTileEntitySpecialRenderer(TileKeyboard.class, new RendererTileKeyboard());
+		// Register Keyboard renderers
+		if (Settings.enableKeyboard) {
+			RendererKeyboard rendererKeyboard = new RendererKeyboard();
+			MinecraftForgeClient.registerItemRenderer(Settings.blockIdKeyboard, rendererKeyboard);
+			ClientRegistry.bindTileEntitySpecialRenderer(TileKeyboard.class, rendererKeyboard);
+		}
 	}
 }
