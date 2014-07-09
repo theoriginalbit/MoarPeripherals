@@ -32,7 +32,7 @@ public class ProxyClient implements IProxy {
 	@Override
 	public void registerRenderInfo() {
 		// Register Ink Cartridge renderer
-		if (Settings.enablePrinter && Settings.enableInkCartridgeModel) {
+		if (Settings.enablePrinter && Settings.enableInkCartridgeRenderer) {
 			MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new RendererItemInkCartridge());
 		}
 		

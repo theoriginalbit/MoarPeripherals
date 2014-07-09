@@ -8,6 +8,7 @@ tile.moarperipherals.keyboard.name=Keyboard
 item.moarperipherals.inkCartridge.name=Ink Cartridge
 item.moarperipherals.itemKeyboard.name=Keyboard
 
+moarperipherals.tooltip.gui.exitKeyboard=Press ESC to exit the Keyboard
 moarperipherals.tooltip.inkCartridge.contents=Ink Colour
 moarperipherals.tooltip.inkCartridge.level=Ink Level
 moarperipherals.tooltip.inkCartridge.ink.0=White

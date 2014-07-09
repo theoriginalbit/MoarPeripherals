@@ -10,6 +10,7 @@ import com.google.common.io.ByteStreams;
 import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
+import com.theoriginalbit.minecraft.moarperipherals.handler.TinyPacketHandler.PacketID;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -46,7 +47,7 @@ public class TileIronNote extends TilePeripheral {
 		
 		play(worldObj, xCoord, yCoord, zCoord, instrument, pitch);
 		
-		Packet131MapData packet = PacketDispatcher.getTinyPacket(MoarPeripherals.instance, (short) 0, stream.toByteArray());
+		Packet131MapData packet = PacketDispatcher.getTinyPacket(MoarPeripherals.instance, (short) PacketID.IRON_NOTE.ordinal(), stream.toByteArray());
 		PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, Settings.noteRange, dimId, packet);
 	}
 	

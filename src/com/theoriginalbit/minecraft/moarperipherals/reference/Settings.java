@@ -28,7 +28,6 @@ public final class Settings {
 	public static int blockIdPrinter = startBlockID++;
 	public static boolean enableFluidInk;
 	public static int itemIdInkCartridge = startItemID++;
-	public static boolean enableInkCartridgeModel;
 
 	// Fluids
 	public static int fluidInkWhiteID = startFluidID++;
@@ -52,4 +51,8 @@ public final class Settings {
 	// Keyboard
 	public static boolean enableKeyboard;
 	public static int blockIdKeyboard = startBlockID++;
+	public static int keyboardRange = 16;
+	
+	// Renderer
+	public static boolean enableInkCartridgeRenderer;
 }

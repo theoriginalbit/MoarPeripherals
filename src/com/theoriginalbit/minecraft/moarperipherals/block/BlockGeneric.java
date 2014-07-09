@@ -64,7 +64,7 @@ public abstract class BlockGeneric extends BlockContainer {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		
 		if (tile instanceof IHasGui) {
-			player.openGui(MoarPeripherals.instance, ((IHasGui) tile).getGuiId(), world, x, y, z);
+			player.openGui(MoarPeripherals.instance, ((IHasGui) tile).getGuiId().ordinal(), world, x, y, z);
 			return true;
 		}
 		

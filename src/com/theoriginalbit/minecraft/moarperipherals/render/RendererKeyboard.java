@@ -3,7 +3,6 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 import org.lwjgl.opengl.GL11;
 
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelKeyboard;
-import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 
 import net.minecraft.item.ItemStack;
@@ -11,10 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public final class RendererKeyboard extends CustomTileRenderer {
-	
-	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "/textures/models/Keyboard.png");
-	private static final ResourceLocation TEXTURE_CONNECTION = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "/textures/models/Keyboard_Connection.png");
-	
 	public RendererKeyboard() {
 		super(new ModelKeyboard());
 	}
@@ -24,6 +19,7 @@ public final class RendererKeyboard extends CustomTileRenderer {
 		float scale = 0.5f;
 		GL11.glScalef(scale, scale, scale);
 		GL11.glRotatef(180, 0, 0, 1);
+		GL11.glTranslatef(-0.06f, 0f, 0.03f);
 		adjustRotatePivotViaMeta(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 	}
 	
@@ -72,11 +68,11 @@ public final class RendererKeyboard extends CustomTileRenderer {
 
 	@Override
 	protected ResourceLocation getTexture(TileEntity tile) {
-		return ((TileKeyboard) tile).hasConnection() ? TEXTURE_CONNECTION : TEXTURE;
+		return ((TileKeyboard) tile).getTexture();
 	}
 
 	@Override
 	protected ResourceLocation getTexture(ItemStack stack) {
-		return TEXTURE;
+		return TileKeyboard.TEXTURE;
 	}
 }
