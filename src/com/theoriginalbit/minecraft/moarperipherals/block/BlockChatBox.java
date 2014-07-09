@@ -24,6 +24,6 @@ public class BlockChatBox extends BlockGeneric {
 	
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new TileChatBox(world);
+		return new TileChatBox();
 	}
 }

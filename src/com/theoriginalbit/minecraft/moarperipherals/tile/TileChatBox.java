@@ -10,7 +10,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.world.World;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
@@ -39,17 +38,10 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 	
 	private int ticker = 0;
 	private int count = 0;
+	private boolean registered = false;
 	
-	public TileChatBox(World world) {
+	public TileChatBox() {
 		super(TYPE);
-		// add the ChatBox to the ChatListener
-		if (!world.isRemote) {
-			ChatHandler.instance.addChatListener(this);
-			ChatHandler.instance.addDeathListener(this);
-			try {
-				ChatHandler.instance.addCommandListener(this);
-			} catch (Exception e) {}
-		}
 	}
 	
 	@Override
@@ -90,6 +82,15 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 	public void updateEntity() {
 		if (++ticker > TICKER_INTERVAL) {
 			ticker = count = 0;
+		}
+		
+		if (!worldObj.isRemote && !registered) {
+			ChatHandler.instance.addChatListener(this);
+			ChatHandler.instance.addDeathListener(this);
+			try {
+				ChatHandler.instance.addCommandListener(this);
+			} catch (Exception e) {}
+			registered = true;
 		}
 	}
 	
