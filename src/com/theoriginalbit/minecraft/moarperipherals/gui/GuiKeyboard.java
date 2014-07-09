@@ -10,7 +10,7 @@ import net.minecraft.util.StatCollector;
 
 public class GuiKeyboard extends GuiScreen {
 	
-	private static final String LOCAL_STRING = "moarperipherals.tooltip.gui.exitKeyboard";
+	private static final String LOCAL_STRING = "moarperipherals.gui.keyboard.exit";
 	private final EntityPlayer player;
 	private final TileKeyboard tile;
 	private int terminateTimer, rebootTimer, shutdownTimer = 0;

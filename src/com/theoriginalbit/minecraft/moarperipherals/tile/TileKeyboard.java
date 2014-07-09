@@ -10,6 +10,7 @@ import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ComputerUtils;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet131MapData;
@@ -28,7 +29,6 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	@Override
 	public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		sendPacketToServer(PacketID.KEYBOARD_TURNON);
-		connection.newConnection(1301, 4, -279);
 		return true;
 	}
 	
@@ -40,6 +40,7 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 		int y = tag.getInteger("yPos");
 		int z = tag.getInteger("zPos");
 		connection.newConnection(x, y, z);
+		System.out.println("ReadNBT x=" + x + " y=" + y + " z=" + z);
 	}
 	
 	@Override
@@ -47,15 +48,16 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 		super.writeToNBT(tag);
 		
 		ChunkCoordinates coord = connection.getLocation();
-		tag.setInteger("xPos", coord.posZ);
+		tag.setInteger("xPos", coord.posX);
 		tag.setInteger("yPos", coord.posY);
 		tag.setInteger("zPos", coord.posZ);
+		System.out.println("WriteNBT x=" + coord.posX + " y=" + coord.posY + " z=" + coord.posZ);
 	}
 	
 	public ResourceLocation getTexture() {
 		boolean connected = connection.isConnected();
 		boolean valid = connection.isValidConnection();
-		boolean range = connection.inRange();
+		boolean range = connection.inRange(xCoord, yCoord, zCoord);
 		
 		if (connected && valid && range) {
 			return TEXTURE_ON;
@@ -101,7 +103,7 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	}
 	
 	private boolean canSendPacket() {
-		return connection.isConnected() && connection.isValidConnection() && connection.inRange();
+		return connection.isConnected() && connection.isValidConnection() && connection.inRange(xCoord, yCoord, zCoord);
 	}
 	
 	private void sendPacketToServer(PacketID packetId) {
@@ -121,8 +123,47 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 		PacketDispatcher.sendPacketToServer(packet);
 	}
 	
+	public boolean hasConnection() {
+		return connection.isConnected();
+	}
+	
+	public void connectToComputer(EntityPlayer player, int x, int y, int z) {
+		ChunkCoordinates coords = connection.getLocation();
+		if (coords.posX != x || coords.posY != y || coords.posZ != z) {
+			connection.newConnection(x, y, z);
+			ByteArrayDataOutput stream = ByteStreams.newDataOutput();
+			int dimId = worldObj.provider.dimensionId;
+			stream.writeInt(dimId);
+			stream.writeInt(xCoord);
+			stream.writeInt(yCoord);
+			stream.writeInt(zCoord);
+			if (worldObj.isRemote) {
+				sendPacketToServer(PacketID.KEYBOARD_SYNC, stream);
+			} else {
+				Packet131MapData packet = PacketDispatcher.getTinyPacket(MoarPeripherals.instance, (short) PacketID.KEYBOARD_SYNC.ordinal(), stream.toByteArray());
+				PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
+			}
+		}
+	}
+	
+	public void disconnectFromComputer() {
+		connection.removeConnection();
+	}
+	
+	public boolean isConnectionValid() {
+		return connection.isValidConnection();
+	}
+	
+	public boolean isComputerInRange(int x, int y, int z) {
+		return connection.inRange(x, y, z);
+	}
+	
+	public ChunkCoordinates getConnectionLocation() {
+		return connection.getLocation();
+	}
+	
 	public class KeyboardConnection {
-		private int xPos, yPos, zPos;
+		private Integer xPos, yPos, zPos;
 		private boolean activeConnection = false;
 		
 		public boolean isConnected() {
@@ -130,21 +171,23 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 		}
 		
 		public boolean isValidConnection() {
+			if (xPos == null || yPos == null || zPos == null) {
+				return false;
+			}
 			return ComputerUtils.getTileComputerBase(worldObj, xPos, yPos, zPos) != null;
 		}
 		
-		public boolean inRange() {
-			double x = xPos - xCoord;
-			double y = yPos - yCoord;
-			double z = zPos - zCoord;
+		public boolean inRange(int x, int y, int z) {
+			x -= xCoord;
+			y -= yCoord;
+			z -= zCoord;
 			return MathHelper.sqrt_double(x*x + y*y + z*z) <= Settings.keyboardRange;
 		}
 		
-		public boolean isOn() {
-			return ComputerUtils.isOn(worldObj.getBlockTileEntity(xCoord, yCoord, zCoord));
-		}
-		
 		public ChunkCoordinates getLocation() {
+			if (xPos == null || yPos == null || zPos == null) {
+				return new ChunkCoordinates();
+			}
 			return new ChunkCoordinates(xPos, yPos, zPos);
 		}
 		
@@ -156,7 +199,7 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 		}
 		
 		public void removeConnection() {
-			
+			xPos = yPos = zPos = null;
 		}
 	}
 }

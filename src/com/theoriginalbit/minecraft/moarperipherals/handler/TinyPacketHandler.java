@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileIronNote;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ComputerUtils;
 
 import net.minecraft.network.NetServerHandler;
@@ -23,7 +24,8 @@ public class TinyPacketHandler implements ITinyPacketHandler {
 		KEYBOARD_TURNON,
 		KEYBOARD_SHUTDOWN,
 		KEYBOARD_REBOOT,
-		KEYBOARD_PASTE;
+		KEYBOARD_PASTE,
+		KEYBOARD_SYNC;
 		
 		public static PacketID valueOf(int id) {
 			for (PacketID packet : values()) {
@@ -63,6 +65,8 @@ public class TinyPacketHandler implements ITinyPacketHandler {
 				case KEYBOARD_PASTE:
 					handleKeyboardPaste(handler, stream);
 					break;
+				case KEYBOARD_SYNC:
+					handleKeyboardSync(handler, stream);
 				default: break;
 			}
 		}
@@ -165,6 +169,19 @@ public class TinyPacketHandler implements ITinyPacketHandler {
 		TileEntity tile = ComputerUtils.getTileComputerBase(world, xPos, yPos, zPos);
 		if (tile != null) {
 			ComputerUtils.paste(tile, clipboard);
+		}
+	}
+	
+	private void handleKeyboardSync(NetHandler handler, ByteArrayDataInput stream) {
+		int dimId = stream.readInt();
+		int xPos = stream.readInt();
+		int yPos = stream.readInt();
+		int zPos = stream.readInt();
+		
+		World world = MoarPeripherals.proxy.getClientWorld(dimId);
+		TileEntity tile = world.getBlockTileEntity(xPos, yPos, zPos);
+		if (tile != null) {
+			((TileKeyboard) tile).connectToComputer(null, xPos, yPos, zPos);
 		}
 	}
 }

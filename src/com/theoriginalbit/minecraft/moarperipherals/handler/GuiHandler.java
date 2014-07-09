@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.handler;
 
 import com.theoriginalbit.minecraft.moarperipherals.gui.GuiKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.gui.GuiKeyboardModify;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,8 +37,7 @@ public class GuiHandler implements IGuiHandler {
 				case KEYBOARD:
 					return new GuiKeyboard((TileKeyboard) world.getBlockTileEntity(x, y, z), player);
 				case KEYBOARD_MODIFY:
-					//return new GuiKeyboardModify((TileKeyboard) world.getBlockTileEntity(x, y, z), player);
-					return null;
+					return new GuiKeyboardModify((TileKeyboard) world.getBlockTileEntity(x, y, z), player);
 				default: return null;
 			}
 		}
