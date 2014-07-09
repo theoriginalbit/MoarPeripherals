@@ -73,7 +73,7 @@ public final class ChatHandler {
 			final String token = entry.getKey();
 			final int tokenLength = token.length();
 			if (event.message.substring(0, tokenLength).equals(token)) {
-				entry.getValue().onServerChatEvent(event.message.substring(tokenLength+1).trim(), event.player);
+				entry.getValue().onServerChatEvent(event.message.substring(tokenLength).trim(), event.player);
 				event.setCanceled(true);
 			}
 		}
