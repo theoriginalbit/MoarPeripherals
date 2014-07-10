@@ -17,6 +17,9 @@ public final class ComputerUtils {
 	private static final Method METHOD_SHUTDOWN = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "shutdown", new Class[]{});
 	private static final Method METHOD_REBOOT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "reboot", new Class[]{});
 	
+	private static final String EVENT_TERMINATE = "terminate";
+	private static final String EVENT_PASTE = "terminate";
+	
 	public static TileEntity getTileComputerBase(World world, Integer x, Integer y, Integer z) {
 		if (x == null || y == null || z == null) { return null; }
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
@@ -77,10 +80,10 @@ public final class ComputerUtils {
 	}
 	
 	public static void terminate(TileEntity tile) {
-		queueEvent(tile, "terminate");
+		queueEvent(tile, EVENT_TERMINATE);
 	}
 	
 	public static void paste(TileEntity tile, String clipboard) {
-		queueEvent(tile, "paste", clipboard);
+		queueEvent(tile, EVENT_PASTE, clipboard);
 	}
 }
