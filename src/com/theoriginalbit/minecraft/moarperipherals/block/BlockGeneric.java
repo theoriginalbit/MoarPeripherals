@@ -8,6 +8,7 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.INeighborAw
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.utils.InventoryUtils;
+import com.theoriginalbit.minecraft.moarperipherals.utils.NeiUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -95,5 +96,10 @@ public abstract class BlockGeneric extends BlockContainer {
 			((INeighborAwareTile) tile).onNeighbourChanged(blockId);
 		
 		super.onNeighborBlockChange(world, x, y, z, blockId);
+	}
+	
+	public BlockGeneric hideFromNEI() {
+		NeiUtils.hideFromNEI(blockID);
+		return this;
 	}
 }
