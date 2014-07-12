@@ -8,7 +8,7 @@ import com.theoriginalbit.minecraft.moarperipherals.handler.BucketHandler;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ChatHandler;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ConfigurationHandler;
 import com.theoriginalbit.minecraft.moarperipherals.handler.GuiHandler;
-import com.theoriginalbit.minecraft.moarperipherals.handler.TinyPacketHandler;
+import com.theoriginalbit.minecraft.moarperipherals.handler.PacketHandler;
 import com.theoriginalbit.minecraft.moarperipherals.init.Blocks;
 import com.theoriginalbit.minecraft.moarperipherals.init.Fluids;
 import com.theoriginalbit.minecraft.moarperipherals.init.Items;
@@ -27,7 +27,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.ComputerCraftAPI;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
-@NetworkMod(clientSideRequired = ModInfo.REQUIRED_CLIENT, serverSideRequired = ModInfo.REQUIRED_SERVER, tinyPacketHandler = TinyPacketHandler.class)
+@NetworkMod(channels = { "moarp" }, clientSideRequired = ModInfo.REQUIRED_CLIENT, serverSideRequired = ModInfo.REQUIRED_SERVER, packetHandler = PacketHandler.class)
 public class MoarPeripherals {
 	
 	@Instance(ModInfo.ID)

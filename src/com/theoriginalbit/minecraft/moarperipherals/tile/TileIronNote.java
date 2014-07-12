@@ -1,19 +1,14 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.world.World;
 import openperipheral.api.Ignore;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
-import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.minecraft.moarperipherals.handler.TinyPacketHandler.PacketID;
+import com.theoriginalbit.minecraft.moarperipherals.packet.PacketIronNote;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
+import com.theoriginalbit.minecraft.moarperipherals.utils.PacketUtils;
 
 @Ignore
 public class TileIronNote extends TilePeripheral {
@@ -36,19 +31,12 @@ public class TileIronNote extends TilePeripheral {
 		Preconditions.checkArgument(ticker++ <= MAX_TICK, "Too many notes (over " + MAX_TICK + " per tick)");
 		Preconditions.checkArgument(Settings.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 		
-		int dimId = worldObj.provider.dimensionId;
-		ByteArrayDataOutput stream = ByteStreams.newDataOutput();
-		stream.writeDouble(xCoord);
-		stream.writeDouble(yCoord);
-		stream.writeDouble(zCoord);
-		stream.writeByte(instrument);
-		stream.writeByte(pitch);
-		stream.writeByte(dimId);
-		
 		play(worldObj, xCoord, yCoord, zCoord, instrument, pitch);
 		
-		Packet131MapData packet = PacketDispatcher.getTinyPacket(MoarPeripherals.instance, (short) PacketID.IRON_NOTE.ordinal(), stream.toByteArray());
-		PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, Settings.noteRange, dimId, packet);
+		int dimId = worldObj.provider.dimensionId;
+		PacketIronNote packet = new PacketIronNote();
+		packet.intData = new int[]{ dimId, xCoord, yCoord, zCoord, instrument, pitch };
+		PacketUtils.sendToPlayersAround(packet, xCoord, yCoord, zCoord, Settings.noteRange, dimId);
 	}
 	
 	@Override

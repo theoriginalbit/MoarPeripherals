@@ -1,7 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.minecraft.moarperipherals.handler.GuiHandler.Gui;
+import com.theoriginalbit.minecraft.moarperipherals.gui.GuiType;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
@@ -64,9 +64,9 @@ public class BlockKeyboard extends BlockGeneric {
 		
 		if (tile instanceof TileKeyboard) {
 			if (player.isSneaking()) {
-				player.openGui(MoarPeripherals.instance, Gui.KEYBOARD_MODIFY.ordinal(), world, x, y, z);
+				player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD_MODIFY.ordinal(), world, x, y, z);
 			} else {
-				player.openGui(MoarPeripherals.instance, Gui.KEYBOARD.ordinal(), world, x, y, z);
+				player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
 			}
 			return ((IActivateAwareTile) tile).onActivated(player, side, hitX, hitY, hitZ);
 		}

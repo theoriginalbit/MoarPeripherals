@@ -1,6 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.interfaces;
 
-import com.theoriginalbit.minecraft.moarperipherals.handler.GuiHandler.Gui;
+import com.theoriginalbit.minecraft.moarperipherals.gui.GuiType;
 
 import net.minecraft.tileentity.TileEntity;
 
@@ -13,5 +13,5 @@ public interface IHasGui {
 	/**
 	 * Returns the ID of the GUI
 	 */
-	public Gui getGuiId();
+	public GuiType getGuiId();
 }

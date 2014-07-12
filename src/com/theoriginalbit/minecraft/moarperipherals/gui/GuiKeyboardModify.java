@@ -7,11 +7,11 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
+import com.theoriginalbit.minecraft.moarperipherals.keyboard.KeyboardStatus;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 
@@ -19,9 +19,7 @@ public class GuiKeyboardModify extends GuiScreen {
 	protected static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/gui/keyboard.png");
 	
 	private final TileKeyboard tile;
-	private final EntityPlayer player;
-	private String statusText = StatCollector.translateToLocal("moarperipherasl.gui.keyboard.status.other");
-	private int statusColor = 0x404040;
+	private KeyboardStatus keyboardStatus = KeyboardStatus.OTHER;
 	
 	private GuiTextField xTextField, yTextField, zTextField;
 	private GuiButton closeButton;
@@ -31,15 +29,14 @@ public class GuiKeyboardModify extends GuiScreen {
 	protected int guiLeft;
 	protected int guiTop;
 
-	public GuiKeyboardModify(TileKeyboard tile, EntityPlayer player) {
-		this.tile = tile;
-		this.player = player;
+	public GuiKeyboardModify(TileKeyboard tileEntity) {
+		tile = tileEntity;
 	}
 	
 	@Override
 	public void initGui() {
-		guiLeft = (this.width - this.xSize) / 2;
-        guiTop = (this.height - this.ySize) / 2;
+		guiLeft = (width - xSize) / 2;
+        guiTop = (height - ySize) / 2;
         
         int elementPadding = 10;
         int textPosY = 42;
@@ -108,7 +105,7 @@ public class GuiKeyboardModify extends GuiScreen {
 		String status = StatCollector.translateToLocal("moarperipherals.gui.keyboard.status");
 		fontRenderer.drawString(status + ":", 10, 66, 0x404040);
 		
-		fontRenderer.drawString(statusText, 10, 80, statusColor);
+		fontRenderer.drawString(keyboardStatus.getLocal(), 10, 80, keyboardStatus.getColor());
 		
 		xTextField.drawTextBox();
 		yTextField.drawTextBox();
@@ -155,34 +152,33 @@ public class GuiKeyboardModify extends GuiScreen {
 	@Override
 	public void updateScreen() {
 		boolean fieldValid = validate(xTextField) && validate(yTextField) && validate(zTextField);
-		boolean fieldFocused = xTextField.isFocused() && yTextField.isFocused() && zTextField.isFocused();
+		boolean fieldFocused = xTextField.isFocused() || yTextField.isFocused() || zTextField.isFocused();
 		
-		if (fieldValid && !fieldFocused) {
+		if (fieldFocused) {
+			tile.disconnectFromComputer();
+			keyboardStatus = KeyboardStatus.EDITING;
+		} else if (fieldValid && !fieldFocused) {
 			int x = Integer.parseInt(xTextField.getText());
 			int y = Integer.parseInt(yTextField.getText());
 			int z = Integer.parseInt(zTextField.getText());
 			
 			if (!tile.isComputerInRange(x, y, z)) {
 				tile.disconnectFromComputer();
-				statusText = StatCollector.translateToLocal("moarperipherasl.gui.keyboard.status.range");
-				statusColor = 0xec960e;
+				keyboardStatus = KeyboardStatus.OUT_OF_RANGE;
 			} else {
-				tile.connectToComputer(player, x, y, z);
+				tile.connectToComputer(x, y, z);
 				boolean connected = tile.hasConnection();
 				boolean valid = tile.isConnectionValid();
 				if (connected && valid) {
-					statusText = StatCollector.translateToLocal("moarperipherasl.gui.keyboard.status.connected");
-					statusColor = 0x0f9501;
+					keyboardStatus = KeyboardStatus.CONNECTED;
 				} else if (connected && !valid) {
-					statusText = StatCollector.translateToLocal("moarperipherasl.gui.keyboard.status.invalid");
-					statusColor = 0xcc0e0e;
+					keyboardStatus = KeyboardStatus.INVALID;
 				}
 			}
 		} else if (!fieldFocused) {
 			if (xTextField.getText().equals("") && yTextField.getText().equals("") && zTextField.getText().equals("")) {
 				tile.disconnectFromComputer();
-				statusText = StatCollector.translateToLocal("moarperipherasl.gui.keyboard.status.disconnected");
-				statusColor = 0x404040;
+				keyboardStatus = KeyboardStatus.DISCONNECTED;
 			}
 		}
 	}

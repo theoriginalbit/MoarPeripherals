@@ -12,10 +12,11 @@ moarperipherals.gui.keyboard.heading=Configure Keyboard
 moarperipherals.gui.keyboard.close=Close
 moarperipherals.gui.keyboard.coords=Computer Coordinates
 moarperipherals.gui.keyboard.status=Status
+moarperipherals.gui.keyboard.status.editing=Editing
 moarperipherasl.gui.keyboard.status.connected=Connected
 moarperipherasl.gui.keyboard.status.disconnected=Disconnected
 moarperipherasl.gui.keyboard.status.invalid=Invalid Target
-moarperipherasl.gui.keyboard.status.range=Out of range
+moarperipherasl.gui.keyboard.status.outofrange=Out of range
 moarperipherasl.gui.keyboard.status.other=Unknown
 moarperipherals.gui.keyboard.exit=Press ESC to exit the Keyboard
 
