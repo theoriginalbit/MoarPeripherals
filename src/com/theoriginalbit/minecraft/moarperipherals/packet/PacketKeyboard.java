@@ -26,29 +26,14 @@ public class PacketKeyboard extends PacketGeneric {
 
 		KeyboardEvent type = KeyboardEvent.valueOf(subPacketType);
 		switch (type) {
-		case SYNC:
-			sync();
-			break;
-		case PASTE:
-			paste();
-			break;
-		case REBOOT:
-			reboot();
-			break;
-		case TURN_ON:
-			turnOn();
-			break;
-		case SHUTDOWN:
-			shutdown();
-			break;
-		case KEY_PRESS:
-			keyPress();
-			break;
-		case TERMINATE:
-			terminate();
-			break;
-		default:
-			throw new Exception("Invalid Keyboard packet, sub-packet type was " + subPacketType);
+		case SYNC: sync(); break;
+		case PASTE: paste(); break;
+		case REBOOT: reboot(); break;
+		case TURN_ON: turnOn(); break;
+		case SHUTDOWN: shutdown(); break;
+		case KEY_PRESS: keyPress(); break;
+		case TERMINATE: terminate(); break;
+		default: throw new Exception("Invalid Keyboard packet, sub-packet type was " + subPacketType);
 		}
 	}
 
@@ -62,6 +47,8 @@ public class PacketKeyboard extends PacketGeneric {
 	}
 
 	private final void sync() {
+		World world = MoarPeripherals.proxy.getClientWorld(intData[0]);
+		TileEntity tile = world.getBlockTileEntity(intData[1], intData[2], intData[3]);
 		if (tile != null) {
 			((TileKeyboard) tile).sync(intData[4], intData[5], intData[6]);
 		}
@@ -93,11 +80,10 @@ public class PacketKeyboard extends PacketGeneric {
 
 	private final void keyPress() {
 		if (tile != null) {
-			ComputerUtils.queueEvent(tile, EVENT_KEY, intData[5]);
+			ComputerUtils.queueEvent(tile, EVENT_KEY, intData[4]);
 			char ch = charData[0];
 			if (ChatAllowedCharacters.isAllowedCharacter(ch)) {
-				ComputerUtils.queueEvent(tile, EVENT_CHAR,
-						Character.toString(ch));
+				ComputerUtils.queueEvent(tile, EVENT_CHAR, Character.toString(ch));
 			}
 		}
 	}

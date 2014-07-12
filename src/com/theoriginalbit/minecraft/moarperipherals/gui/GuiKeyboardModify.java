@@ -155,18 +155,18 @@ public class GuiKeyboardModify extends GuiScreen {
 		boolean fieldFocused = xTextField.isFocused() || yTextField.isFocused() || zTextField.isFocused();
 		
 		if (fieldFocused) {
-			tile.disconnectFromComputer();
+			tile.closeConnection();
 			keyboardStatus = KeyboardStatus.EDITING;
 		} else if (fieldValid && !fieldFocused) {
 			int x = Integer.parseInt(xTextField.getText());
 			int y = Integer.parseInt(yTextField.getText());
 			int z = Integer.parseInt(zTextField.getText());
 			
-			if (!tile.isComputerInRange(x, y, z)) {
-				tile.disconnectFromComputer();
+			if (!tile.isComputerInRange(new ChunkCoordinates(x, y, z))) {
+				tile.closeConnection();
 				keyboardStatus = KeyboardStatus.OUT_OF_RANGE;
 			} else {
-				tile.connectToComputer(x, y, z);
+				tile.openConnection(x, y, z);
 				boolean connected = tile.hasConnection();
 				boolean valid = tile.isConnectionValid();
 				if (connected && valid) {
@@ -177,7 +177,7 @@ public class GuiKeyboardModify extends GuiScreen {
 			}
 		} else if (!fieldFocused) {
 			if (xTextField.getText().equals("") && yTextField.getText().equals("") && zTextField.getText().equals("")) {
-				tile.disconnectFromComputer();
+				tile.closeConnection();
 				keyboardStatus = KeyboardStatus.DISCONNECTED;
 			}
 		}

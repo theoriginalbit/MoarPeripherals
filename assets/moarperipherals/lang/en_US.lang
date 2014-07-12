@@ -19,6 +19,7 @@ moarperipherasl.gui.keyboard.status.invalid=Invalid Target
 moarperipherasl.gui.keyboard.status.outofrange=Out of range
 moarperipherasl.gui.keyboard.status.other=Unknown
 moarperipherals.gui.keyboard.exit=Press ESC to exit the Keyboard
+moarperipherals.gui.keyboard.configure=Keyboard has not been configured. Shift right-click to configure.
 
 moarperipherals.tooltip.inkCartridge.contents=Ink Color
 moarperipherals.tooltip.inkCartridge.level=Ink Level

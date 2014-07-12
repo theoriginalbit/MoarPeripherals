@@ -36,20 +36,20 @@ public class GuiKeyboard extends GuiScreen {
 			// T
 			if (++terminateTimer > 50 && Keyboard.isKeyDown(20)) {
 				System.out.println("Terminating");
-				tile.terminateComputer();
+				tile.terminateTarget();
 				terminateTimer = 0;
 			}
 			
 			// R
 			if (++rebootTimer > 50 && Keyboard.isKeyDown(19)) {
 				System.out.println("Rebooting");
-				tile.rebootComputer();
+				tile.rebootTarget();
 				rebootTimer = 0;
 			}
 			// S
 			if (++shutdownTimer > 50 && Keyboard.isKeyDown(31)) {
 				System.out.println("Shutting down");
-				tile.shutdownComputer();
+				tile.shutdownTarget();
 				shutdownTimer = 0;
 			}
 		} else {
@@ -87,7 +87,7 @@ public class GuiKeyboard extends GuiScreen {
 			super.keyTyped(ch, keyCode);
 		} else {
 			// A different key was pressed, send to TileEntity
-			tile.onKey(ch, keyCode);
+			tile.onKeyPress(ch, keyCode);
 		}
 	}
 	
