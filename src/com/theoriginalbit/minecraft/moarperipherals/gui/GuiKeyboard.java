@@ -3,6 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.gui;
 import org.lwjgl.input.Keyboard;
 
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.utils.KeyboardUtils;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +32,11 @@ public class GuiKeyboard extends GuiScreen {
 	}
 	
 	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
+	
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float par3) {
 		String exitMessage = StatCollector.translateToLocal(EXIT_MESSAGE);
 		int xPos = (width-fontRenderer.getStringWidth(exitMessage))/2;
@@ -41,8 +47,7 @@ public class GuiKeyboard extends GuiScreen {
 	
 	@Override
 	public void updateScreen() {
-		// CTRL
-		if (isCtrlKeyDown()) {
+		if (KeyboardUtils.isCtrlKeyDown()) {
 			// T
 			if (++terminateTimer > 50 && Keyboard.isKeyDown(20)) {
 				tile.terminateTarget();
@@ -93,17 +98,11 @@ public class GuiKeyboard extends GuiScreen {
 		if (keyCode == 1) {
 			super.keyTyped(ch, keyCode);
 		} else {
-			// A different key was pressed, send to TileEntity
-			
+			// A different key was pressed, queue it to the computer
 			tile.queueEventToTarget(EVENT_KEY, keyCode);
 			if (ChatAllowedCharacters.isAllowedCharacter(ch)) {
 				tile.queueEventToTarget(EVENT_CHAR, Character.toString(ch));
 			}
 		}
-	}
-	
-	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
 	}
 }

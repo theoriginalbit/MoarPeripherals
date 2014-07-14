@@ -12,14 +12,14 @@ public final class ConfigurationHandler {
 	private static final String ENABLEFORMAT = "Enable the %s Block";
 	private static final String BLOCKIDFORMAT = "The Block ID of the %s Block";
 	private static final String ITEMIDFORMAT = "The ID for the %s Item";
-	private static final String LIQUIDIDFORMAT = "The Liquid ID for %s";
+//	private static final String LIQUIDIDFORMAT = "The Liquid ID for %s";
 	
-	private static final String FLUIDS = "Fluids";
+//	private static final String FLUIDS = "Fluids";
 	private static final String CHATBOX = "ChatBox";
-	private static final String PRINTER = "Printer";
+//	private static final String PRINTER = "Printer";
 	private static final String KEYBOARD = "Keyboard";
 	private static final String IRONNOTE = "Iron Note";
-	private static final String RENDERER = "Render";
+//	private static final String RENDERER = "Render";
 	private static final String PLAYERDETECTOR = "Player Detector";
 	
 	private static Configuration config;
@@ -48,13 +48,13 @@ public final class ConfigurationHandler {
 		return getInt(cat, key, defId, String.format(ITEMIDFORMAT, readableName));
 	}
 	
-	private static final int getFluidId(String key, int defId) {
-		return getInt(FLUIDS, key, defId, null);
-	}
-	
-	private static final int getFluidId(String key, int defId, String desc) {
-		return getInt(FLUIDS, key, defId, String.format(LIQUIDIDFORMAT, desc));
-	}
+//	private static final int getFluidId(String key, int defId) {
+//		return getInt(FLUIDS, key, defId, null);
+//	}
+//	
+//	private static final int getFluidId(String key, int defId, String desc) {
+//		return getInt(FLUIDS, key, defId, String.format(LIQUIDIDFORMAT, desc));
+//	}
 	
 	public static final void init(File c) {
 		if (config == null) {
@@ -85,37 +85,38 @@ public final class ConfigurationHandler {
 		Settings.noteRange = getInt(IRONNOTE, "noteRange", Settings.noteRange, "The range at which the note can be heard. Note: Does not seem to work for audio, yet (?).");
 		
 		// Printer
-		Settings.enablePrinter = getEnabled(PRINTER);
-		Settings.blockIdPrinter = getBlockId(PRINTER, Settings.blockIdPrinter);
-		Settings.enableFluidInk = getBoolean(PRINTER, "fluidInk", false, "Enable inks, ink cartridges will need to be filled with ink, not dyes. Note: Not yet implemented");
-		Settings.itemIdInkCartridge = getItemId(PRINTER, "inkCartridge", Settings.itemIdInkCartridge, "Ink Cartridge");
+//		Settings.enablePrinter = getEnabled(PRINTER);
+//		Settings.blockIdPrinter = getBlockId(PRINTER, Settings.blockIdPrinter);
+//		Settings.enableFluidInk = getBoolean(PRINTER, "fluidInk", false, "Enable inks, ink cartridges will need to be filled with ink, not dyes. Note: Not yet implemented");
+//		Settings.itemIdInkCartridge = getItemId(PRINTER, "inkCartridge", Settings.itemIdInkCartridge, "Ink Cartridge");
 		
 		// Fluids
-		Settings.fluidInkWhiteID = getFluidId("fluidInkWhiteID", Settings.fluidInkWhiteID);
-		Settings.fluidInkOrangeID = getFluidId("fluidInkOrangeID", Settings.fluidInkOrangeID);
-		Settings.fluidInkMagentaID = getFluidId("fluidInkMagentaID", Settings.fluidInkMagentaID);
-		Settings.fluidInkLightBlueID = getFluidId("fluidInkLightBlueID", Settings.fluidInkLightBlueID);
-		Settings.fluidInkYellowID = getFluidId("fluidInkYellowID", Settings.fluidInkYellowID);
-		Settings.fluidInkLimeID = getFluidId("fluidInkLimeID", Settings.fluidInkLimeID);
-		Settings.fluidInkPinkID = getFluidId("fluidInkPinkID", Settings.fluidInkPinkID);
-		Settings.fluidInkGrayID = getFluidId("fluidInkGrayID", Settings.fluidInkGrayID);
-		Settings.fluidInkLightGrayID = getFluidId("fluidInkLightGrayID", Settings.fluidInkLightGrayID);
-		Settings.fluidInkCyanID = getFluidId("fluidInkCyanID", Settings.fluidInkCyanID);
-		Settings.fluidInkPurpleID = getFluidId("fluidInkPurpleID", Settings.fluidInkPurpleID);
-		Settings.fluidInkBlueID = getFluidId("fluidInkBlueID", Settings.fluidInkBlueID);
-		Settings.fluidInkBrownID = getFluidId("fluidInkBrownID", Settings.fluidInkBrownID);
-		Settings.fluidInkGreenID = getFluidId("fluidInkGreenID", Settings.fluidInkGreenID);
-		Settings.fluidInkRedID = getFluidId("fluidInkRedID", Settings.fluidInkRedID);
-		Settings.fluidInkBlackID = getFluidId("fluidInkBlackID", Settings.fluidInkBlackID);
-		Settings.fluidPlasticID = getFluidId("fluidPlasticID", Settings.fluidPlasticID, "Plastic");
+//		Settings.fluidInkWhiteID = getFluidId("fluidInkWhiteID", Settings.fluidInkWhiteID);
+//		Settings.fluidInkOrangeID = getFluidId("fluidInkOrangeID", Settings.fluidInkOrangeID);
+//		Settings.fluidInkMagentaID = getFluidId("fluidInkMagentaID", Settings.fluidInkMagentaID);
+//		Settings.fluidInkLightBlueID = getFluidId("fluidInkLightBlueID", Settings.fluidInkLightBlueID);
+//		Settings.fluidInkYellowID = getFluidId("fluidInkYellowID", Settings.fluidInkYellowID);
+//		Settings.fluidInkLimeID = getFluidId("fluidInkLimeID", Settings.fluidInkLimeID);
+//		Settings.fluidInkPinkID = getFluidId("fluidInkPinkID", Settings.fluidInkPinkID);
+//		Settings.fluidInkGrayID = getFluidId("fluidInkGrayID", Settings.fluidInkGrayID);
+//		Settings.fluidInkLightGrayID = getFluidId("fluidInkLightGrayID", Settings.fluidInkLightGrayID);
+//		Settings.fluidInkCyanID = getFluidId("fluidInkCyanID", Settings.fluidInkCyanID);
+//		Settings.fluidInkPurpleID = getFluidId("fluidInkPurpleID", Settings.fluidInkPurpleID);
+//		Settings.fluidInkBlueID = getFluidId("fluidInkBlueID", Settings.fluidInkBlueID);
+//		Settings.fluidInkBrownID = getFluidId("fluidInkBrownID", Settings.fluidInkBrownID);
+//		Settings.fluidInkGreenID = getFluidId("fluidInkGreenID", Settings.fluidInkGreenID);
+//		Settings.fluidInkRedID = getFluidId("fluidInkRedID", Settings.fluidInkRedID);
+//		Settings.fluidInkBlackID = getFluidId("fluidInkBlackID", Settings.fluidInkBlackID);
+//		Settings.fluidPlasticID = getFluidId("fluidPlasticID", Settings.fluidPlasticID, "Plastic");
 		
 		// Keyboard
 		Settings.enableKeyboard = getEnabled(KEYBOARD);
 		Settings.blockIdKeyboard = getBlockId(KEYBOARD, Settings.blockIdKeyboard);
+		Settings.itemKeyboardPart = getItemId(KEYBOARD, "keyboardPart", Settings.itemKeyboardPart, "Keyboard Part");
 		Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 		
 		// Renderers
-		Settings.enableInkCartridgeRenderer = getBoolean(RENDERER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered in the players hand as a model or texture");
+//		Settings.enableInkCartridgeRenderer = getBoolean(RENDERER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered in the players hand as a model or texture");
 	
 		if (config.hasChanged()) {
 			config.save();

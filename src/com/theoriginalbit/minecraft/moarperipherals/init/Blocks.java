@@ -3,6 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.init;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.theoriginalbit.minecraft.moarperipherals.block.*;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemBlockKeyboard;
@@ -55,7 +56,14 @@ public final class Blocks {
 			GameRegistry.addRecipe(new ItemStack(blockIronNote), "III", "INI", "IRI", 'I', Item.ingotIron, 'N', Block.music, 'R', Item.redstone);
 		}
 		if (Settings.enableKeyboard) {
-			//GameRegistry.addRecipe(new ItemStack(blockKeyboard), "K", "K", "K", 'K', Items.itemKeyboardPart);
+			GameRegistry.addRecipe(new ItemStack(blockKeyboard), "KKK", 'K', Items.itemKeyboardPart);
 		}
+	}
+	
+	public static void oreRegistration() {
+		OreDictionary.registerOre("peripheralChatbox", blockChatBox);
+		OreDictionary.registerOre("peripheralPlayerDetector", blockPlayerDetector);
+		OreDictionary.registerOre("peripheralIronNote", blockIronNote);
+		OreDictionary.registerOre("peripheralKeyboard", blockKeyboard);
 	}
 }

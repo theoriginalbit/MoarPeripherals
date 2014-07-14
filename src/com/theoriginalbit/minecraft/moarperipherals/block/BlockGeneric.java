@@ -65,8 +65,9 @@ public abstract class BlockGeneric extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		
-		if (tile instanceof IPlaceAwareTile)
+		if (tile instanceof IPlaceAwareTile) {
 			((IPlaceAwareTile) tile).onPlaced(entity, stack, x, y, z);
+		}
 	}
 	
 	@Override
@@ -78,8 +79,9 @@ public abstract class BlockGeneric extends BlockContainer {
 			return true;
 		}
 		
-		if (tile instanceof IActivateAwareTile)
+		if (tile instanceof IActivateAwareTile) {
 			return ((IActivateAwareTile) tile).onActivated(player, side, hitX, hitY, hitZ);
+		}
 		
 		return false;
 	}
@@ -88,11 +90,13 @@ public abstract class BlockGeneric extends BlockContainer {
 	public void breakBlock(World world, int x, int y, int z, int id, int meta) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		
-		if (tile instanceof IBreakAwareTile)
+		if (tile instanceof IBreakAwareTile) {
 			((IBreakAwareTile) tile).onBreak(x, y, z);
+		}
 		
-		if (tile instanceof IInventory)
+		if (tile instanceof IInventory) {
 			InventoryUtils.explodeInventory((IInventory)tile, world, x, y, z);
+		}
 		
 		super.breakBlock(world, x, y, z, id, meta);
 	}
@@ -101,8 +105,9 @@ public abstract class BlockGeneric extends BlockContainer {
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		
-		if (tile instanceof INeighborAwareTile)
+		if (tile instanceof INeighborAwareTile) {
 			((INeighborAwareTile) tile).onNeighbourChanged(blockId);
+		}
 		
 		super.onNeighborBlockChange(world, x, y, z, blockId);
 	}

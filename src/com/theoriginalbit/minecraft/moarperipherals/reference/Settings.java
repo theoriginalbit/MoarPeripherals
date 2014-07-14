@@ -51,6 +51,7 @@ public final class Settings {
 	// Keyboard
 	public static boolean enableKeyboard;
 	public static int blockIdKeyboard = startBlockID++;
+	public static int itemKeyboardPart = startItemID++;
 	public static int keyboardRange = 16;
 	
 	// Renderer

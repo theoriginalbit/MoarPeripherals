@@ -9,6 +9,9 @@ import com.theoriginalbit.minecraft.moarperipherals.utils.ComputerUtils;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -22,6 +25,9 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	
 	private Integer targetX, targetY, targetZ;
 	
+	/**
+	 * Read the target information from NBT
+	 */
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
@@ -32,6 +38,9 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
         }
     }
 	
+	/**
+	 * Write the target information to NBT
+	 */
 	@Override
     public void writeToNBT(NBTTagCompound tag) {
     	super.writeToNBT(tag);
@@ -41,23 +50,56 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
     		tag.setInteger("targetZ", targetZ);
     	}
     }
+	
+	/**
+	 * If a player begins watching the chunk, send the target info for correct rendering
+	 */
+	@Override
+	public Packet getDescriptionPacket() {
+		System.out.println("Description packet: " + targetX + " " + targetY + " " + targetZ);
+		if (targetX == null || targetY == null || targetZ == null) {
+			return null;
+		}
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger("targetX", targetX);
+		tag.setInteger("targetY", targetY);
+		tag.setInteger("targetZ", targetZ);
+		return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);
+    }
+	
+	/**
+	 * Recieve the target info packet
+	 */
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {
+		NBTTagCompound tag = packet.data;
+		targetX = tag.getInteger("targetX");
+		targetY = tag.getInteger("targetY");
+		targetZ = tag.getInteger("targetZ");
+		System.out.println("Data packet: " + targetX + " " + targetY + " " + targetZ);
+	}
     
+	/**
+	 * When the Keybaord is right-clicked, it shall turn on the target computer if it is not on
+	 */
 	@Override
 	public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		ComputerUtils.turnOn(getTileComputerBase());
 		return true;
 	}
 	
-	public boolean hasConnection() {
+	/**
+	 * Whether the keyboard has a valid connection or not
+	 */
+	public final boolean hasConnection() {
+		//System.out.println("HasConnection: " + targetX + " " + targetY + " " + targetZ);
 		return ComputerUtils.getTileComputerBase(worldObj, targetX, targetY, targetZ) != null;
 	}
 	
-	public boolean targetInRange() {
-		if (targetX == null || targetY == null || targetZ == null) { return false; }
-		return MathHelper.sqrt_double(getDistanceFrom(targetX, targetY, targetZ)) <= Settings.keyboardRange;
-	}
-	
-	public ResourceLocation getTextureForRender() {
+	/**
+	 * Used by the renderer to get which texture to display based on the connection status
+	 */
+	public final ResourceLocation getTextureForRender() {
 		if (hasConnection() && targetInRange()) {
 			return TEXTURE_ON;
 		} else if (hasConnection() && !targetInRange()) {
@@ -66,31 +108,32 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 		return TEXTURE;
 	}
 
-	public void configureTarget(int x, int y, int z) {
+	public final void configureTarget(int x, int y, int z) {
+		System.out.println("Configure: " + targetX + " " + targetY + " " + targetZ);
 		targetX = x;
 		targetY = y;
 		targetZ = z;
 	}
 	
-	public void terminateTarget() {
+	public final void terminateTarget() {
 		if (targetInRange()) {
 			ComputerUtils.terminate(getTileComputerBase());
 		}
 	}
 
-	public void rebootTarget() {
+	public final void rebootTarget() {
 		if (targetInRange()) {
 			ComputerUtils.reboot(getTileComputerBase());
 		}
 	}
 
-	public void shutdownTarget() {
+	public final void shutdownTarget() {
 		if (targetInRange()) {
 			ComputerUtils.shutdown(getTileComputerBase());
 		}
 	}
 
-	public void queueEventToTarget(String event, Object... args) {
+	public final void queueEventToTarget(String event, Object... args) {
 		if (targetInRange()) {
 			ComputerUtils.queueEvent(getTileComputerBase(), event, args);
 		}
@@ -98,5 +141,10 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	
 	private final TileEntity getTileComputerBase() {
 		return ComputerUtils.getTileComputerBase(worldObj, targetX, targetY, targetZ);
+	}
+	
+	private final boolean targetInRange() {
+		if (targetX == null || targetY == null || targetZ == null) { return false; }
+		return MathHelper.sqrt_double(getDistanceFrom(targetX, targetY, targetZ)) <= Settings.keyboardRange;
 	}
 }

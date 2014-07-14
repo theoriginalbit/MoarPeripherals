@@ -22,7 +22,7 @@ public class BlockKeyboard extends BlockGeneric {
 	private static final String NOT_PAIRED = "moarperipherals.gui.keyboard.notPaired";
 	
 	public BlockKeyboard() {
-		super(Settings.blockIdKeyboard, Material.rock, "keyboard");
+		super(Settings.blockIdKeyboard, Material.rock, "keyboard", soundStoneFootstep);
 		setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
 	}
 
@@ -56,6 +56,7 @@ public class BlockKeyboard extends BlockGeneric {
 		int face = MathHelper.floor_double((double) (entity.rotationYaw * 4.0f / 360.0f) + 0.5d) & 3;
 		int meta = ForgeDirection.getOrientation(face).getOpposite().ordinal();
 		world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+		super.onBlockPlacedBy(world, x, y, z, entity, stack);
 	}
 	
 	@Override
@@ -66,7 +67,7 @@ public class BlockKeyboard extends BlockGeneric {
 			TileKeyboard keyboard = (TileKeyboard) tile;
 			if (keyboard.hasConnection()) {
 				player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
-			} else {
+			} else if (world.isRemote) {
 				ChatUtils.sendChatToPlayer(player.username, StatCollector.translateToLocal(NOT_PAIRED));
 			}
 			return ((IActivateAwareTile) tile).onActivated(player, side, hitX, hitY, hitZ);

@@ -1,8 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.packet;
 
 public enum PacketType {
-	IRON_NOTE,
-	KEYBOARD;
+	IRON_NOTE;
 	
 	public static PacketType valueOf(int id) {
 		for (PacketType type : values()) {

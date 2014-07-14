@@ -5,7 +5,6 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.theoriginalbit.minecraft.moarperipherals.packet.PacketGeneric;
 import com.theoriginalbit.minecraft.moarperipherals.packet.PacketIronNote;
-import com.theoriginalbit.minecraft.moarperipherals.packet.PacketKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.packet.PacketType;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,12 +23,9 @@ public class PacketHandler implements IPacketHandler {
 		PacketGeneric mpPacket;
 		
 		switch (type) {
-			case IRON_NOTE:
-				mpPacket = new PacketIronNote();
-				break;
-			case KEYBOARD:
-				mpPacket = new PacketKeyboard();
-				break;
+		case IRON_NOTE:
+			mpPacket = new PacketIronNote();
+			break;
 		default: return;
 		}
 		

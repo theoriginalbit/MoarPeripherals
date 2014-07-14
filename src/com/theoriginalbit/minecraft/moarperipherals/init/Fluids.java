@@ -1,9 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.init;
 
-import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public class Fluids {
 	public static Fluid fluidInkWhite;
@@ -26,15 +23,19 @@ public class Fluids {
 	public static Fluid fluidPlastic;
 	
 	public static void init() {
-		if (Settings.enablePrinter && Settings.enableFluidInk) {
-			fluidInkWhite = new Fluid("fluidInkWhite").setBlockID(Settings.fluidInkWhiteID);
-			FluidRegistry.registerFluid(fluidInkWhite);
-			
-			// create the ink fluids
-		}
+//		if (Settings.enablePrinter && Settings.enableFluidInk) {
+//			fluidInkWhite = new Fluid("fluidInkWhite").setBlockID(Settings.fluidInkWhiteID);
+//			FluidRegistry.registerFluid(fluidInkWhite);
+//			
+//			// create the ink fluids
+//		}
 		
-		if (Settings.enablePrinter) {
-			// create plastic
-		}
+//		if (Settings.enablePrinter) {
+//			// create plastic
+//		}
+	}
+	
+	public static void oreRegistration() {
+		
 	}
 }

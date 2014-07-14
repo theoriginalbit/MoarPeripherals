@@ -46,7 +46,7 @@ public class ItemBlockKeyboard extends ItemBlock {
 	
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		if (stack.getItem() instanceof ItemBlockKeyboard && ComputerUtils.getTileComputerBase(world, x, y, z) != null) {
+		if (!world.isRemote && stack.getItem() instanceof ItemBlockKeyboard && ComputerUtils.getTileComputerBase(world, x, y, z) != null) {
 			NBTTagCompound tag = new NBTTagCompound("tag");
 			tag.setInteger("targetX", x);
 			tag.setInteger("targetY", y);
