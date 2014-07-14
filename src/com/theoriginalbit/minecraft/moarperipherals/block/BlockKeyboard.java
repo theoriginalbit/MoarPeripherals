@@ -3,27 +3,27 @@ package com.theoriginalbit.minecraft.moarperipherals.block;
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.gui.GuiType;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
-import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.utils.ChatUtils;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
 public class BlockKeyboard extends BlockGeneric {
+	
+	private static final String NOT_PAIRED = "moarperipherals.gui.keyboard.notPaired";
+	
 	public BlockKeyboard() {
 		super(Settings.blockIdKeyboard, Material.rock, "keyboard");
-		
 		setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
-		
-		GameRegistry.registerTileEntity(TileKeyboard.class, ModInfo.ID + ":tileKeyboard");
 	}
 
 	@Override
@@ -63,10 +63,11 @@ public class BlockKeyboard extends BlockGeneric {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		
 		if (tile instanceof TileKeyboard) {
-			if (player.isSneaking()) {
-				player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD_MODIFY.ordinal(), world, x, y, z);
-			} else {
+			TileKeyboard keyboard = (TileKeyboard) tile;
+			if (keyboard.hasConnection()) {
 				player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
+			} else {
+				ChatUtils.sendChatToPlayer(player.username, StatCollector.translateToLocal(NOT_PAIRED));
 			}
 			return ((IActivateAwareTile) tile).onActivated(player, side, hitX, hitY, hitZ);
 		}

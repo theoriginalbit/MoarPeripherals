@@ -6,11 +6,15 @@ import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.StatCollector;
 
 public class GuiKeyboard extends GuiScreen {
+	private static final String EXIT_MESSAGE = "moarperipherals.gui.keyboard.exit";
+	private static final String EVENT_PASTE = "paste";
+	private static final String EVENT_KEY = "key";
+	private static final String EVENT_CHAR = "char";
 	
-	private static final String LOCAL_STRING = "moarperipherals.gui.keyboard.exit";
 	private final EntityPlayer player;
 	private final TileKeyboard tile;
 	private int terminateTimer, rebootTimer, shutdownTimer = 0;
@@ -21,8 +25,14 @@ public class GuiKeyboard extends GuiScreen {
 	}
 	
 	@Override
+	public void initGui() {
+		super.initGui();
+		Keyboard.enableRepeatEvents(true);
+	}
+	
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float par3) {
-		String exitMessage = StatCollector.translateToLocal(LOCAL_STRING);
+		String exitMessage = StatCollector.translateToLocal(EXIT_MESSAGE);
 		int xPos = (width-fontRenderer.getStringWidth(exitMessage))/2;
 		int yPos = player.capabilities.isCreativeMode ? height-33 : height-59;
 		int color = 0xffffff;
@@ -35,20 +45,17 @@ public class GuiKeyboard extends GuiScreen {
 		if (isCtrlKeyDown()) {
 			// T
 			if (++terminateTimer > 50 && Keyboard.isKeyDown(20)) {
-				System.out.println("Terminating");
 				tile.terminateTarget();
 				terminateTimer = 0;
 			}
 			
 			// R
 			if (++rebootTimer > 50 && Keyboard.isKeyDown(19)) {
-				System.out.println("Rebooting");
 				tile.rebootTarget();
 				rebootTimer = 0;
 			}
 			// S
 			if (++shutdownTimer > 50 && Keyboard.isKeyDown(31)) {
-				System.out.println("Shutting down");
 				tile.shutdownTarget();
 				shutdownTimer = 0;
 			}
@@ -77,7 +84,7 @@ public class GuiKeyboard extends GuiScreen {
 						clipboard = clipboard.substring(0, 128);
 					}
 					
-					tile.onPaste(clipboard);
+					tile.queueEventToTarget(EVENT_PASTE, clipboard);
 				}
 			}
 			return;
@@ -87,7 +94,11 @@ public class GuiKeyboard extends GuiScreen {
 			super.keyTyped(ch, keyCode);
 		} else {
 			// A different key was pressed, send to TileEntity
-			tile.onKeyPress(ch, keyCode);
+			
+			tile.queueEventToTarget(EVENT_KEY, keyCode);
+			if (ChatAllowedCharacters.isAllowedCharacter(ch)) {
+				tile.queueEventToTarget(EVENT_CHAR, Character.toString(ch));
+			}
 		}
 	}
 	

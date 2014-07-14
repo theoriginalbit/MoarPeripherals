@@ -10,6 +10,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public final class RendererKeyboard extends CustomTileRenderer {
+	
+	
 	public RendererKeyboard() {
 		super(new ModelKeyboard());
 	}
@@ -20,7 +22,7 @@ public final class RendererKeyboard extends CustomTileRenderer {
 		GL11.glScalef(scale, scale, scale);
 		GL11.glRotatef(180, 0, 0, 1);
 		GL11.glTranslatef(-0.06f, 0f, 0.03f);
-		adjustRotatePivotViaMeta(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+		adjustRotatePivotViaMeta(tile);
 	}
 	
 	@Override
@@ -68,7 +70,7 @@ public final class RendererKeyboard extends CustomTileRenderer {
 
 	@Override
 	protected ResourceLocation getTexture(TileEntity tile) {
-		return ((TileKeyboard) tile).getTexture();
+		return ((TileKeyboard) tile).getTextureForRender();
 	}
 
 	@Override

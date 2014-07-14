@@ -2,7 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals.item;
 
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.minecraft.moarperipherals.utils.NeiUtils;
+import com.theoriginalbit.minecraft.moarperipherals.utils.NEIUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,7 +28,7 @@ public class ItemGeneric extends Item {
 	}
 	
 	public ItemGeneric hideFromNEI() {
-		NeiUtils.hideFromNEI(itemID);
+		NEIUtils.hideFromNEI(itemID);
 		return this;
 	}
 }

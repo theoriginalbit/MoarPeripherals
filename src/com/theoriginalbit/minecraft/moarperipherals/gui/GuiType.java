@@ -1,7 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.gui;
 
 public enum GuiType {
-	KEYBOARD, KEYBOARD_MODIFY;
+	KEYBOARD;
 
 	public static GuiType valueOf(int id) {
 		for (GuiType gui : values()) {

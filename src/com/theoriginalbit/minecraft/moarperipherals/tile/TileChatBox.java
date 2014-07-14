@@ -46,12 +46,7 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 	
 	@Override
 	public void onBreak(int x, int y, int z) {
-		// remove the ChatBox to the ChatListener
-		if (!worldObj.isRemote) {
-			ChatHandler.instance.removeChatListener(this);
-			ChatHandler.instance.removeDeathListener(this);
-			ChatHandler.instance.removeCommandListener(this);
-		}
+		unload();
 	}
 	
 	@LuaFunction
@@ -91,6 +86,20 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 				ChatHandler.instance.addCommandListener(this);
 			} catch (Exception e) {}
 			registered = true;
+		}
+	}
+	
+	@Override
+	public void onChunkUnload() {
+		unload();
+	}
+	
+	private void unload() {
+		// remove the ChatBox to the ChatListener
+		if (!worldObj.isRemote) {
+			ChatHandler.instance.removeChatListener(this);
+			ChatHandler.instance.removeDeathListener(this);
+			ChatHandler.instance.removeCommandListener(this);
 		}
 	}
 	

@@ -25,8 +25,8 @@ public class ProxyClient implements IProxy {
 	}
 
 	@Override
-	public boolean isServer() {
-		return FMLCommonHandler.instance().getEffectiveSide().isServer();
+	public boolean isClient() {
+		return FMLCommonHandler.instance().getEffectiveSide().isClient();
 	}
 
 	@Override

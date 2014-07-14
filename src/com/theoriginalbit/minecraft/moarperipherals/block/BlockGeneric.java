@@ -8,9 +8,8 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.INeighborAw
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.utils.InventoryUtils;
-import com.theoriginalbit.minecraft.moarperipherals.utils.NeiUtils;
+import com.theoriginalbit.minecraft.moarperipherals.utils.NEIUtils;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
@@ -29,21 +28,31 @@ public abstract class BlockGeneric extends BlockContainer {
 	private final String name;
 	
 	public BlockGeneric(int id, Material material, String blockName) {
-		this(id, material, blockName, null);
+		this(id, material, blockName, null, true);
 	}
 
 	public BlockGeneric(int id, Material material, String blockName, StepSound stepSound) {
+		this(id, material, blockName, stepSound, true);
+	}
+	
+	public BlockGeneric(int id, Material material, String blockName, boolean inCreative) {
+		this(id, material, blockName, null, inCreative);
+	}
+
+	public BlockGeneric(int id, Material material, String blockName, StepSound stepSound, boolean inCreative) {
 		super(id, material);
 		name = blockName;
-		
 		setHardness(0.5f);
 		setResistance(10.0f);
-		setUnlocalizedName(ModInfo.RESOURCE_DOMAIN + "." + name);
-		setCreativeTab(MoarPeripherals.creativeTab);
+		if (blockName != null) {
+			setUnlocalizedName(ModInfo.RESOURCE_DOMAIN + "." + name);
+		}
+		if (inCreative) {
+			setCreativeTab(MoarPeripherals.creativeTab);
+		}
 		if (stepSound != null) {
 			setStepSound(stepSound);
 		}
-		GameRegistry.registerBlock(this, getUnlocalizedName());
 	}
 	
 	@Override
@@ -99,7 +108,7 @@ public abstract class BlockGeneric extends BlockContainer {
 	}
 	
 	public BlockGeneric hideFromNEI() {
-		NeiUtils.hideFromNEI(blockID);
+		NEIUtils.hideFromNEI(blockID);
 		return this;
 	}
 }

@@ -1,7 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.handler;
 
 import com.theoriginalbit.minecraft.moarperipherals.gui.GuiKeyboard;
-import com.theoriginalbit.minecraft.moarperipherals.gui.GuiKeyboardModify;
 import com.theoriginalbit.minecraft.moarperipherals.gui.GuiType;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ChatUtils;
@@ -30,10 +29,10 @@ public class GuiHandler implements IGuiHandler {
 					if (tile.hasConnection()) {
 						return new GuiKeyboard(tile, player);
 					}
-					ChatUtils.sendChatToPlayer(player.username, StatCollector.translateToLocal(MESSAGE_CONFIGURE));
+					if (world.isRemote) {
+						ChatUtils.sendChatToPlayer(player.username, StatCollector.translateToLocal(MESSAGE_CONFIGURE));
+					}
 					return null;
-				case KEYBOARD_MODIFY:
-					return new GuiKeyboardModify((TileKeyboard) world.getBlockTileEntity(x, y, z));
 				default: return null;
 			}
 		}

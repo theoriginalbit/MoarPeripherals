@@ -13,8 +13,8 @@ public class ProxyServer implements IProxy {
 	}
 
 	@Override
-	public boolean isServer() {
-		return true;
+	public boolean isClient() {
+		return false;
 	}
 
 	@Override

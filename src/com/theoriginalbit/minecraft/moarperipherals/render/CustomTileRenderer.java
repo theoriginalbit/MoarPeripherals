@@ -9,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 
 public abstract class CustomTileRenderer extends TileEntitySpecialRenderer implements IItemRenderer {
@@ -36,8 +35,8 @@ public abstract class CustomTileRenderer extends TileEntitySpecialRenderer imple
 		GL11.glPopMatrix();
 	}
 	
-	protected void adjustRotatePivotViaMeta(World world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
+	protected void adjustRotatePivotViaMeta(TileEntity tile) {
+		int meta = tile.getBlockMetadata();
 		GL11.glRotatef((meta - 1) * -90, 0, 1, 0);
 	}
 	

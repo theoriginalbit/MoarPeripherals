@@ -2,7 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals.utils;
 
 import java.lang.reflect.Method;
 
-public final class NeiUtils {
+public final class NEIUtils {
 	private static final Class<?> CLAZZ_API = ReflectionUtils.getClass("codechicken.nei.api.API");
 	private static final Method METHOD_HIDEITEM = ReflectionUtils.getMethod(CLAZZ_API, "hideItem", new Class[]{ int.class });
 	

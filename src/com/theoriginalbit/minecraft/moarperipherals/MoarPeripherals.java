@@ -55,6 +55,9 @@ public class MoarPeripherals {
 		Items.init();
 		Fluids.init();
 		
+		Blocks.initRecipes();
+		Items.initRecipes();
+		
 		proxy.registerRenderInfo();
 	}
 	

@@ -39,51 +39,51 @@ public final class ComputerUtils {
 	
 	public static void queueEvent(TileEntity tile, String event, Object...args) {
 		Object computer = getIComputer(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-		
 		if (computer != null && CLAZZ_ICOMPUTER.isAssignableFrom(computer.getClass())) {
 			ReflectionUtils.callMethod(computer, METHOD_QUEUEEVENT, event, args);
 		}
 	}
 	
 	public static boolean isOn(TileEntity tile) {
+		if (tile == null) { return false; }
 		Object computer = getIComputer(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-		
 		if (computer != null && CLAZZ_ICOMPUTER.isAssignableFrom(computer.getClass())) {
 			return (Boolean) ReflectionUtils.callMethod(computer, METHOD_ISON);
 		}
-		
 		return false;
 	}
 	
 	public static void turnOn(TileEntity tile) {
+		if (tile == null) { return; }
 		Object computer = getIComputer(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-		
 		if (computer != null && CLAZZ_ICOMPUTER.isAssignableFrom(computer.getClass())) {
 			ReflectionUtils.callMethod(computer, METHOD_TURNON);
 		}
 	}
 	
 	public static void shutdown(TileEntity tile) {
+		if (tile == null) { return; }
 		Object computer = getIComputer(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-		
 		if (computer != null && CLAZZ_ICOMPUTER.isAssignableFrom(computer.getClass())) {
 			ReflectionUtils.callMethod(computer, METHOD_SHUTDOWN);
 		}
 	}
 	
 	public static void reboot(TileEntity tile) {
+		if (tile == null) { return; }
 		Object computer = getIComputer(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-		
 		if (computer != null && CLAZZ_ICOMPUTER.isAssignableFrom(computer.getClass())) {
 			ReflectionUtils.callMethod(computer, METHOD_REBOOT);
 		}
 	}
 	
 	public static void terminate(TileEntity tile) {
+		if (tile == null) { return; }
 		queueEvent(tile, EVENT_TERMINATE);
 	}
 	
 	public static void paste(TileEntity tile, String clipboard) {
+		if (tile == null) { return; }
 		queueEvent(tile, EVENT_PASTE, clipboard);
 	}
 }

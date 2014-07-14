@@ -8,11 +8,21 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Items {
 	public static ItemGeneric itemInkCartridge;
+	public static ItemGeneric itemKeyboardPart;
 	
 	public static void init() {		
 		if (Settings.enablePrinter) {
 			itemInkCartridge = new ItemInkCartridge();
 			GameRegistry.registerItem(itemInkCartridge, itemInkCartridge.getUnlocalizedName());
+		}
+	}
+	
+	public static void initRecipes() {
+		if (Settings.enablePrinter) {
+			
+		}
+		if (Settings.enableKeyboard) {
+			
 		}
 	}
 }
