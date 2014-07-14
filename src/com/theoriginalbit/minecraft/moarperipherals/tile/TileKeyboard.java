@@ -19,9 +19,9 @@ import net.minecraft.util.ResourceLocation;
 @Ignore
 public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	
-	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "/textures/models/Keyboard.png");
-	public static final ResourceLocation TEXTURE_ON = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "/textures/models/Keyboard_On.png");
-	public static final ResourceLocation TEXTURE_LOST = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "/textures/models/Keyboard_Lost.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/Keyboard.png");
+	public static final ResourceLocation TEXTURE_ON = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/Keyboard_On.png");
+	public static final ResourceLocation TEXTURE_LOST = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/Keyboard_Lost.png");
 	
 	private Integer targetX, targetY, targetZ;
 	
@@ -56,7 +56,6 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	 */
 	@Override
 	public Packet getDescriptionPacket() {
-		System.out.println("Description packet: " + targetX + " " + targetY + " " + targetZ);
 		if (targetX == null || targetY == null || targetZ == null) {
 			return null;
 		}
@@ -76,7 +75,6 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 		targetX = tag.getInteger("targetX");
 		targetY = tag.getInteger("targetY");
 		targetZ = tag.getInteger("targetZ");
-		System.out.println("Data packet: " + targetX + " " + targetY + " " + targetZ);
 	}
     
 	/**
@@ -92,7 +90,6 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	 * Whether the keyboard has a valid connection or not
 	 */
 	public final boolean hasConnection() {
-		//System.out.println("HasConnection: " + targetX + " " + targetY + " " + targetZ);
 		return ComputerUtils.getTileComputerBase(worldObj, targetX, targetY, targetZ) != null;
 	}
 	
@@ -109,7 +106,6 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	}
 
 	public final void configureTarget(int x, int y, int z) {
-		System.out.println("Configure: " + targetX + " " + targetY + " " + targetZ);
 		targetX = x;
 		targetY = y;
 		targetZ = z;
