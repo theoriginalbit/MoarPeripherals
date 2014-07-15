@@ -115,6 +115,8 @@ if not shell then
   
   local ironnote, paused, cTick, song = {peripheral.find("iron_note")}
   
+  local translate = {[0]=0,4,1,2,3}
+  
   local function assert(cdn, msg, lvl)
     if not cdn then
       error(msg or "assertion failed!", (lvl == 0 and 0 or lvl and (lvl + 1) or 2))
@@ -298,7 +300,7 @@ if not shell then
         local key = byte_lsb(handle)
         --
         notes[tick] = notes[tick] or {}
-        table.insert(notes[tick], {inst = inst; pitch = math.max((key-33)%maxPitch,0)})
+        table.insert(notes[tick], {inst = translate[inst]; pitch = math.max((key-33)%maxPitch,0)})
       end
     end
 
@@ -331,6 +333,7 @@ if not shell then
           local nowPlaying, curPeripheral = 0, 1
           
           for _,note in pairs(notes[cTick]) do
+            if not translate[note.inst] then error(note.inst) end
             ironnote[curPeripheral].playNote(note.inst, note.pitch)
             
             curPeripheral = curPeripheral + 1
