@@ -91,6 +91,13 @@
 --       5 = one beat per 0.2 seconds.
 --      10 = one beat per 0.1 seconds.
 
+-- Must be a factor of ten.
+
+-- < note.getRealSongTempo() >
+-- Returns the tempo the song's NBS file specified it should be played at.
+
+-- Should be a power of ten, but for whatever reason a lot of NBS files have invalid tempos.
+
 -- < note.getSongName() >
 -- Returns the name of the song.
 
@@ -136,17 +143,22 @@ if not shell then
   
   -- Returns the song length in seconds.
   function getSongSeconds()
-    if type(song) == "table" then return song.length / 10 end
+    if type(song) == "table" then return song.length / song.tempo end
   end
   
   -- Returns the song position in seconds.
   function getSongPositionSeconds()
-    if type(song) == "table" then return cTick / 10 end
+    if type(song) == "table" then return cTick / song.tempo end
   end
   
-  -- Returns the song tempo.
+  -- Returns the tempo the song will be played at.
   function getSongTempo()
     if type(song) == "table" then return song.tempo end
+  end
+  
+  -- Returns the tempo the song's NBS file specified it should be played at.
+  function getRealSongTempo()
+    if type(song) == "table" then return song.realTempo end
   end
   
   -- Switches to a different playback device.
@@ -266,7 +278,8 @@ if not shell then
     song.author = nbs_string(handle)
     song.originalauthor = nbs_string(handle)
     song.description = nbs_string(handle)
-    song.tempo = int16_msb(handle)/100
+    song.realTempo = int16_msb(handle)/100
+    song.tempo = song.realTempo < 10 and (10%song.realTempo == 0 and song.realTempo or 10/math.floor(10/song.realTempo+0.5)) or 10
     
     byte_lsb(handle) --# auto-saving has been enabled (0 or 1)
     byte_lsb(handle) --# The amount of minutes between each auto-save (if it has been enabled) (1-60)
@@ -316,13 +329,14 @@ if not shell then
   function songEngine(targetSong)
     assert(ironnote[1], "Note songEngine failure: No Iron Note Blocks assigned.", 0)
     
-    local tTick, notes = os.startTimer(0.1)
+    local tTick, delay, notes = os.startTimer(0.1)
     
     if targetSong then
       readNbs(targetSong)
       notes = song.notes
       cTick = 0
       paused = false
+      delay = 1 / song.tempo
     end
 
     while true do
@@ -346,7 +360,7 @@ if not shell then
           end
         end
         
-        tTick = os.startTimer(0.1)
+        tTick = os.startTimer(delay)
         cTick = cTick + 1
         
         if cTick > song.length then
@@ -366,8 +380,9 @@ if not shell then
         readNbs(e[2])
         notes = song.notes
         cTick = 0
-        tTick = os.startTimer(0)
+        tTick = os.startTimer(0.1)
         paused = false
+        delay = 1 / song.tempo
         os.queueEvent("newTrack")
       end
     end
@@ -628,7 +643,8 @@ else
             if note.getSongName() ~= "" then marquee = marquee..note.getSongName().."]" else marquee = marquee..fs.getName(lastSong[1]).."]" end
             if note.getSongArtist() ~= "" then marquee = marquee.." [Artist: "..note.getSongArtist().."]" end
             if note.getSongAuthor() ~= "" then marquee = marquee.." [NBS Author: "..note.getSongAuthor().."]" end
-            marquee = marquee.." [Tempo: "..note.getSongTempo().."]"
+            marquee = marquee.." [Tempo: "..note.getSongTempo()
+            marquee = marquee..(note.getSongTempo() == note.getRealSongTempo() and "]" or (" (Real: "..note.getRealSongTempo()..")]"))
             if note.getSongDescription() ~= "" then marquee = marquee.." [Description: "..note.getSongDescription().."]" end
             lastPauseState = "maybe"
           end
@@ -660,7 +676,7 @@ else
           -- Song timers.
           if note.isPlaying() then
             term.setCursorPos(xSize-5,ySize-2)
-            if term.isColour() and 10%note.getSongTempo() ~= 0 then term.setTextColour(colours.red) end
+            if term.isColour() and note.getSongTempo() ~= note.getRealSongTempo() then term.setTextColour(colours.red) end
 
             local mins = tostring(math.min(99,math.floor(note.getSongSeconds()/60)))
             local secs = tostring(math.floor(note.getSongSeconds()%60))
