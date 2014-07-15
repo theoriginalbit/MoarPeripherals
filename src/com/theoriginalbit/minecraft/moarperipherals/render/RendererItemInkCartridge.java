@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
+import com.theoriginalbit.minecraft.moarperipherals.reference.ModelTextures;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
@@ -13,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 public final class RendererItemInkCartridge extends CustomItemRenderer {
 	
 	private static final ResourceLocation[] textures;
-	private static final String TEXTURE_PATH = "/textures/models/InkCartridge%s.png";
 	private static final ModelBase modelCartridgeEmpty = new ModelItemInkCartridge(true);
 	private static final ModelBase modelCartridgeFilled = new ModelItemInkCartridge(false);
 	
@@ -71,10 +71,11 @@ public final class RendererItemInkCartridge extends CustomItemRenderer {
 	}
 	
 	static {
+		final String texturePath = ModelTextures.INK_CARTRIDGE.getPath();
 		textures = new ResourceLocation[17];
 		for (int i = 0; i < textures.length - 1; ++i) {
-			textures[i] = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, String.format(TEXTURE_PATH, i));
+			textures[i] = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, String.format(texturePath, i));
 		}
-		textures[textures.length - 1] = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, String.format(TEXTURE_PATH, "Empty"));
+		textures[textures.length - 1] = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, String.format(texturePath, "Empty"));
 	}
 }

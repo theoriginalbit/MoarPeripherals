@@ -3,6 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 import org.lwjgl.opengl.GL11;
 
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.reference.ModelTextures;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 
 import net.minecraft.item.ItemStack;
@@ -74,6 +75,6 @@ public final class RendererKeyboard extends CustomTileRenderer {
 
 	@Override
 	protected ResourceLocation getTexture(ItemStack stack) {
-		return TileKeyboard.TEXTURE;
+		return ModelTextures.KEYBOARD.getTexture();
 	}
 }

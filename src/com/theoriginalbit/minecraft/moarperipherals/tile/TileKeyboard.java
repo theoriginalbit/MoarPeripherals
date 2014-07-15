@@ -3,7 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
 import openperipheral.api.Ignore;
 
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
-import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
+import com.theoriginalbit.minecraft.moarperipherals.reference.ModelTextures;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ComputerUtils;
 
@@ -18,10 +18,6 @@ import net.minecraft.util.ResourceLocation;
 
 @Ignore
 public class TileKeyboard extends TileEntity implements IActivateAwareTile {
-	
-	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/Keyboard.png");
-	public static final ResourceLocation TEXTURE_ON = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/Keyboard_On.png");
-	public static final ResourceLocation TEXTURE_LOST = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/Keyboard_Lost.png");
 	
 	private Integer targetX, targetY, targetZ;
 	
@@ -98,11 +94,11 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	 */
 	public final ResourceLocation getTextureForRender() {
 		if (hasConnection() && targetInRange()) {
-			return TEXTURE_ON;
+			return ModelTextures.KEYBOARD_ON.getTexture();
 		} else if (hasConnection() && !targetInRange()) {
-			return TEXTURE_LOST;
+			return ModelTextures.KEYBOARD_LOST.getTexture();
 		}
-		return TEXTURE;
+		return ModelTextures.KEYBOARD.getTexture();
 	}
 
 	public final void configureTarget(int x, int y, int z) {
