@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelItemInkCartridge extends ModelBase {
-	ModelRenderer base, nozzle, clip, baseBack, baseBackSkinny;
+	protected ModelRenderer base, nozzle, clip, baseBack, baseBackSkinny;
 	protected boolean cartridgeEmpty;
 
 	public ModelItemInkCartridge(boolean empty) {
