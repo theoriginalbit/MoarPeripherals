@@ -2,7 +2,9 @@ package com.theoriginalbit.minecraft.moarperipherals.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.theoriginalbit.minecraft.moarperipherals.block.*;
@@ -13,6 +15,7 @@ import com.theoriginalbit.minecraft.moarperipherals.tile.TileChatBox;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileIronNote;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePlayerDetector;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -21,27 +24,28 @@ public final class Blocks {
 	public static BlockGeneric blockPlayerDetector;
 	public static BlockGeneric blockIronNote;
 	public static BlockGeneric blockKeyboard;
+	public static BlockGeneric blockPrinter;
 	
 	public static void init() {
 		if (Settings.enablePlayerDetector) {
 			blockPlayerDetector = new BlockPlayerDetector();
-			GameRegistry.registerBlock(blockPlayerDetector, blockPlayerDetector.getUnlocalizedName());
-			GameRegistry.registerTileEntity(TilePlayerDetector.class, ModInfo.ID + ":tilePlayerDetector");
+			registerBlock(blockPlayerDetector, TilePlayerDetector.class, "tilePlayerDetector");
 		}
 		if (Settings.enableChatBox) {
 			blockChatBox = new BlockChatBox();
-			GameRegistry.registerBlock(blockChatBox, blockChatBox.getUnlocalizedName());
-			GameRegistry.registerTileEntity(TileChatBox.class, ModInfo.ID + ":tileChatBox");
+			registerBlock(blockChatBox, TileChatBox.class, "tileChatBox");
 		}
 		if (Settings.enableIronNote) {
 			blockIronNote = new BlockIronNote();
-			GameRegistry.registerBlock(blockIronNote, blockIronNote.getUnlocalizedName());
-			GameRegistry.registerTileEntity(TileIronNote.class, ModInfo.ID + ":tileIronNote");
+			registerBlock(blockIronNote, TileIronNote.class, "tileIronNote");
 		}
 		if (Settings.enableKeyboard) {
 			blockKeyboard = new BlockKeyboard();
-			GameRegistry.registerBlock(blockKeyboard, ItemBlockKeyboard.class, blockKeyboard.getUnlocalizedName());
-			GameRegistry.registerTileEntity(TileKeyboard.class, ModInfo.ID + ":tileKeyboard");
+			registerBlock(blockKeyboard, TileKeyboard.class, "tileKeyboard", ItemBlockKeyboard.class);
+		}
+		if (Settings.enablePrinter) {
+			blockPrinter = new BlockPrinter();
+			registerBlock(blockPrinter, TilePrinter.class, "tilePrinter");
 		}
 	}
 	
@@ -65,5 +69,18 @@ public final class Blocks {
 		OreDictionary.registerOre("peripheralPlayerDetector", blockPlayerDetector);
 		OreDictionary.registerOre("peripheralIronNote", blockIronNote);
 		OreDictionary.registerOre("peripheralKeyboard", blockKeyboard);
+	}
+	
+	private static final void registerBlock(BlockGeneric block, Class<? extends TileEntity> tile, String teName) {
+		registerBlock(block, tile, teName, null);
+	}
+	
+	private static final void registerBlock(BlockGeneric block, Class<? extends TileEntity> tile, String teName, Class<? extends ItemBlock> itemBlock) {
+		if (itemBlock != null) {
+			GameRegistry.registerBlock(block, itemBlock, block.getUnlocalizedName());
+		} else {
+			GameRegistry.registerBlock(block, block.getUnlocalizedName());
+		}
+		GameRegistry.registerTileEntity(tile, ModInfo.ID + ':' + teName);
 	}
 }

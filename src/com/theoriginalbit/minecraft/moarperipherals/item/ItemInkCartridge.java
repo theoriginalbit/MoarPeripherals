@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.utils.KeyboardUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -22,6 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemInkCartridge extends ItemGeneric {
 	private static final int emptyColorIndex = 16;
 	private static final String TOOLTIP_LOCALIZATION = "moarperipherals.tooltip.inkCartridge.";
+	private static final String TOOLTIP_INFO = "moarperipherals.tooltip.generic.hold";
 	
 	private final ItemStack emptyCartridge;
 	private final ItemStack[] inkCartridges;
@@ -93,22 +95,26 @@ public class ItemInkCartridge extends ItemGeneric {
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-		// get the ink colour
-		int inkColor = getInkColor(stack);
-		// if it is not empty
-		if (inkColor != emptyColorIndex) {
-			String contents = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "contents") + ": ";
-			// translate the colour
-			String inkName = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "ink." + inkColor);
-			list.add(contents + inkName);
-			// there was a colour, so also get the percent
-			String percent = getInkPercent(stack);
-			if (percent != null) {
-				String level = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "level");
-				list.add(level + ": " + percent);
+		if (KeyboardUtils.isShiftKeyDown()) {
+			// get the ink colour
+			int inkColor = getInkColor(stack);
+			// if it is not empty
+			if (inkColor != emptyColorIndex) {
+				String contents = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "contents") + ": ";
+				// translate the colour
+				String inkName = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "ink." + inkColor);
+				list.add(contents + inkName);
+				// there was a colour, so also get the percent
+				String percent = getInkPercent(stack);
+				if (percent != null) {
+					String level = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "level");
+					list.add(level + ": " + percent);
+				}
+			} else {
+				list.add("Empty");
 			}
 		} else {
-			list.add("Empty");
+			list.add(StatCollector.translateToLocal(TOOLTIP_INFO));
 		}
 	}
 	

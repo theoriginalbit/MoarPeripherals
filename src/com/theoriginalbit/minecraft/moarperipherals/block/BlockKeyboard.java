@@ -8,21 +8,19 @@ import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ChatUtils;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class BlockKeyboard extends BlockGeneric {
+public class BlockKeyboard extends BlockRotatable {
 	
 	private static final String NOT_PAIRED = "moarperipherals.gui.keyboard.notPaired";
 	
 	public BlockKeyboard() {
 		super(Settings.blockIdKeyboard, Material.rock, "keyboard", soundStoneFootstep);
+		setRotationMode(RotationMode.FOUR);
 		setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
 	}
 
@@ -49,14 +47,6 @@ public class BlockKeyboard extends BlockGeneric {
 	@Override
 	public final boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
 		return isOnTopOfSolidBlock(world, x, y, z, ForgeDirection.getOrientation(side).getOpposite());
-	}
-	
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-		int face = MathHelper.floor_double((double) (entity.rotationYaw * 4.0f / 360.0f) + 0.5d) & 3;
-		int meta = ForgeDirection.getOrientation(face).getOpposite().ordinal();
-		world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-		super.onBlockPlacedBy(world, x, y, z, entity, stack);
 	}
 	
 	@Override

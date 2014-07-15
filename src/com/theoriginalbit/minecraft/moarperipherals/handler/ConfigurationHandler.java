@@ -16,10 +16,10 @@ public final class ConfigurationHandler {
 	
 //	private static final String FLUIDS = "Fluids";
 	private static final String CHATBOX = "ChatBox";
-//	private static final String PRINTER = "Printer";
+	private static final String PRINTER = "Printer";
 	private static final String KEYBOARD = "Keyboard";
 	private static final String IRONNOTE = "Iron Note";
-//	private static final String RENDERER = "Render";
+	private static final String RENDERER = "Render";
 	private static final String PLAYERDETECTOR = "Player Detector";
 	
 	private static Configuration config;
@@ -85,10 +85,10 @@ public final class ConfigurationHandler {
 		Settings.noteRange = getInt(IRONNOTE, "noteRange", Settings.noteRange, "The range at which the note can be heard. Note: Does not seem to work for audio, yet (?).");
 		
 		// Printer
-//		Settings.enablePrinter = getEnabled(PRINTER);
-//		Settings.blockIdPrinter = getBlockId(PRINTER, Settings.blockIdPrinter);
+		Settings.enablePrinter = getEnabled(PRINTER);
+		Settings.blockIdPrinter = getBlockId(PRINTER, Settings.blockIdPrinter);
 //		Settings.enableFluidInk = getBoolean(PRINTER, "fluidInk", false, "Enable inks, ink cartridges will need to be filled with ink, not dyes. Note: Not yet implemented");
-//		Settings.itemIdInkCartridge = getItemId(PRINTER, "inkCartridge", Settings.itemIdInkCartridge, "Ink Cartridge");
+		Settings.itemIdInkCartridge = getItemId(PRINTER, "inkCartridge", Settings.itemIdInkCartridge, "Ink Cartridge");
 		
 		// Fluids
 //		Settings.fluidInkWhiteID = getFluidId("fluidInkWhiteID", Settings.fluidInkWhiteID);
@@ -116,7 +116,7 @@ public final class ConfigurationHandler {
 		Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 		
 		// Renderers
-//		Settings.enableInkCartridgeRenderer = getBoolean(RENDERER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered in the players hand as a model or texture");
+		Settings.enableInkCartridgeRenderer = getBoolean(RENDERER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered in the players hand as a model or texture");
 	
 		if (config.hasChanged()) {
 			config.save();

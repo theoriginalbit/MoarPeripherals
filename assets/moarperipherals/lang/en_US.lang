@@ -4,6 +4,7 @@ tile.moarperipherals.playerdetector.name=Player Detector
 tile.moarperipherals.chatbox.name=ChatBox
 tile.moarperipherals.ironnote.name=Iron Note Block
 tile.moarperipherals.keyboard.name=Keyboard
+tile.moarperipherals.printer.name=Advanced Printer
 
 item.moarperipherals.inkCartridge.name=Ink Cartridge
 item.moarperipherals.keyboardPart.name=Keyboard Part

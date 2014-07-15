@@ -4,7 +4,9 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.render.RendererKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.render.RendererPrinter;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -34,6 +36,9 @@ public class ProxyClient implements IProxy {
 		// Register Ink Cartridge renderer
 		if (Settings.enablePrinter && Settings.enableInkCartridgeRenderer) {
 			MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new RendererItemInkCartridge());
+			RendererPrinter rendererPrinter = new RendererPrinter();
+			MinecraftForgeClient.registerItemRenderer(Settings.blockIdPrinter, rendererPrinter);
+			ClientRegistry.bindTileEntitySpecialRenderer(TilePrinter.class, rendererPrinter);
 		}
 		
 		// Register Keyboard renderers

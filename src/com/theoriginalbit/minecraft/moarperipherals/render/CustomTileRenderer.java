@@ -13,7 +13,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 public abstract class CustomTileRenderer extends TileEntitySpecialRenderer implements IItemRenderer {
 	
-	protected final ModelBase model;
+	protected ModelBase model;
 	
 	public CustomTileRenderer(ModelBase tile) {
 		model = tile;
