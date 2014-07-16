@@ -1,10 +1,13 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.StepSound;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
@@ -54,6 +57,17 @@ public abstract class BlockRotatable extends BlockGeneric {
 			return faceIcon;
 		}
 		return super.getBlockTexture(blockAccess, x, y, z, side);
+	}
+	
+	@Override
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public void getSubBlocks(int par1, CreativeTabs tab, List list) {
+		list.add(new ItemStack(this, 1, 3));
+	}
+	
+	@Override
+	public int getDamageValue(World world, int x, int y, int z) {
+		return 3;
 	}
 	
 	@Override

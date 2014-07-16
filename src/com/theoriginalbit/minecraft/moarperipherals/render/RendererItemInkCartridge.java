@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.minecraft.moarperipherals.reference.ModelTextures;
+import com.theoriginalbit.minecraft.moarperipherals.reference.lookup.ModelTextures;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;

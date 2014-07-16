@@ -41,8 +41,8 @@ public class ModelPrinter extends ModelBase {
 		bodyUpperMiddle.mirror = true;
 		setRotation(bodyUpperMiddle, 0F, 0F, 0F);
 		bodyLowerMiddle = new ModelRenderer(this, 114, 36);
-		bodyLowerMiddle.addBox(-8.5F, -4F, -11.5F, 17, 8, 23);
-		bodyLowerMiddle.setRotationPoint(0F, 0.5F, 0.5F);
+		bodyLowerMiddle.addBox(-8.5F, -4F, -11.5F, 17, 7, 23);
+		bodyLowerMiddle.setRotationPoint(0F, 1F, 0.5F);
 		bodyLowerMiddle.setTextureSize(256, 128);
 		bodyLowerMiddle.mirror = true;
 		setRotation(bodyLowerMiddle, 0F, 0F, 0F);
@@ -54,7 +54,7 @@ public class ModelPrinter extends ModelBase {
 		setRotation(feederSlope, 0.6632251F, 0F, 0F);
 		holePlug = new ModelRenderer(this, 114, 69);
 		holePlug.addBox(-8.5F, -1F, -1.5F, 17, 2, 3);
-		holePlug.setRotationPoint(0F, 5.5F, 10.5F);
+		holePlug.setRotationPoint(0F, 5F, 10.5F);
 		holePlug.setTextureSize(256, 128);
 		holePlug.mirror = true;
 		setRotation(holePlug, 0F, 0F, 0F);

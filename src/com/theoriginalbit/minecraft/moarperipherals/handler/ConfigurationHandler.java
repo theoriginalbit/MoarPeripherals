@@ -116,7 +116,8 @@ public final class ConfigurationHandler {
 		Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 		
 		// Renderers
-		Settings.enableInkCartridgeRenderer = getBoolean(RENDERER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered in the players hand as a model or texture");
+		Settings.enableRendererInkCartridge = getBoolean(RENDERER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered as an item or a model");
+		Settings.enableRendererPrinter = getBoolean(RENDERER, "enablePrinterModel", false, "Enable whether the Advanced Printer should be rendered as a block or a model");
 	
 		if (config.hasChanged()) {
 			config.save();

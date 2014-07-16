@@ -15,7 +15,7 @@ moarperipherals.gui.keyboard.notPaired=Keyboard not paired. Shift right-click a 
 moarperipherals.tooltip.keyboard.paired=Target
 moarperipherals.tooltip.keyboard.notPaired=Not Paired
 
-moarperipherals.tooltip.generic.hold=Hold SHIFT for information
+moarperipherals.tooltip.generic.information=Hold SHIFT for information
 
 moarperipherals.tooltip.inkCartridge.contents=Ink Colour
 moarperipherals.tooltip.inkCartridge.level=Ink Level

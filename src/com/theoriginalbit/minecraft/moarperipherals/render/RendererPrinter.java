@@ -3,7 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 import org.lwjgl.opengl.GL11;
 
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelPrinter;
-import com.theoriginalbit.minecraft.moarperipherals.reference.ModelTextures;
+import com.theoriginalbit.minecraft.moarperipherals.reference.lookup.ModelTextures;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 
 import net.minecraft.client.model.ModelBase;

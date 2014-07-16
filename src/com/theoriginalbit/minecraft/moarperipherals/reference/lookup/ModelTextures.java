@@ -1,4 +1,6 @@
-package com.theoriginalbit.minecraft.moarperipherals.reference;
+package com.theoriginalbit.minecraft.moarperipherals.reference.lookup;
+
+import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 
 import net.minecraft.util.ResourceLocation;
 

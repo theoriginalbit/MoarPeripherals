@@ -55,5 +55,6 @@ public final class Settings {
 	public static int keyboardRange = 16;
 	
 	// Renderer
-	public static boolean enableInkCartridgeRenderer;
+	public static boolean enableRendererInkCartridge;
+	public static boolean enableRendererPrinter;
 }

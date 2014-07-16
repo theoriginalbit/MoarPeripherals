@@ -3,8 +3,8 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
 import openperipheral.api.Ignore;
 
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
-import com.theoriginalbit.minecraft.moarperipherals.reference.ModelTextures;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.reference.lookup.ModelTextures;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ComputerUtils;
 
 import net.minecraft.entity.player.EntityPlayer;
