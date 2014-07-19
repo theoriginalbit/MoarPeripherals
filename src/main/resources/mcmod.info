@@ -3,8 +3,8 @@
         "modid": "MoarPeripherals",
         "name": "MoarPeripherals",
         "description": "Adds a bunch of useful peripherals to ComputerCraft",
-        "version": "@VERSION@",
-        "mcversion" : "1.6.4",
+        "version": "${version}",
+        "mcversion" : "${mcversion}",
         "url": "http://www.computercraft.info/forums2/index.php?/topic/19357-",
         "updateUrl": "",
         "authors": [
