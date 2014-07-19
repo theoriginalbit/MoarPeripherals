@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 public class TileKeyboard extends TileEntity implements IActivateAwareTile {
 	
 	private TileEntity targetTile;
+	private Integer nbtTargetX, nbtTargetY, nbtTargetZ;
 	
 	/**
 	 * Read the target information from NBT
@@ -42,6 +43,14 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
     		tag.setInteger("targetZ", targetTile.zCoord);
     	}
     }
+	
+	@Override
+	public void updateEntity() {
+		if (nbtTargetX != null && nbtTargetY != null && nbtTargetZ != null) {
+			configureTarget(nbtTargetX, nbtTargetY, nbtTargetZ);
+			nbtTargetX = nbtTargetY = nbtTargetZ = null;
+		}
+	}
 	
 	/**
 	 * If a player begins watching the chunk, send the target info for correct rendering
@@ -104,7 +113,9 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
         	int x = tag.getInteger("targetX");
         	int y = tag.getInteger("targetY");
         	int z = tag.getInteger("targetZ");
-        	configureTarget(x, y, z);
+        	nbtTargetX = x;
+        	nbtTargetY = y;
+        	nbtTargetZ = z;
         }
 	}
 	
