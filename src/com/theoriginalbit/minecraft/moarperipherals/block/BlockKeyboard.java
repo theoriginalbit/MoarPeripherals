@@ -10,6 +10,7 @@ import com.theoriginalbit.minecraft.moarperipherals.utils.ChatUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -59,7 +60,8 @@ public class BlockKeyboard extends BlockRotatable {
 			if (keyboard.hasConnection()) {
 				player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
 			} else if (!world.isRemote) {
-				ChatUtils.sendChatToPlayer(player.username, EnumChatFormatting.RED + StatCollector.translateToLocal(NOT_PAIRED));
+				String message = EnumChatFormatting.RED + StatCollector.translateToLocal(NOT_PAIRED);
+				player.sendChatToPlayer(new ChatMessageComponent().addText(message));
 			}
 			return ((IActivateAwareTile) tile).onActivated(player, side, hitX, hitY, hitZ);
 		}

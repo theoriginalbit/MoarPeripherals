@@ -24,7 +24,7 @@ public class ItemBlockKeyboard extends ItemBlock {
 	private static final String CHAT_PAIRED = "moarperipherals.gui.keyboard.paired";
 	private static final String TOOLTIP_PAIRED = "moarperipherals.tooltip.keyboard.paired";
 	private static final String TOOLTIP_NOT_PAIRED = "moarperipherals.tooltip.keyboard.notPaired";
-	private static final String TOOLTIP_INFO = "moarperipherals.tooltip.generic.hold";
+	private static final String TOOLTIP_INFO = "moarperipherals.tooltip.generic.information";
 
 	public ItemBlockKeyboard(int id) {
 		super(id);
