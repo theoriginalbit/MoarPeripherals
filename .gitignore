@@ -57,11 +57,12 @@ download/
 eclipse/
 
 #######################
-## Gradle.gitignore
+## ForgeGradle.gitignore
 #######################
 
 .gradle
 build/
+out/
 
 #######################
 ## Java.gitignore
