@@ -4,7 +4,7 @@
   <import file="common.xml" />
 
   <target name="set-env">
-    <property name="env.BUILD_NUMBER" value="0" />
+    <property name="env.BUILD_NUMBER" value="6" />
     <property name="env.JOB_NAME" value="MoarPeripherals" />
     <property name="mod.version" value="1.6.4-1.63-1.1" />
     <property name="mod.name" value="MoarPeripherals" />

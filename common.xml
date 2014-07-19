@@ -136,7 +136,7 @@
   <target name="create-jar" depends="set-env">
     <mkdir dir="${jar.dir}" />
     <delete dir="${jar.dir}" includes="${env.JOB_NAME}*.jar" />
-    <jar destfile="${jar.dir}/${env.JOB_NAME}-${mod.version}-snapshot-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}" manifest="${classes.dir}/META-INF/MANIFEST.MF" />
+    <jar destfile="${jar.dir}/${env.JOB_NAME}-${mod.version}-.${env.BUILD_NUMBER}.jar" basedir="${classes.dir}" manifest="${classes.dir}/META-INF/MANIFEST.MF" />
   </target>
 
   <target name="pre-build" depends="setup-forge,cleanup-build,cleanup-mcp" />
