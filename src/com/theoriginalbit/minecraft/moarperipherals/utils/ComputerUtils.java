@@ -37,7 +37,14 @@ public final class ComputerUtils {
 		return null;
 	}
 	
+	public static boolean isTileComputer(TileEntity tile) {
+		return tile != null && CLAZZ_TILECOMPUTERBASE.isAssignableFrom(tile.getClass());
+	}
+	
 	public static void queueEvent(TileEntity tile, String event, Object...args) {
+		if (tile == null) {
+			return;
+		}
 		Object computer = getIComputer(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 		if (computer != null && CLAZZ_ICOMPUTER.isAssignableFrom(computer.getClass())) {
 			ReflectionUtils.callMethod(computer, METHOD_QUEUEEVENT, event, args);
