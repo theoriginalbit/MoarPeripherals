@@ -2,16 +2,18 @@
     {
         "modid": "MoarPeripherals",
         "name": "MoarPeripherals",
+        "description": "Adds a bunch of useful peripherals to ComputerCraft",
         "version": "@VERSION@",
-        "url": "http://www.computercraft.info/forums2/index.php?/topic/19357-mc164cc163-moarperipherals/",
-        "credits": "",
+        "mcversion" : "1.6.4",
+        "url": "http://www.computercraft.info/forums2/index.php?/topic/19357-",
+        "updateUrl": "",
         "authors": [
             "theoriginalbit"
         ],
-        "description": "Adds more peripherals to ComputerCraft",
-        "logoFile": "",
-        "updateUrl": "https://github.com/theoriginalbit/MoarPeripherals/releases",
-        "parent": "",
-        "screenshots": []
+        "credits": "Created by Joshua Asbury (@theoriginalbit)",
+        "logoFile": "pack.png",
+        "dependencies": [
+            "ComputerCraft"
+        ]
     }
 ]
