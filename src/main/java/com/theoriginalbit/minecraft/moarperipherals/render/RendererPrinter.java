@@ -1,7 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.render;
 
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelPrinter;
-import com.theoriginalbit.minecraft.moarperipherals.reference.lookup.ModelTextures;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
@@ -84,12 +84,12 @@ public class RendererPrinter extends CustomTileRenderer {
 
     @Override
     protected ResourceLocation getTexture(TileEntity tile) {
-        return ModelTextures.PRINTER_IDLE.getTexture();
+        return Constants.TEXTURES.MODELS.PRINTER_IDLE.getTexture();
     }
 
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
-        return ModelTextures.PRINTER_IDLE.getTexture();
+        return Constants.TEXTURES.MODELS.PRINTER_IDLE.getTexture();
     }
 
 }

@@ -24,27 +24,27 @@ public final class ConfigurationHandler {
 
     private static Configuration config;
 
-    private static final boolean getBoolean(String cat, String key, boolean defBool, String desc) {
+    private static boolean getBoolean(String cat, String key, boolean defBool, String desc) {
         return config.get(cat, key, defBool, desc).getBoolean(defBool);
     }
 
-    private static final boolean getBoolean(String cat, String key, String desc) {
+    private static boolean getBoolean(String cat, String key, String desc) {
         return getBoolean(cat, key, true, desc);
     }
 
-    private static final int getInt(String cat, String key, int defInt, String desc) {
+    private static int getInt(String cat, String key, int defInt, String desc) {
         return config.get(cat, key, defInt, desc).getInt();
     }
 
-    private static final boolean getEnabled(String cat) {
+    private static boolean getEnabled(String cat) {
         return getBoolean(cat, ENABLED, String.format(ENABLEFORMAT, cat));
     }
 
-    private static final int getBlockId(String cat, int defId) {
+    private static int getBlockId(String cat, int defId) {
         return getInt(cat, BLOCKID, defId, String.format(BLOCKIDFORMAT, cat));
     }
 
-    private static final int getItemId(String cat, String key, int defId, String readableName) {
+    private static int getItemId(String cat, String key, int defId, String readableName) {
         return getInt(cat, key, defId, String.format(ITEMIDFORMAT, readableName));
     }
 
@@ -56,7 +56,7 @@ public final class ConfigurationHandler {
 //		return getInt(FLUIDS, key, defId, String.format(LIQUIDIDFORMAT, desc));
 //	}
 
-    public static final void init(File c) {
+    public static void init(File c) {
         if (config == null) {
             config = new Configuration(c);
             load();

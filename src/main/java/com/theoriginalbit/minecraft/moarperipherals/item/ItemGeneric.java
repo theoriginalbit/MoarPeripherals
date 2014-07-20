@@ -2,8 +2,8 @@ package com.theoriginalbit.minecraft.moarperipherals.item;
 
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.ITooltipInformer;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.minecraft.moarperipherals.reference.lookup.Tooltips;
 import com.theoriginalbit.minecraft.moarperipherals.utils.KeyboardUtils;
 import com.theoriginalbit.minecraft.moarperipherals.utils.NEIUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -42,13 +42,24 @@ public class ItemGeneric extends Item {
             if (KeyboardUtils.isShiftKeyDown()) {
                 ((ITooltipInformer) item).addInformativeTooltip(stack, player, list, bool);
             } else {
-                list.add(Tooltips.SHIFT_INFO.getLocalised());
+                list.add(Constants.TOOLTIPS.SHIFT_INFO.getLocalised());
             }
         }
     }
 
-    public ItemGeneric hideFromNEI() {
+    /**
+     * Stops the block from appearing in Not Enough Items
+     */
+    public final ItemGeneric hideFromNEI() {
         NEIUtils.hideFromNEI(itemID);
+        return this;
+    }
+
+    /**
+     * Removes the block from the creative menu, by default it is added to the MoarPeripherals creative tab.
+     */
+    public final ItemGeneric hideFromCreative() {
+        setCreativeTab(null);
         return this;
     }
 

@@ -1,10 +1,14 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
+import com.theoriginalbit.minecraft.moarperipherals.init.Blocks;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.IPairableDevice;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-import com.theoriginalbit.minecraft.moarperipherals.reference.lookup.ModelTextures;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ComputerUtils;
+import com.theoriginalbit.minecraft.moarperipherals.utils.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -15,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import openperipheral.api.Ignore;
 
 @Ignore
-public class TileKeyboard extends TileEntity implements IActivateAwareTile {
+public class TileKeyboard extends TileEntity implements IPairableDevice, IActivateAwareTile {
 
     private TileEntity targetTile;
     private Integer nbtTargetX, nbtTargetY, nbtTargetZ;
@@ -45,7 +49,7 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
     @Override
     public void updateEntity() {
         if (nbtTargetX != null && nbtTargetY != null && nbtTargetZ != null) {
-            configureTarget(nbtTargetX, nbtTargetY, nbtTargetZ);
+            targetTile = worldObj.getBlockTileEntity(nbtTargetX, nbtTargetY, nbtTargetZ);
             nbtTargetX = nbtTargetY = nbtTargetZ = null;
         }
     }
@@ -95,26 +99,37 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
      */
     public final ResourceLocation getTextureForRender() {
         if (hasConnection() && targetInRange()) {
-            return ModelTextures.KEYBOARD_ON.getTexture();
+            return Constants.TEXTURES.MODELS.KEYBOARD_ON.getTexture();
         } else if (hasConnection() && !targetInRange()) {
-            return ModelTextures.KEYBOARD_LOST.getTexture();
+            return Constants.TEXTURES.MODELS.KEYBOARD_LOST.getTexture();
         }
-        return ModelTextures.KEYBOARD.getTexture();
+        return Constants.TEXTURES.MODELS.KEYBOARD.getTexture();
     }
 
-    public final void configureTarget(int x, int y, int z) {
-        targetTile = worldObj.getBlockTileEntity(x, y, z);
+    @Override
+    public final boolean configureTargetFromNbt(NBTTagCompound tag) {
+        final String targetX = Constants.NBT.TARGET_X;
+        final String targetY = Constants.NBT.TARGET_Y;
+        final String targetZ = Constants.NBT.TARGET_Z;
+
+        if (tag.hasKey(targetX) && tag.hasKey(targetY) && tag.hasKey(targetZ)) {
+            nbtTargetX = tag.getInteger(targetX);
+            nbtTargetY = tag.getInteger(targetY);
+            nbtTargetZ = tag.getInteger(targetZ);
+            return true;
+        }
+        return false;
     }
 
-    public final void configureTargetFromNbt(NBTTagCompound tag) {
-        if (tag.hasKey("targetX") && tag.hasKey("targetY") && tag.hasKey("targetZ")) {
-            int x = tag.getInteger("targetX");
-            int y = tag.getInteger("targetY");
-            int z = tag.getInteger("targetZ");
-            nbtTargetX = x;
-            nbtTargetY = y;
-            nbtTargetZ = z;
+    @Override
+    public ItemStack getPairedDrop() {
+        ItemStack stack = new ItemStack(Blocks.blockKeyboard, 1);
+        if (targetTile != null) {
+            NBTUtils.setInteger(stack, Constants.NBT.TARGET_X, targetTile.xCoord);
+            NBTUtils.setInteger(stack, Constants.NBT.TARGET_Y, targetTile.yCoord);
+            NBTUtils.setInteger(stack, Constants.NBT.TARGET_Z, targetTile.zCoord);
         }
+        return stack;
     }
 
     public final void terminateTarget() {
@@ -141,11 +156,8 @@ public class TileKeyboard extends TileEntity implements IActivateAwareTile {
         }
     }
 
-    private final boolean targetInRange() {
-        if (targetTile == null) {
-            return false;
-        }
-        return MathHelper.sqrt_double(getDistanceFrom(targetTile.xCoord, targetTile.yCoord, targetTile.zCoord)) <= Settings.keyboardRange;
+    private boolean targetInRange() {
+        return targetTile != null && MathHelper.sqrt_double(getDistanceFrom(targetTile.xCoord, targetTile.yCoord, targetTile.zCoord)) <= Settings.keyboardRange;
     }
 
 }

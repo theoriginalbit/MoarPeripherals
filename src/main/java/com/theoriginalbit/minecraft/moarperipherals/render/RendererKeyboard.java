@@ -1,7 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.render;
 
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelKeyboard;
-import com.theoriginalbit.minecraft.moarperipherals.reference.lookup.ModelTextures;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -73,7 +73,7 @@ public final class RendererKeyboard extends CustomTileRenderer {
 
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
-        return ModelTextures.KEYBOARD.getTexture();
+        return Constants.TEXTURES.MODELS.KEYBOARD.getTexture();
     }
 
 }

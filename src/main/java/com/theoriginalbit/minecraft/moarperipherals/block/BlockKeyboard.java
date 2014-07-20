@@ -4,31 +4,23 @@ import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.gui.GuiType;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class BlockKeyboard extends BlockRotatable {
-
-    private static final String NOT_PAIRED = "moarperipherals.gui.keyboard.notPaired";
+public class BlockKeyboard extends BlockPairable {
 
     public BlockKeyboard() {
-        super(Settings.blockIdKeyboard, Material.rock, "keyboard", soundStoneFootstep);
+        super(Settings.blockIdKeyboard, Material.rock, "keyboard");
+        setStepSound(soundStoneFootstep);
         setRotationMode(RotationMode.FOUR);
         setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
-    }
-
-    private final static boolean isNeighborBlockSolid(World world, int x, int y, int z, ForgeDirection side) {
-        x += side.offsetX;
-        y += side.offsetY;
-        z += side.offsetZ;
-        return world.isBlockSolidOnSide(x, y, z, side.getOpposite());
     }
 
     @Override
@@ -65,7 +57,7 @@ public class BlockKeyboard extends BlockRotatable {
             if (keyboard.hasConnection()) {
                 player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
             } else if (!world.isRemote) {
-                String message = EnumChatFormatting.RED + StatCollector.translateToLocal(NOT_PAIRED);
+                String message = EnumChatFormatting.RED + Constants.CHAT.CHAT_NOT_PAIRED.getLocalised();
                 player.sendChatToPlayer(new ChatMessageComponent().addText(message));
             }
             return ((IActivateAwareTile) tile).onActivated(player, side, hitX, hitY, hitZ);
@@ -74,8 +66,15 @@ public class BlockKeyboard extends BlockRotatable {
         return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
     }
 
-    private final boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
+    private boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
         return side == ForgeDirection.DOWN && isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
+    }
+
+    private static boolean isNeighborBlockSolid(World world, int x, int y, int z, ForgeDirection side) {
+        x += side.offsetX;
+        y += side.offsetY;
+        z += side.offsetZ;
+        return world.isBlockSolidOnSide(x, y, z, side.getOpposite());
     }
 
 }

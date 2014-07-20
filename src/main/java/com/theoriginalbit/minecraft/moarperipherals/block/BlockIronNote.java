@@ -9,7 +9,8 @@ import net.minecraft.world.World;
 public class BlockIronNote extends BlockGeneric {
 
     public BlockIronNote() {
-        super(Settings.blockIdIronNote, Material.iron, "ironnote", soundMetalFootstep);
+        super(Settings.blockIdIronNote, Material.iron, "ironnote");
+        setStepSound(soundMetalFootstep);
     }
 
     @Override

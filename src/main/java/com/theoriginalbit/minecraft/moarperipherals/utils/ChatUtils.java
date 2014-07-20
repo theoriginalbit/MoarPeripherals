@@ -7,7 +7,7 @@ import net.minecraft.util.ChatMessageComponent;
 
 public final class ChatUtils {
 
-    public final static void sendChatToPlayer(String[] to, String message) {
+    public static void sendChatToPlayer(String[] to, String message) {
         message = ChatAllowedCharacters.filerAllowedCharacters(message);
         ChatMessageComponent msg = new ChatMessageComponent().addText(message);
         for (String user : to) {
@@ -18,7 +18,7 @@ public final class ChatUtils {
         }
     }
 
-    public final static void sendChatToPlayer(String to, String message) {
+    public static void sendChatToPlayer(String to, String message) {
         sendChatToPlayer(new String[]{to}, message);
     }
 

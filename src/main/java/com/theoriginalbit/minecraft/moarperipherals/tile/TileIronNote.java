@@ -45,8 +45,8 @@ public class TileIronNote extends TilePeripheral {
                 break;
         }
 
-        world.playSoundEffect((double) x + 0.5D, (double) y + 0.5D, (double) z + 0.5D, "note." + s, 3.0F, f);
-        world.spawnParticle("note", (double) x + 0.5D, (double) y + 1.2D, (double) z + 0.5D, (double) pitch / 24.0D, 0.0D, 0.0D);
+        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "note." + s, 3.0F, f);
+        world.spawnParticle("note", x + 0.5D, y + 1.2D, z + 0.5D, (double) pitch / 24.0D, 0.0D, 0.0D);
     }
 
     @LuaFunction

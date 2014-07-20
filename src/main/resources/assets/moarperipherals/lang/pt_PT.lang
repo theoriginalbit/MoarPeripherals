@@ -9,30 +9,19 @@ tile.moarperipherals.printer.name=Impressora avançada
 item.moarperipherals.inkCartridge.name=Cartucho para Tinta
 item.moarperipherals.keyboardPart.name=Parte de Teclado
 
+moarperipherals.chat.paired=Paired with Computer at %d %d %d
+moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.
+
 moarperipherals.gui.keyboard.exit=Pressione ESC para sair do teclado
-moarperipherals.gui.keyboard.paired=Teclado ligado a computador em %d %d %d
-moarperipherals.gui.keyboard.notPaired=Teclado não ligado. Shift e clique com o butão direito para ligar.
-moarperipherals.tooltip.keyboard.paired=Alvo
-moarperipherals.tooltip.keyboard.notPaired=Não Ligado
 
 moarperipherals.tooltip.generic.information=Hold SHIFT for information
+moarperipherals.tooltip.pairable.paired=Alvo
+moarperipherals.tooltip.pairable.notPaired=Não Ligado
 
 moarperipherals.tooltip.inkCartridge.contents=Cor da tinta
 moarperipherals.tooltip.inkCartridge.level=Nivel da tinta
-moarperipherals.tooltip.inkCartridge.ink.0=Branco
-moarperipherals.tooltip.inkCartridge.ink.1=Laranja
-moarperipherals.tooltip.inkCartridge.ink.2=Magenta
-moarperipherals.tooltip.inkCartridge.ink.3=Azul claro
-moarperipherals.tooltip.inkCartridge.ink.4=Amarelo
-moarperipherals.tooltip.inkCartridge.ink.5=Lima
-moarperipherals.tooltip.inkCartridge.ink.6=Cor de rosa
-moarperipherals.tooltip.inkCartridge.ink.7=Cinzento
-moarperipherals.tooltip.inkCartridge.ink.8=Cinzento claro
-moarperipherals.tooltip.inkCartridge.ink.9=Ciano
-moarperipherals.tooltip.inkCartridge.ink.10=Purpura
-moarperipherals.tooltip.inkCartridge.ink.11=Azul
-moarperipherals.tooltip.inkCartridge.ink.12=Castanho
-moarperipherals.tooltip.inkCartridge.ink.13=Verde
-moarperipherals.tooltip.inkCartridge.ink.14=Vermelho
-moarperipherals.tooltip.inkCartridge.ink.15=Preto
-moarperipherals.tooltip.inkCartridge.ink.16=Vazio
+moarperipherals.tooltip.printer.ink.cyan=Ciano
+moarperipherals.tooltip.printer.ink.magenta=Magenta
+moarperipherals.tooltip.printer.ink.yellow=Amarelo
+moarperipherals.tooltip.printer.ink.black=Preto
+moarperipherals.tooltip.printer.ink.empty=Vazio

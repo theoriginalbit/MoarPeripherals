@@ -9,30 +9,19 @@ tile.moarperipherals.printer.name=Advanced Printer
 item.moarperipherals.inkCartridge.name=Ink Cartridge
 item.moarperipherals.keyboardPart.name=Keyboard Part
 
+moarperipherals.chat.paired=Paired with Computer at %d %d %d
+moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.
+
 moarperipherals.gui.keyboard.exit=Press ESC to exit the Keyboard
-moarperipherals.gui.keyboard.paired=Paired keyboard with Computer at %d %d %d
-moarperipherals.gui.keyboard.notPaired=Keyboard not paired. Shift right-click a computer to pair.
-moarperipherals.tooltip.keyboard.paired=Target
-moarperipherals.tooltip.keyboard.notPaired=Not Paired
 
 moarperipherals.tooltip.generic.information=Hold SHIFT for information
+moarperipherals.tooltip.pairable.paired=Target
+moarperipherals.tooltip.pairable.notPaired=Not Paired
 
 moarperipherals.tooltip.inkCartridge.contents=Ink Color
 moarperipherals.tooltip.inkCartridge.level=Ink Level
-moarperipherals.tooltip.inkCartridge.ink.0=White
-moarperipherals.tooltip.inkCartridge.ink.1=Orange
-moarperipherals.tooltip.inkCartridge.ink.2=Magenta
-moarperipherals.tooltip.inkCartridge.ink.3=Light Blue
-moarperipherals.tooltip.inkCartridge.ink.4=Yellow
-moarperipherals.tooltip.inkCartridge.ink.5=Lime
-moarperipherals.tooltip.inkCartridge.ink.6=Pink
-moarperipherals.tooltip.inkCartridge.ink.7=Gray
-moarperipherals.tooltip.inkCartridge.ink.8=Light Gray
-moarperipherals.tooltip.inkCartridge.ink.9=Cyan
-moarperipherals.tooltip.inkCartridge.ink.10=Purple
-moarperipherals.tooltip.inkCartridge.ink.11=Blue
-moarperipherals.tooltip.inkCartridge.ink.12=Brown
-moarperipherals.tooltip.inkCartridge.ink.13=Green
-moarperipherals.tooltip.inkCartridge.ink.14=Red
-moarperipherals.tooltip.inkCartridge.ink.15=Black
-moarperipherals.tooltip.inkCartridge.ink.16=Empty
+moarperipherals.tooltip.printer.ink.cyan=Cyan
+moarperipherals.tooltip.printer.ink.magenta=Magenta
+moarperipherals.tooltip.printer.ink.yellow=Yellow
+moarperipherals.tooltip.printer.ink.black=Black
+moarperipherals.tooltip.printer.ink.empty=Empty

@@ -3,7 +3,6 @@ package com.theoriginalbit.minecraft.moarperipherals.block;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.StepSound;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,18 +23,6 @@ public abstract class BlockRotatable extends BlockGeneric {
 
     public BlockRotatable(int id, Material material, String blockName) {
         super(id, material, blockName);
-    }
-
-    public BlockRotatable(int id, Material material, String blockName, StepSound stepSound) {
-        super(id, material, blockName, stepSound, true);
-    }
-
-    public BlockRotatable(int id, Material material, String blockName, boolean inCreative) {
-        super(id, material, blockName, null, inCreative);
-    }
-
-    public BlockRotatable(int id, Material material, String blockName, StepSound stepSound, boolean inCreative) {
-        super(id, material, blockName, stepSound, inCreative);
     }
 
     public BlockRotatable setRotationMode(RotationMode mode) {
@@ -87,7 +74,7 @@ public abstract class BlockRotatable extends BlockGeneric {
     }
 
     public enum RotationMode {
-        FOUR, SIX;
+        FOUR, SIX
     }
 
 }

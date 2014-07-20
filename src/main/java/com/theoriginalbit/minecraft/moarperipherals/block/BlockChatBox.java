@@ -9,7 +9,8 @@ import net.minecraft.world.World;
 public class BlockChatBox extends BlockGeneric {
 
     public BlockChatBox() {
-        super(Settings.blockIdChatBox, Material.iron, "chatbox", soundMetalFootstep);
+        super(Settings.blockIdChatBox, Material.iron, "chatbox");
+        setStepSound(soundMetalFootstep);
     }
 
     @Override

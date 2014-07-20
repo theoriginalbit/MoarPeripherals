@@ -10,7 +10,7 @@ import java.util.Random;
 
 public final class InventoryUtils {
 
-    public final static void explodeInventory(IInventory inv, World world, int x, int y, int z) {
+    public static void explodeInventory(IInventory inv, World world, int x, int y, int z) {
         Random rand = new Random();
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack item = inv.getStackInSlot(i);

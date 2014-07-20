@@ -18,7 +18,6 @@ public final class ComputerUtils {
     private static final Method METHOD_REBOOT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "reboot", new Class[]{});
 
     private static final String EVENT_TERMINATE = "terminate";
-    private static final String EVENT_PASTE = "terminate";
 
     public static TileEntity getTileComputerBase(World world, Integer x, Integer y, Integer z) {
         if (x == null || y == null || z == null) {
@@ -99,13 +98,6 @@ public final class ComputerUtils {
             return;
         }
         queueEvent(tile, EVENT_TERMINATE);
-    }
-
-    public static void paste(TileEntity tile, String clipboard) {
-        if (tile == null) {
-            return;
-        }
-        queueEvent(tile, EVENT_PASTE, clipboard);
     }
 
 }

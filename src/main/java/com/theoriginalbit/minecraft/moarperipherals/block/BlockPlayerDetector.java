@@ -9,7 +9,8 @@ import net.minecraft.world.World;
 public class BlockPlayerDetector extends BlockGeneric {
 
     public BlockPlayerDetector() {
-        super(Settings.blockIdPlayerDetector, Material.rock, "playerdetector", soundStoneFootstep);
+        super(Settings.blockIdPlayerDetector, Material.rock, "playerdetector");
+        setStepSound(soundStoneFootstep);
     }
 
     @Override

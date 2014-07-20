@@ -1,16 +1,15 @@
 package com.theoriginalbit.minecraft.moarperipherals.gui;
 
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.utils.KeyboardUtils;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 
 public class GuiKeyboard extends GuiScreen {
 
-    private static final String EXIT_MESSAGE = "moarperipherals.gui.keyboard.exit";
     private static final String EVENT_PASTE = "paste";
     private static final String EVENT_KEY = "key";
     private static final String EVENT_CHAR = "char";
@@ -37,7 +36,7 @@ public class GuiKeyboard extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float par3) {
-        String exitMessage = StatCollector.translateToLocal(EXIT_MESSAGE);
+        String exitMessage = Constants.GUI.KEYBOARD_EXIT.getLocalised();
         int xPos = (width - fontRenderer.getStringWidth(exitMessage)) / 2;
         int yPos = player.capabilities.isCreativeMode ? height - 33 : height - 59;
         int color = 0xffffff;

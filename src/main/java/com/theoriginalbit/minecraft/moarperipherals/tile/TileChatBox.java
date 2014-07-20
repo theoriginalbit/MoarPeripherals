@@ -2,9 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
 import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Arg;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ChatHandler;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
@@ -50,7 +48,7 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
     }
 
     @LuaFunction
-    public boolean say(@Arg(LuaType.STRING) String message) throws Exception {
+    public boolean say(String message) throws Exception {
         Preconditions.checkArgument(count++ <= Settings.chatSayRate, "too many messages (max " + Settings.chatSayRate + " per second)");
 
         String[] usernames = getPlayerUsernames();
@@ -125,7 +123,7 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
             DamageSource source = event.source;
             String killer = null;
             if (source instanceof EntityDamageSource) {
-                Entity ent = ((EntityDamageSource) source).getEntity();
+                Entity ent = source.getEntity();
                 if (ent != null) {
                     killer = ent.getEntityName();
                 }

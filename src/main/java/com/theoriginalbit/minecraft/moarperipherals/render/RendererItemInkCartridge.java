@@ -2,8 +2,8 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelItemInkCartridge;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.minecraft.moarperipherals.reference.lookup.ModelTextures;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -69,7 +69,7 @@ public final class RendererItemInkCartridge extends CustomItemRenderer {
     }
 
     static {
-        final String texturePath = ModelTextures.INK_CARTRIDGE.getPath();
+        final String texturePath = Constants.TEXTURES.MODELS.INK_CARTRIDGE.getPath();
         textures = new ResourceLocation[17];
         for (int i = 0; i < textures.length - 1; ++i) {
             textures[i] = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, String.format(texturePath, i));

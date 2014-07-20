@@ -1,7 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.init;
 
 import com.theoriginalbit.minecraft.moarperipherals.block.*;
-import com.theoriginalbit.minecraft.moarperipherals.item.ItemBlockKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.itemblock.ItemBlockKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.tile.*;
@@ -66,11 +66,11 @@ public final class Blocks {
         OreDictionary.registerOre("peripheralKeyboard", blockKeyboard);
     }
 
-    private static final void registerBlock(BlockGeneric block, Class<? extends TileEntity> tile, String teName) {
+    private static void registerBlock(BlockGeneric block, Class<? extends TileEntity> tile, String teName) {
         registerBlock(block, tile, teName, null);
     }
 
-    private static final void registerBlock(BlockGeneric block, Class<? extends TileEntity> tile, String teName, Class<? extends ItemBlock> itemBlock) {
+    private static void registerBlock(BlockGeneric block, Class<? extends TileEntity> tile, String teName, Class<? extends ItemBlock> itemBlock) {
         if (itemBlock != null) {
             GameRegistry.registerBlock(block, itemBlock, block.getUnlocalizedName());
         } else {
