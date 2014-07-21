@@ -1,11 +1,9 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
+package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
 
-import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -30,28 +28,17 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
  */
 
 /**
- * Converts a {@link java.util.Set} to/from Lua
+ * This annotation indicates that you would like your TileEntity to be
+ * wrapped as a peripheral. The "value" argument is required as it
+ * specifies the type of the peripheral when a player makes a call to
+ * peripheral.getType() in-game.
  *
  * @author theoriginalbit
  */
-public class ConverterSet implements ITypeConverter {
-	@Override
-	public Object fromLua(Object obj, Class<?> expected) {
-		if (obj instanceof Map && expected == Set.class) {
-			return Sets.newHashSet(((Map<?, ?>) obj).keySet());
-		}
-		return null;
-	}
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface LuaPeripheral {
 
-	@Override
-	public Object toLua(Object obj) {
-		if (obj instanceof Set) {
-			Map<Object, Boolean> result = Maps.newHashMap();
-			for (Object o : (Set<?>) obj) {
-				result.put(LuaType.toLua(o), true);
-			}
-			return result;
-		}
-		return null;
-	}
+    public String value();
+
 }

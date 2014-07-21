@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
+import net.minecraft.tileentity.TileEntity;
 import openperipheral.api.Ignore;
 
 /**
@@ -26,12 +27,7 @@ import openperipheral.api.Ignore;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 @Ignore
-public class TilePrinter extends TilePeripheral {
-
-    private static final String TYPE = "advanced_printer";
-
-    public TilePrinter() {
-        super(TYPE);
-    }
+@LuaPeripheral("advanced_printer")
+public class TilePrinter extends TileEntity {
 
 }

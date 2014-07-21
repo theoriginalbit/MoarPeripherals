@@ -1,9 +1,17 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
+import com.google.common.collect.Lists;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnAttach;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnDetach;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
+import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import openperipheral.api.Ignore;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.ArrayList;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -28,13 +36,25 @@ import openperipheral.api.Ignore;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 @Ignore
-public class TilePlayerDetector extends TilePeripheral implements IActivateAwareTile {
+@LuaPeripheral("player_detector")
+public class TilePlayerDetector extends TileEntity implements IActivateAwareTile {
 
-    private static final String TYPE = "player_detector";
     private static final String EVENT_PLAYER = "player";
 
-    public TilePlayerDetector() {
-        super(TYPE);
+    private ArrayList<IComputerAccess> computers = Lists.newArrayList();
+
+    @OnAttach
+    public void attach(IComputerAccess computer) {
+        if (!computers.contains(computer)) {
+            computers.add(computer);
+        }
+    }
+
+    @OnDetach
+    public void detach(IComputerAccess computer) {
+        if (computers.contains(computer)) {
+            computers.remove(computer);
+        }
     }
 
     @Override
@@ -44,6 +64,12 @@ public class TilePlayerDetector extends TilePeripheral implements IActivateAware
         }
         computerQueueEvent(EVENT_PLAYER, player.username);
         return true;
+    }
+
+    protected void computerQueueEvent(String event, Object... args) {
+        for (IComputerAccess computer : computers) {
+            computer.queueEvent(event, ArrayUtils.add(args, 0, computer.getAttachmentName()));
+        }
     }
 
 }

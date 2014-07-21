@@ -1,11 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
-
-import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
+package com.theoriginalbit.minecraft.computercraft.peripheral;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -30,28 +23,20 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
  */
 
 /**
- * Converts a {@link java.util.Set} to/from Lua
+ * In the event that you don't want to have your peripheral implementation
+ * in your TileEntity you can implement this interface and return an object
+ * that is an instance of your peripheral implementation.
+ *
+ * See the example program for usage
  *
  * @author theoriginalbit
  */
-public class ConverterSet implements ITypeConverter {
-	@Override
-	public Object fromLua(Object obj, Class<?> expected) {
-		if (obj instanceof Map && expected == Set.class) {
-			return Sets.newHashSet(((Map<?, ?>) obj).keySet());
-		}
-		return null;
-	}
+public interface ILuaPeripheralProvider {
 
-	@Override
-	public Object toLua(Object obj) {
-		if (obj instanceof Set) {
-			Map<Object, Boolean> result = Maps.newHashMap();
-			for (Object o : (Set<?>) obj) {
-				result.put(LuaType.toLua(o), true);
-			}
-			return result;
-		}
-		return null;
-	}
+    /**
+     * @return an instance of an object which is annotated with
+     * LuaPeripheral and pertains to your TileEntity
+     */
+    public Object getPeripheral();
+
 }

@@ -2,8 +2,10 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.theoriginalbit.minecraft.computercraft.peripheral.TilePeripheral;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnAttach;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnDetach;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ChatHandler;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IChatListener;
@@ -11,17 +13,21 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.ICommand
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IDeathListener;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.ChatUtils;
+import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import openperipheral.api.Ignore;
+import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,9 +53,9 @@ import java.util.List;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 @Ignore
-public class TileChatBox extends TilePeripheral implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
+@LuaPeripheral("chatbox")
+public class TileChatBox extends TileEntity implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
 
-    private static final String TYPE = "chatbox";
     private static final String EVENT_CHAT = "chat_message";
     private static final String EVENT_DEATH = "death_message";
     private static final String EVENT_COMMAND = "chatbox_command";
@@ -60,14 +66,7 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
     private int count = 0;
     private boolean registered = false;
 
-    public TileChatBox() {
-        super(TYPE);
-    }
-
-    @Override
-    public void onBreak(int x, int y, int z) {
-        unload();
-    }
+    private ArrayList<IComputerAccess> computers = Lists.newArrayList();
 
     @LuaFunction
     public boolean say(String message) throws Exception {
@@ -95,6 +94,20 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
 
         ChatUtils.sendChatToPlayer(username, buildMessage(message, true));
         return true;
+    }
+
+    @OnAttach
+    public void attach(IComputerAccess computer) {
+        if (!computers.contains(computer)) {
+            computers.add(computer);
+        }
+    }
+
+    @OnDetach
+    public void detach(IComputerAccess computer) {
+        if (computers.contains(computer)) {
+            computers.remove(computer);
+        }
     }
 
     @Override
@@ -126,6 +139,11 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
             ChatHandler.instance.removeDeathListener(this);
             ChatHandler.instance.removeCommandListener(this);
         }
+    }
+
+    @Override
+    public void onBreak(int x, int y, int z) {
+        unload();
     }
 
     // IChatListener
@@ -167,6 +185,12 @@ public class TileChatBox extends TilePeripheral implements IBreakAwareTile, ICha
     public void onServerChatEvent(String message, EntityPlayer player) {
         if (Settings.chatRangeRead < 0 || entityInRange(player, Settings.chatRangeRead)) {
             computerQueueEvent(EVENT_COMMAND, player.username, message);
+        }
+    }
+
+    protected void computerQueueEvent(String event, Object... args) {
+        for (IComputerAccess computer : computers) {
+            computer.queueEvent(event, ArrayUtils.add(args, 0, computer.getAttachmentName()));
         }
     }
 
