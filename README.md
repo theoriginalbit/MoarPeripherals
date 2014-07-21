@@ -1,5 +1,6 @@
-MoarPeripherals
-===============
+<p align="center">
+  <img src="http://i.imgur.com/IY49GPE.png" alt="MoarPeripherals"/>
+</p>
 
 A Minecraft mod that adds more peripherals into the ComputerCraft mod
 
