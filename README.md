@@ -4,9 +4,9 @@
 
 A Minecraft mod that adds more peripherals into the ComputerCraft mod
 
-[Official Thread](http://www.computercraft.info/forums2/index.php?/topic/19357-)
+<a href="http://www.computercraft.info/forums2/index.php?/topic/19357-" target="_blank">Official Thread</a>
 
-[Official Wiki (In development)](http://wiki.theoriginalbit.com/moarperipherals/)
+<a href="http://wiki.theoriginalbit.com/moarperipherals/" target="_blank">Official Wiki</a> (In development)
 
 License
 -------
