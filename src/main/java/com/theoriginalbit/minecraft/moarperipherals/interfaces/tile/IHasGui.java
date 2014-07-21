@@ -1,9 +1,7 @@
-package com.theoriginalbit.minecraft.moarperipherals.utils;
+package com.theoriginalbit.minecraft.moarperipherals.interfaces.tile;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.ChatMessageComponent;
+import com.theoriginalbit.minecraft.moarperipherals.gui.GuiType;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -27,21 +25,16 @@ import net.minecraft.util.ChatMessageComponent;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public final class ChatUtils {
 
-    public static void sendChatToPlayer(String[] to, String message) {
-        message = ChatAllowedCharacters.filerAllowedCharacters(message);
-        ChatMessageComponent msg = new ChatMessageComponent().addText(message);
-        for (String user : to) {
-            EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(user);
-            if (player != null) {
-                player.sendChatToPlayer(msg);
-            }
-        }
-    }
-
-    public static void sendChatToPlayer(String to, String message) {
-        sendChatToPlayer(new String[]{to}, message);
-    }
+/**
+ * Register that your {@link TileEntity} has a GUI
+ *
+ * @author theoriginalbit
+ */
+public interface IHasGui {
+    /**
+     * Returns the ID of the GUI
+     */
+    public GuiType getGuiId();
 
 }

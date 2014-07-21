@@ -1,9 +1,7 @@
-package com.theoriginalbit.minecraft.moarperipherals.utils;
+package com.theoriginalbit.minecraft.moarperipherals.interfaces.tile;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -27,21 +25,13 @@ import net.minecraft.util.ChatMessageComponent;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public final class ChatUtils {
+public interface IPairableDevice {
 
-    public static void sendChatToPlayer(String[] to, String message) {
-        message = ChatAllowedCharacters.filerAllowedCharacters(message);
-        ChatMessageComponent msg = new ChatMessageComponent().addText(message);
-        for (String user : to) {
-            EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(user);
-            if (player != null) {
-                player.sendChatToPlayer(msg);
-            }
-        }
-    }
+    /**
+     * Setup the target information based on NBT data and
+     * return success.
+     */
+    public boolean configureTargetFromNbt(NBTTagCompound tag);
 
-    public static void sendChatToPlayer(String to, String message) {
-        sendChatToPlayer(new String[]{to}, message);
-    }
-
+    public ItemStack getPairedDrop();
 }
