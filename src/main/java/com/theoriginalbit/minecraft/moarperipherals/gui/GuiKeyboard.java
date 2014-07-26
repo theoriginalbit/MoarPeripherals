@@ -117,7 +117,7 @@ public class GuiKeyboard extends GuiScreen {
         // Escape was pressed
         if (keyCode == 1) {
             super.keyTyped(ch, keyCode);
-        } else {
+        } else if (terminateTimer < 10 && shutdownTimer < 10 && rebootTimer < 10) {
             // A different key was pressed, queue it to the computer
             tile.queueEventToTarget(EVENT_KEY, keyCode);
             if (ChatAllowedCharacters.isAllowedCharacter(ch)) {
