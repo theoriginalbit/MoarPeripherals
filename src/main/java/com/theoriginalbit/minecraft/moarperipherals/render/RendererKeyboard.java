@@ -95,7 +95,7 @@ public final class RendererKeyboard extends CustomTileRenderer {
 
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
-        return Constants.TEXTURES.MODELS.KEYBOARD.getTexture();
+        return Constants.TEXTURES_MODEL.KEYBOARD.getTexture();
     }
 
 }

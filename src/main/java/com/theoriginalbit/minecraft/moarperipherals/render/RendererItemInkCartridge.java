@@ -91,7 +91,7 @@ public final class RendererItemInkCartridge extends CustomItemRenderer {
     }
 
     static {
-        final String texturePath = Constants.TEXTURES.MODELS.INK_CARTRIDGE.getPath();
+        final String texturePath = Constants.TEXTURES_MODEL.INK_CARTRIDGE.getPath();
         textures = new ResourceLocation[17];
         for (int i = 0; i < textures.length - 1; ++i) {
             textures[i] = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, String.format(texturePath, i));

@@ -44,6 +44,12 @@ public final class Constants {
         public static final LocalisationStore INK_EMPTY = new LocalisationStore("moarperipherals.tooltip.printer.ink.empty");
     }
 
+    public static final class UPGRADE {
+        public static final LocalisationStore COMPASS = new LocalisationStore("upgrade.moarperipherals.adjective.compass");
+
+        public static final TextureStore ICON_COMPASS = new TextureStore("textures/upgrades/compass");
+    }
+
     public static final class CHAT {
         public static final LocalisationStore CHAT_PAIRED = new LocalisationStore("moarperipherals.chat.paired");
         public static final LocalisationStore CHAT_NOT_PAIRED = new LocalisationStore("moarperipherals.chat.notPaired");
@@ -55,39 +61,15 @@ public final class Constants {
         public static final String TARGET_Z = "targetZ";
     }
 
-    public static final class TEXTURES {
-
-        public enum MODELS {
-            KEYBOARD("textures/models/blocks/keyboard/Keyboard"),
-            KEYBOARD_ON("textures/models/blocks/keyboard/Keyboard_On"),
-            KEYBOARD_LOST("textures/models/blocks/keyboard/Keyboard_Lost"),
-            PRINTER("textures/models/blocks/printer/Printer_Printing"),
-            PRINTER_IDLE("textures/models/blocks/printer/Printer_Idle"),
-            PRINTER_ERROR("textures/models/blocks/printer/Printer_Error"),
-            PRINTER_PRINT_ERROR("textures/models/blocks/printer/Printer_Printing_Error"),
-            INK_CARTRIDGE("textures/models/items/inkCartridge/InkCartridge%s", false);
-
-            private final String pathToResource;
-            private final ResourceLocation resource;
-
-            private MODELS(String path) {
-                this(path, true);
-            }
-
-            private MODELS(String path, boolean load) {
-                pathToResource = path + ".png";
-                resource = load ? new ResourceLocation(ModInfo.RESOURCE_DOMAIN, pathToResource) : null;
-            }
-
-            public final ResourceLocation getTexture() {
-                return resource;
-            }
-
-            public final String getPath() {
-                return pathToResource;
-            }
-        }
-
+    public static final class TEXTURES_MODEL {
+        public static final TextureStore KEYBOARD = new TextureStore("textures/models/blocks/keyboard/Keyboard");
+        public static final TextureStore KEYBOARD_ON = new TextureStore("textures/models/blocks/keyboard/Keyboard_On");
+        public static final TextureStore KEYBOARD_LOST = new TextureStore("textures/models/blocks/keyboard/Keyboard_Lost");
+        public static final TextureStore PRINTER = new TextureStore("textures/models/blocks/printer/Printer_Printing");
+        public static final TextureStore PRINTER_IDLE = new TextureStore("textures/models/blocks/printer/Printer_Idle");
+        public static final TextureStore PRINTER_ERROR = new TextureStore("textures/models/blocks/printer/Printer_Error");
+        public static final TextureStore PRINTER_PRINT_ERROR = new TextureStore("textures/models/blocks/printer/Printer_Printing_Error");
+        public static final TextureStore INK_CARTRIDGE = new TextureStore("textures/models/items/inkCartridge/InkCartridge%s", false);
     }
 
     public enum COLOR {
@@ -126,7 +108,7 @@ public final class Constants {
 
     }
 
-    public static class LocalisationStore {
+    public static final class LocalisationStore {
 
         private final String rawName;
 
@@ -142,6 +124,29 @@ public final class Constants {
             return StatCollector.translateToLocalFormatted(rawName, args);
         }
 
+    }
+
+    public static final class TextureStore {
+
+        private final String pathToResource;
+        private final ResourceLocation resource;
+
+        private TextureStore(String path) {
+            this(path, true);
+        }
+
+        private TextureStore(String path, boolean load) {
+            pathToResource = path + ".png";
+            resource = load ? new ResourceLocation(ModInfo.RESOURCE_DOMAIN, pathToResource) : null;
+        }
+
+        public final ResourceLocation getTexture() {
+            return resource;
+        }
+
+        public final String getPath() {
+            return pathToResource;
+        }
     }
 
 }

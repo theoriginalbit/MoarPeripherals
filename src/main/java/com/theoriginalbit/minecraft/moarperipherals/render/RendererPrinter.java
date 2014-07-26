@@ -106,12 +106,12 @@ public class RendererPrinter extends CustomTileRenderer {
 
     @Override
     protected ResourceLocation getTexture(TileEntity tile) {
-        return Constants.TEXTURES.MODELS.PRINTER_IDLE.getTexture();
+        return Constants.TEXTURES_MODEL.PRINTER_IDLE.getTexture();
     }
 
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
-        return Constants.TEXTURES.MODELS.PRINTER_IDLE.getTexture();
+        return Constants.TEXTURES_MODEL.PRINTER_IDLE.getTexture();
     }
 
 }

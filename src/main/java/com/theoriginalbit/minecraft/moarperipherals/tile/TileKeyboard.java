@@ -121,11 +121,11 @@ public class TileKeyboard extends TileEntity implements IPairableDevice, IActiva
      */
     public final ResourceLocation getTextureForRender() {
         if (hasConnection() && targetInRange()) {
-            return Constants.TEXTURES.MODELS.KEYBOARD_ON.getTexture();
+            return Constants.TEXTURES_MODEL.KEYBOARD_ON.getTexture();
         } else if (hasConnection() && !targetInRange()) {
-            return Constants.TEXTURES.MODELS.KEYBOARD_LOST.getTexture();
+            return Constants.TEXTURES_MODEL.KEYBOARD_LOST.getTexture();
         }
-        return Constants.TEXTURES.MODELS.KEYBOARD.getTexture();
+        return Constants.TEXTURES_MODEL.KEYBOARD.getTexture();
     }
 
     @Override
