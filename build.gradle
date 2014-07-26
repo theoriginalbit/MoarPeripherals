@@ -25,8 +25,13 @@ minecraft {
     replaceIn "ModInfo.java"
 }
 
-processResources
-{
+jar {
+    from(sourceSets.api.output) {
+        include 'com/theoriginalbit/**/*'
+    }
+}
+
+processResources {
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
