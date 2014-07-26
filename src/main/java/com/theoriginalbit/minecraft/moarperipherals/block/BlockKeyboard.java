@@ -7,12 +7,16 @@ import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+
+import java.util.List;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -86,6 +90,14 @@ public class BlockKeyboard extends BlockPairable {
         }
 
         return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
+    }
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List list, Entity entity) {
+        setBlockBounds(0f, 0f, 0f, 0.8f, 0.1f, 0.8f);
+        super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
+        setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
     }
 
     private boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
