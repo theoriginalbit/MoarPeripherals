@@ -71,8 +71,7 @@ public class MoarPeripherals {
         Items.init();
         Fluids.init();
 
-        Blocks.initRecipes();
-        Items.initRecipes();
+        RecipeHandler.init();
 
         Blocks.oreRegistration();
         Items.oreRegistration();

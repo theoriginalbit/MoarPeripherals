@@ -6,10 +6,7 @@ import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.tile.*;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -63,21 +60,6 @@ public final class Blocks {
         if (Settings.enablePrinter) {
             blockPrinter = new BlockPrinter();
             registerBlock(blockPrinter, TilePrinter.class, "tilePrinter");
-        }
-    }
-
-    public static void initRecipes() {
-        if (Settings.enablePlayerDetector) {
-            GameRegistry.addRecipe(new ItemStack(blockPlayerDetector), "SBS", "BRB", "SBS", 'S', Block.stone, 'B', Block.stoneButton, 'R', Item.redstone);
-        }
-        if (Settings.enableChatBox) {
-            GameRegistry.addRecipe(new ItemStack(blockChatBox), "GGG", "GNG", "GRG", 'G', Item.ingotGold, 'N', Block.music, 'R', Item.redstone);
-        }
-        if (Settings.enableIronNote) {
-            GameRegistry.addRecipe(new ItemStack(blockIronNote), "III", "INI", "IRI", 'I', Item.ingotIron, 'N', Block.music, 'R', Item.redstone);
-        }
-        if (Settings.enableKeyboard) {
-            GameRegistry.addRecipe(new ItemStack(blockKeyboard), "KKK", 'K', Items.itemKeyboardPart);
         }
     }
 

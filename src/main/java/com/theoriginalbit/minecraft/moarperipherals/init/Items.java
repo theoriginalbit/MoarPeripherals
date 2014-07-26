@@ -4,9 +4,6 @@ import com.theoriginalbit.minecraft.moarperipherals.item.ItemGeneric;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -43,15 +40,6 @@ public class Items {
         if (Settings.enableKeyboard) {
             itemKeyboardPart = new ItemGeneric(Settings.itemKeyboardPart, "keyboardPart");
             GameRegistry.registerItem(itemKeyboardPart, itemKeyboardPart.getUnlocalizedName());
-        }
-    }
-
-    public static void initRecipes() {
-        if (Settings.enablePrinter) {
-
-        }
-        if (Settings.enableKeyboard) {
-            GameRegistry.addRecipe(new ItemStack(itemKeyboardPart), "BBB", "RRR", "SSS", 'B', Block.stoneButton, 'R', Item.redstone, 'S', Block.stone);
         }
     }
 
