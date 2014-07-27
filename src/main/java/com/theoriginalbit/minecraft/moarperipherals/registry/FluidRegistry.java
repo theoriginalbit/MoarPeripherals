@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.init;
+package com.theoriginalbit.minecraft.moarperipherals.registry;
 
 import net.minecraftforge.fluids.Fluid;
 
@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.Fluid;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class Fluids {
+public class FluidRegistry {
 
     public static Fluid fluidInkWhite;
     public static Fluid fluidInkOrange;

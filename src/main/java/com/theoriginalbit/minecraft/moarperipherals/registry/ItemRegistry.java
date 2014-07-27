@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.init;
+package com.theoriginalbit.minecraft.moarperipherals.registry;
 
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemGeneric;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
@@ -27,19 +27,14 @@ import cpw.mods.fml.common.registry.GameRegistry;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class Items {
+public class ItemRegistry {
 
     public static ItemGeneric itemInkCartridge;
-    public static ItemGeneric itemKeyboardPart;
 
     public static void init() {
         if (Settings.enablePrinter) {
             itemInkCartridge = new ItemInkCartridge();
             GameRegistry.registerItem(itemInkCartridge, itemInkCartridge.getUnlocalizedName());
-        }
-        if (Settings.enableKeyboard) {
-            itemKeyboardPart = new ItemGeneric(Settings.itemKeyboardPart, "keyboardPart");
-            GameRegistry.registerItem(itemKeyboardPart, itemKeyboardPart.getUnlocalizedName());
         }
     }
 

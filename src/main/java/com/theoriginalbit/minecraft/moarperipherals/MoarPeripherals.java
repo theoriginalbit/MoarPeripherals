@@ -2,9 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals;
 
 import com.theoriginalbit.minecraft.computercraft.peripheral.PeripheralProvider;
 import com.theoriginalbit.minecraft.moarperipherals.handler.*;
-import com.theoriginalbit.minecraft.moarperipherals.init.Blocks;
-import com.theoriginalbit.minecraft.moarperipherals.init.Fluids;
-import com.theoriginalbit.minecraft.moarperipherals.init.Items;
+import com.theoriginalbit.minecraft.moarperipherals.registry.*;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import cpw.mods.fml.common.Mod;
@@ -67,15 +65,17 @@ public class MoarPeripherals {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        Blocks.init();
-        Items.init();
-        Fluids.init();
+        MaterialRegistry.init();
+        BlockRegistry.init();
+        ItemRegistry.init();
+        FluidRegistry.init();
 
-        RecipeHandler.init();
+        MaterialRegistry.oreRegistration();
+        BlockRegistry.oreRegistration();
+        ItemRegistry.oreRegistration();
+        FluidRegistry.oreRegistration();
 
-        Blocks.oreRegistration();
-        Items.oreRegistration();
-        Fluids.oreRegistration();
+        RecipeRegistry.init();
 
         proxy.registerRenderInfo();
     }

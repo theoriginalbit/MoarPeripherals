@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.init;
+package com.theoriginalbit.minecraft.moarperipherals.registry;
 
 import com.theoriginalbit.minecraft.moarperipherals.block.*;
 import com.theoriginalbit.minecraft.moarperipherals.itemblock.ItemBlockKeyboard;
@@ -32,7 +32,7 @@ import net.minecraftforge.oredict.OreDictionary;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public final class Blocks {
+public final class BlockRegistry {
 
     public static BlockGeneric blockChatBox;
     public static BlockGeneric blockPlayerDetector;

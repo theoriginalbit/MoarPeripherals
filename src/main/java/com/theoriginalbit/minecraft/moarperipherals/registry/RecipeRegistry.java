@@ -1,7 +1,5 @@
-package com.theoriginalbit.minecraft.moarperipherals.handler;
+package com.theoriginalbit.minecraft.moarperipherals.registry;
 
-import com.theoriginalbit.minecraft.moarperipherals.init.Blocks;
-import com.theoriginalbit.minecraft.moarperipherals.init.Items;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -30,21 +28,21 @@ import net.minecraft.item.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public final class RecipeHandler {
+public final class RecipeRegistry {
 
     public static void init() {
         if (Settings.enablePlayerDetector) {
-            GameRegistry.addRecipe(new ItemStack(Blocks.blockPlayerDetector), "SBS", "BRB", "SBS", 'S', Block.stone, 'B', Block.stoneButton, 'R', Item.redstone);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockPlayerDetector), "SBS", "BRB", "SBS", 'S', Block.stone, 'B', Block.stoneButton, 'R', Item.redstone);
         }
         if (Settings.enableChatBox) {
-            GameRegistry.addRecipe(new ItemStack(Blocks.blockChatBox), "GGG", "GNG", "GRG", 'G', Item.ingotGold, 'N', Block.music, 'R', Item.redstone);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockChatBox), "GGG", "GNG", "GRG", 'G', Item.ingotGold, 'N', Block.music, 'R', Item.redstone);
         }
         if (Settings.enableIronNote) {
-            GameRegistry.addRecipe(new ItemStack(Blocks.blockIronNote), "III", "INI", "IRI", 'I', Item.ingotIron, 'N', Block.music, 'R', Item.redstone);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockIronNote), "III", "INI", "IRI", 'I', Item.ingotIron, 'N', Block.music, 'R', Item.redstone);
         }
         if (Settings.enableKeyboard) {
-            GameRegistry.addRecipe(new ItemStack(Items.itemKeyboardPart), "BBB", "RRR", "SSS", 'B', Block.stoneButton, 'R', Item.redstone, 'S', Block.stone);
-            GameRegistry.addRecipe(new ItemStack(Blocks.blockKeyboard), "KKK", 'K', Items.itemKeyboardPart);
+            GameRegistry.addRecipe(new ItemStack(MaterialRegistry.materialKeyboardPart), "BBB", "RRR", "SSS", 'B', Block.stoneButton, 'R', Item.redstone, 'S', Block.stone);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockKeyboard), "KKK", 'K', MaterialRegistry.materialKeyboardPart);
         }
         if (Settings.enablePrinter) {
 

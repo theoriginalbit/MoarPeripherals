@@ -1,6 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import com.theoriginalbit.minecraft.moarperipherals.init.Blocks;
+import com.theoriginalbit.minecraft.moarperipherals.registry.BlockRegistry;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.tile.IPairableDevice;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
@@ -145,7 +145,7 @@ public class TileKeyboard extends TileEntity implements IPairableDevice, IActiva
 
     @Override
     public ItemStack getPairedDrop() {
-        ItemStack stack = new ItemStack(Blocks.blockKeyboard, 1);
+        ItemStack stack = new ItemStack(BlockRegistry.blockKeyboard, 1);
         if (targetTile != null) {
             NBTUtils.setInteger(stack, Constants.NBT.TARGET_X, targetTile.xCoord);
             NBTUtils.setInteger(stack, Constants.NBT.TARGET_Y, targetTile.yCoord);
