@@ -1,15 +1,10 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
  * Peripheral Framework is an open-source framework that has the aim of
  * allowing developers to implement their ComputerCraft peripherals faster,
  * easier, and cleaner; allowing them to focus more on developing their
  * content.
+ *
+ * URL: https://github.com/theoriginalbit/Peripheral-Framework
  *
  * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
  *
@@ -27,18 +22,7 @@ import java.lang.annotation.Target;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-/**
- * This annotation indicates that you would like your TileEntity to be
- * wrapped as a peripheral. The "value" argument is required as it
- * specifies the type of the peripheral when a player makes a call to
- * peripheral.getType() in-game.
- *
- * @author theoriginalbit
- */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface LuaPeripheral {
+@API(apiVersion = "1.1", owner = "MoarPeripherals", provides = "Peripheral-Framework|Wrapper")
+package com.theoriginalbit.minecraft.framework.peripheral.wrapper;
 
-    public String value();
-
-}
+import cpw.mods.fml.common.API;

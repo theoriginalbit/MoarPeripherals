@@ -1,9 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import com.google.common.collect.Lists;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnAttach;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnDetach;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.ComputerList;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,21 +38,8 @@ public class TilePlayerDetector extends TileMPBase implements IActivateAwareTile
 
     private static final String EVENT_PLAYER = "player";
 
-    private ArrayList<IComputerAccess> computers = Lists.newArrayList();
-
-    @OnAttach
-    public void attach(IComputerAccess computer) {
-        if (!computers.contains(computer)) {
-            computers.add(computer);
-        }
-    }
-
-    @OnDetach
-    public void detach(IComputerAccess computer) {
-        if (computers.contains(computer)) {
-            computers.remove(computer);
-        }
-    }
+    @ComputerList
+    public ArrayList<IComputerAccess> computers;
 
     @Override
     public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -66,6 +51,9 @@ public class TilePlayerDetector extends TileMPBase implements IActivateAwareTile
     }
 
     protected void computerQueueEvent(String event, Object... args) {
+        if (computers == null || computers.isEmpty()) {
+            return;
+        }
         for (IComputerAccess computer : computers) {
             computer.queueEvent(event, ArrayUtils.add(args, 0, computer.getAttachmentName()));
         }

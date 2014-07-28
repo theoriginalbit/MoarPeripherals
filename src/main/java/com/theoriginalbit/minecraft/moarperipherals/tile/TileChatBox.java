@@ -2,10 +2,9 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnAttach;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnDetach;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.ComputerList;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.minecraft.moarperipherals.handler.ChatHandler;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IChatListener;
@@ -65,7 +64,8 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
     private int count = 0;
     private boolean registered = false;
 
-    private ArrayList<IComputerAccess> computers = Lists.newArrayList();
+    @ComputerList
+    public ArrayList<IComputerAccess> computers;
 
     @LuaFunction
     public boolean say(String message) throws Exception {
@@ -93,20 +93,6 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
 
         ChatUtils.sendChatToPlayer(username, buildMessage(message, true));
         return true;
-    }
-
-    @OnAttach
-    public void attach(IComputerAccess computer) {
-        if (!computers.contains(computer)) {
-            computers.add(computer);
-        }
-    }
-
-    @OnDetach
-    public void detach(IComputerAccess computer) {
-        if (computers.contains(computer)) {
-            computers.remove(computer);
-        }
     }
 
     @Override
@@ -188,6 +174,9 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
     }
 
     protected void computerQueueEvent(String event, Object... args) {
+        if (computers == null || computers.isEmpty()) {
+            return;
+        }
         for (IComputerAccess computer : computers) {
             computer.queueEvent(event, ArrayUtils.add(args, 0, computer.getAttachmentName()));
         }

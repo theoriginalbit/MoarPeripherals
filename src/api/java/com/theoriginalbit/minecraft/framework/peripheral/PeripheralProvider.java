@@ -1,8 +1,8 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral;
+package com.theoriginalbit.minecraft.framework.peripheral;
 
 import com.google.common.base.Preconditions;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.minecraft.computercraft.peripheral.wrapper.PeripheralWrapper;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.minecraft.framework.peripheral.wrapper.PeripheralWrapper;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

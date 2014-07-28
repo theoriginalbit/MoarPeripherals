@@ -1,14 +1,12 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
+package com.theoriginalbit.minecraft.framework.peripheral.converter;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
+import com.theoriginalbit.minecraft.framework.peripheral.LuaType;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -33,17 +31,18 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
  */
 
 /**
- * Converts a {@link java.util.List} to/from Lua
+ * Converts an array to/from Lua
  *
  * @author theoriginalbit
  */
-public class ConverterList implements ITypeConverter {
+public class ConverterArray implements ITypeConverter {
 	@Override
 	public Object fromLua(Object obj, Class<?> expected) {
-		if (obj instanceof Map && expected == List.class) {
+		if (obj instanceof Map && expected.isArray()) {
 			Map<?, ?> map = (Map<?, ?>) obj;
+			Class<?> component = expected.getComponentType();
 			if (map.isEmpty()) {
-				return ImmutableList.of();
+				return Array.newInstance(component, 0);
 			}
 			
 			int indexMin = Integer.MAX_VALUE;
@@ -64,10 +63,14 @@ public class ConverterList implements ITypeConverter {
 			if (size != tmp.size() || (indexMin != 0 && indexMin != 1)) {
 				return null;
 			}
-			List<Object> result = Lists.newArrayList();
-			for (int index = indexMin; index <= indexMax; ++index) {
-				Object o = tmp.get(index);
-				result.add(o);
+			Object result = Array.newInstance(component, size);
+			for (int i = 0, index = indexMin; i < size; ++i, ++index) {
+				Object in = tmp.get(index);
+				Object out = LuaType.fromLua(in, component);
+				if (out == null) {
+					return null;
+				}
+				Array.set(result, i, out);
 			}
 			return result;
 		}
@@ -76,11 +79,11 @@ public class ConverterList implements ITypeConverter {
 	
 	@Override
 	public Object toLua(Object obj) {
-		if (obj instanceof List) {
+		if (obj.getClass().isArray()) {
 			HashMap<Integer, Object> map = Maps.newHashMap();
-			List<?> objList = (List<?>) obj;
-			for (int i = 0; i < objList.size(); ++i) {
-				map.put(i + 1, LuaType.toLua(objList.get(i)));
+			int length = Array.getLength(obj);
+			for (int i = 0; i < length; ++i) {
+				map.put(i + 1, LuaType.toLua(Array.get(obj, i)));
 			}
 			return map;
 		}

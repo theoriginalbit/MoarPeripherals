@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
+package com.theoriginalbit.minecraft.framework.peripheral.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,11 +28,29 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Specifies that the annotated method will handle the {@link dan200.computercraft.api.peripheral.IPeripheral#detach(dan200.computercraft.api.peripheral.IComputerAccess)}
- * method on your {@link com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral} annotated {@link net.minecraft.tileentity.TileEntity}
- *
+ * Marks a Java method in your peripheral as a Lua accessible method.
  * @author theoriginalbit
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnDetach {}
+public @interface LuaFunction {
+
+    /**
+     * This value will determine what the corresponding Lua function will be called. 
+     * By default, the Lua function will go by the same name as the method it is created from.
+     */
+    public String name() default "";
+
+    /**
+     * If your method returns an Object[] and you don't want it to be handled by
+     * the framework's automatic conversion utility, set this flag to true.
+     */
+    public boolean isMultiReturn() default false;
+
+    /**
+     * Use this to only enable this method when certain mods are found installed in
+     * this Minecraft instance, these values should be the Mod's ID
+     */
+    public String[] modIds() default {};
+
+}

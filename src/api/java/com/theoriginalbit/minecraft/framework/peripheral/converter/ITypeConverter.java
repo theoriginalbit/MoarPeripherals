@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
+package com.theoriginalbit.minecraft.framework.peripheral.converter;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of

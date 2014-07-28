@@ -1,14 +1,10 @@
-package com.theoriginalbit.minecraft.moarperipherals.tile;
-
-import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
-import openperipheral.api.Ignore;
-
 /**
- * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
- * Official Thread:
- * http://www.computercraft.info/forums2/index.php?/topic/19357-
- * Official Wiki:
- * http://wiki.theoriginalbit.com/moarperipherals/
+ * Peripheral Framework is an open-source framework that has the aim of
+ * allowing developers to implement their ComputerCraft peripherals faster,
+ * easier, and cleaner; allowing them to focus more on developing their
+ * content.
+ *
+ * URL: https://github.com/theoriginalbit/Peripheral-Framework
  *
  * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
  *
@@ -25,8 +21,8 @@ import openperipheral.api.Ignore;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-@Ignore
-@LuaPeripheral("advanced_printer")
-public class TilePrinter extends TileMPBase {
 
-}
+@API(apiVersion = "1.1", owner = "MoarPeripherals", provides = "Peripheral-Framework|Annotation")
+package com.theoriginalbit.minecraft.framework.peripheral.annotation;
+
+import cpw.mods.fml.common.API;

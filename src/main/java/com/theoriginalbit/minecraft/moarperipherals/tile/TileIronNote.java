@@ -1,8 +1,9 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
 import com.google.common.base.Preconditions;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
+import com.google.common.collect.ImmutableList;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.minecraft.moarperipherals.packet.PacketIronNote;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.PacketUtils;
@@ -35,6 +36,7 @@ import openperipheral.api.Ignore;
 @LuaPeripheral("iron_note")
 public class TileIronNote extends TileMPBase {
 
+    private static ImmutableList<String> INSTRUMENTS = ImmutableList.of("harp", "bd", "snare", "hat", "bassattack");
     private static final int MIN_INST = 0;
     private static final int MAX_INST = 4;
     private static final int MIN_PITCH = 0;
@@ -64,26 +66,7 @@ public class TileIronNote extends TileMPBase {
 
     public static void play(World world, double x, double y, double z, int instrument, int pitch) {
         float f = (float) Math.pow(2.0D, (double) (pitch - 12) / 12.0D);
-        String s;
-        switch (instrument) {
-            case 1:
-                s = "bd";
-                break;
-            case 2:
-                s = "snare";
-                break;
-            case 3:
-                s = "hat";
-                break;
-            case 4:
-                s = "bassattack";
-                break;
-            default:
-                s = "harp";
-                break;
-        }
-
-        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "note." + s, 3.0F, f);
+        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "note." + INSTRUMENTS.get(instrument), 3.0F, f);
         world.spawnParticle("note", x + 0.5D, y + 1.2D, z + 0.5D, (double) pitch / 24.0D, 0.0D, 0.0D);
     }
 

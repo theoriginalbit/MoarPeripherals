@@ -22,7 +22,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-@API(apiVersion = "1.0", owner = "MoarPeripherals", provides = "Peripheral-Framework|Wrapper")
-package com.theoriginalbit.minecraft.computercraft.peripheral.wrapper;
+@API(apiVersion = "1.1", owner = "MoarPeripherals", provides = "Peripheral-Framework|Converter")
+package com.theoriginalbit.minecraft.framework.peripheral.converter;
 
 import cpw.mods.fml.common.API;

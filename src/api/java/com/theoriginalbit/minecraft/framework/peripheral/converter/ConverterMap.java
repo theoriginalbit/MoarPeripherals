@@ -1,9 +1,10 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
+package com.theoriginalbit.minecraft.framework.peripheral.converter;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import com.google.common.collect.Maps;
+import com.theoriginalbit.minecraft.framework.peripheral.LuaType;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -28,11 +29,30 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Specifies that the annotated method will handle the {@link dan200.computercraft.api.peripheral.IPeripheral#attach(dan200.computercraft.api.peripheral.IComputerAccess)}
- * method on your {@link com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral} annotated {@link net.minecraft.tileentity.TileEntity}
+ * Converts a {@link java.util.Map} to/from Lua
  *
  * @author theoriginalbit
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface OnAttach {}
+public class ConverterMap implements ITypeConverter {
+	@Override
+	public Object fromLua(Object obj, Class<?> expected) {
+		if (obj instanceof Map && expected == Map.class) {
+			return obj;
+		}
+		return null;
+	}
+
+	@Override
+	public Object toLua(Object obj) {
+		if (obj instanceof Map) {
+			Map<Object, Object> map = Maps.newHashMap();
+			for (Entry<?, ?> e : ((Map<?, ?>) obj).entrySet()) {
+				Object k = LuaType.toLua(e.getKey());
+				Object v = LuaType.toLua(e.getValue());
+				map.put(k, v);
+			}
+			return map;
+		}
+		return null;
+	}
+}

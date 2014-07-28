@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
+package com.theoriginalbit.minecraft.framework.peripheral.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,16 +28,15 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Marks that you wish the LuaFunction to appear under multiple names
- * Lua-side. This would be commonly used to provide different spellings
- * of the method name, for example `isColor` and `isColour`.
+ * Specifies your list for the attached IComputerAccess instances. When
+ * computers are attached or detached from your peripheral this list
+ * will be updated by the peripheral wrapper, this means you can count
+ * on this list always having an up-to-date list of computers attached.
+ * You may use this list however you wish, though a common usage would
+ * be to queue events to all computers.
  *
  * @author theoriginalbit
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Alias {
-
-    String[] value() default {};
-
-}
+public @interface ComputerList {}

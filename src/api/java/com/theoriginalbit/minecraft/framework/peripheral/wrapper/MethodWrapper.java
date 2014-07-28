@@ -1,11 +1,11 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.wrapper;
+package com.theoriginalbit.minecraft.framework.peripheral.wrapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.google.common.base.Preconditions;
-import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.minecraft.framework.peripheral.LuaType;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
 
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;

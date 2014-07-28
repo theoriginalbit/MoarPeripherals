@@ -1,7 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.

@@ -1,18 +1,18 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral;
+package com.theoriginalbit.minecraft.framework.peripheral;
 
 import java.util.*;
 
 import com.google.common.collect.Maps;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterArray;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterDefault;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterList;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterMap;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterNumber;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterSet;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterString;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ITypeConverter;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ConverterArray;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ConverterDefault;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ConverterList;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ConverterMap;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ConverterNumber;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ConverterSet;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ConverterString;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ITypeConverter;
 
 import dan200.computercraft.api.lua.ILuaObject;
 

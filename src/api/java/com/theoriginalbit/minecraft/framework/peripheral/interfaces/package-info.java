@@ -22,7 +22,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-@API(apiVersion = "1.0", owner = "MoarPeripherals", provides = "Peripheral-Framework|Annotation")
-package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
+@API(apiVersion = "1.1", owner = "MoarPeripherals", provides = "Peripheral-Framework|Interfaces")
+package com.theoriginalbit.minecraft.framework.peripheral.interfaces;
 
 import cpw.mods.fml.common.API;

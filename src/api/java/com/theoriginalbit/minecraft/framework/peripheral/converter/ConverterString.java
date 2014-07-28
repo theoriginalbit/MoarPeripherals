@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral;
+package com.theoriginalbit.minecraft.framework.peripheral.converter;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -23,20 +23,23 @@ package com.theoriginalbit.minecraft.computercraft.peripheral;
  */
 
 /**
- * In the event that you don't want to have your peripheral implementation
- * in your TileEntity you can implement this interface and return an object
- * that is an instance of your peripheral implementation.
- *
- * See the example program for usage
+ * Converts a String to/from Lua, it also acts as a catch-all,
+ * converting anything that hasn't been converted, as such
+ * this is the last conversion to happen
  *
  * @author theoriginalbit
  */
-public interface ILuaPeripheralProvider {
+public class ConverterString implements ITypeConverter {
+	@Override
+	public Object fromLua(Object obj, Class<?> expected) {
+		if (expected == String.class) {
+			return obj.toString();
+		}
+		return null;
+	}
 
-    /**
-     * @return an instance of an object which is annotated with
-     * LuaPeripheral and pertains to your TileEntity
-     */
-    public Object getPeripheral();
-
+	@Override
+	public Object toLua(Object obj) {
+		return obj.toString(); // catch-all
+	}
 }

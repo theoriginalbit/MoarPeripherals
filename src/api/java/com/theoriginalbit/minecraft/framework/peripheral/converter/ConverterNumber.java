@@ -1,7 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
+package com.theoriginalbit.minecraft.framework.peripheral.converter;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -26,42 +23,33 @@ import com.google.common.collect.ImmutableBiMap;
  */
 
 /**
- * Converts primitive wrappers to/from Lua
+ * Converts a number to/from Lua
  *
  * @author theoriginalbit
  */
-public class ConverterDefault implements ITypeConverter {
+public class ConverterNumber implements ITypeConverter {
 	@Override
 	public Object fromLua(Object obj, Class<?> expected) {
-		if (compareTypes(obj.getClass(), expected)) {
-			return obj;
+		final Double d;
+		if (obj instanceof Double) {
+			d = (Double) obj;
+		} else {
+			return null;
 		}
+		
+		if (expected == Double.class || expected == double.class) { return d; }
+		if (expected == Integer.class || expected == int.class) { return d.intValue(); }
+		if (expected == Float.class || expected == float.class) { return d.floatValue(); }
+		if (expected == Long.class || expected == long.class) { return d.longValue(); }
+		if (expected == Short.class || expected == short.class) { return d.shortValue(); }
+		if (expected == Byte.class || expected == byte.class) { return d.byteValue(); }
+		if (expected == Boolean.class || expected == boolean.class) { return d != 0; }
+		
 		return null;
 	}
 
 	@Override
 	public Object toLua(Object obj) {
-		if (obj instanceof Boolean) {
-			return obj;
-		}
-		return null;
+		return obj instanceof Number ? ((Number) obj).doubleValue() : null;
 	}
-	
-	private static final BiMap<Class<?>, Class<?>> WRAPPERS = ImmutableBiMap.<Class<?>, Class<?>> builder()
-			.put(long.class, Long.class)
-			.put(int.class, Integer.class)
-			.put(short.class, Short.class)
-			.put(byte.class, Byte.class)
-			.put(boolean.class, Boolean.class)
-			.put(double.class, Double.class)
-			.put(float.class, Float.class)
-			.put(char.class, Character.class)
-			.build();
-	
-	private static boolean compareTypes(Class<?> left, Class<?> right) {
-		if (left.isPrimitive()) left = WRAPPERS.get(left);
-		if (right.isPrimitive()) right = WRAPPERS.get(right);
-		return left.equals(right);
-	}
-	
 }

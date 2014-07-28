@@ -1,10 +1,10 @@
+package com.theoriginalbit.minecraft.framework.peripheral;
+
 /**
  * Peripheral Framework is an open-source framework that has the aim of
  * allowing developers to implement their ComputerCraft peripherals faster,
  * easier, and cleaner; allowing them to focus more on developing their
  * content.
- *
- * URL: https://github.com/theoriginalbit/Peripheral-Framework
  *
  * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
  *
@@ -22,7 +22,21 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-@API(apiVersion = "1.0", owner = "MoarPeripherals", provides = "Peripheral-Framework|Converter")
-package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
+/**
+ * In the event that you don't want to have your peripheral implementation
+ * in your TileEntity you can implement this interface and return an object
+ * that is an instance of your peripheral implementation.
+ *
+ * See the example program for usage
+ *
+ * @author theoriginalbit
+ */
+public interface ILuaPeripheralProvider {
 
-import cpw.mods.fml.common.API;
+    /**
+     * @return an instance of an object which is annotated with
+     * LuaPeripheral and pertains to your TileEntity
+     */
+    public Object getPeripheral();
+
+}
