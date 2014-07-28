@@ -5,9 +5,11 @@ tile.moarperipherals.chatbox.name=Caixa Falante
 tile.moarperipherals.ironnote.name=Note block de Ferro
 tile.moarperipherals.keyboard.name=Teclado
 tile.moarperipherals.printer.name=Impressora avançada
+tile.moarperipherals.itemDictionary.name=Item Dictionary
 
 item.moarperipherals.inkCartridge.name=Cartucho para Tinta
 item.moarperipherals.keyboardPart.name=Parte de Teclado
+item.moarperipherals.sonic.name=Sonic Screwdriver
 
 moarperipherals.chat.paired=Ligado ao computador em %d %d %d
 moarperipherals.chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador

@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
 
 /**
@@ -25,4 +26,10 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPerip
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 @LuaPeripheral("item_dictionary")
-public class TileDictionary extends TileMPBase {}
+public class TileDictionary extends TileMPBase {
+
+    @LuaFunction
+    public void search(String term) {
+        // TODO: yield and wait for search to complete
+    }
+}

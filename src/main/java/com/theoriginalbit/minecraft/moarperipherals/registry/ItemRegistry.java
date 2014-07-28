@@ -1,7 +1,8 @@
 package com.theoriginalbit.minecraft.moarperipherals.registry;
 
-import com.theoriginalbit.minecraft.moarperipherals.item.ItemGeneric;
+import com.theoriginalbit.minecraft.moarperipherals.item.ItemMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
+import com.theoriginalbit.minecraft.moarperipherals.item.ItemSonic;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -29,13 +30,21 @@ import cpw.mods.fml.common.registry.GameRegistry;
  */
 public class ItemRegistry {
 
-    public static ItemGeneric itemInkCartridge;
+    public static ItemMPBase itemInkCartridge;
+    public static ItemMPBase itemSonic;
 
     public static void init() {
         if (Settings.enablePrinter) {
             itemInkCartridge = new ItemInkCartridge();
             GameRegistry.registerItem(itemInkCartridge, itemInkCartridge.getUnlocalizedName());
         }
+
+        /*
+         for now it is perminently enabled
+         later it should only be enabled when needed
+          */
+        itemSonic = new ItemSonic();
+        GameRegistry.registerItem(itemSonic, itemSonic.getUnlocalizedName());
     }
 
     public static void oreRegistration() {

@@ -38,19 +38,20 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class ItemInkCartridge extends ItemGeneric implements ITooltipInformer {
+public class ItemInkCartridge extends ItemMPBase implements ITooltipInformer {
 
     private static final int emptyColorIndex = 16;
     private static final String TOOLTIP_LOCALIZATION = "moarperipherals.tooltip.inkCartridge.";
 
-    private final Icon[] icons;
+    private Icon iconInkC;
+    private Icon iconInkM;
+    private Icon iconInkY;
+    private Icon iconInkK;
+    private Icon iconInkE;
 
     public ItemInkCartridge() {
         super(Settings.itemIdInkCartridge, "inkCartridge");
-
         setMaxStackSize(1);
-
-        icons = new Icon[17];
     }
 
     public static boolean isCartridgeEmpty(ItemStack stack) {
@@ -83,18 +84,24 @@ public class ItemInkCartridge extends ItemGeneric implements ITooltipInformer {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister registry) {
-        icons[emptyColorIndex] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeEmpty");
-
-        for (int i = 0; i < icons.length - 1; ++i) {
-            icons[i] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridge" + i);
-        }
+        iconInkC = registerIcon(registry, "inkCartridgeC");
+        iconInkM = registerIcon(registry, "inkCartridgeM");
+        iconInkY = registerIcon(registry, "inkCartridgeY");
+        iconInkK = registerIcon(registry, "inkCartridgeK");
+        iconInkE = registerIcon(registry, "inkCartridgeE");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public Icon getIconIndex(ItemStack stack) {
         int inkColor = getInkColor(stack);
-        return icons[inkColor];
+        switch (inkColor) {
+            case 0: return iconInkC;
+            case 1: return iconInkM;
+            case 2: return iconInkY;
+            case 3: return iconInkK;
+            default: return iconInkE;
+        }
     }
 
     @Override
@@ -130,6 +137,10 @@ public class ItemInkCartridge extends ItemGeneric implements ITooltipInformer {
         } else {
             list.add("Empty");
         }
+    }
+
+    private Icon registerIcon(IconRegister registry, String name) {
+        return registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ':' + name);
     }
 
 }

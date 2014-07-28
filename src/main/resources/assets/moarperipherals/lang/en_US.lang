@@ -5,9 +5,11 @@ tile.moarperipherals.chatbox.name=ChatBox
 tile.moarperipherals.ironnote.name=Iron Note Block
 tile.moarperipherals.keyboard.name=Keyboard
 tile.moarperipherals.printer.name=Advanced Printer
+tile.moarperipherals.itemDictionary.name=Item Dictionary
 
 item.moarperipherals.inkCartridge.name=Ink Cartridge
 item.moarperipherals.keyboardPart.name=Keyboard Part
+item.moarperipherals.sonic.name=Sonic Screwdriver
 
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.

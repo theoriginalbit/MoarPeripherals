@@ -37,11 +37,11 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class ItemGeneric extends Item {
+public class ItemMPBase extends Item {
 
     private final String name;
 
-    public ItemGeneric(int itemId, String itemName) {
+    public ItemMPBase(int itemId, String itemName) {
         super(itemId - 256);
         name = itemName;
 
@@ -72,7 +72,7 @@ public class ItemGeneric extends Item {
     /**
      * Stops the block from appearing in Not Enough Items
      */
-    public final ItemGeneric hideFromNEI() {
+    public final ItemMPBase hideFromNEI() {
         NEIUtils.hideFromNEI(itemID);
         return this;
     }
@@ -80,7 +80,7 @@ public class ItemGeneric extends Item {
     /**
      * Removes the block from the creative menu, by default it is added to the MoarPeripherals creative tab.
      */
-    public final ItemGeneric hideFromCreative() {
+    public final ItemMPBase hideFromCreative() {
         setCreativeTab(null);
         return this;
     }

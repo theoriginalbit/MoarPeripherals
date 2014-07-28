@@ -36,7 +36,8 @@ public final class Settings {
     // Item ID
     private static int startItemID = 4470;
     public static int itemIdInkCartridge = startItemID++;
-    public static int itemKeyboardPart = startItemID++;
+    public static int itemIdKeyboardPart = startItemID++;
+    public static int itemIdSonic = startItemID++;
 
     // Fluid ID
     private static int startFluidID = 5470;

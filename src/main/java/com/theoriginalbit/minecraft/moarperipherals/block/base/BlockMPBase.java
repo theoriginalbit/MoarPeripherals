@@ -25,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -54,6 +55,7 @@ import java.util.List;
 public abstract class BlockMPBase extends BlockContainer {
 
     private final String blockName;
+    private final Icon[] icons = new Icon[6];
 
     public BlockMPBase(int id, String name) {
         this(id, Material.rock, name);
@@ -71,7 +73,16 @@ public abstract class BlockMPBase extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister registry) {
-        blockIcon = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":" + blockName);
+        Icon icon = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":" + blockName);
+        for (int i = 0; i < icons.length; ++i) {
+            icons[i] = icon;
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Icon getIcon(int side, int meta) {
+        return icons[side];
     }
 
     @Override

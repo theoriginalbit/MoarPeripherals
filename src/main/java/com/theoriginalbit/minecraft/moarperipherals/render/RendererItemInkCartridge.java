@@ -3,7 +3,6 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
-import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -33,7 +32,6 @@ import org.lwjgl.opengl.GL11;
  */
 public final class RendererItemInkCartridge extends CustomItemRenderer {
 
-    private static final ResourceLocation[] textures;
     private static final ModelBase modelCartridgeEmpty = new ModelItemInkCartridge(true);
     private static final ModelBase modelCartridgeFilled = new ModelItemInkCartridge(false);
 
@@ -44,7 +42,13 @@ public final class RendererItemInkCartridge extends CustomItemRenderer {
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
         int inkColor = ItemInkCartridge.getInkColor(stack);
-        return textures[inkColor];
+        switch (inkColor) {
+            case 0: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_C.getTexture();
+            case 1: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_M.getTexture();
+            case 2: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_Y.getTexture();
+            case 3: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_K.getTexture();
+            default: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_E.getTexture();
+        }
     }
 
     @Override
@@ -88,15 +92,6 @@ public final class RendererItemInkCartridge extends CustomItemRenderer {
 
     private void selectModel(ItemStack stack) {
         modelItem = ItemInkCartridge.isCartridgeEmpty(stack) ? modelCartridgeEmpty : modelCartridgeFilled;
-    }
-
-    static {
-        final String texturePath = Constants.TEXTURES_MODEL.INK_CARTRIDGE.getPath();
-        textures = new ResourceLocation[17];
-        for (int i = 0; i < textures.length - 1; ++i) {
-            textures[i] = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, String.format(texturePath, i));
-        }
-        textures[textures.length - 1] = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, String.format(texturePath, "Empty"));
     }
 
 }

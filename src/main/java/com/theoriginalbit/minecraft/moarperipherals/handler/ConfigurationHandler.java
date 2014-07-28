@@ -37,6 +37,7 @@ public final class ConfigurationHandler {
     private static final String BLOCKIDFORMAT = "The Block ID of the %s Block";
 
 //	private static final String FLUIDS = "Fluids";
+    private static final String GENERAL = "general";
     private static final String CHATBOX = "ChatBox";
     private static final String PRINTER = "Printer";
     private static final String RENDERER = "Render";
@@ -124,7 +125,7 @@ public final class ConfigurationHandler {
         // Keyboard
         Settings.enableKeyboard = getEnabled(KEYBOARD);
         Settings.blockIdKeyboard = getBlockId(KEYBOARD, Settings.blockIdKeyboard);
-        Settings.itemKeyboardPart = getItemId(KEYBOARD, "keyboardPart", Settings.itemKeyboardPart, "Keyboard Part");
+        Settings.itemIdKeyboardPart = getItemId(KEYBOARD, "keyboardPart", Settings.itemIdKeyboardPart, "Keyboard Part");
         Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 
         // Item Dictionary
@@ -137,6 +138,9 @@ public final class ConfigurationHandler {
 
         // Security
         Settings.securityOpBreak = getBoolean(SECURITY, "canOpBreakSecurity", "Are OPs able to break blocks that they don't own (when applicable); It is suggested you have this set to false until needed e.g. griefing ");
+
+        // Sonic
+        Settings.itemIdSonic = getItemId(GENERAL, "itemSonic", Settings.itemIdSonic, "Sonic Screwdriver");
 
         if (config.hasChanged()) {
             config.save();

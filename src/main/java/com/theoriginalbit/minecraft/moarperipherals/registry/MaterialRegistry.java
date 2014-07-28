@@ -1,6 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.registry;
 
-import com.theoriginalbit.minecraft.moarperipherals.item.ItemGeneric;
+import com.theoriginalbit.minecraft.moarperipherals.item.ItemMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -28,11 +28,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
  */
 public class MaterialRegistry {
 
-    public static ItemGeneric materialKeyboardPart;
+    public static ItemMPBase materialKeyboardPart;
 
     public static void init() {
         if (Settings.enableKeyboard) {
-            materialKeyboardPart = new ItemGeneric(Settings.itemKeyboardPart, "keyboardPart");
+            materialKeyboardPart = new ItemMPBase(Settings.itemIdKeyboardPart, "keyboardPart");
             GameRegistry.registerItem(materialKeyboardPart, materialKeyboardPart.getUnlocalizedName());
         }
     }

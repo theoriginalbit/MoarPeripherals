@@ -6,7 +6,6 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -46,7 +45,9 @@ public class ItemSearch {
         @Override
         public void execute() {
             for (Item item : Item.itemsList) {
-                ItemSearch.itemMap.add(new ItemStack(item));
+                if (item != null) {
+                    ItemSearch.itemMap.add(new ItemStack(item));
+                }
             }
         }
 

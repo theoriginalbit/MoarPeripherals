@@ -69,7 +69,11 @@ public final class Constants {
         public static final TextureStore PRINTER_IDLE = new TextureStore("textures/models/blocks/printer/Printer_Idle");
         public static final TextureStore PRINTER_ERROR = new TextureStore("textures/models/blocks/printer/Printer_Error");
         public static final TextureStore PRINTER_PRINT_ERROR = new TextureStore("textures/models/blocks/printer/Printer_Printing_Error");
-        public static final TextureStore INK_CARTRIDGE = new TextureStore("textures/models/items/inkCartridge/InkCartridge%s", false);
+        public static final TextureStore INK_CARTRIDGE_C = new TextureStore("textures/models/items/inkCartridge/InkCartridgeC");
+        public static final TextureStore INK_CARTRIDGE_M = new TextureStore("textures/models/items/inkCartridge/InkCartridgeM");
+        public static final TextureStore INK_CARTRIDGE_Y = new TextureStore("textures/models/items/inkCartridge/InkCartridgeY");
+        public static final TextureStore INK_CARTRIDGE_K = new TextureStore("textures/models/items/inkCartridge/InkCartridgeK");
+        public static final TextureStore INK_CARTRIDGE_E = new TextureStore("textures/models/items/inkCartridge/InkCartridgeE");
     }
 
     public enum COLOR {
