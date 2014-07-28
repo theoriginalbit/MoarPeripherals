@@ -32,16 +32,18 @@ public final class ConfigurationHandler {
     private static final String ENABLED = "enabled";
     private static final String BLOCKID = "blockId";
     private static final String ENABLEFORMAT = "Enable the %s Block";
-    private static final String BLOCKIDFORMAT = "The Block ID of the %s Block";
     private static final String ITEMIDFORMAT = "The ID for the %s Item";
 //	private static final String LIQUIDIDFORMAT = "The Liquid ID for %s";
+    private static final String BLOCKIDFORMAT = "The Block ID of the %s Block";
 
 //	private static final String FLUIDS = "Fluids";
     private static final String CHATBOX = "ChatBox";
     private static final String PRINTER = "Printer";
-    private static final String KEYBOARD = "Keyboard";
-    private static final String IRONNOTE = "Iron Note";
     private static final String RENDERER = "Render";
+    private static final String KEYBOARD = "Keyboard";
+    private static final String SECURITY = "Security";
+    private static final String IRONNOTE = "Iron Note";
+    private static final String DICTIONARY = "Item Dictionary";
     private static final String PLAYERDETECTOR = "Player Detector";
 
     private static Configuration config;
@@ -113,21 +115,9 @@ public final class ConfigurationHandler {
         Settings.itemIdInkCartridge = getItemId(PRINTER, "inkCartridge", Settings.itemIdInkCartridge, "Ink Cartridge");
 
         // Fluids
-//		Settings.fluidInkWhiteID = getFluidId("fluidInkWhiteID", Settings.fluidInkWhiteID);
-//		Settings.fluidInkOrangeID = getFluidId("fluidInkOrangeID", Settings.fluidInkOrangeID);
-//		Settings.fluidInkMagentaID = getFluidId("fluidInkMagentaID", Settings.fluidInkMagentaID);
-//		Settings.fluidInkLightBlueID = getFluidId("fluidInkLightBlueID", Settings.fluidInkLightBlueID);
-//		Settings.fluidInkYellowID = getFluidId("fluidInkYellowID", Settings.fluidInkYellowID);
-//		Settings.fluidInkLimeID = getFluidId("fluidInkLimeID", Settings.fluidInkLimeID);
-//		Settings.fluidInkPinkID = getFluidId("fluidInkPinkID", Settings.fluidInkPinkID);
-//		Settings.fluidInkGrayID = getFluidId("fluidInkGrayID", Settings.fluidInkGrayID);
-//		Settings.fluidInkLightGrayID = getFluidId("fluidInkLightGrayID", Settings.fluidInkLightGrayID);
 //		Settings.fluidInkCyanID = getFluidId("fluidInkCyanID", Settings.fluidInkCyanID);
-//		Settings.fluidInkPurpleID = getFluidId("fluidInkPurpleID", Settings.fluidInkPurpleID);
-//		Settings.fluidInkBlueID = getFluidId("fluidInkBlueID", Settings.fluidInkBlueID);
-//		Settings.fluidInkBrownID = getFluidId("fluidInkBrownID", Settings.fluidInkBrownID);
-//		Settings.fluidInkGreenID = getFluidId("fluidInkGreenID", Settings.fluidInkGreenID);
-//		Settings.fluidInkRedID = getFluidId("fluidInkRedID", Settings.fluidInkRedID);
+//		Settings.fluidInkYellowID = getFluidId("fluidInkYellowID", Settings.fluidInkYellowID);
+//		Settings.fluidInkMagentaID = getFluidId("fluidInkMagentaID", Settings.fluidInkMagentaID);
 //		Settings.fluidInkBlackID = getFluidId("fluidInkBlackID", Settings.fluidInkBlackID);
 //		Settings.fluidPlasticID = getFluidId("fluidPlasticID", Settings.fluidPlasticID, "Plastic");
 
@@ -137,9 +127,16 @@ public final class ConfigurationHandler {
         Settings.itemKeyboardPart = getItemId(KEYBOARD, "keyboardPart", Settings.itemKeyboardPart, "Keyboard Part");
         Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 
+        // Item Dictionary
+        Settings.enableDictionary = getEnabled(DICTIONARY);
+        Settings.blockIdDictionary = getBlockId(DICTIONARY, Settings.blockIdDictionary);
+
         // Renderers
         Settings.enableRendererInkCartridge = getBoolean(RENDERER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered as an item or a model");
         Settings.enableRendererPrinter = getBoolean(RENDERER, "enablePrinterModel", false, "Enable whether the Advanced Printer should be rendered as a block or a model");
+
+        // Security
+        Settings.securityOpBreak = getBoolean(SECURITY, "canOpBreakSecurity", "Are OPs able to break blocks that they don't own (when applicable); It is suggested you have this set to false until needed e.g. griefing ");
 
         if (config.hasChanged()) {
             config.save();

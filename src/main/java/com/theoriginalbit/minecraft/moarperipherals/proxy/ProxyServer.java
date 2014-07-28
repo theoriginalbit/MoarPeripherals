@@ -1,6 +1,8 @@
 package com.theoriginalbit.minecraft.moarperipherals.proxy;
 
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
+import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
@@ -40,6 +42,12 @@ public class ProxyServer implements IProxy {
 
     @Override
     public void registerRenderInfo() {
+    }
+
+    @Override
+    public boolean isOp(EntityPlayer player) {
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        return server.getConfigurationManager().getOps().contains(player.username.trim().toLowerCase());
     }
 
 }

@@ -6,7 +6,6 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPerip
 import com.theoriginalbit.minecraft.moarperipherals.packet.PacketIronNote;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.PacketUtils;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openperipheral.api.Ignore;
 
@@ -34,7 +33,7 @@ import openperipheral.api.Ignore;
  */
 @Ignore
 @LuaPeripheral("iron_note")
-public class TileIronNote extends TileEntity {
+public class TileIronNote extends TileMPBase {
 
     private static final int MIN_INST = 0;
     private static final int MAX_INST = 4;

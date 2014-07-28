@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
+import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockPairable;
 import com.theoriginalbit.minecraft.moarperipherals.gui.GuiType;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
@@ -43,8 +44,8 @@ import java.util.List;
 public class BlockKeyboard extends BlockPairable {
 
     public BlockKeyboard() {
-        super(Settings.blockIdKeyboard, Material.rock, "keyboard");
-        setStepSound(soundStoneFootstep);
+        super(Settings.blockIdKeyboard, Material.iron, "keyboard");
+        setStepSound(soundMetalFootstep);
         setRotationMode(RotationMode.FOUR);
         setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
     }

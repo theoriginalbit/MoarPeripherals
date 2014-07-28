@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
+import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileChatBox;
 import net.minecraft.block.material.Material;
@@ -28,7 +29,7 @@ import net.minecraft.world.World;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class BlockChatBox extends BlockGeneric {
+public class BlockChatBox extends BlockMPBase {
 
     public BlockChatBox() {
         super(Settings.blockIdChatBox, Material.iron, "chatbox");

@@ -1,15 +1,17 @@
-package com.theoriginalbit.minecraft.moarperipherals.block;
+package com.theoriginalbit.minecraft.moarperipherals.block.base;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.minecraft.moarperipherals.interfaces.tile.IHasGui;
-import com.theoriginalbit.minecraft.moarperipherals.interfaces.tile.IPairableDevice;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.INeighborAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.tile.IHasGui;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.tile.IHasSpecialDrops;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.tile.IPairableDevice;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TileMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.utils.InventoryUtils;
 import com.theoriginalbit.minecraft.moarperipherals.utils.NEIUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -49,16 +51,15 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public abstract class BlockGeneric extends BlockContainer {
+public abstract class BlockMPBase extends BlockContainer {
 
     private final String blockName;
-    private String blockOwner;
 
-    public BlockGeneric(int id, String name) {
+    public BlockMPBase(int id, String name) {
         this(id, Material.rock, name);
     }
 
-    public BlockGeneric(int id, Material material, String name) {
+    public BlockMPBase(int id, Material material, String name) {
         super(id, material);
         blockName = name;
         setHardness(0.5f);
@@ -79,6 +80,10 @@ public abstract class BlockGeneric extends BlockContainer {
 
         if (tile instanceof IPlaceAwareTile) {
             ((IPlaceAwareTile) tile).onPlaced(entity, stack, x, y, z);
+        }
+
+        if (entity instanceof EntityPlayer) {
+            ((TileMPBase) tile).setOwner(((EntityPlayer) entity).username);
         }
     }
 
@@ -142,18 +147,25 @@ public abstract class BlockGeneric extends BlockContainer {
     }
 
     @Override
-    public boolean canCreatureSpawn(EnumCreatureType creature, World world, int x, int y, int z) {
-        return false;
+    public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z) {
+        final TileEntity tile = world.getBlockTileEntity(x, y, z);
+
+        if ((((TileMPBase) tile).canPlayerAccess(player) || isOpBreakable(player))) {
+            return blockHardness;
+        }
+
+        return -1.0f;
     }
 
-    public final String getBlockOwner() {
-        return blockOwner;
+    @Override
+    public boolean canCreatureSpawn(EnumCreatureType creature, World world, int x, int y, int z) {
+        return false;
     }
 
     /**
      * Stops the block from appearing in Not Enough Items
      */
-    public final BlockGeneric hideFromNEI() {
+    public final BlockMPBase hideFromNEI() {
         NEIUtils.hideFromNEI(blockID);
         return this;
     }
@@ -161,9 +173,13 @@ public abstract class BlockGeneric extends BlockContainer {
     /**
      * Removes the block from the creative menu, by default it is added to the MoarPeripherals creative tab.
      */
-    public final BlockGeneric hideFromCreative() {
+    public final BlockMPBase hideFromCreative() {
         setCreativeTab(null);
         return this;
+    }
+
+    private static boolean isOpBreakable(EntityPlayer player) {
+        return Settings.securityOpBreak && MoarPeripherals.proxy.isOp(player);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals;
 
 import com.theoriginalbit.minecraft.computercraft.peripheral.PeripheralProvider;
+import com.theoriginalbit.minecraft.moarperipherals.dictionary.ItemSearch;
 import com.theoriginalbit.minecraft.moarperipherals.handler.*;
 import com.theoriginalbit.minecraft.moarperipherals.registry.*;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
@@ -82,6 +83,8 @@ public class MoarPeripherals {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        ItemSearch.init();
+
         ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
     }
 

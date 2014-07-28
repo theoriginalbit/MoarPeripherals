@@ -1,6 +1,10 @@
-package com.theoriginalbit.minecraft.moarperipherals.interfaces;
+package com.theoriginalbit.minecraft.moarperipherals.block;
 
-import net.minecraft.entity.player.EntityPlayer;
+import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockMPBase;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TileDictionary;
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 /**
@@ -25,14 +29,15 @@ import net.minecraft.world.World;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public interface IProxy {
+public class BlockDictionary extends BlockMPBase {
 
-    public World getClientWorld(int dimId);
+    public BlockDictionary() {
+        super(Settings.blockIdDictionary, Material.iron, "itemDictionary");
+        setStepSound(soundMetalFootstep);
+    }
 
-    public boolean isClient();
-
-    public void registerRenderInfo();
-
-    public boolean isOp(EntityPlayer player);
-
+    @Override
+    public TileEntity createNewTileEntity(World world) {
+        return new TileDictionary();
+    }
 }

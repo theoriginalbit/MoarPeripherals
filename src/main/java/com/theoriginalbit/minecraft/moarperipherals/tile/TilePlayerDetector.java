@@ -7,7 +7,6 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.OnDetach
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAwareTile;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import openperipheral.api.Ignore;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -37,7 +36,7 @@ import java.util.ArrayList;
  */
 @Ignore
 @LuaPeripheral("player_detector")
-public class TilePlayerDetector extends TileEntity implements IActivateAwareTile {
+public class TilePlayerDetector extends TileMPBase implements IActivateAwareTile {
 
     private static final String EVENT_PLAYER = "player";
 

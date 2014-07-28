@@ -1,7 +1,6 @@
-package com.theoriginalbit.minecraft.moarperipherals.interfaces;
+package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -25,14 +24,5 @@ import net.minecraft.world.World;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public interface IProxy {
-
-    public World getClientWorld(int dimId);
-
-    public boolean isClient();
-
-    public void registerRenderInfo();
-
-    public boolean isOp(EntityPlayer player);
-
-}
+@LuaPeripheral("item_dictionary")
+public class TileDictionary extends TileMPBase {}

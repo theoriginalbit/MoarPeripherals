@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
+import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockRotatable;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
@@ -40,7 +41,8 @@ public class BlockPrinter extends BlockRotatable {
     private static final Icon[] icons = new Icon[6];
 
     public BlockPrinter() {
-        super(Settings.blockIdPrinter, Material.rock, "printer");
+        super(Settings.blockIdPrinter, Material.iron, "printer");
+        setStepSound(soundMetalFootstep);
         setRotationMode(RotationMode.FOUR);
     }
 

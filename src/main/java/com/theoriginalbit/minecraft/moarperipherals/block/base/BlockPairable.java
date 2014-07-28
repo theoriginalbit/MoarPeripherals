@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.block;
+package com.theoriginalbit.minecraft.moarperipherals.block.base;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.tile.IPairableDevice;

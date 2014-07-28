@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
+import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileIronNote;
 import net.minecraft.block.material.Material;
@@ -28,7 +29,7 @@ import net.minecraft.world.World;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class BlockIronNote extends BlockGeneric {
+public class BlockIronNote extends BlockMPBase {
 
     public BlockIronNote() {
         super(Settings.blockIdIronNote, Material.iron, "ironnote");

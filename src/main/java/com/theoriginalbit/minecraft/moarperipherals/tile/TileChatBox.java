@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.ServerChatEvent;
@@ -54,7 +53,7 @@ import java.util.List;
  */
 @Ignore
 @LuaPeripheral("chatbox")
-public class TileChatBox extends TileEntity implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
+public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
 
     private static final String EVENT_CHAT = "chat_message";
     private static final String EVENT_DEATH = "death_message";

@@ -41,7 +41,7 @@ import openperipheral.api.Ignore;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 @Ignore
-public class TileKeyboard extends TileEntity implements IPairableDevice, IActivateAwareTile {
+public class TileKeyboard extends TileMPBase implements IPairableDevice, IActivateAwareTile {
 
     private TileEntity targetTile;
     private Integer nbtTargetX, nbtTargetY, nbtTargetZ;
@@ -76,26 +76,22 @@ public class TileKeyboard extends TileEntity implements IPairableDevice, IActiva
         }
     }
 
-    /**
-     * If a player begins watching the chunk, send the target info for correct rendering
-     */
     @Override
     public Packet getDescriptionPacket() {
         if (!hasConnection()) {
             return null;
         }
-        NBTTagCompound tag = new NBTTagCompound();
+        Packet132TileEntityData packet = (Packet132TileEntityData) super.getDescriptionPacket();
+        NBTTagCompound tag = packet.data;
         tag.setInteger("targetX", targetTile.xCoord);
         tag.setInteger("targetY", targetTile.yCoord);
         tag.setInteger("targetZ", targetTile.zCoord);
-        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);
+        return packet;
     }
 
-    /**
-     * Recieve the target info packet
-     */
     @Override
     public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {
+        super.onDataPacket(net, packet);
         NBTTagCompound tag = packet.data;
         configureTargetFromNbt(tag);
     }

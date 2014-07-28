@@ -31,6 +31,7 @@ public final class Settings {
     public static int blockIdIronNote = startBlockID++;
     public static int blockIdPrinter = startBlockID++;
     public static int blockIdKeyboard = startBlockID++;
+    public static int blockIdDictionary = startBlockID++;
 
     // Item ID
     private static int startItemID = 4470;
@@ -39,21 +40,9 @@ public final class Settings {
 
     // Fluid ID
     private static int startFluidID = 5470;
-    public static int fluidInkWhiteID = startFluidID++;
-    public static int fluidInkOrangeID = startFluidID++;
-    public static int fluidInkMagentaID = startFluidID++;
-    public static int fluidInkLightBlueID = startFluidID++;
-    public static int fluidInkYellowID = startFluidID++;
-    public static int fluidInkLimeID = startFluidID++;
-    public static int fluidInkPinkID = startFluidID++;
-    public static int fluidInkGrayID = startFluidID++;
-    public static int fluidInkLightGrayID = startFluidID++;
     public static int fluidInkCyanID = startFluidID++;
-    public static int fluidInkPurpleID = startFluidID++;
-    public static int fluidInkBlueID = startFluidID++;
-    public static int fluidInkBrownID = startFluidID++;
-    public static int fluidInkGreenID = startFluidID++;
-    public static int fluidInkRedID = startFluidID++;
+    public static int fluidInkYellowID = startFluidID++;
+    public static int fluidInkMagentaID = startFluidID++;
     public static int fluidInkBlackID = startFluidID++;
     public static int fluidPlasticID = startFluidID++;
 
@@ -63,6 +52,7 @@ public final class Settings {
     public static boolean enableIronNote;
     public static boolean enableKeyboard;
     public static boolean enablePrinter;
+    public static boolean enableDictionary;
 
     // ChatBox settings
     public static boolean displayChatBoxCoords;
@@ -84,4 +74,6 @@ public final class Settings {
     public static boolean enableRendererInkCartridge;
     public static boolean enableRendererPrinter;
 
+    // Security settings
+    public static boolean securityOpBreak;
 }

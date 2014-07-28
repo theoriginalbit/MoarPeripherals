@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
+import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePlayerDetector;
 import net.minecraft.block.material.Material;
@@ -28,10 +29,10 @@ import net.minecraft.world.World;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class BlockPlayerDetector extends BlockGeneric {
+public class BlockPlayerDetector extends BlockMPBase {
 
     public BlockPlayerDetector() {
-        super(Settings.blockIdPlayerDetector, Material.rock, "playerdetector");
+        super(Settings.blockIdPlayerDetector, "playerdetector");
         setStepSound(soundStoneFootstep);
     }
 

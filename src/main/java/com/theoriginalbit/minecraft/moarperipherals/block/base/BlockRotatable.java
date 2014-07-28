@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.block;
+package com.theoriginalbit.minecraft.moarperipherals.block.base;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,7 +37,7 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public abstract class BlockRotatable extends BlockGeneric {
+public abstract class BlockRotatable extends BlockMPBase {
 
     @SideOnly(Side.CLIENT)
     protected Icon faceIcon;

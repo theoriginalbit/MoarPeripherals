@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.registry;
 
 import com.theoriginalbit.minecraft.moarperipherals.block.*;
+import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.itemblock.ItemBlockKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
@@ -34,11 +35,12 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public final class BlockRegistry {
 
-    public static BlockGeneric blockChatBox;
-    public static BlockGeneric blockPlayerDetector;
-    public static BlockGeneric blockIronNote;
-    public static BlockGeneric blockKeyboard;
-    public static BlockGeneric blockPrinter;
+    public static BlockMPBase blockChatBox;
+    public static BlockMPBase blockPlayerDetector;
+    public static BlockMPBase blockIronNote;
+    public static BlockMPBase blockKeyboard;
+    public static BlockMPBase blockPrinter;
+    public static BlockMPBase blockDictionary;
 
     public static void init() {
         if (Settings.enablePlayerDetector) {
@@ -61,6 +63,10 @@ public final class BlockRegistry {
             blockPrinter = new BlockPrinter();
             registerBlock(blockPrinter, TilePrinter.class, "tilePrinter");
         }
+        if (Settings.enableDictionary) {
+            blockDictionary = new BlockDictionary();
+            registerBlock(blockDictionary, TileDictionary.class, "tileDictionary");
+        }
     }
 
     public static void oreRegistration() {
@@ -70,11 +76,11 @@ public final class BlockRegistry {
         OreDictionary.registerOre("peripheralKeyboard", blockKeyboard);
     }
 
-    private static void registerBlock(BlockGeneric block, Class<? extends TileEntity> tile, String teName) {
+    private static void registerBlock(BlockMPBase block, Class<? extends TileEntity> tile, String teName) {
         registerBlock(block, tile, teName, null);
     }
 
-    private static void registerBlock(BlockGeneric block, Class<? extends TileEntity> tile, String teName, Class<? extends ItemBlock> itemBlock) {
+    private static void registerBlock(BlockMPBase block, Class<? extends TileEntity> tile, String teName, Class<? extends ItemBlock> itemBlock) {
         if (itemBlock != null) {
             GameRegistry.registerBlock(block, itemBlock, block.getUnlocalizedName());
         } else {
