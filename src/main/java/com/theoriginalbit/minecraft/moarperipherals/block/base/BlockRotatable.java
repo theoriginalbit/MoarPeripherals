@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.block.base;
 
+import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockPistonBase;
@@ -11,7 +12,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 
 import java.util.List;
 
@@ -85,13 +85,13 @@ public abstract class BlockRotatable extends BlockMPBase {
         switch (rotationMode) {
             case FOUR:
                 int face = MathHelper.floor_double((double) (entity.rotationYaw * 4.0f / 360.0f) + 0.5d) & 3;
-                meta = ForgeDirection.getOrientation(face).getOpposite().ordinal();
+                meta = face == 0 ? 2 : (face == 1 ? 5 : (face == 2 ? 3 : (face == 3 ? 4 : 0)));
                 break;
             case SIX:
                 meta = BlockPistonBase.determineOrientation(world, x, y, z, entity);
                 break;
         }
-        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+        world.setBlockMetadataWithNotify(x, y, z, meta, BlockNotifyFlags.SEND_TO_CLIENTS);
         super.onBlockPlacedBy(world, x, y, z, entity, stack);
     }
 

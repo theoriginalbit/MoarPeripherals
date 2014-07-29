@@ -1,7 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.render;
 
-import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
-import com.theoriginalbit.minecraft.moarperipherals.model.ModelItemInkCartridge;
+import com.theoriginalbit.minecraft.moarperipherals.model.ModelSonic;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.render.base.CustomItemRenderer;
 import net.minecraft.client.model.ModelBase;
@@ -15,84 +14,66 @@ import org.lwjgl.opengl.GL11;
  * http://www.computercraft.info/forums2/index.php?/topic/19357-
  * Official Wiki:
  * http://wiki.theoriginalbit.com/moarperipherals/
- *
+ * <p/>
  * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
- *
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public final class RendererItemInkCartridge extends CustomItemRenderer {
+public class RendererItemSonic extends CustomItemRenderer {
 
-    private static final ModelBase modelCartridgeEmpty = new ModelItemInkCartridge(true);
-    private static final ModelBase modelCartridgeFilled = new ModelItemInkCartridge(false);
+    private static final ModelBase model = new ModelSonic();
 
-    public RendererItemInkCartridge() {
-        super(modelCartridgeEmpty);
+    public RendererItemSonic() {
+        super(model);
     }
 
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
-        int inkColor = ItemInkCartridge.getInkColor(stack);
-        switch (inkColor) {
-            case 0: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_C.getResourceLocation();
-            case 1: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_M.getResourceLocation();
-            case 2: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_Y.getResourceLocation();
-            case 3: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_K.getResourceLocation();
-            default: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_E.getResourceLocation();
-        }
+        return Constants.TEXTURES_MODEL.SONIC.getResourceLocation();
     }
 
     @Override
     protected void manipulateEntityRender(ItemStack stack) {
-        selectModel(stack);
-        float scale = 0.24f;
+        float scale = 0.145f;
         GL11.glScalef(scale, scale, scale);
         GL11.glRotatef(180, 1, 0, 0);
-        GL11.glTranslatef(0f, -0.5f, 0f);
+        GL11.glTranslatef(0f, -1f, 0f);
     }
 
     @Override
     protected void manipulateInventoryRender(ItemStack stack) {
-        selectModel(stack);
-        float scale = 0.6f;
+        float scale = 0.3f;
         GL11.glScalef(scale, scale, scale);
         GL11.glRotatef(180, 1, 0, 0);
+        GL11.glTranslatef(0f, 1f, 0f);
     }
 
     @Override
     protected void manipulateThirdPersonRender(ItemStack stack) {
-        selectModel(stack);
-        float scale = 0.3f;
+        float scale = 0.225f;
         GL11.glScalef(scale, scale, scale);
-        GL11.glRotatef(120, 1, 0, 0);
-        GL11.glRotatef(-55, 0, 0, 1);
-        GL11.glRotatef(-40, 0, 1, 0);
-        GL11.glTranslatef(-3.2f, 2.1f, -1.7f);
+        GL11.glRotatef(175, 1, 0, 0);
+        GL11.glTranslatef(0f, -3.5f, -4.5f);
     }
 
     @Override
     protected void manipulateFirstPersonRender(ItemStack stack) {
-        selectModel(stack);
-        float scale = 0.5f;
+        float scale = 0.3f;
         GL11.glScalef(scale, scale, scale);
-        GL11.glRotatef(170, 0, 0, 1);
-        GL11.glRotatef(40, 0, 1, 0);
-        GL11.glRotatef(-60, 1, 0, 0);
-        GL11.glTranslatef(-2.2f, -1f, -1.5f);
+        GL11.glRotatef(140, 1, 0, 0);
+        GL11.glRotatef(-60, 0, 1, 0);
+        GL11.glRotatef(-20, 0, 0, 1);
+        GL11.glTranslatef(-2f, -0.5f, -3.8f);
     }
-
-    private void selectModel(ItemStack stack) {
-        modelItem = ItemInkCartridge.isCartridgeEmpty(stack) ? modelCartridgeEmpty : modelCartridgeFilled;
-    }
-
 }

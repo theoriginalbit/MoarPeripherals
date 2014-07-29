@@ -14,6 +14,9 @@ item.moarperipherals.sonic.name=Sonic Screwdriver
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.
 
+# believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
+moarperipherals.chat.sonic.wood=It doesn't do wood!
+
 moarperipherals.gui.keyboard.exit=Press ESC to exit the Keyboard
 
 moarperipherals.tooltip.generic.information=Hold SHIFT for information

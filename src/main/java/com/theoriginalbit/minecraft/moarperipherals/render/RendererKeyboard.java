@@ -2,6 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
+import com.theoriginalbit.minecraft.moarperipherals.render.base.CustomTileRenderer;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -95,7 +96,18 @@ public final class RendererKeyboard extends CustomTileRenderer {
 
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
-        return Constants.TEXTURES_MODEL.KEYBOARD.getTexture();
+        return Constants.TEXTURES_MODEL.KEYBOARD.getResourceLocation();
+    }
+
+    private void adjustRotatePivotViaMeta(TileEntity tile) {
+        int meta = tile.getBlockMetadata();
+        switch (meta) {
+            case 2: /* no rotate */ break;
+            case 3: GL11.glRotatef(180, 0, 1, 0); break;
+            case 4: GL11.glRotatef(-90, 0, 1, 0); break;
+            case 5: GL11.glRotatef(90, 0, 1, 0); break;
+            default: break;
+        }
     }
 
 }

@@ -53,6 +53,7 @@ public final class Constants {
     public static final class CHAT {
         public static final LocalisationStore CHAT_PAIRED = new LocalisationStore("moarperipherals.chat.paired");
         public static final LocalisationStore CHAT_NOT_PAIRED = new LocalisationStore("moarperipherals.chat.notPaired");
+        public static final LocalisationStore SONIC_WOOD = new LocalisationStore("moarperipherals.chat.sonic.wood");
     }
 
     public static final class NBT {
@@ -74,6 +75,7 @@ public final class Constants {
         public static final TextureStore INK_CARTRIDGE_Y = new TextureStore("textures/models/items/inkCartridge/InkCartridgeY");
         public static final TextureStore INK_CARTRIDGE_K = new TextureStore("textures/models/items/inkCartridge/InkCartridgeK");
         public static final TextureStore INK_CARTRIDGE_E = new TextureStore("textures/models/items/inkCartridge/InkCartridgeE");
+        public static final TextureStore SONIC = new TextureStore("textures/models/items/sonic/Sonic");
     }
 
     public enum COLOR {
@@ -144,7 +146,7 @@ public final class Constants {
             resource = load ? new ResourceLocation(ModInfo.RESOURCE_DOMAIN, pathToResource) : null;
         }
 
-        public final ResourceLocation getTexture() {
+        public final ResourceLocation getResourceLocation() {
             return resource;
         }
 

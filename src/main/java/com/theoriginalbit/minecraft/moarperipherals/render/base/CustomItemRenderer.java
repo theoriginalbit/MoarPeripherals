@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.render;
+package com.theoriginalbit.minecraft.moarperipherals.render.base;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;

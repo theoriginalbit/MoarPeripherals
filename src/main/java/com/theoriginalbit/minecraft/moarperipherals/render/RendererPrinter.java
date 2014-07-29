@@ -2,6 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelPrinter;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
+import com.theoriginalbit.minecraft.moarperipherals.render.base.CustomTileRenderer;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
@@ -49,7 +50,7 @@ public class RendererPrinter extends CustomTileRenderer {
         GL11.glScalef(scale, scale, scale);
         GL11.glRotatef(180, 0, 0, 1);
         GL11.glTranslatef(-1f, -0.44f, 1f);
-        adjustRotatePivotViaMeta(tile);
+        // FIXME: adjustRotatePivotViaMeta(tile);
     }
 
     @Override
@@ -106,12 +107,12 @@ public class RendererPrinter extends CustomTileRenderer {
 
     @Override
     protected ResourceLocation getTexture(TileEntity tile) {
-        return Constants.TEXTURES_MODEL.PRINTER_IDLE.getTexture();
+        return Constants.TEXTURES_MODEL.PRINTER_IDLE.getResourceLocation();
     }
 
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
-        return Constants.TEXTURES_MODEL.PRINTER_IDLE.getTexture();
+        return Constants.TEXTURES_MODEL.PRINTER_IDLE.getResourceLocation();
     }
 
 }

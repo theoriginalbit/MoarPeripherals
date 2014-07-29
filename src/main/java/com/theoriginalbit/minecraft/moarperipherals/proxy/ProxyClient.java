@@ -3,6 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.proxy;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemInkCartridge;
+import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemSonic;
 import com.theoriginalbit.minecraft.moarperipherals.render.RendererKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.render.RendererPrinter;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
@@ -72,6 +73,9 @@ public class ProxyClient implements IProxy {
             MinecraftForgeClient.registerItemRenderer(Settings.blockIdKeyboard, rendererKeyboard);
             ClientRegistry.bindTileEntitySpecialRenderer(TileKeyboard.class, rendererKeyboard);
         }
+
+        // for now, always enabled
+        MinecraftForgeClient.registerItemRenderer(Settings.itemIdSonic, new RendererItemSonic());
     }
 
     @Override

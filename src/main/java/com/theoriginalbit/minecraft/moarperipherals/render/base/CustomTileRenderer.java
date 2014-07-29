@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.moarperipherals.render;
+package com.theoriginalbit.minecraft.moarperipherals.render.base;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -54,11 +54,6 @@ public abstract class CustomTileRenderer extends TileEntitySpecialRenderer imple
         model.render(null, 0F, 0F, 0f, 0f, 0f, 0.0625f);
         GL11.glPopMatrix();
         GL11.glPopMatrix();
-    }
-
-    protected void adjustRotatePivotViaMeta(TileEntity tile) {
-        int meta = tile.getBlockMetadata();
-        GL11.glRotatef((meta - 1) * -90, 0, 1, 0);
     }
 
     // force methods that are used in the implementations of the TileEntitySpecialRenderer#renderTileEntityAt method
