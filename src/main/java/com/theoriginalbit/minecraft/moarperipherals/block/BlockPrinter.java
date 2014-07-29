@@ -86,17 +86,17 @@ public class BlockPrinter extends BlockRotatable {
 
     @Override
     public int getRenderType() {
-        return Settings.enableRendererPrinter ? -1 : 0;
+        return Settings.enablePrinterGfx ? -1 : 0;
     }
 
     @Override
     public boolean isOpaqueCube() {
-        return !Settings.enableRendererPrinter;
+        return !Settings.enablePrinterGfx;
     }
 
     @Override
     public boolean renderAsNormalBlock() {
-        return !Settings.enableRendererPrinter;
+        return !Settings.enablePrinterGfx;
     }
 
     @Override

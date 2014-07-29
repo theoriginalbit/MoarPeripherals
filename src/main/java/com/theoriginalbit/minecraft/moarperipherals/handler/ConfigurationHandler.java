@@ -29,15 +29,16 @@ import java.io.File;
  */
 public final class ConfigurationHandler {
 
-    private static final String ENABLED = "enabled";
+    private static final String ITEMID = "itemId";
     private static final String BLOCKID = "blockId";
-    private static final String ENABLEFORMAT = "Enable the %s Block";
+    private static final String ENABLED = "enabled";
+    private static final String ENABLEFORMAT = "Enable the %s";
     private static final String ITEMIDFORMAT = "The ID for the %s Item";
 //	private static final String LIQUIDIDFORMAT = "The Liquid ID for %s";
     private static final String BLOCKIDFORMAT = "The Block ID of the %s Block";
 
 //	private static final String FLUIDS = "Fluids";
-    private static final String GENERAL = "general";
+    private static final String SONIC = "Sonic Screwdriver";
     private static final String CHATBOX = "ChatBox";
     private static final String PRINTER = "Printer";
     private static final String RENDERER = "Render";
@@ -45,6 +46,8 @@ public final class ConfigurationHandler {
     private static final String SECURITY = "Security";
     private static final String IRONNOTE = "Iron Note";
     private static final String DICTIONARY = "Item Dictionary";
+    private static final String INKCARTRIDGE = "Ink Cartridge";
+    private static final String KEYBOARDPART = "Keyboard Part";
     private static final String PLAYERDETECTOR = "Player Detector";
 
     private static Configuration config;
@@ -61,16 +64,16 @@ public final class ConfigurationHandler {
         return config.get(cat, key, defInt, desc).getInt();
     }
 
-    private static boolean getEnabled(String cat) {
-        return getBoolean(cat, ENABLED, String.format(ENABLEFORMAT, cat));
+    private static boolean getEnabled(String key) {
+        return getBoolean(ENABLED, key, String.format(ENABLEFORMAT, key));
     }
 
-    private static int getBlockId(String cat, int defId) {
-        return getInt(cat, BLOCKID, defId, String.format(BLOCKIDFORMAT, cat));
+    private static int getBlockId(String key, int defId) {
+        return getInt(BLOCKID, key, defId, String.format(BLOCKIDFORMAT, key));
     }
 
-    private static int getItemId(String cat, String key, int defId, String readableName) {
-        return getInt(cat, key, defId, String.format(ITEMIDFORMAT, readableName));
+    private static int getItemId(String key, int defId) {
+        return getInt(ITEMID, key, defId, String.format(ITEMIDFORMAT, key));
     }
 
 //	private static final int getFluidId(String key, int defId) {
@@ -91,13 +94,36 @@ public final class ConfigurationHandler {
     private static void load() {
         config.load();
 
-        // Player Detector
-        Settings.enablePlayerDetector = getEnabled(PLAYERDETECTOR);
+        // Block ID
+        Settings.blockIdChatBox = getBlockId(CHATBOX, Settings.blockIdChatBox);
+        Settings.blockIdPrinter = getBlockId(PRINTER, Settings.blockIdPrinter);
+        Settings.blockIdKeyboard = getBlockId(KEYBOARD, Settings.blockIdKeyboard);
+        Settings.blockIdIronNote = getBlockId(IRONNOTE, Settings.blockIdIronNote);
+        Settings.blockIdDictionary = getBlockId(DICTIONARY, Settings.blockIdDictionary);
         Settings.blockIdPlayerDetector = getBlockId(PLAYERDETECTOR, Settings.blockIdPlayerDetector);
 
-        // ChatBox
+        // Item ID
+        Settings.itemIdSonic = getItemId(SONIC, Settings.itemIdSonic);
+        Settings.itemIdInkCartridge = getItemId(INKCARTRIDGE, Settings.itemIdInkCartridge);
+        Settings.itemIdKeyboardPart = getItemId(KEYBOARDPART, Settings.itemIdKeyboardPart);
+
+        // Fluid ID
+//		Settings.fluidInkCyanID = getFluidId("fluidInkCyanID", Settings.fluidInkCyanID);
+//		Settings.fluidInkYellowID = getFluidId("fluidInkYellowID", Settings.fluidInkYellowID);
+//		Settings.fluidInkMagentaID = getFluidId("fluidInkMagentaID", Settings.fluidInkMagentaID);
+//		Settings.fluidInkBlackID = getFluidId("fluidInkBlackID", Settings.fluidInkBlackID);
+//		Settings.fluidPlasticID = getFluidId("fluidPlasticID", Settings.fluidPlasticID, "Plastic");
+
+        // Feature enabled
+        Settings.enableSonic = getEnabled(SONIC);
         Settings.enableChatBox = getEnabled(CHATBOX);
-        Settings.blockIdChatBox = getBlockId(CHATBOX, Settings.blockIdChatBox);
+        Settings.enablePrinter = getEnabled(PRINTER);
+        Settings.enableKeyboard = getEnabled(KEYBOARD);
+        Settings.enableIronNote = getEnabled(IRONNOTE);
+        Settings.enableDictionary = getEnabled(DICTIONARY);
+        Settings.enablePlayerDetector = getEnabled(PLAYERDETECTOR);
+
+        // ChatBox settings
         Settings.displayChatBoxCoords = getBoolean(CHATBOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
         Settings.chatRangeSay = getInt(CHATBOX, "sayRange", Settings.chatRangeSay, "Range for the ChatBox peripheral's say function, set to -1 for infinite");
         Settings.chatRangeTell = getInt(CHATBOX, "tellRange", Settings.chatRangeSay, "Range for the ChatBox peripheral's tell (private message) function, set to -1 for infinite");
@@ -105,42 +131,20 @@ public final class ConfigurationHandler {
         Settings.chatSayRate = getInt(CHATBOX, "sayRate", Settings.chatSayRate, "Maximum number of messages per second a ChatBox peripheral can 'say'");
 
         // Iron Note Block
-        Settings.enableIronNote = getEnabled(IRONNOTE);
-        Settings.blockIdIronNote = getBlockId(IRONNOTE, Settings.blockIdIronNote);
         Settings.noteRange = getInt(IRONNOTE, "noteRange", Settings.noteRange, "The range at which the note can be heard. Note: Does not seem to work for audio, yet (?).");
 
-        // Printer
-        Settings.enablePrinter = getEnabled(PRINTER);
-        Settings.blockIdPrinter = getBlockId(PRINTER, Settings.blockIdPrinter);
+        // Printer settings
 //		Settings.enableFluidInk = getBoolean(PRINTER, "fluidInk", false, "Enable inks, ink cartridges will need to be filled with ink, not dyes. Note: Not yet implemented");
-        Settings.itemIdInkCartridge = getItemId(PRINTER, "inkCartridge", Settings.itemIdInkCartridge, "Ink Cartridge");
 
-        // Fluids
-//		Settings.fluidInkCyanID = getFluidId("fluidInkCyanID", Settings.fluidInkCyanID);
-//		Settings.fluidInkYellowID = getFluidId("fluidInkYellowID", Settings.fluidInkYellowID);
-//		Settings.fluidInkMagentaID = getFluidId("fluidInkMagentaID", Settings.fluidInkMagentaID);
-//		Settings.fluidInkBlackID = getFluidId("fluidInkBlackID", Settings.fluidInkBlackID);
-//		Settings.fluidPlasticID = getFluidId("fluidPlasticID", Settings.fluidPlasticID, "Plastic");
-
-        // Keyboard
-        Settings.enableKeyboard = getEnabled(KEYBOARD);
-        Settings.blockIdKeyboard = getBlockId(KEYBOARD, Settings.blockIdKeyboard);
-        Settings.itemIdKeyboardPart = getItemId(KEYBOARD, "keyboardPart", Settings.itemIdKeyboardPart, "Keyboard Part");
+        // Keyboard settings
         Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 
-        // Item Dictionary
-        Settings.enableDictionary = getEnabled(DICTIONARY);
-        Settings.blockIdDictionary = getBlockId(DICTIONARY, Settings.blockIdDictionary);
+        // Renderer enabled
+        Settings.enablePrinterGfx = getBoolean(RENDERER, "printerModel", "Whether or not to render items and blocks, related to the printer, normally or as models.");
+        Settings.enableSonicGfx = getBoolean(RENDERER, "sonicModel", "Whether or not to render the Sonic Screwdriver normally or as a model");
 
-        // Renderers
-        Settings.enableRendererInkCartridge = getBoolean(RENDERER, "enableInkCartridgeModel", "Enable whether the ink cartridge should be rendered as an item or a model");
-        Settings.enableRendererPrinter = getBoolean(RENDERER, "enablePrinterModel", false, "Enable whether the Advanced Printer should be rendered as a block or a model");
-
-        // Security
+        // Security settings
         Settings.securityOpBreak = getBoolean(SECURITY, "canOpBreakSecurity", "Are OPs able to break blocks that they don't own (when applicable); It is suggested you have this set to false until needed e.g. griefing ");
-
-        // Sonic
-        Settings.itemIdSonic = getItemId(GENERAL, "itemSonic", Settings.itemIdSonic, "Sonic Screwdriver");
 
         if (config.hasChanged()) {
             config.save();

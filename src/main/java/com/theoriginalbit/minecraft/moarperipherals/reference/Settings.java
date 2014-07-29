@@ -47,13 +47,14 @@ public final class Settings {
     public static int fluidInkBlackID = startFluidID++;
     public static int fluidPlasticID = startFluidID++;
 
-    // Block/feature enabled
+    // Feature enabled
     public static boolean enablePlayerDetector;
     public static boolean enableChatBox;
     public static boolean enableIronNote;
     public static boolean enableKeyboard;
     public static boolean enablePrinter;
     public static boolean enableDictionary;
+    public static boolean enableSonic;
 
     // ChatBox settings
     public static boolean displayChatBoxCoords;
@@ -72,9 +73,18 @@ public final class Settings {
     public static int keyboardRange = 16;
 
     // Renderer enabled
-    public static boolean enableRendererInkCartridge;
-    public static boolean enableRendererPrinter;
+    public static boolean enablePrinterGfx;
+    public static boolean enableSonicGfx;
 
     // Security settings
     public static boolean securityOpBreak;
+
+    public static boolean isSonicEnabled() {
+        /*
+            this will be expanded in the future to ignore the enabled flag
+            when a flag from blocks that require the sonic for configuration
+            is enabled
+         */
+        return enableSonic;
+    }
 }

@@ -57,16 +57,6 @@ public class ProxyClient implements IProxy {
 
     @Override
     public void registerRenderInfo() {
-        // Register Ink Cartridge renderer
-        if (Settings.enablePrinter && Settings.enableRendererInkCartridge) {
-            MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new RendererItemInkCartridge());
-            if (Settings.enableRendererPrinter) {
-                RendererPrinter rendererPrinter = new RendererPrinter();
-                MinecraftForgeClient.registerItemRenderer(Settings.blockIdPrinter, rendererPrinter);
-                ClientRegistry.bindTileEntitySpecialRenderer(TilePrinter.class, rendererPrinter);
-            }
-        }
-
         // Register Keyboard renderers
         if (Settings.enableKeyboard) {
             RendererKeyboard rendererKeyboard = new RendererKeyboard();
@@ -74,8 +64,20 @@ public class ProxyClient implements IProxy {
             ClientRegistry.bindTileEntitySpecialRenderer(TileKeyboard.class, rendererKeyboard);
         }
 
-        // for now, always enabled
-        MinecraftForgeClient.registerItemRenderer(Settings.itemIdSonic, new RendererItemSonic());
+        // Register optional renders when enabled
+        if (Settings.enablePrinter && Settings.enablePrinterGfx) {
+            // printer
+            RendererPrinter rendererPrinter = new RendererPrinter();
+            MinecraftForgeClient.registerItemRenderer(Settings.blockIdPrinter, rendererPrinter);
+            ClientRegistry.bindTileEntitySpecialRenderer(TilePrinter.class, rendererPrinter);
+            // ink cartridge
+            MinecraftForgeClient.registerItemRenderer(Settings.itemIdInkCartridge, new RendererItemInkCartridge());
+        }
+
+        if (Settings.isSonicEnabled() && Settings.enableSonicGfx) {
+            MinecraftForgeClient.registerItemRenderer(Settings.itemIdSonic, new RendererItemSonic());
+        }
+
     }
 
     @Override
