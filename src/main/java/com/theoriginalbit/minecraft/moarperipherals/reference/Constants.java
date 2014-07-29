@@ -44,12 +44,6 @@ public final class Constants {
         public static final LocalisationStore INK_EMPTY = new LocalisationStore("moarperipherals.tooltip.printer.ink.empty");
     }
 
-    public static final class UPGRADE {
-        public static final LocalisationStore COMPASS = new LocalisationStore("upgrade.moarperipherals.adjective.compass");
-
-        public static final TextureStore ICON_COMPASS = new TextureStore("textures/upgrades/compass");
-    }
-
     public static final class CHAT {
         public static final LocalisationStore CHAT_PAIRED = new LocalisationStore("moarperipherals.chat.paired");
         public static final LocalisationStore CHAT_NOT_PAIRED = new LocalisationStore("moarperipherals.chat.notPaired");
