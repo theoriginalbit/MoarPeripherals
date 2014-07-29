@@ -70,29 +70,38 @@ public class RendererPrinter extends CustomTileRenderer {
 
     @Override
     protected void manipulateEntityRender(ItemStack stack) {
+        float scale = 0.9f;
+        GL11.glScalef(scale, scale, scale);
         GL11.glRotatef(180, 1, 0, 0);
         GL11.glTranslatef(0f, -0.5f, 0f);
     }
 
     @Override
     protected void manipulateInventoryRender(ItemStack stack) {
-        float scale = 0.55f;
+        // switch to the model with paper as it looks better
+        model = printerBoth;
+        float scale = 0.5f;
         GL11.glScalef(scale, scale, scale);
         GL11.glRotatef(180, 1, 0, 0);
+        GL11.glTranslatef(0f, 0.3f, 0f);
     }
 
     @Override
     protected void manipulateThirdPersonRender(ItemStack stack) {
-        float scale = 0.3f;
+        // switch to the model with paper as it looks better
+        model = printerEmpty;
+        float scale = 0.8f;
         GL11.glScalef(scale, scale, scale);
         GL11.glRotatef(120, 1, 0, 0);
-        GL11.glRotatef(-55, 0, 0, 1);
-        GL11.glRotatef(-40, 0, 1, 0);
-        GL11.glTranslatef(-3.2f, 2.1f, -1.7f);
+        GL11.glRotatef(-40, 0, 0, 1);
+        GL11.glRotatef(-100, 0, 1, 0);
+        GL11.glTranslatef(-1.8f, 0.5f, 0.5f);
     }
 
     @Override
     protected void manipulateFirstPersonRender(ItemStack stack) {
+        // switch to the model with paper as it looks better
+        model = printerBoth;
         float scale = 0.5f;
         GL11.glScalef(scale, scale, scale);
         GL11.glRotatef(170, 0, 0, 1);
