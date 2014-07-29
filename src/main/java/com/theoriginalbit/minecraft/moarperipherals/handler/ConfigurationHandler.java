@@ -140,7 +140,7 @@ public final class ConfigurationHandler {
         Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 
         // Renderer enabled
-        Settings.enablePrinterGfx = getBoolean(RENDERER, "printerModel", "Whether or not to render items and blocks, related to the printer, normally or as models.");
+        Settings.enablePrinterGfx = getBoolean(RENDERER, "printerModel", false, "Whether or not to render items and blocks, related to the printer, normally or as models.");
         Settings.enableSonicGfx = getBoolean(RENDERER, "sonicModel", "Whether or not to render the Sonic Screwdriver normally or as a model");
 
         // Security settings
