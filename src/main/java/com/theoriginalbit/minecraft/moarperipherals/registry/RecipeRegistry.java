@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.registry;
 
+import com.theoriginalbit.minecraft.moarperipherals.reference.Mods;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -30,15 +31,18 @@ import net.minecraft.item.ItemStack;
  */
 public final class RecipeRegistry {
 
+    private static final Block blockCable = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Cable");
+    private static final ItemStack cable = new ItemStack(blockCable, 1, 0);
+
     public static void init() {
         if (Settings.enablePlayerDetector) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockPlayerDetector), "SBS", "BRB", "SBS", 'S', Block.stone, 'B', Block.stoneButton, 'R', Item.redstone);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockPlayerDetector), "SBS", "BPB", "SCS", 'S', Block.stone, 'B', Block.stoneButton, 'P', Block.pressurePlateStone, 'C', cable);
         }
         if (Settings.enableChatBox) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockChatBox), "GGG", "GNG", "GRG", 'G', Item.ingotGold, 'N', Block.music, 'R', Item.redstone);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockChatBox), "GGG", "GNG", "GCG", 'G', Item.ingotGold, 'N', Block.music, 'C', cable);
         }
         if (Settings.enableIronNote) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockIronNote), "III", "INI", "IRI", 'I', Item.ingotIron, 'N', Block.music, 'R', Item.redstone);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockIronNote), "III", "INI", "ICI", 'I', Item.ingotIron, 'N', Block.music, 'C', cable);
         }
         if (Settings.enableKeyboard) {
             GameRegistry.addRecipe(new ItemStack(MaterialRegistry.materialKeyboardPart), "BBB", "RRR", "SSS", 'B', Block.stoneButton, 'R', Item.redstone, 'S', Block.stone);
@@ -48,7 +52,7 @@ public final class RecipeRegistry {
 
         }
         if (Settings.enableDictionary) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockDictionary), "SBS", "BDB", "SRS", 'S', Block.stone, 'B', Item.book, 'D', Item.diamond, 'R', Item.redstone);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockDictionary), "SBS", "BDB", "SCS", 'S', Block.stone, 'B', Item.book, 'D', Item.diamond, 'C', cable);
         }
     }
 
