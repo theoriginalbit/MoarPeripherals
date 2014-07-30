@@ -47,6 +47,9 @@ public final class RecipeRegistry {
         if (Settings.enablePrinter) {
 
         }
+        if (Settings.enableDictionary) {
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockDictionary), "SBS", "BDB", "SRS", 'S', Block.stone, 'B', Item.book, 'D', Item.diamond, 'R', Item.redstone);
+        }
     }
 
 }
