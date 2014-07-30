@@ -1,6 +1,8 @@
 package com.theoriginalbit.minecraft.moarperipherals;
 
+import com.theoriginalbit.minecraft.framework.peripheral.LuaType;
 import com.theoriginalbit.minecraft.framework.peripheral.PeripheralProvider;
+import com.theoriginalbit.minecraft.moarperipherals.converters.ConverterItemStack;
 import com.theoriginalbit.minecraft.moarperipherals.dictionary.ItemSearch;
 import com.theoriginalbit.minecraft.moarperipherals.handler.*;
 import com.theoriginalbit.minecraft.moarperipherals.registry.*;
@@ -17,6 +19,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -84,6 +87,9 @@ public class MoarPeripherals {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         ItemSearch.init();
+
+        LuaType.registerTypeConverter(new ConverterItemStack());
+        LuaType.registerClassToNameMapping(ItemStack.class, "item");
 
         ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
     }

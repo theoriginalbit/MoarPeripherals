@@ -2,6 +2,10 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
 
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.minecraft.moarperipherals.dictionary.ItemSearch;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -29,7 +33,8 @@ import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeriphera
 public class TileDictionary extends TileMPBase {
 
     @LuaFunction
-    public void search(String term) {
-        // TODO: yield and wait for search to complete
+    public ArrayList<ItemStack> search(String term) throws Exception {
+        return ItemSearch.search(term);
     }
+
 }

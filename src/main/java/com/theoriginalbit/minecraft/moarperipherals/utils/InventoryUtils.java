@@ -54,4 +54,19 @@ public final class InventoryUtils {
         }
     }
 
+    public static String getItemName(ItemStack stack) {
+        String name;
+        try {
+            name = stack.getDisplayName();
+        } catch (Exception e) {
+            try {
+                name = stack.getUnlocalizedName();
+            } catch (Exception e2) {
+                // not sure this will be good, but lets see
+                name = stack.toString();
+            }
+        }
+        return name;
+    }
+
 }
