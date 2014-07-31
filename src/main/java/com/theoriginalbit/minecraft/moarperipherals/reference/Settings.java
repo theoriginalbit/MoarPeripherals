@@ -32,6 +32,10 @@ public final class Settings {
     public static int blockIdPrinter = startBlockID++;
     public static int blockIdKeyboard = startBlockID++;
     public static int blockIdDictionary = startBlockID++;
+    public static int blockIdAntenna = startBlockID++;
+    public static int blockIdAntennaCell = startBlockID++;
+    public static int blockIdAntennaModem = startBlockID++;
+    public static int blockIdAntennaController = startBlockID++;
 
     // Item ID
     private static int startItemID = 4470;
@@ -55,6 +59,7 @@ public final class Settings {
     public static boolean enablePrinter;
     public static boolean enableDictionary;
     public static boolean enableSonic;
+    public static boolean enableAntenna;
 
     // ChatBox settings
     public static boolean displayChatBoxCoords;
@@ -71,6 +76,12 @@ public final class Settings {
 
     // Keyboard settings
     public static int keyboardRange = 16;
+
+    // Antenna settings
+    public static int antennaRange = 1000;
+    public static int antennaRangeStorm = 800;
+    public static boolean antennaKeepChunkLoaded = false;
+    public static int antennaMessageDelay = 5;
 
     // Renderer enabled
     public static boolean enablePrinterGfx;

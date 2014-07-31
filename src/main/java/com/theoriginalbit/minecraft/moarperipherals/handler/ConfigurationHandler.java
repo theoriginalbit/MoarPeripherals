@@ -45,10 +45,15 @@ public final class ConfigurationHandler {
     private static final String KEYBOARD = "Keyboard";
     private static final String SECURITY = "Security";
     private static final String IRONNOTE = "Iron Note";
+    private static final String ANTENNA = "Communications Tower";
     private static final String DICTIONARY = "Item Dictionary";
     private static final String INKCARTRIDGE = "Ink Cartridge";
     private static final String KEYBOARDPART = "Keyboard Part";
     private static final String PLAYERDETECTOR = "Player Detector";
+    private static final String ANTENNAPOLE = "Communications Tower (Pole Block)";
+    private static final String ANTENNACELL = "Communications Tower (Cell Block)";
+    private static final String ANTENNACTRLR = "Communications Tower (Controller)";
+    private static final String ANTENNAMODEM = "Communications Tower (Modem Block)";
 
     private static Configuration config;
 
@@ -101,6 +106,10 @@ public final class ConfigurationHandler {
         Settings.blockIdIronNote = getBlockId(IRONNOTE, Settings.blockIdIronNote);
         Settings.blockIdDictionary = getBlockId(DICTIONARY, Settings.blockIdDictionary);
         Settings.blockIdPlayerDetector = getBlockId(PLAYERDETECTOR, Settings.blockIdPlayerDetector);
+        Settings.blockIdAntenna = getBlockId(ANTENNAPOLE, Settings.blockIdAntenna);
+        Settings.blockIdAntennaCell = getBlockId(ANTENNACELL, Settings.blockIdAntennaCell);
+        Settings.blockIdAntennaModem = getBlockId(ANTENNAMODEM, Settings.blockIdAntennaModem);
+        Settings.blockIdAntennaController = getBlockId(ANTENNACTRLR, Settings.blockIdAntennaController);
 
         // Item ID
         Settings.itemIdSonic = getItemId(SONIC, Settings.itemIdSonic);
@@ -122,6 +131,7 @@ public final class ConfigurationHandler {
         Settings.enableIronNote = getEnabled(IRONNOTE);
         Settings.enableDictionary = getEnabled(DICTIONARY);
         Settings.enablePlayerDetector = getEnabled(PLAYERDETECTOR);
+        Settings.enableAntenna = getEnabled(ANTENNAPOLE);
 
         // ChatBox settings
         Settings.displayChatBoxCoords = getBoolean(CHATBOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
@@ -138,6 +148,12 @@ public final class ConfigurationHandler {
 
         // Keyboard settings
         Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
+
+        // Antenna settings
+        Settings.antennaRange = getInt(ANTENNA, "cellTowerRange", Settings.antennaRange, "The range in blocks the Cell Tower can transmit");
+        Settings.antennaRangeStorm = getInt(ANTENNA, "cellTowerRangeStorm", Settings.antennaRangeStorm, "The range in blocks the Cell Tower can transmit during a storm");
+        Settings.antennaMessageDelay = getInt(ANTENNA, "cellTowerMessageDelay", Settings.antennaMessageDelay, "The delay (in ticks) that the Cell Tower takes to send a message per 100 block distance (rounded up).");
+        Settings.antennaKeepChunkLoaded = getBoolean(ANTENNA, "keepChunkLoaded", Settings.antennaKeepChunkLoaded, "Whether a cell tower should keep the chunk it resides in loaded");
 
         // Renderer enabled
         Settings.enablePrinterGfx = getBoolean(RENDERER, "printerModel", false, "Whether or not to render items and blocks, related to the printer, normally or as models.");
