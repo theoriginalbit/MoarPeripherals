@@ -41,6 +41,10 @@ public final class BlockRegistry {
     public static BlockMPBase blockKeyboard;
     public static BlockMPBase blockPrinter;
     public static BlockMPBase blockDictionary;
+    public static BlockMPBase blockAntenna;
+    public static BlockMPBase blockAntennaCell;
+    public static BlockMPBase blockAntennaModem;
+    public static BlockMPBase blockAntennaController;
 
     public static void init() {
         if (Settings.enablePlayerDetector) {
@@ -67,6 +71,16 @@ public final class BlockRegistry {
             blockDictionary = new BlockDictionary();
             registerBlock(blockDictionary, TileDictionary.class, "tileDictionary");
         }
+        if (Settings.enableAntenna) {
+            blockAntenna = new BlockAntenna();
+            registerBlock(blockAntenna, TileAntenna.class, "tileAntenna");
+            blockAntennaCell = new BlockAntennaCell();
+            registerBlock(blockAntennaCell);
+            blockAntennaModem = new BlockAntennaModem();
+            registerBlock(blockAntennaModem);
+            blockAntennaController = new BlockAntennaController();
+            registerBlock(blockAntennaController, TileAntennaController.class, "tileAntennaController");
+        }
     }
 
     public static void oreRegistration() {
@@ -74,6 +88,10 @@ public final class BlockRegistry {
         OreDictionary.registerOre("peripheralPlayerDetector", blockPlayerDetector);
         OreDictionary.registerOre("peripheralIronNote", blockIronNote);
         OreDictionary.registerOre("peripheralKeyboard", blockKeyboard);
+    }
+
+    private static void registerBlock(BlockMPBase block) {
+        registerBlock(block, null, null, null);
     }
 
     private static void registerBlock(BlockMPBase block, Class<? extends TileEntity> tile, String teName) {
@@ -86,7 +104,9 @@ public final class BlockRegistry {
         } else {
             GameRegistry.registerBlock(block, block.getUnlocalizedName());
         }
-        GameRegistry.registerTileEntity(tile, ModInfo.ID + ':' + teName);
+        if (tile != null) {
+            GameRegistry.registerTileEntity(tile, ModInfo.ID + ':' + teName);
+        }
     }
 
 }

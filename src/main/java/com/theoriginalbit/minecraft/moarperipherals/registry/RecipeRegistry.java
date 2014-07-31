@@ -31,8 +31,12 @@ import net.minecraft.item.ItemStack;
  */
 public final class RecipeRegistry {
 
+    private static final Block blockComputer = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Computer");
+    private static final Block blockPeripheral = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Peripheral");
     private static final Block blockCable = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Cable");
     private static final ItemStack cable = new ItemStack(blockCable, 1, 0);
+    private static final ItemStack wiredModem = new ItemStack(blockCable, 1, 1);
+    private static final ItemStack wirelessModem = new ItemStack(blockPeripheral, 1, 1);
 
     public static void init() {
         if (Settings.enablePlayerDetector) {
@@ -53,6 +57,15 @@ public final class RecipeRegistry {
         }
         if (Settings.enableDictionary) {
             GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockDictionary), "SBS", "BDB", "SCS", 'S', Block.stone, 'B', Item.book, 'D', Item.diamond, 'C', cable);
+        }
+        if (Settings.enableSonic) {
+            GameRegistry.addRecipe(new ItemStack(ItemRegistry.itemSonic), "DIG", "IRI", "GIO", 'D', Item.diamond, 'I', Item.ingotIron, 'G', new ItemStack(Item.dyePowder, 1, 8), 'R', Item.redstone, 'O', Block.obsidian);
+        }
+        if (Settings.enableAntenna) {
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntenna), "ICI", "ICI", "ICI", 'I', Item.ingotIron, 'C', cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaCell), "IMI", "MCM", "IMI", 'I', Item.ingotIron, 'M', wirelessModem, 'C', cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaModem), "ICI", "CCC", "ICI", 'I', Item.ingotIron, 'C', cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaController), "ICI", "DWD", "IPI", 'I', Item.ingotIron, 'C', cable, 'D', Item.diamond, 'W', wiredModem, 'P', blockComputer);
         }
     }
 

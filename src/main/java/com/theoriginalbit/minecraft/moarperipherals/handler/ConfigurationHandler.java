@@ -131,7 +131,7 @@ public final class ConfigurationHandler {
         Settings.enableIronNote = getEnabled(IRONNOTE);
         Settings.enableDictionary = getEnabled(DICTIONARY);
         Settings.enablePlayerDetector = getEnabled(PLAYERDETECTOR);
-        Settings.enableAntenna = getEnabled(ANTENNAPOLE);
+        Settings.enableAntenna = getEnabled(ANTENNA);
 
         // ChatBox settings
         Settings.displayChatBoxCoords = getBoolean(CHATBOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
@@ -150,9 +150,9 @@ public final class ConfigurationHandler {
         Settings.keyboardRange = getInt(KEYBOARD, "keyboardRange", Settings.keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 
         // Antenna settings
-        Settings.antennaRange = getInt(ANTENNA, "cellTowerRange", Settings.antennaRange, "The range in blocks the Cell Tower can transmit");
-        Settings.antennaRangeStorm = getInt(ANTENNA, "cellTowerRangeStorm", Settings.antennaRangeStorm, "The range in blocks the Cell Tower can transmit during a storm");
-        Settings.antennaMessageDelay = getInt(ANTENNA, "cellTowerMessageDelay", Settings.antennaMessageDelay, "The delay (in ticks) that the Cell Tower takes to send a message per 100 block distance (rounded up).");
+        Settings.antennaRange = getInt(ANTENNA, "towerRange", Settings.antennaRange, "The range in blocks the Cell Tower can transmit");
+        Settings.antennaRangeStorm = getInt(ANTENNA, "towerRangeStorm", Settings.antennaRangeStorm, "The range in blocks the Cell Tower can transmit during a storm");
+        Settings.antennaMessageDelay = getInt(ANTENNA, "towerMessageDelay", Settings.antennaMessageDelay, "The delay (in ticks) that the Cell Tower takes to send a message per 100 block distance (rounded up).");
         Settings.antennaKeepChunkLoaded = getBoolean(ANTENNA, "keepChunkLoaded", Settings.antennaKeepChunkLoaded, "Whether a cell tower should keep the chunk it resides in loaded");
 
         // Renderer enabled

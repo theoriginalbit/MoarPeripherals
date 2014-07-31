@@ -54,8 +54,8 @@ import java.util.List;
  */
 public abstract class BlockMPBase extends BlockContainer {
 
-    private final String blockName;
-    private final Icon[] icons = new Icon[6];
+    protected final String blockName;
+    protected final Icon[] icons = new Icon[6];
 
     public BlockMPBase(int id, String name) {
         this(id, Material.rock, name);
