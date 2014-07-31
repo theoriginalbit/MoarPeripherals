@@ -91,6 +91,8 @@ public class MoarPeripherals {
         LuaType.registerTypeConverter(new ConverterItemStack());
         LuaType.registerClassToNameMapping(ItemStack.class, "item");
 
+        UpgradeRegistry.init();
+
         ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
     }
 

@@ -11,6 +11,10 @@ item.moarperipherals.inkCartridge.name=Ink Cartridge
 item.moarperipherals.keyboardPart.name=Keyboard Part
 item.moarperipherals.sonic.name=Sonic Screwdriver
 
+upgrade.moarperipherals.adjective.chatbox=Chatty
+upgrade.moarperipherals.adjective.ironnote=Noisy
+upgrade.moarperipherals.adjective.dictionary=Informed
+
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.
 

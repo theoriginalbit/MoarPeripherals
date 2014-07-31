@@ -54,6 +54,7 @@ public class PeripheralWrapper implements IPeripheral {
 
     private static HashMap<Integer, Integer> mountMap = Maps.newHashMap();
 
+    private final Object instance;
     private final String peripheralType;
     private final LinkedHashMap<String, MethodWrapper> methods = Maps.newLinkedHashMap();
 	private final String[] methodNames;
@@ -99,10 +100,15 @@ public class PeripheralWrapper implements IPeripheral {
             mounts.add(mount);
         }
 
+        instance = peripheral;
         peripheralType = pname;
         Set<String> keys = methods.keySet();
 		methodNames = keys.toArray(new String[keys.size()]);
 	}
+
+    public final Object getInstance() {
+        return instance;
+    }
 
     @Override
 	public String getType() {

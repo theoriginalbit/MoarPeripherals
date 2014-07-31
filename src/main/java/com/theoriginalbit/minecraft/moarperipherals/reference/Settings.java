@@ -51,6 +51,12 @@ public final class Settings {
     public static int fluidInkBlackID = startFluidID++;
     public static int fluidPlasticID = startFluidID++;
 
+    // Upgrade ID
+    private static int startUpgradeID = 16384;
+    public static int upgradeIdChatBox = startUpgradeID++;
+    public static int upgradeIdIronNote = startUpgradeID++;
+    public static int upgradeIdDictionary = startUpgradeID++;
+
     // Feature enabled
     public static boolean enablePlayerDetector;
     public static boolean enableChatBox;

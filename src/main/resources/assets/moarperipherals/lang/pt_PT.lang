@@ -11,6 +11,10 @@ item.moarperipherals.inkCartridge.name=Cartucho para Tinta
 item.moarperipherals.keyboardPart.name=Parte de Teclado
 item.moarperipherals.sonic.name=Sonic Screwdriver
 
+upgrade.moarperipherals.adjective.chatbox=Chatty
+upgrade.moarperipherals.adjective.ironnote=Noisy
+upgrade.moarperipherals.adjective.dictionary=Informed
+
 moarperipherals.chat.paired=Ligado ao computador em %d %d %d
 moarperipherals.chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador
 

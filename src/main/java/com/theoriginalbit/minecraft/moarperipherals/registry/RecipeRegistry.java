@@ -58,7 +58,7 @@ public final class RecipeRegistry {
         if (Settings.enableDictionary) {
             GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockDictionary), "SBS", "BDB", "SCS", 'S', Block.stone, 'B', Item.book, 'D', Item.diamond, 'C', cable);
         }
-        if (Settings.enableSonic) {
+        if (Settings.isSonicEnabled()) {
             GameRegistry.addRecipe(new ItemStack(ItemRegistry.itemSonic), "DIG", "IRI", "GIO", 'D', Item.diamond, 'I', Item.ingotIron, 'G', new ItemStack(Item.dyePowder, 1, 8), 'R', Item.redstone, 'O', Block.obsidian);
         }
         if (Settings.enableAntenna) {
