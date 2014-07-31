@@ -79,14 +79,14 @@ public class MoarPeripherals {
         ItemRegistry.oreRegistration();
         FluidRegistry.oreRegistration();
 
-        RecipeRegistry.init();
-
         proxy.registerRenderInfo();
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         ItemSearch.init();
+
+        RecipeRegistry.init();
 
         LuaType.registerTypeConverter(new ConverterItemStack());
         LuaType.registerClassToNameMapping(ItemStack.class, "item");
