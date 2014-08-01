@@ -2,7 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals.render;
 
 import com.theoriginalbit.minecraft.moarperipherals.model.ModelAntenna;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
-import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
+import com.theoriginalbit.minecraft.moarperipherals.tile.antenna.TileAntennaController;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;

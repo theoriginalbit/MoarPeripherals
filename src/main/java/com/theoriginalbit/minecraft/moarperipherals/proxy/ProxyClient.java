@@ -4,7 +4,7 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.render.*;
-import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
+import com.theoriginalbit.minecraft.moarperipherals.tile.antenna.TileAntennaController;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 import cpw.mods.fml.client.registry.ClientRegistry;

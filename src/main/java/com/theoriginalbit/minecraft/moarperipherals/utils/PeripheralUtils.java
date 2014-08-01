@@ -1,9 +1,9 @@
-package com.theoriginalbit.minecraft.moarperipherals.block;
+package com.theoriginalbit.minecraft.moarperipherals.utils;
 
-import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-import com.theoriginalbit.minecraft.moarperipherals.tile.antenna.TileAntennaModem;
+import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+
+import java.lang.reflect.Method;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -27,15 +27,21 @@ import net.minecraft.world.World;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class BlockAntennaModem extends BlockAntenna {
+public final class PeripheralUtils {
 
-    public BlockAntennaModem() {
-        super(Settings.blockIdAntennaModem, "antennaModem");
-    }
+    private static final Class<?> CLAZZ_TILEMODEMBASE = ReflectionUtils.getClass("dan200.computercraft.shared.peripheral.modem.TileModemBase");
+    private static final Method METHOD_GETPERIPHERAL = ReflectionUtils.getMethod(CLAZZ_TILEMODEMBASE, "getPeripheral", new Class[]{int.class});
 
-    @Override
-    public TileEntity createNewTileEntity(World world) {
-        return new TileAntennaModem();
+    public static IPeripheral getIPeripheral(TileEntity tile) {
+        if (tile != null && CLAZZ_TILEMODEMBASE.isAssignableFrom(tile.getClass())) {
+            for (int i = 0; i < 6; ++i) {
+                Object obj = ReflectionUtils.callMethod(tile, METHOD_GETPERIPHERAL, i);
+                if (obj != null && obj instanceof IPeripheral) {
+                    return (IPeripheral) obj;
+                }
+            }
+        }
+        return null;
     }
 
 }

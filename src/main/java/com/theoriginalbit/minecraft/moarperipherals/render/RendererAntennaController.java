@@ -1,7 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.render;
 
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
-import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
+import com.theoriginalbit.minecraft.moarperipherals.tile.antenna.TileAntennaController;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;

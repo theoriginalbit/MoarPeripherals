@@ -1,10 +1,9 @@
-package com.theoriginalbit.minecraft.moarperipherals.tile;
+package com.theoriginalbit.minecraft.moarperipherals.tile.antenna;
 
-import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.INeighborAwareTile;
-import com.theoriginalbit.minecraft.moarperipherals.registry.RecipeRegistry;
 import dan200.computercraft.api.filesystem.IMount;
 import dan200.computercraft.api.filesystem.IWritableMount;
 import dan200.computercraft.api.peripheral.IComputerAccess;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -28,36 +27,27 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class TileAntennaModem extends TileAntenna implements INeighborAwareTile, IComputerAccess {
+public class FauxComputer implements IComputerAccess {
 
-    private static final String ATTACHMENT_NAME = "top";
+    private final String attachmentName;
 
-    @Override
-    public void onNeighbourChanged(int previousBlockId) {
-        final int modemId = RecipeRegistry.cc_wirelessModem.getItem().itemID;
-        if (worldObj.getBlockId(xCoord + 1, yCoord, zCoord) == modemId &&
-            worldObj.getBlockId(xCoord - 1, yCoord, zCoord) == modemId &&
-            worldObj.getBlockId(xCoord, yCoord, zCoord + 1) == modemId &&
-            worldObj.getBlockId(xCoord, yCoord, zCoord - 1) == modemId) {
-            System.out.println("All modems found");
-            return;
-        }
-        System.out.println("Missing modem(s)");
+    public FauxComputer(String name) {
+        attachmentName = name;
     }
 
-    /*
-     * Lets fool the Modem into thinking that we're a computer
-     */
+    @Override
+    public int getID() {
+        // why? just 'cause
+        return 2048;
+    }
 
     @Override
     public String getAttachmentName() {
-        return ATTACHMENT_NAME;
+        return attachmentName;
     }
 
     @Override
-    public void queueEvent(String event, Object[] arguments) {
-
-    }
+    public void queueEvent(String event, Object[] arguments) {}
 
     @Override
     public String mount(String desiredLocation, IMount mount) {
@@ -71,10 +61,5 @@ public class TileAntennaModem extends TileAntenna implements INeighborAwareTile,
 
     @Override
     public void unmount(String location) {}
-
-    @Override
-    public int getID() {
-        return 0;
-    }
 
 }

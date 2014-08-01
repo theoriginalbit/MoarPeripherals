@@ -3,7 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.block;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
+import com.theoriginalbit.minecraft.moarperipherals.tile.antenna.TileAntennaController;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;

@@ -85,7 +85,9 @@ public class MethodWrapper {
             if (IComputerAccess.class.isAssignableFrom(javaParams[i])) {
 				args[i] = access;
 			} else if (ILuaContext.class.isAssignableFrom(javaParams[i])) {
-				args[i] = context;
+                args[i] = context;
+            } else if (Object.class.isAssignableFrom(javaParams[i])) {
+                args[i] = arguments[i];
 			} else if (arguments[i] != null) {
 				final Object convert = LuaType.fromLua(arguments[i], javaParams[i]);
 				Preconditions.checkArgument(convert != null, "expected %s, got %s", LuaType.getLuaName(javaParams[i]), LuaType.getLuaName(arguments[i].getClass()));

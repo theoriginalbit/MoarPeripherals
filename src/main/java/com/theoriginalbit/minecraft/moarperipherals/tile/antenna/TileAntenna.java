@@ -1,7 +1,8 @@
-package com.theoriginalbit.minecraft.moarperipherals.tile;
+package com.theoriginalbit.minecraft.moarperipherals.tile.antenna;
 
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TileMPBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,7 +32,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class TileAntenna extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile {
 
-    private Integer controllerX, controllerY, controllerZ;
+    protected Integer controllerX, controllerY, controllerZ;
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
@@ -59,13 +60,30 @@ public class TileAntenna extends TileMPBase implements IPlaceAwareTile, IBreakAw
         controllerZ = z;
     }
 
+    public boolean isValidController() {
+        return controllerX != null && controllerY != null && controllerZ != null && worldObj.getBlockTileEntity(controllerX, controllerY, controllerZ) instanceof TileAntennaController;
+    }
+
+    public boolean isStructureComplete() {
+        if (controllerX != null && controllerY != null && controllerZ != null) {
+            TileEntity tile = worldObj.getBlockTileEntity(controllerX, controllerY, controllerZ);
+            if (tile instanceof TileAntennaController) {
+                return ((TileAntennaController) tile).isComplete();
+            }
+        }
+        return false;
+    }
+
+    public void structureCreated() {}
+
+    public void structureDestroyed() {}
+
     @Override
     public void onPlaced(EntityLivingBase entity, ItemStack stack, int x, int y, int z) {
         // search for the controller
         for (int i = 1; i < 16; ++i){
             final TileEntity tileEntity = worldObj.getBlockTileEntity(xCoord, yCoord - i, zCoord);
             if (tileEntity instanceof TileAntennaController) {
-                System.out.println(String.format("Found controller at %d %d %d for %d %d %d!", xCoord, yCoord-i, zCoord, xCoord, yCoord, zCoord));
                 // inform the controller of this block
                 ((TileAntennaController) tileEntity).blockAdded();
                 // inform the TileEntity for this block of the controller
