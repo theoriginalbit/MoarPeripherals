@@ -1,22 +1,13 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
-import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockMPBase;
-import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-import com.theoriginalbit.minecraft.moarperipherals.registry.RecipeRegistry;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntenna;
-import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -40,33 +31,18 @@ import net.minecraftforge.common.ForgeDirection;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class BlockAntennaCell extends BlockMPBase {
+public class BlockAntennaCell extends BlockAntenna {
 
     public BlockAntennaCell() {
-        super(Settings.blockIdAntennaCell, Material.iron, "antennaCell");
-        setStepSound(soundMetalFootstep);
-    }
-
-    @Override
-    public int getRenderType() {
-        return Constants.RENDER_ID.ANTENNA;
+        super(Settings.blockIdAntennaCell, "antennaCell");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister registry) {
         super.registerIcons(registry);
-        // set the top textures to the generic one
-        Icon icon = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":antenna");
-        icons[0] = icon;
-        icons[1] = icon;
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        int meta = world.getBlockMetadata(x, y, z);
-        world.setBlockMetadataWithNotify(x, y, z, meta ^ 1, BlockNotifyFlags.ALL);
-        return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
+        icons[0] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":antennaCable");
+        icons[1] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":antenna");
     }
 
     @Override

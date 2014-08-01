@@ -34,6 +34,6 @@ public interface INeighborAwareTile {
     /**
      * Invoked when a neighbouring block changes
      */
-    public void onNeighbourChanged(int blockId);
+    public void onNeighbourChanged(int previousBlockId);
 
 }

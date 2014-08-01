@@ -1,5 +1,11 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.INeighborAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.registry.RecipeRegistry;
+import dan200.computercraft.api.filesystem.IMount;
+import dan200.computercraft.api.filesystem.IWritableMount;
+import dan200.computercraft.api.peripheral.IComputerAccess;
+
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
  * Official Thread:
@@ -22,7 +28,53 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class TileAntennaModem extends TileMPBase {
+public class TileAntennaModem extends TileAntenna implements INeighborAwareTile, IComputerAccess {
 
+    private static final String ATTACHMENT_NAME = "top";
+
+    @Override
+    public void onNeighbourChanged(int previousBlockId) {
+        final int modemId = RecipeRegistry.cc_wirelessModem.getItem().itemID;
+        if (worldObj.getBlockId(xCoord + 1, yCoord, zCoord) == modemId &&
+            worldObj.getBlockId(xCoord - 1, yCoord, zCoord) == modemId &&
+            worldObj.getBlockId(xCoord, yCoord, zCoord + 1) == modemId &&
+            worldObj.getBlockId(xCoord, yCoord, zCoord - 1) == modemId) {
+            System.out.println("All modems found");
+            return;
+        }
+        System.out.println("Missing modem(s)");
+    }
+
+    /*
+     * Lets fool the Modem into thinking that we're a computer
+     */
+
+    @Override
+    public String getAttachmentName() {
+        return ATTACHMENT_NAME;
+    }
+
+    @Override
+    public void queueEvent(String event, Object[] arguments) {
+
+    }
+
+    @Override
+    public String mount(String desiredLocation, IMount mount) {
+        return null;
+    }
+
+    @Override
+    public String mountWritable(String desiredLocation, IWritableMount mount) {
+        return null;
+    }
+
+    @Override
+    public void unmount(String location) {}
+
+    @Override
+    public int getID() {
+        return 0;
+    }
 
 }

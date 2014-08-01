@@ -77,7 +77,7 @@ public final class BlockRegistry {
             blockAntennaCell = new BlockAntennaCell();
             registerBlock(blockAntennaCell);
             blockAntennaModem = new BlockAntennaModem();
-            registerBlock(blockAntennaModem);
+            registerBlock(blockAntennaModem, TileAntennaModem.class, "tileAntennaModem");
             blockAntennaController = new BlockAntennaController();
             registerBlock(blockAntennaController, TileAntennaController.class, "tileAntennaController");
         }
