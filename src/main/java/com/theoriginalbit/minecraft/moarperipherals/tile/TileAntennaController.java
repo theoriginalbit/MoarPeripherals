@@ -23,4 +23,9 @@ package com.theoriginalbit.minecraft.moarperipherals.tile;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 public class TileAntennaController extends TileMPBase {
+
+    public boolean isComplete() {
+        return true;
+    }
+
 }

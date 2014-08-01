@@ -3,11 +3,16 @@ package com.theoriginalbit.minecraft.moarperipherals.block;
 import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.registry.BlockRegistry;
+import com.theoriginalbit.minecraft.moarperipherals.registry.RecipeRegistry;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntenna;
+import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
@@ -53,13 +58,15 @@ public class BlockAntennaModem extends BlockMPBase {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world) {
-        return new TileAntenna();
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        int meta = world.getBlockMetadata(x, y, z);
+        world.setBlockMetadataWithNotify(x, y, z, meta ^ 1, BlockNotifyFlags.ALL);
+        return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
     }
 
     @Override
-    public final boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
-        return true;
+    public TileEntity createNewTileEntity(World world) {
+        return new TileAntenna();
     }
 
 }

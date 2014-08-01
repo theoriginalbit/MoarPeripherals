@@ -17,6 +17,7 @@ public class ItemSonic extends ItemMPBase {
 
     public ItemSonic() {
         super(Settings.itemIdSonic, "sonic");
+        setMaxStackSize(1);
     }
 
     @Override

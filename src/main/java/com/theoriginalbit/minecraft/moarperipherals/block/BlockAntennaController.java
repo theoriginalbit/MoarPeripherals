@@ -1,17 +1,28 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
 import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockMPBase;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.registry.RecipeRegistry;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
+import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+
+import java.util.List;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -53,13 +64,46 @@ public class BlockAntennaController extends BlockMPBase {
     }
 
     @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        int meta = world.getBlockMetadata(x, y, z);
+        world.setBlockMetadataWithNotify(x, y, z, meta ^ 1, BlockNotifyFlags.ALL);
+        return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
+    }
+
+    @Override
+    public int getRenderType() {
+        return Constants.RENDER_ID.ANTENNA;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return true;
+    }
+
+    @Override
     public TileEntity createNewTileEntity(World world) {
         return new TileAntennaController();
     }
 
     @Override
     public final boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
-        return true;
+        return side == ForgeDirection.DOWN;
+    }
+
+    @Override
+    public void onBlockAdded(World world, int x, int y, int z) {
+        // invalidate the structure?
+    }
+
+    @Override
+    public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
+//        setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 16.0f, 1.0f);
+        setBlockBounds(0,0,0,1,1,1);
     }
 
 }

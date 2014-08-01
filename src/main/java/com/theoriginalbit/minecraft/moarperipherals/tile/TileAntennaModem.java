@@ -1,7 +1,5 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
  * Official Thread:
@@ -24,22 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class TileAntenna extends TileMPBase {
+public class TileAntennaModem extends TileMPBase {
 
-
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-    }
-
-    private void searchForController() {
-
-    }
 
 }

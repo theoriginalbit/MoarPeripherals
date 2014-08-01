@@ -27,6 +27,10 @@ import net.minecraft.util.StatCollector;
  */
 public final class Constants {
 
+    public static final class RENDER_ID {
+        public static int ANTENNA = -1;
+    }
+
     public static final class GUI {
         public static final LocalisationStore KEYBOARD_EXIT = new LocalisationStore("moarperipherals.gui.keyboard.exit");
     }

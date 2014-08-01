@@ -1,14 +1,13 @@
 package com.theoriginalbit.minecraft.moarperipherals.proxy;
 
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemInkCartridge;
-import com.theoriginalbit.minecraft.moarperipherals.render.RendererItemSonic;
-import com.theoriginalbit.minecraft.moarperipherals.render.RendererKeyboard;
-import com.theoriginalbit.minecraft.moarperipherals.render.RendererPrinter;
+import com.theoriginalbit.minecraft.moarperipherals.render.*;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -76,6 +75,11 @@ public class ProxyClient implements IProxy {
 
         if (Settings.isSonicEnabled() && Settings.enableSonicGfx) {
             MinecraftForgeClient.registerItemRenderer(Settings.itemIdSonic, new RendererItemSonic());
+        }
+
+        if (Settings.enableAntenna) {
+            Constants.RENDER_ID.ANTENNA = RenderingRegistry.getNextAvailableRenderId();
+            RenderingRegistry.registerBlockHandler(Constants.RENDER_ID.ANTENNA, new RendererAntennaController());
         }
 
     }
