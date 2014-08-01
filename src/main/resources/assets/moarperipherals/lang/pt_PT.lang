@@ -6,6 +6,10 @@ tile.moarperipherals.ironnote.name=Note block de Ferro
 tile.moarperipherals.keyboard.name=Teclado
 tile.moarperipherals.printer.name=Impressora avançada
 tile.moarperipherals.itemDictionary.name=Item Dictionary
+tile.moarperipherals.antenna.name=Communication Tower (Pole)
+tile.moarperipherals.antennaCell.name=Communication Tower (Cell)
+tile.moarperipherals.antennaModem.name=Communication Tower (Modem Interface)
+tile.moarperipherals.antennaController.name=Communication Tower (Controller)
 
 item.moarperipherals.inkCartridge.name=Cartucho para Tinta
 item.moarperipherals.keyboardPart.name=Parte de Teclado
