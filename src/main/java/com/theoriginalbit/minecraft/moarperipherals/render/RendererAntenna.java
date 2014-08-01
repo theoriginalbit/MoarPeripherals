@@ -1,19 +1,11 @@
 package com.theoriginalbit.minecraft.moarperipherals.render;
 
-import com.theoriginalbit.minecraft.moarperipherals.model.ModelAntenna;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
-import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.opengl.GL11;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -41,16 +33,37 @@ public class RendererAntenna implements ISimpleBlockRenderingHandler {
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-        Icon texture = block.getIcon(0, 0);
         Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
         renderer.setRenderBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, texture);
-        renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
-        renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, texture);
-        renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, texture);
-        renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, texture);
-        renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, texture);
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(1.0F, 0.0F, 0.0F);
+        renderer.renderFaceXPos(block, 0.0D, -0.1D, 0.0D, block.getIcon(3, 0));
+        tessellator.draw();
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+        renderer.renderFaceXNeg(block, 0.0D, -0.1D, 0.0D, block.getIcon(2, 0));
+        tessellator.draw();
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 1.0F, 0.0F);
+        renderer.renderFaceYPos(block, 0.0D, -0.1D, 0.0D, block.getIcon(1, 0));
+        tessellator.draw();
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, -1.0F, 0.0F);
+        renderer.renderFaceYNeg(block, 0.0D, -0.1D, 0.0D, block.getIcon(0, 0));
+        tessellator.draw();
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, 1.0F);
+        renderer.renderFaceZPos(block, 0.0D, -0.1D, 0.0D, block.getIcon(4, 0));
+        tessellator.draw();
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, -1.0F);
+        renderer.renderFaceZNeg(block, 0.0D, -0.1D, 0.0D, block.getIcon(5, 0));
         tessellator.draw();
     }
 

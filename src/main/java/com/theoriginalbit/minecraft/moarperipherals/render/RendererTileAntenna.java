@@ -1,10 +1,11 @@
 package com.theoriginalbit.minecraft.moarperipherals.render;
 
+import com.theoriginalbit.minecraft.moarperipherals.model.ModelAntenna;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import org.lwjgl.opengl.GL11;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -28,20 +29,23 @@ import net.minecraft.world.IBlockAccess;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class RendererAntennaController extends RendererAntenna {
+public class RendererTileAntenna extends TileEntitySpecialRenderer {
+
+    ModelAntenna model = new ModelAntenna();
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        TileAntennaController tile = (TileAntennaController) world.getBlockTileEntity(x, y, z);
-        if (!tile.isComplete()) {
-            renderer.renderStandardBlock(block, x, y, z);
+    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float t) {
+        TileAntennaController tile = (TileAntennaController) tileEntity;
+        if (tile.isComplete()) {
+            GL11.glPushMatrix();
+            GL11.glTranslatef((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f);
+            GL11.glRotatef(180, 0, 0, 1);
+            GL11.glTranslatef(0.0f, -1.0f, 0.0f);
+            GL11.glPushMatrix();
+            bindTexture(Constants.TEXTURES_MODEL.ANTENNA.getResourceLocation());
+            model.render(null, 0F, 0F, 0f, 0f, 0f, 0.0625f);
+            GL11.glPopMatrix();
+            GL11.glPopMatrix();
         }
-        return true;
     }
-
-    @Override
-    public int getRenderId() {
-        return Constants.RENDER_ID.ANTENNA_CTRLR;
-    }
-
 }

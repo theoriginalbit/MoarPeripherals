@@ -29,6 +29,7 @@ public final class Constants {
 
     public static final class RENDER_ID {
         public static int ANTENNA = -1;
+        public static int ANTENNA_CTRLR = -1;
     }
 
     public static final class GUI {

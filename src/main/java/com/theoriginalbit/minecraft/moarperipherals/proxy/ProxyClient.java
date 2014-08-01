@@ -4,6 +4,7 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.render.*;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -79,7 +80,10 @@ public class ProxyClient implements IProxy {
 
         if (Settings.enableAntenna) {
             Constants.RENDER_ID.ANTENNA = RenderingRegistry.getNextAvailableRenderId();
-            RenderingRegistry.registerBlockHandler(Constants.RENDER_ID.ANTENNA, new RendererAntennaController());
+            Constants.RENDER_ID.ANTENNA_CTRLR = RenderingRegistry.getNextAvailableRenderId();
+            RenderingRegistry.registerBlockHandler(Constants.RENDER_ID.ANTENNA, new RendererAntenna());
+            RenderingRegistry.registerBlockHandler(Constants.RENDER_ID.ANTENNA_CTRLR, new RendererAntennaController());
+            ClientRegistry.bindTileEntitySpecialRenderer(TileAntennaController.class, new RendererTileAntenna());
         }
 
     }
