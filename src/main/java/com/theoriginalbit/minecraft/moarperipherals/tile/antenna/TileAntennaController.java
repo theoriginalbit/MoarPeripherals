@@ -5,6 +5,7 @@ import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
@@ -46,20 +47,15 @@ import java.util.ArrayList;
 public class TileAntennaController extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile {
 
     private static final String EVENT_BITNET = "bitnet_message";
-    private static final String EVENT_MODEM = "modem_message";
 
+    private TileAntennaModem modemInterface;
     private final FauxComputer computer = new FauxComputer("top") {
         @Override
         public void queueEvent(String event, Object[] arguments) {
             // this message is coming from a modem attached to this structure
             if (isComplete() && arguments.length >= 3 && arguments[3] != null) {
-                TileEntity tile = worldObj.getBlockTileEntity(xCoord, yCoord + 13, zCoord);
-                if (tile != null && tile instanceof TileAntennaModem) {
-                    if (((TileAntennaModem) tile).hasModemsConnected()) {
-                        transmit(arguments[3]);
-                        queueFakeEvent(ArrayUtils.subarray(arguments, 1, arguments.length));
-                    }
-                }
+                transmit(arguments[3]);
+                queueFakeEvent(ArrayUtils.subarray(arguments, 1, arguments.length));
             }
         }
     };
@@ -113,6 +109,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     }
 
     public void blockAdded() {
+        System.out.println("Block added!");
         // check if the multi-block is complete
         complete = false;
 
@@ -125,7 +122,10 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
 
         if (worldObj.getBlockId(xCoord, yCoord + 13, zCoord) != Settings.blockIdAntennaModem) {
             return;
+        } else {
+            modemInterface = (TileAntennaModem) worldObj.getBlockTileEntity(xCoord, yCoord + 13, zCoord);
         }
+
         if (worldObj.getBlockId(xCoord, yCoord + 14, zCoord) != Settings.blockIdAntennaCell) {
             return;
         }
@@ -139,13 +139,12 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
             // notify the TileEntity of change
             TileEntity tile = worldObj.getBlockTileEntity(xCoord, yCoord + y, zCoord);
             if (tile != null && tile instanceof TileAntenna) {
-                ((TileAntenna) tile).structureCreated();
-                ((TileAntenna) tile).setController(xCoord, yCoord, zCoord);
+                ((TileAntenna) tile).connectToController(xCoord, yCoord, zCoord);
             }
         }
 
-        // open all the modems
-        ((TileAntennaModem) worldObj.getBlockTileEntity(xCoord, yCoord + 13, zCoord)).openModems();
+        // inform modem interface
+        refreshModems();
 
         // mark this block for an update
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, BlockNotifyFlags.ALL);
@@ -159,8 +158,6 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
             TileEntity tile = worldObj.getBlockTileEntity(xCoord, yCoord + y, zCoord);
             if (tile != null && tile instanceof TileAntenna) {
                 worldObj.setBlockMetadataWithNotify(xCoord, yCoord + y, zCoord, 0, BlockNotifyFlags.ALL);
-                // notify tile of change
-                ((TileAntenna) tile).structureDestroyed();
             }
         }
 
@@ -170,21 +167,30 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
             ((TileAntennaModem) tile).closeModems();
         }
 
+        if (modemInterface != null) {
+            modemInterface.structureDestroyed();
+        }
+
         // mark this block for an update
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, BlockNotifyFlags.ALL);
         complete = false;
     }
 
-    public void receiveMessage(Object payload, double distance) {
+    public void receiveMessage(Integer channel, Object payload, double distance) {
+        // message received over bitnet
         for (IComputerAccess comp : computers) {
             comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), payload, distance});
+        }
+        // retransmit over CC modems
+        TileEntity tile = worldObj.getBlockTileEntity(xCoord, yCoord + 13, zCoord);
+        if (tile != null && tile instanceof TileAntennaModem) {
+            ((TileAntennaModem) tile).transmit(null, payload);
         }
     }
 
     private void refreshModems() {
-        TileEntity tile = worldObj.getBlockTileEntity(xCoord, yCoord + 13, zCoord);
-        if (tile != null && tile instanceof TileAntennaModem) {
-            ((TileAntennaModem) tile).refreshModems();
+        if (modemInterface != null) {
+            modemInterface.structureComplete();
         }
     }
 
@@ -203,13 +209,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
 
     private void queueFakeEvent(Object[] args) {
         for (IComputerAccess computer : computers) {
-            computer.queueEvent(EVENT_MODEM, ArrayUtils.add(args, 0, "top"));
-        }
-    }
-
-    private void queueEvent(String event, Object[] args) {
-        for (IComputerAccess computer : computers) {
-            computer.queueEvent(event, ArrayUtils.add(args, 0, computer.getAttachmentName()));
+            computer.queueEvent(ComputerCraftInfo.EVENT.MODEM, ArrayUtils.add(args, 0, "top"));
         }
     }
 

@@ -3,8 +3,6 @@ package com.theoriginalbit.minecraft.moarperipherals.item;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
@@ -20,11 +18,6 @@ public class ItemSonic extends ItemMPBase {
     public ItemSonic() {
         super(Settings.itemIdSonic, "sonic");
         setMaxStackSize(1);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses() {
-        return true;
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile.antenna;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.minecraft.moarperipherals.registry.RecipeRegistry;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.INeighborAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
 import com.theoriginalbit.minecraft.moarperipherals.utils.PeripheralUtils;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -30,34 +31,19 @@ import java.util.ArrayList;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public class TileAntennaModem extends TileAntenna {
+public class TileAntennaModem extends TileAntenna implements INeighborAwareTile {
 
-    private static final Double REDNET_BROADCAST = 65535.0d;
     private IPeripheral[] modems;
     private IComputerAccess dummyComputer = new FauxComputer("top");
 
     @Override
-    public void structureCreated() {
-        attachModem();
-        openModems();
-    }
-
-    @Override
-    public void structureDestroyed() {
-        closeModems();
-        detachModem();
-    }
-
-    @Override
-    public void updateEntity() {
-        if (isValidController() && isStructureComplete() && hasModemsConnected()) {
-            refreshModems();
-        }
+    public void onNeighbourChanged(int previousBlockId) {
+        modemSearch();
     }
 
     public void attachModem() {
         if (isValidController() && hasModemsConnected()) {
-            modems[0].attach(((TileAntennaController) worldObj.getBlockTileEntity(controllerX, controllerY, controllerZ)).getComputer());
+            modems[0].attach(controller.getComputer());
             modems[1].attach(dummyComputer);
             modems[2].attach(dummyComputer);
             modems[3].attach(dummyComputer);
@@ -66,10 +52,21 @@ public class TileAntennaModem extends TileAntenna {
 
     public void detachModem() {
         if (isValidController() && hasModemsConnected()) {
-            modems[0].detach(((TileAntennaController) worldObj.getBlockTileEntity(controllerX, controllerY, controllerZ)).getComputer());
+            modems[0].detach(controller.getComputer());
             modems[1].detach(dummyComputer);
             modems[2].detach(dummyComputer);
             modems[3].detach(dummyComputer);
+        }
+    }
+
+    public void transmit(Double channel, Object payload) {
+        if (isValidController() && hasModemsConnected()) {
+            try {
+                channel = channel != null ? channel : ComputerCraftInfo.REDNET_BROADCAST;
+                modems[0].callMethod(null, null, 4, new Object[]{channel, channel, payload});
+            } catch (Exception e) {
+                System.out.println(String.format("Communications Tower at %d %d %d failed to retransmit message over rednet broadcast", xCoord, yCoord, zCoord));
+            }
         }
     }
 
@@ -77,7 +74,7 @@ public class TileAntennaModem extends TileAntenna {
         if (isValidController() && hasModemsConnected()) {
             for (IPeripheral modem : modems) {
                 try {
-                    modem.callMethod(null, null, 0, new Object[]{REDNET_BROADCAST});
+                    modem.callMethod(null, null, 0, new Object[]{ComputerCraftInfo.REDNET_BROADCAST});
                 } catch (Exception e) {
                     System.out.println(String.format("Communications Tower at %d %d %d failed to open rednet broadcast channel on modem", xCoord, yCoord, zCoord));
                     e.printStackTrace();
@@ -90,7 +87,7 @@ public class TileAntennaModem extends TileAntenna {
         if (isValidController() && hasModemsConnected()) {
             for (IPeripheral modem : modems) {
                 try {
-                    modem.callMethod(null, null, 2, new Object[]{REDNET_BROADCAST});
+                    modem.callMethod(null, null, 2, new Object[]{ComputerCraftInfo.REDNET_BROADCAST});
                 } catch (Exception e) {
                     System.out.println(String.format("Communications Tower at %d %d %d failed to close rednet broadcast channel on modem", xCoord, yCoord, zCoord));
                     e.printStackTrace();
@@ -99,26 +96,36 @@ public class TileAntennaModem extends TileAntenna {
         }
     }
 
-    public void refreshModems() {
-        hasModemsConnected();
-        attachModem();
-        openModems();
+    public void structureComplete() {
+        modemSearch();
+        if (isValidController() && hasModemsConnected()) {
+            attachModem();
+            openModems();
+        }
     }
 
-    public boolean hasModemsConnected() {
+    public void structureDestroyed() {
+        closeModems();
+        detachModem();
+    }
+
+    private boolean hasModemsConnected() {
+        return modems.length == 4;
+    }
+
+    private void modemSearch() {
         ArrayList<IPeripheral> found = Lists.newArrayList();
         checkModem(found, 1, 0);
         checkModem(found, -1, 0);
         checkModem(found, 0, 1);
         checkModem(found, 0, -1);
         modems = found.toArray(new IPeripheral[found.size()]);
-        return modems.length == 4;
     }
 
     private void checkModem(ArrayList<IPeripheral> list, int xOffset, int zOffset) {
         int x = xCoord + xOffset;
         int z = zCoord + zOffset;
-        if (worldObj.getBlockId(x, yCoord, z) == RecipeRegistry.cc_wirelessModem.getItem().itemID) {
+        if (worldObj.getBlockId(x, yCoord, z) == ComputerCraftInfo.cc_wirelessModem.getItem().itemID) {
             IPeripheral p = PeripheralUtils.getIPeripheral(worldObj.getBlockTileEntity(x, yCoord, z));
             if (p != null) {
                 list.add(p);

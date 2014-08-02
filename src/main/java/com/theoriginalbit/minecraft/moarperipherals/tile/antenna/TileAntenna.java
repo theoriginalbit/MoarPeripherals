@@ -32,62 +32,45 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class TileAntenna extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile {
 
-    protected Integer controllerX, controllerY, controllerZ;
+    protected TileAntennaController controller;
+    private Integer nbtTargetX, nbtTargetY, nbtTargetZ;
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         if (tag.hasKey("controllerX") && tag.hasKey("controllerY") && tag.hasKey("controllerZ")) {
-            controllerX = tag.getInteger("controllerX");
-            controllerY = tag.getInteger("controllerY");
-            controllerZ = tag.getInteger("controllerZ");
+            nbtTargetX = tag.getInteger("controllerX");
+            nbtTargetY = tag.getInteger("controllerY");
+            nbtTargetZ = tag.getInteger("controllerZ");
         }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        if (controllerX != null && controllerY != null && controllerZ != null) {
-            tag.setInteger("controllerX", controllerX);
-            tag.setInteger("controllerY", controllerY);
-            tag.setInteger("controllerZ", controllerZ);
+        if (controller != null && !controller.isInvalid()) {
+            tag.setInteger("controllerX", controller.xCoord);
+            tag.setInteger("controllerY", controller.yCoord);
+            tag.setInteger("controllerZ", controller.zCoord);
         }
     }
 
-    public void setController(Integer x, Integer y, Integer z) {
-        controllerX = x;
-        controllerY = y;
-        controllerZ = z;
-    }
-
-    public boolean isValidController() {
-        return controllerX != null && controllerY != null && controllerZ != null && worldObj.getBlockTileEntity(controllerX, controllerY, controllerZ) instanceof TileAntennaController;
-    }
-
-    public boolean isStructureComplete() {
-        if (controllerX != null && controllerY != null && controllerZ != null) {
-            TileEntity tile = worldObj.getBlockTileEntity(controllerX, controllerY, controllerZ);
-            if (tile instanceof TileAntennaController) {
-                return ((TileAntennaController) tile).isComplete();
-            }
+    @Override
+    public void updateEntity() {
+        if (nbtTargetX != null && nbtTargetY != null && nbtTargetZ != null) {
+            connectToController(nbtTargetX, nbtTargetY, nbtTargetZ);
+            controller.blockAdded();
+            nbtTargetX = nbtTargetY = nbtTargetZ = null;
         }
-        return false;
     }
-
-    public void structureCreated() {}
-
-    public void structureDestroyed() {}
 
     @Override
     public void onPlaced(EntityLivingBase entity, ItemStack stack, int x, int y, int z) {
         // search for the controller
         for (int i = 1; i < 16; ++i){
-            final TileEntity tileEntity = worldObj.getBlockTileEntity(xCoord, yCoord - i, zCoord);
-            if (tileEntity instanceof TileAntennaController) {
-                // inform the controller of this block
-                ((TileAntennaController) tileEntity).blockAdded();
-                // inform the TileEntity for this block of the controller
-                setController(xCoord, yCoord - i, zCoord);
+            if (connectToController(xCoord, yCoord - i, zCoord)) {
+                System.out.println("Found controller!");
+                controller.blockAdded();
                 break;
             }
         }
@@ -95,12 +78,22 @@ public class TileAntenna extends TileMPBase implements IPlaceAwareTile, IBreakAw
 
     @Override
     public void onBreak(int x, int y, int z) {
-        if (controllerX != null && controllerY != null && controllerZ != null) {
-            final TileEntity tileEntity = worldObj.getBlockTileEntity(controllerX, controllerY, controllerZ);
-            if (tileEntity instanceof TileAntennaController) {
-                ((TileAntennaController) tileEntity).blockRemoved();
-            }
+        if (isValidController()) {
+            controller.blockRemoved();
         }
+    }
+
+    public boolean connectToController(int x, int y, int z) {
+        TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+        if (tile != null && tile instanceof TileAntennaController) {
+            controller = (TileAntennaController) tile;
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isValidController() {
+        return controller != null && !controller.isInvalid();
     }
 
 }
