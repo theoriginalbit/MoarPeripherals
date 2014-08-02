@@ -69,7 +69,6 @@ public class TileAntenna extends TileMPBase implements IPlaceAwareTile, IBreakAw
         // search for the controller
         for (int i = 1; i < 16; ++i){
             if (connectToController(xCoord, yCoord - i, zCoord)) {
-                System.out.println("Found controller!");
                 controller.blockAdded();
                 break;
             }

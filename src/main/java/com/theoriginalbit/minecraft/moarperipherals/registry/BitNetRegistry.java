@@ -3,7 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.registry;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.moarperipherals.api.IBitNetTower;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -50,15 +50,16 @@ public final class BitNetRegistry {
     }
 
     public static void transmit(IBitNetTower sender, Object payload) {
-        final ChunkCoordinates sendLocation = sender.getCoordinates();
+        final Vec3 sendLocation = sender.getWorldPosition();
         final World sendWorld = sender.getWorld();
         final int range = (sendWorld.isRaining() && sendWorld.isThundering()) ? Settings.antennaRangeStorm : Settings.antennaRange;
 
 
         for (IBitNetTower tower : towers) {
             if (tower.getWorld() == sendWorld) {
-                final double distance = sendLocation.getDistanceSquaredToChunkCoordinates(tower.getCoordinates());
-                if (distance <= range) {
+                final Vec3 towerLocation = tower.getWorldPosition();
+                final double distance = Math.sqrt(sendLocation.squareDistanceTo(towerLocation.xCoord, towerLocation.yCoord, towerLocation.zCoord));
+                if (distance > 0 && distance <= range) {
                     tower.receive(payload, distance);
                 }
             }

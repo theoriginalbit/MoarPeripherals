@@ -1,6 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.api;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
@@ -29,7 +29,7 @@ public interface IBitNetTower {
 
     public World getWorld();
 
-    public ChunkCoordinates getCoordinates();
+    public Vec3 getWorldPosition();
 
     public void receive(Object payload, Double distanceTravelled);
 

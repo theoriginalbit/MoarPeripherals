@@ -19,7 +19,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -120,20 +120,17 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     }
 
     @Override
-    public ChunkCoordinates getCoordinates() {
-        return new ChunkCoordinates(xCoord, yCoord, zCoord);
+    public Vec3 getWorldPosition() {
+        return Vec3.createVectorHelper(xCoord, yCoord, zCoord);
     }
 
     @Override
     public void receive(Object payload, Double distance) {
         // message received over bitnet
-        for (IComputerAccess comp : computers) {
-            comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), payload, distance});
-        }
-        // retransmit over CC modems
-        TileEntity tile = worldObj.getBlockTileEntity(xCoord, yCoord + 13, zCoord);
-        if (tile != null && tile instanceof TileAntennaModem) {
-            ((TileAntennaModem) tile).transmit(null, payload);
+        if (computers != null) {
+            for (IComputerAccess comp : computers) {
+                comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), payload, distance});
+            }
         }
     }
 
@@ -142,7 +139,6 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     }
 
     public void blockAdded() {
-        System.out.println("Block added!");
         // check if the multi-block is complete
         complete = false;
 
@@ -183,7 +179,9 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, BlockNotifyFlags.ALL);
 
         // the tower is complete, register it with the system
-        towerID = BitNetRegistry.registerTower(this);
+        if (!worldObj.isRemote) {
+            towerID = BitNetRegistry.registerTower(this);
+        }
 
         complete = true;
     }
@@ -212,7 +210,9 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, BlockNotifyFlags.ALL);
 
         // the tower is no longer complete, deregister it with the system
-        BitNetRegistry.deregisterTower(this);
+        if (!worldObj.isRemote) {
+            BitNetRegistry.deregisterTower(this);
+        }
 
         complete = false;
     }
