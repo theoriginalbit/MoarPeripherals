@@ -107,6 +107,8 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
             try {
                 ChatHandler.instance.addCommandListener(this);
             } catch (Exception e) {
+                System.err.println(String.format("Failed to register command listener for ChatBox at %d %d %d", xCoord, yCoord, zCoord));
+                e.printStackTrace();
             }
             registered = true;
         }

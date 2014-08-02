@@ -41,7 +41,7 @@ public final class ChatHandler {
 
     private final ArrayList<IChatListener> chatListeners = Lists.newArrayList();
     private final ArrayList<IDeathListener> deathListeners = Lists.newArrayList();
-    private final HashMap<String, ICommandListener> commandListeners = Maps.newHashMap();
+    private final HashMap<String, ArrayList<ICommandListener>> commandListeners = Maps.newHashMap();
 
     public void addChatListener(IChatListener listener) {
         if (!chatListeners.contains(listener)) {
@@ -70,22 +70,22 @@ public final class ChatHandler {
     public void addCommandListener(ICommandListener listener) throws Exception {
         final String token = listener.getToken();
 
-        if (commandListeners.containsKey(token)) {
-            throw new Exception("ICommandListener already exists for the token " + token);
+        if (!commandListeners.containsKey(token)) {
+            commandListeners.put(token, new ArrayList<ICommandListener>());
         }
-
-        commandListeners.put(token, listener);
+        commandListeners.get(token).add(listener);
     }
 
     public void removeCommandListener(ICommandListener listener) {
         final String token = listener.getToken();
 
         if (commandListeners.containsKey(token)) {
-            commandListeners.remove(token);
+            commandListeners.get(token).remove(listener);
         }
     }
 
     @ForgeSubscribe
+    @SuppressWarnings("unused")
     public void onServerChatEvent(ServerChatEvent event) {
         // lets just ignore canceled events
         if (event.isCanceled()) {
@@ -93,12 +93,14 @@ public final class ChatHandler {
         }
 
         // check if it was a command first, if it is, chat listeners shouldn't get this!
-        for (Entry<String, ICommandListener> entry : commandListeners.entrySet()) {
+        for (Entry<String, ArrayList<ICommandListener>> entry : commandListeners.entrySet()) {
             final String token = entry.getKey();
             final int tokenLength = token.length();
             if (event.message.substring(0, tokenLength).equals(token)) {
-                entry.getValue().onServerChatEvent(event.message.substring(tokenLength).trim(), event.player);
-                event.setCanceled(true);
+                for (ICommandListener listener : entry.getValue()) {
+                    listener.onServerChatEvent(event.message.substring(tokenLength).trim(), event.player);
+                    event.setCanceled(true);
+                }
             }
         }
 
@@ -114,6 +116,7 @@ public final class ChatHandler {
     }
 
     @ForgeSubscribe
+    @SuppressWarnings("unused")
     public void onLivingDeathEvent(LivingDeathEvent event) {
         for (IDeathListener listener : deathListeners) {
             listener.onDeathEvent(event);
