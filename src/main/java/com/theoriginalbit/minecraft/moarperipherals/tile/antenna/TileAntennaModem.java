@@ -61,38 +61,67 @@ public class TileAntennaModem extends TileAntenna implements INeighborAwareTile 
 
     public void transmit(Double channel, Object payload) {
         if (isValidController() && hasModemsConnected()) {
+            channel = channel != null ? channel : ComputerCraftInfo.REDNET_BROADCAST;
             try {
-                channel = channel != null ? channel : ComputerCraftInfo.REDNET_BROADCAST;
                 modems[0].callMethod(null, null, 4, new Object[]{channel, channel, payload});
             } catch (Exception e) {
-                System.out.println(String.format("Communications Tower at %d %d %d failed to retransmit message over rednet broadcast", xCoord, yCoord, zCoord));
+                System.out.println(String.format("Communications Tower at %d %d %d failed to transmit message over channel %d", xCoord, yCoord, zCoord, channel.intValue()));
             }
         }
     }
 
-    public void openModems() {
+    public void openChannel(double channel) {
         if (isValidController() && hasModemsConnected()) {
             for (IPeripheral modem : modems) {
                 try {
-                    modem.callMethod(null, null, 0, new Object[]{ComputerCraftInfo.REDNET_BROADCAST});
+                    modem.callMethod(null, null, 0, new Object[]{channel});
                 } catch (Exception e) {
-                    System.out.println(String.format("Communications Tower at %d %d %d failed to open rednet broadcast channel on modem", xCoord, yCoord, zCoord));
+                    System.out.println(String.format("Communications Tower at %d %d %d failed to open channel %d on modem", xCoord, yCoord, zCoord, (int)channel));
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public boolean isChannelOpen(double channel) {
+        if (isValidController() && hasModemsConnected()) {
+            for (IPeripheral modem : modems) {
+                try {
+                    return (Boolean) modem.callMethod(null, null, 1, new Object[]{channel})[0];
+                } catch (Exception e) {
+                    System.out.println(String.format("Communications Tower at %d %d %d failed to check if channel %d was open on modem", xCoord, yCoord, zCoord, (int)channel));
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    public void closeAllChannels() {
+        // close all the channels
+        if (isValidController() && hasModemsConnected()) {
+            for (IPeripheral modem : modems) {
+                try {
+                    modem.callMethod(null, null, 3, new Object[0]);
+                } catch (Exception e) {
+                    System.out.println(String.format("Communications Tower at %d %d %d failed to close all channels on modem", xCoord, yCoord, zCoord));
+                    e.printStackTrace();
+                }
+            }
+        }
+        // re-open the rednet broadcast channel
+        openModems();
+    }
+
+    public void openModems() {
+        if (isValidController() && hasModemsConnected() && !isChannelOpen(ComputerCraftInfo.REDNET_BROADCAST)) {
+            openChannel(ComputerCraftInfo.REDNET_BROADCAST);
         }
     }
 
     public void closeModems() {
         if (isValidController() && hasModemsConnected()) {
-            for (IPeripheral modem : modems) {
-                try {
-                    modem.callMethod(null, null, 2, new Object[]{ComputerCraftInfo.REDNET_BROADCAST});
-                } catch (Exception e) {
-                    System.out.println(String.format("Communications Tower at %d %d %d failed to close rednet broadcast channel on modem", xCoord, yCoord, zCoord));
-                    e.printStackTrace();
-                }
-            }
+            closeAllChannels();
         }
     }
 

@@ -60,12 +60,16 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
             return towerID;
         }
 
+        /**
+         * Invoked when the modem interface gets a rednet.broadcast message from its attached modems
+         */
         @Override
         public void queueEvent(String event, Object[] arguments) {
-            // this message is coming from a modem attached to this structure
             if (isComplete() && arguments.length >= 3 && arguments[3] != null) {
                 transmit(arguments[3]);
-                queueFakeEvent(ArrayUtils.subarray(arguments, 1, arguments.length));
+                for (IComputerAccess computer : computers) {
+                    computer.queueEvent(ComputerCraftInfo.EVENT.MODEM, ArrayUtils.add(ArrayUtils.subarray(arguments, 1, arguments.length), 0, "top"));
+                }
             }
         }
     };
@@ -74,6 +78,24 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     public ArrayList<IComputerAccess> computers;
 
     private boolean complete = false;
+
+    @LuaFunction
+    @SuppressWarnings("unused")
+    public boolean isCompleteTower() {
+        return complete;
+    }
+
+    /**
+     * Send a BitNet message
+     */
+    @LuaFunction(isMultiReturn = true)
+    public Object[] transmit(Object payload) {
+        if (isComplete()) {
+            BitNetRegistry.transmit(this, payload);
+            return new Object[]{true};
+        }
+        return new Object[]{false, "BitNet Communications Tower incomplete."};
+    }
 
     @Override
     public double getMaxRenderDistanceSquared() {
@@ -124,6 +146,9 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         return Vec3.createVectorHelper(xCoord, yCoord, zCoord);
     }
 
+    /**
+     * Invoked when this tower is in range of a BitNet message
+     */
     @Override
     public void receive(Object payload, Double distance) {
         // message received over bitnet
@@ -136,6 +161,10 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
 
     public boolean isComplete() {
         return complete;
+    }
+
+    public IComputerAccess getComputer() {
+        return computer;
     }
 
     public void blockAdded() {
@@ -220,26 +249,6 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     private void refreshModems() {
         if (modemInterface != null) {
             modemInterface.structureComplete();
-        }
-    }
-
-    @LuaFunction(isMultiReturn = true)
-    public Object[] transmit(Object payload) {
-        if (isComplete()) {
-            BitNetRegistry.transmit(this, payload);
-            // TODO: transmit the message over the attached modems
-            return new Object[]{true};
-        }
-        return new Object[]{false, "BitNet Communications Tower incomplete."};
-    }
-
-    public IComputerAccess getComputer() {
-        return computer;
-    }
-
-    private void queueFakeEvent(Object[] args) {
-        for (IComputerAccess computer : computers) {
-            computer.queueEvent(ComputerCraftInfo.EVENT.MODEM, ArrayUtils.add(args, 0, "top"));
         }
     }
 
