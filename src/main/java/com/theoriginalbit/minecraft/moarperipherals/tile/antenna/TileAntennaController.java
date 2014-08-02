@@ -3,10 +3,12 @@ package com.theoriginalbit.minecraft.moarperipherals.tile.antenna;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.ComputerList;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.minecraft.moarperipherals.api.IBitNetTower;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.registry.BitNetRegistry;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -17,6 +19,8 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
@@ -44,12 +48,18 @@ import java.util.ArrayList;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 @LuaPeripheral("bitnet_tower")
-public class TileAntennaController extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile {
+public class TileAntennaController extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile, IBitNetTower {
 
     private static final String EVENT_BITNET = "bitnet_message";
 
+    private int towerID;
     private TileAntennaModem modemInterface;
     private final FauxComputer computer = new FauxComputer("top") {
+        @Override
+        public int getID() {
+            return towerID;
+        }
+
         @Override
         public void queueEvent(String event, Object[] arguments) {
             // this message is coming from a modem attached to this structure
@@ -104,6 +114,29 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         refreshModems();
     }
 
+    @Override
+    public World getWorld() {
+        return worldObj;
+    }
+
+    @Override
+    public ChunkCoordinates getCoordinates() {
+        return new ChunkCoordinates(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public void receive(Object payload, Double distance) {
+        // message received over bitnet
+        for (IComputerAccess comp : computers) {
+            comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), payload, distance});
+        }
+        // retransmit over CC modems
+        TileEntity tile = worldObj.getBlockTileEntity(xCoord, yCoord + 13, zCoord);
+        if (tile != null && tile instanceof TileAntennaModem) {
+            ((TileAntennaModem) tile).transmit(null, payload);
+        }
+    }
+
     public boolean isComplete() {
         return complete;
     }
@@ -148,6 +181,10 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
 
         // mark this block for an update
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, BlockNotifyFlags.ALL);
+
+        // the tower is complete, register it with the system
+        towerID = BitNetRegistry.registerTower(this);
+
         complete = true;
     }
 
@@ -173,19 +210,11 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
 
         // mark this block for an update
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, BlockNotifyFlags.ALL);
-        complete = false;
-    }
 
-    public void receiveMessage(Integer channel, Object payload, double distance) {
-        // message received over bitnet
-        for (IComputerAccess comp : computers) {
-            comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), payload, distance});
-        }
-        // retransmit over CC modems
-        TileEntity tile = worldObj.getBlockTileEntity(xCoord, yCoord + 13, zCoord);
-        if (tile != null && tile instanceof TileAntennaModem) {
-            ((TileAntennaModem) tile).transmit(null, payload);
-        }
+        // the tower is no longer complete, deregister it with the system
+        BitNetRegistry.deregisterTower(this);
+
+        complete = false;
     }
 
     private void refreshModems() {
@@ -194,13 +223,14 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         }
     }
 
-    @LuaFunction
-    public boolean transmit(Object payload) {
+    @LuaFunction(isMultiReturn = true)
+    public Object[] transmit(Object payload) {
         if (isComplete()) {
-            // TODO: transmit the message to other antennas
+            BitNetRegistry.transmit(this, payload);
             // TODO: transmit the message over the attached modems
+            return new Object[]{true};
         }
-        return false;
+        return new Object[]{false, "BitNet Communications Tower incomplete."};
     }
 
     public IComputerAccess getComputer() {
