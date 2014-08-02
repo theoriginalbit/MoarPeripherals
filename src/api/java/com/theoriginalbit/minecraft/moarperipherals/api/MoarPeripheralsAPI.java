@@ -31,6 +31,7 @@ public class MoarPeripheralsAPI {
     private static Class<?> bitNetRegistry;
     private static Method bitNetRegisterTower;
     private static Method bitNetDeregisterTower;
+    private static Method bitNetTransmit;
 
     public static void registerBitNetTower(IBitNetTower tower) {
         findBitNet();
@@ -50,12 +51,22 @@ public class MoarPeripheralsAPI {
         }
     }
 
+    public static void sendBitNetMessage(IBitNetTower tower, Object payload) {
+        findBitNet();
+        try {
+            bitNetTransmit.invoke(null, tower, payload);
+        } catch (Exception e) {
+            System.out.println("MoarPeripheralsAPI: Failed to transmit message via BitNet");
+        }
+    }
+
     private static void findBitNet() {
         if (!searched) {
             try {
                 bitNetRegistry = Class.forName("com.theoriginalbit.minecraft.moarperipherals.registry.BitNetRegistry");
                 bitNetRegisterTower = findBitNetMethod("registerTower", new Class[]{IBitNetTower.class});
                 bitNetDeregisterTower = findBitNetMethod("deregisterTower", new Class[]{IBitNetTower.class});
+                bitNetTransmit = findBitNetMethod("transmit", new Class[]{IBitNetTower.class, Object.class});
             } catch (Exception e) {
                 System.err.println("MoarPeripheralsAPI: BitNetRegistry not found.");
             } finally {
