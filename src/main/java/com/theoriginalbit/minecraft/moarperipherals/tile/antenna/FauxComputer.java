@@ -3,7 +3,6 @@ package com.theoriginalbit.minecraft.moarperipherals.tile.antenna;
 import dan200.computercraft.api.filesystem.IMount;
 import dan200.computercraft.api.filesystem.IWritableMount;
 import dan200.computercraft.api.peripheral.IComputerAccess;
-import net.minecraft.tileentity.TileEntity;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.

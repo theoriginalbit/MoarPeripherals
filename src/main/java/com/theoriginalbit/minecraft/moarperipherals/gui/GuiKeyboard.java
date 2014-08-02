@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.gui;
 
+import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.utils.KeyboardUtils;
@@ -31,10 +32,6 @@ import org.lwjgl.input.Keyboard;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 public class GuiKeyboard extends GuiScreen {
-
-    private static final String EVENT_PASTE = "paste";
-    private static final String EVENT_KEY = "key";
-    private static final String EVENT_CHAR = "char";
 
     private final EntityPlayer player;
     private final TileKeyboard tile;
@@ -109,7 +106,7 @@ public class GuiKeyboard extends GuiScreen {
                         clipboard = clipboard.substring(0, 128);
                     }
 
-                    tile.queueEventToTarget(EVENT_PASTE, clipboard);
+                    tile.queueEventToTarget(ComputerCraftInfo.EVENT.PASTE, clipboard);
                 }
             }
             return;
@@ -119,9 +116,9 @@ public class GuiKeyboard extends GuiScreen {
             super.keyTyped(ch, keyCode);
         } else if (terminateTimer < 10 && shutdownTimer < 10 && rebootTimer < 10) {
             // A different key was pressed, queue it to the computer
-            tile.queueEventToTarget(EVENT_KEY, keyCode);
+            tile.queueEventToTarget(ComputerCraftInfo.EVENT.KEY, keyCode);
             if (ChatAllowedCharacters.isAllowedCharacter(ch)) {
-                tile.queueEventToTarget(EVENT_CHAR, Character.toString(ch));
+                tile.queueEventToTarget(ComputerCraftInfo.EVENT.CHAR, Character.toString(ch));
             }
         }
     }

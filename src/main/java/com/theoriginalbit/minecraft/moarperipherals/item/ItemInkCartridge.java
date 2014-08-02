@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.item;
 
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.ITooltipInformer;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.relauncher.Side;
@@ -11,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import java.util.List;
@@ -41,7 +41,6 @@ import java.util.List;
 public class ItemInkCartridge extends ItemMPBase implements ITooltipInformer {
 
     private static final int emptyColorIndex = 16;
-    private static final String TOOLTIP_LOCALIZATION = "moarperipherals.tooltip.inkCartridge.";
 
     private Icon iconInkC;
     private Icon iconInkM;
@@ -124,14 +123,14 @@ public class ItemInkCartridge extends ItemMPBase implements ITooltipInformer {
         int inkColor = getInkColor(stack);
         // if it is not empty
         if (inkColor != emptyColorIndex) {
-            String contents = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "contents") + ": ";
-            // translate the colour
-            String inkName = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "ink." + inkColor);
+            String contents = Constants.TOOLTIPS.INK_CONTENTS.getLocalised() + ": ";
+            // TODO: translate the colour name
+            String inkName = "unknown";
             list.add(contents + inkName);
             // there was a colour, so also get the percent
             String percent = getInkPercent(stack);
             if (percent != null) {
-                String level = StatCollector.translateToLocal(TOOLTIP_LOCALIZATION + "level");
+                String level = Constants.TOOLTIPS.INK_LEVEL.getLocalised();
                 list.add(level + ": " + percent);
             }
         } else {

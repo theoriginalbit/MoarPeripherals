@@ -5,6 +5,7 @@ import com.theoriginalbit.minecraft.framework.peripheral.PeripheralProvider;
 import com.theoriginalbit.minecraft.moarperipherals.converters.ConverterItemStack;
 import com.theoriginalbit.minecraft.moarperipherals.dictionary.ItemSearch;
 import com.theoriginalbit.minecraft.moarperipherals.handler.*;
+import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
 import com.theoriginalbit.minecraft.moarperipherals.registry.*;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
@@ -59,6 +60,7 @@ public class MoarPeripherals {
     public static CreativeTabs creativeTab = new CreativeTabMoarPeripheral();
 
     @EventHandler
+    @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
@@ -68,6 +70,7 @@ public class MoarPeripherals {
     }
 
     @EventHandler
+    @SuppressWarnings("unused")
     public void init(FMLInitializationEvent event) {
         MaterialRegistry.init();
         BlockRegistry.init();
@@ -83,9 +86,11 @@ public class MoarPeripherals {
     }
 
     @EventHandler
+    @SuppressWarnings("unused")
     public void postInit(FMLPostInitializationEvent event) {
         ItemSearch.init();
 
+        ComputerCraftInfo.init();
         RecipeRegistry.init();
 
         LuaType.registerTypeConverter(new ConverterItemStack());

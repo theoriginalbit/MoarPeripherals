@@ -1,6 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.registry;
 
-import com.theoriginalbit.minecraft.moarperipherals.reference.Mods;
+import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -31,22 +31,15 @@ import net.minecraft.item.ItemStack;
  */
 public final class RecipeRegistry {
 
-    public static final Block cc_blockComputer = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Computer");
-    public static final Block cc_blockPeripheral = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Peripheral");
-    public static final Block cc_blockCable = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Cable");
-    public static final ItemStack cc_cable = new ItemStack(cc_blockCable, 1, 0);
-    public static final ItemStack cc_wiredModem = new ItemStack(cc_blockCable, 1, 1);
-    public static final ItemStack cc_wirelessModem = new ItemStack(cc_blockPeripheral, 1, 1);
-
     public static void init() {
         if (Settings.enablePlayerDetector) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockPlayerDetector), "SBS", "BPB", "SCS", 'S', Block.stone, 'B', Block.stoneButton, 'P', Block.pressurePlateStone, 'C', cc_cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockPlayerDetector), "SBS", "BPB", "SCS", 'S', Block.stone, 'B', Block.stoneButton, 'P', Block.pressurePlateStone, 'C', ComputerCraftInfo.cc_cable);
         }
         if (Settings.enableChatBox) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockChatBox), "GGG", "GNG", "GCG", 'G', Item.ingotGold, 'N', Block.music, 'C', cc_cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockChatBox), "GGG", "GNG", "GCG", 'G', Item.ingotGold, 'N', Block.music, 'C', ComputerCraftInfo.cc_cable);
         }
         if (Settings.enableIronNote) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockIronNote), "III", "INI", "ICI", 'I', Item.ingotIron, 'N', Block.music, 'C', cc_cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockIronNote), "III", "INI", "ICI", 'I', Item.ingotIron, 'N', Block.music, 'C', ComputerCraftInfo.cc_cable);
         }
         if (Settings.enableKeyboard) {
             GameRegistry.addRecipe(new ItemStack(MaterialRegistry.materialKeyboardPart), "BBB", "RRR", "SSS", 'B', Block.stoneButton, 'R', Item.redstone, 'S', Block.stone);
@@ -56,16 +49,16 @@ public final class RecipeRegistry {
 
         }
         if (Settings.enableDictionary) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockDictionary), "SBS", "BDB", "SCS", 'S', Block.stone, 'B', Item.book, 'D', Item.diamond, 'C', cc_cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockDictionary), "SBS", "BDB", "SCS", 'S', Block.stone, 'B', Item.book, 'D', Item.diamond, 'C', ComputerCraftInfo.cc_cable);
         }
         if (Settings.isSonicEnabled()) {
             GameRegistry.addRecipe(new ItemStack(ItemRegistry.itemSonic), "DIG", "IRI", "GIO", 'D', Item.diamond, 'I', Item.ingotIron, 'G', new ItemStack(Item.dyePowder, 1, 8), 'R', Item.redstone, 'O', Block.obsidian);
         }
         if (Settings.enableAntenna) {
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntenna), "ICI", "ICI", "ICI", 'I', Item.ingotIron, 'C', cc_cable);
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaCell), "IMI", "MCM", "IMI", 'I', Item.ingotIron, 'M', cc_wirelessModem, 'C', cc_cable);
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaModem), "ICI", "CCC", "ICI", 'I', Item.ingotIron, 'C', cc_cable);
-            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaController), "ICI", "DWD", "IPI", 'I', Item.ingotIron, 'C', cc_cable, 'D', Item.diamond, 'W', cc_wiredModem, 'P', cc_blockComputer);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntenna), "ICI", "ICI", "ICI", 'I', Item.ingotIron, 'C', ComputerCraftInfo.cc_cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaCell), "IMI", "MCM", "IMI", 'I', Item.ingotIron, 'M', ComputerCraftInfo.cc_wirelessModem, 'C', ComputerCraftInfo.cc_cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaModem), "ICI", "CCC", "ICI", 'I', Item.ingotIron, 'C', ComputerCraftInfo.cc_cable);
+            GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntennaController), "ICI", "DWD", "IPI", 'I', Item.ingotIron, 'C', ComputerCraftInfo.cc_cable, 'D', Item.diamond, 'W', ComputerCraftInfo.cc_wiredModem, 'P', ComputerCraftInfo.cc_blockComputer);
         }
     }
 

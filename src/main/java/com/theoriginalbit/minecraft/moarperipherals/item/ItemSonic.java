@@ -3,6 +3,8 @@ package com.theoriginalbit.minecraft.moarperipherals.item;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
@@ -18,6 +20,11 @@ public class ItemSonic extends ItemMPBase {
     public ItemSonic() {
         super(Settings.itemIdSonic, "sonic");
         setMaxStackSize(1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean requiresMultipleRenderPasses() {
+        return true;
     }
 
     @Override
@@ -76,22 +83,6 @@ public class ItemSonic extends ItemMPBase {
         world.setBlockMetadataWithNotify(x, y, z, meta, BlockNotifyFlags.SEND_TO_CLIENTS);
         stack.damageItem(1, player);
         return true;
-
-//        if (side == 0) {
-//            world.setBlockMetadataWithNotify(x, y, z, 2 | meta, BlockNotifyFlags.SEND_TO_CLIENTS);
-//        }
-//
-//        if (side == 1) {
-//            world.setBlockMetadataWithNotify(x, y, z, 1 | meta, BlockNotifyFlags.SEND_TO_CLIENTS);
-//        }
-//
-//        if (side == 2) {
-//            world.setBlockMetadataWithNotify(x, y, z, 3 | meta, BlockNotifyFlags.SEND_TO_CLIENTS);
-//        }
-//
-//        if (side == 3) {
-//            world.setBlockMetadataWithNotify(x, y, z, 0 | meta, BlockNotifyFlags.SEND_TO_CLIENTS);
-//        }
     }
 
     private boolean rotate(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side) {
