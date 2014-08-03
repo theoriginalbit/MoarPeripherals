@@ -139,7 +139,7 @@ public class TileAntennaModem extends TileAntenna implements INeighborAwareTile 
     }
 
     private boolean hasModemsConnected() {
-        return modems.length == 4;
+        return modems != null && modems.length == 4;
     }
 
     private void modemSearch() {
