@@ -2,7 +2,6 @@ package com.theoriginalbit.minecraft.moarperipherals.item;
 
 import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.ImmutableSet;
-import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
@@ -14,7 +13,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
@@ -24,17 +22,37 @@ import net.minecraftforge.common.ForgeDirection;
 
 import java.util.List;
 
-public class ItemSonic extends Item implements IToolWrench {
+/**
+ * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
+ * Official Thread:
+ * http://www.computercraft.info/forums2/index.php?/topic/19357-
+ * Official Wiki:
+ * http://wiki.theoriginalbit.com/moarperipherals/
+ *
+ * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://www.gnu.org/licenses/.
+ */
+public class ItemSonic extends ItemMPBase implements IToolWrench {
 
     private static final ImmutableSet<Class<? extends Block>> blacklist = ImmutableSet.of(BlockLever.class, BlockButton.class, BlockBed.class, BlockTorch.class);
     private Icon iconTen;
     private Icon iconEleven;
 
     public ItemSonic() {
-        super(Settings.itemIdSonic - 256);
+        super(Settings.itemIdSonic, "sonic");
 
-        setUnlocalizedName(ModInfo.RESOURCE_DOMAIN + ".sonic");
-        setCreativeTab(MoarPeripherals.creativeTab);
         setHasSubtypes(true);
         setMaxStackSize(1);
     }
@@ -42,8 +60,8 @@ public class ItemSonic extends Item implements IToolWrench {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister registry) {
-        iconTen = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":sonicTen");
-        iconEleven = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":sonicEleven");
+        iconTen = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":sonic10");
+        iconEleven = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":sonic11");
     }
 
     @Override
@@ -99,7 +117,7 @@ public class ItemSonic extends Item implements IToolWrench {
         return rotate(block, player, world, x, y, z, side);
     }
 
-    public boolean rotate(Block block, EntityPlayer player, World world, int x, int y, int z, int side) {
+    private boolean rotate(Block block, EntityPlayer player, World world, int x, int y, int z, int side) {
         if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
             player.swingItem();
             return !world.isRemote;

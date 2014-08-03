@@ -32,7 +32,7 @@ import org.lwjgl.opengl.GL11;
  */
 public abstract class CustomItemRenderer implements IItemRenderer {
 
-    protected ModelBase modelItem;
+    private ModelBase modelItem;
 
     public CustomItemRenderer(ModelBase model) {
         modelItem = model;
@@ -75,28 +75,34 @@ public abstract class CustomItemRenderer implements IItemRenderer {
         GL11.glPushMatrix();
         Minecraft.getMinecraft().getTextureManager().bindTexture(getTexture(stack));
 
+        ModelBase model = selectModel(stack);
+
         switch (type) {
             case ENTITY:
                 manipulateEntityRender(stack);
-                modelItem.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
+                model.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
                 break;
             case EQUIPPED:
                 manipulateThirdPersonRender(stack);
-                modelItem.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
+                model.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
                 break;
             case EQUIPPED_FIRST_PERSON:
                 manipulateFirstPersonRender(stack);
-                modelItem.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
+                model.render((Entity) data[1], 0f, 0f, 0f, 0f, 0f, 0.0625f);
                 break;
             case INVENTORY:
                 manipulateInventoryRender(stack);
-                modelItem.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
+                model.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
                 break;
             default:
                 break;
         }
 
         GL11.glPopMatrix();
+    }
+
+    protected ModelBase selectModel(ItemStack stack) {
+        return modelItem;
     }
 
     protected abstract ResourceLocation getTexture(ItemStack stack);

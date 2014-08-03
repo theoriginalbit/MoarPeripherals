@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.render;
 
-import com.theoriginalbit.minecraft.moarperipherals.model.ModelSonic;
+import com.theoriginalbit.minecraft.moarperipherals.model.ModelSonic10;
+import com.theoriginalbit.minecraft.moarperipherals.model.ModelSonic11;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.render.base.CustomItemRenderer;
 import net.minecraft.client.model.ModelBase;
@@ -32,15 +33,32 @@ import org.lwjgl.opengl.GL11;
  */
 public class RendererItemSonic extends CustomItemRenderer {
 
-    private static final ModelBase model = new ModelSonic();
+    private static final ModelBase modelTen = new ModelSonic10();
+    private static final ModelBase modelEleven = new ModelSonic11();
+    private int renderPass;
 
     public RendererItemSonic() {
-        super(model);
+        super(null);
+    }
+
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+        renderPass = 0;
+        super.renderItem(type, stack, data);
+        GL11.glEnable(GL11.GL_BLEND);
+        renderPass = 1;
+        super.renderItem(type, stack, data);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     @Override
     protected ResourceLocation getTexture(ItemStack stack) {
-        return Constants.TEXTURES_MODEL.SONIC.getResourceLocation();
+        return stack.getItemDamage() == 0 ? (renderPass == 0 ? Constants.TEXTURES_MODEL.SONIC_10_0.getResourceLocation() : Constants.TEXTURES_MODEL.SONIC_10_1.getResourceLocation()) : Constants.TEXTURES_MODEL.SONIC_11.getResourceLocation();
+    }
+
+    @Override
+    protected ModelBase selectModel(ItemStack stack) {
+        return stack.getItemDamage() == 0 ? modelTen : modelEleven;
     }
 
     @Override
@@ -66,7 +84,6 @@ public class RendererItemSonic extends CustomItemRenderer {
         GL11.glRotatef(175, 1, 0, 0);
         GL11.glTranslatef(0f, -3.5f, -4.5f);
     }
-
     @Override
     protected void manipulateFirstPersonRender(ItemStack stack) {
         float scale = 0.3f;
@@ -76,4 +93,5 @@ public class RendererItemSonic extends CustomItemRenderer {
         GL11.glRotatef(-20, 0, 0, 1);
         GL11.glTranslatef(-2f, -0.5f, -3.8f);
     }
+
 }

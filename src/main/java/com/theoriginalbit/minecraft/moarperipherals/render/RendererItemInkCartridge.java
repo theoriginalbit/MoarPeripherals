@@ -91,8 +91,8 @@ public final class RendererItemInkCartridge extends CustomItemRenderer {
         GL11.glTranslatef(-2.2f, -1f, -1.5f);
     }
 
-    private void selectModel(ItemStack stack) {
-        modelItem = ItemInkCartridge.isCartridgeEmpty(stack) ? modelCartridgeEmpty : modelCartridgeFilled;
+    protected ModelBase selectModel(ItemStack stack) {
+        return ItemInkCartridge.isCartridgeEmpty(stack) ? modelCartridgeEmpty : modelCartridgeFilled;
     }
 
 }
