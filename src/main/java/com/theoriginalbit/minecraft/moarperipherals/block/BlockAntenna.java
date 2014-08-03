@@ -103,9 +103,9 @@ public class BlockAntenna extends BlockMPBase {
             TileEntity tile = world.getBlockTileEntity(x, y, z);
             if (tile != null && tile instanceof TileAntennaController) {
                 if (added) {
-                    ((TileAntennaController) tile).blockAdded();
+                    ((TileAntennaController) tile).onBlockAdded();
                 } else {
-                    ((TileAntennaController) tile).blockRemoved();
+                    ((TileAntennaController) tile).onBlockRemoved();
                 }
                 return true;
             }

@@ -7,6 +7,7 @@ import com.theoriginalbit.minecraft.moarperipherals.converters.ConverterItemStac
 import com.theoriginalbit.minecraft.moarperipherals.dictionary.ItemSearch;
 import com.theoriginalbit.minecraft.moarperipherals.handler.*;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.registry.*;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
@@ -90,7 +91,9 @@ public class MoarPeripherals {
         ItemRegistry.oreRegistration();
         FluidRegistry.oreRegistration();
 
-        ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
+        if (Settings.shouldChunkLoad()) {
+            ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
+        }
 
         proxy.registerRenderInfo();
     }

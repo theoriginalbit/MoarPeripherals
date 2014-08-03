@@ -104,4 +104,11 @@ public final class Settings {
          */
         return enableSonic;
     }
+
+    public static boolean shouldChunkLoad() {
+        /*
+            this could expand in the future
+         */
+        return antennaKeepChunkLoaded;
+    }
 }

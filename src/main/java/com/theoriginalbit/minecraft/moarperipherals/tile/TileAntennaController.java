@@ -59,6 +59,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     private static final String EVENT_BITNET = "bitnet_message";
     private ForgeChunkManager.Ticket chunkTicket;
     private boolean complete = false;
+    private boolean registered = false;
 
     @Override
     public double getMaxRenderDistanceSquared() {
@@ -85,45 +86,24 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     @Override
     public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {
         super.onDataPacket(net, packet);
-        blockAdded();
+        checkStructure();
     }
 
-    public void blockAdded() {
+    @Override
+    public void updateEntity() {
+        if (complete && !registered) {
+            registerTower();
+        }
+    }
+
+    public void onBlockAdded() {
         // check if the multi-block is complete
         complete = false;
-
-        for (int y = 1; y < 13; ++y) {
-            int id = worldObj.getBlockId(xCoord, yCoord + y, zCoord);
-            if (id != Settings.blockIdAntenna) {
-                return;
-            }
-        }
-
-        if (worldObj.getBlockId(xCoord, yCoord + 13, zCoord) != Settings.blockIdAntennaModem) {
-            return;
-        }
-
-        if (worldObj.getBlockId(xCoord, yCoord + 14, zCoord) != Settings.blockIdAntennaCell) {
-            return;
-        }
-        if (worldObj.getBlockId(xCoord, yCoord + 15, zCoord) != Settings.blockIdAntennaCell) {
-            return;
-        }
-
-        // tell all the blocks in the structure to become invisible
-        for (int y = 1; y < 16; ++y) {
-            worldObj.setBlockMetadataWithNotify(xCoord, yCoord + y, zCoord, 1, BlockNotifyFlags.ALL);
-        }
-
-        // mark this block for an update
-        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, BlockNotifyFlags.ALL);
-
-        registerTower();
-
-        complete = true;
+        registered = false;
+        checkStructure();
     }
 
-    public void blockRemoved() {
+    public void onBlockRemoved() {
         // tell all the blocks in the structure to become visible again
         for (int y = 1; y < 16; ++y) {
             final int id = worldObj.getBlockId(xCoord, yCoord + y, zCoord);
@@ -170,7 +150,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
 
     @Override
     public void onPlaced(EntityLivingBase entity, ItemStack stack, int x, int y, int z) {
-        blockAdded();
+        onBlockAdded();
     }
 
     /*
@@ -179,7 +159,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
 
     @Override
     public void onBreak(int x, int y, int z) {
-        blockRemoved();
+        onBlockRemoved();
     }
 
     /*
@@ -222,11 +202,40 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
      * Private members
      */
 
+    private void checkStructure() {
+        for (int y = 1; y < 13; ++y) {
+            int id = worldObj.getBlockId(xCoord, yCoord + y, zCoord);
+            if (id != Settings.blockIdAntenna) {
+                return;
+            }
+        }
+
+        if (worldObj.getBlockId(xCoord, yCoord + 13, zCoord) != Settings.blockIdAntennaModem) {
+            return;
+        }
+
+        if (worldObj.getBlockId(xCoord, yCoord + 14, zCoord) != Settings.blockIdAntennaCell) {
+            return;
+        }
+        if (worldObj.getBlockId(xCoord, yCoord + 15, zCoord) != Settings.blockIdAntennaCell) {
+            return;
+        }
+
+        // tell all the blocks in the structure to become invisible
+        for (int y = 1; y < 16; ++y) {
+            worldObj.setBlockMetadataWithNotify(xCoord, yCoord + y, zCoord, 1, BlockNotifyFlags.ALL);
+        }
+
+        // mark this block for an update
+        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, BlockNotifyFlags.ALL);
+
+        complete = true;
+    }
+
     private void registerTower() {
-        // the tower is not complete this is the first time this was invoked, register it with the system
-        if (!complete && !worldObj.isRemote) {
+        if (!worldObj.isRemote) {
             BitNetRegistry.registerTower(this);
-            if (chunkTicket == null) {
+            if (Settings.antennaKeepChunkLoaded && chunkTicket == null) {
                 chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
                 if (chunkTicket == null) {
                     LogUtils.info(String.format("Requesting chunk loading ticket for BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
@@ -240,20 +249,21 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
                 }
             }
         }
+        registered = true;
     }
 
     private void unregisterTower() {
-        // if the tower is complete this is the first time this was invoked, deregister it with the system
-        if (complete && !worldObj.isRemote) {
+        if (!worldObj.isRemote) {
             BitNetRegistry.deregisterTower(this);
             // if there was a chunk loading ticket and the server isn't just stopping
-            if (chunkTicket != null && !MoarPeripherals.isServerStopping) {
+            if (Settings.antennaKeepChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
                 LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
                 ForgeChunkManager.unforceChunk(chunkTicket, getChunkCoord());
                 TicketManager.releaseTicket(chunkTicket);
                 chunkTicket = null;
             }
         }
+        registered = false;
     }
 
 }
