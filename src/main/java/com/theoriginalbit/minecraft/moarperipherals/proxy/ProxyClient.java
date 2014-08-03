@@ -4,7 +4,7 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.render.*;
-import com.theoriginalbit.minecraft.moarperipherals.tile.antenna.TileAntennaController;
+import com.theoriginalbit.minecraft.moarperipherals.tile.TileAntennaController;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TilePrinter;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -21,19 +21,19 @@ import net.minecraftforge.client.MinecraftForgeClient;
  * http://www.computercraft.info/forums2/index.php?/topic/19357-
  * Official Wiki:
  * http://wiki.theoriginalbit.com/moarperipherals/
- *
+ * <p/>
  * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
- *
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
