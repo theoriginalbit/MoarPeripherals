@@ -86,7 +86,7 @@ public final class Settings {
     // Antenna settings
     public static int antennaRange = 1000;
     public static int antennaRangeStorm = 800;
-    public static boolean antennaKeepChunkLoaded = false;
+    public static boolean antennaKeepChunkLoaded;
     public static int antennaMessageDelay = 5;
 
     // Renderer enabled

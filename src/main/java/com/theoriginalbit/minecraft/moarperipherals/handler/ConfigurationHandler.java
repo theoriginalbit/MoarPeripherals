@@ -153,7 +153,7 @@ public final class ConfigurationHandler {
         Settings.antennaRange = getInt(ANTENNA, "towerRange", Settings.antennaRange, "The range in blocks the Cell Tower can transmit");
         Settings.antennaRangeStorm = getInt(ANTENNA, "towerRangeStorm", Settings.antennaRangeStorm, "The range in blocks the Cell Tower can transmit during a storm");
         Settings.antennaMessageDelay = getInt(ANTENNA, "towerMessageDelay", Settings.antennaMessageDelay, "The delay (in ticks) that the Cell Tower takes to send a message per 100 block distance (rounded up).");
-        Settings.antennaKeepChunkLoaded = getBoolean(ANTENNA, "keepChunkLoaded", Settings.antennaKeepChunkLoaded, "Whether a cell tower should keep the chunk it resides in loaded");
+        Settings.antennaKeepChunkLoaded = getBoolean(ANTENNA, "keepChunkLoaded", "Whether a cell tower should keep the chunk it resides in loaded");
 
         // Renderer enabled
         Settings.enablePrinterGfx = getBoolean(RENDERER, "printerModel", false, "Whether or not to render items and blocks, related to the printer, normally or as models.");
