@@ -9,6 +9,7 @@ import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
 import com.theoriginalbit.minecraft.moarperipherals.registry.*;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.IProxy;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
+import com.theoriginalbit.minecraft.moarperipherals.utils.LogUtils;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -62,6 +63,8 @@ public class MoarPeripherals {
     @EventHandler
     @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
+        LogUtils.init();
+
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
         MinecraftForge.EVENT_BUS.register(ChatHandler.instance);
