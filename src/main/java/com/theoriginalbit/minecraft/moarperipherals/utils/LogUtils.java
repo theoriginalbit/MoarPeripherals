@@ -42,16 +42,16 @@ public final class LogUtils {
         logger.info("");
     }
 
-    public static void info(String message, Object... args) {
-        logger.log(Level.INFO, message, args);
+    public static void info(String message) {
+        logger.log(Level.INFO, message);
     }
 
-    public static void warning(String message, Object... args) {
-        logger.log(Level.WARNING, message, args);
+    public static void warning(String message) {
+        logger.log(Level.WARNING, message);
     }
 
-    public static void error(String message, Object... args) {
-        logger.log(Level.SEVERE, message, args);
+    public static void error(String message) {
+        logger.log(Level.SEVERE, message);
     }
 
 }

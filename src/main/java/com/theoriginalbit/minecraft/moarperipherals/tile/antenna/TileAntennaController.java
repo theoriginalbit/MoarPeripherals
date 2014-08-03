@@ -3,7 +3,11 @@ package com.theoriginalbit.minecraft.moarperipherals.tile.antenna;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.ComputerList;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.api.IBitNetTower;
+import com.theoriginalbit.minecraft.moarperipherals.chunk.ChunkLoadingCallback;
+import com.theoriginalbit.minecraft.moarperipherals.chunk.TicketManager;
+import com.theoriginalbit.minecraft.moarperipherals.interfaces.IChunkLoader;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IPlaceAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.reference.ComputerCraftInfo;
@@ -11,6 +15,7 @@ import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.registry.BitNetRegistry;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileMPBase;
 import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
+import com.theoriginalbit.minecraft.moarperipherals.utils.LogUtils;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -20,7 +25,9 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
@@ -48,12 +55,13 @@ import java.util.ArrayList;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 @LuaPeripheral("bitnet_tower")
-public class TileAntennaController extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile, IBitNetTower {
+public class TileAntennaController extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile, IBitNetTower, IChunkLoader {
 
     private static final String EVENT_BITNET = "bitnet_message";
 
     private int towerID;
     private TileAntennaModem modemInterface;
+    private ForgeChunkManager.Ticket chunkTicket;
     private final FauxComputer computer = new FauxComputer("top") {
         @Override
         public int getID() {
@@ -146,6 +154,11 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         return Vec3.createVectorHelper(xCoord, yCoord, zCoord);
     }
 
+
+    public ChunkCoordIntPair getChunkCoord() {
+        return new ChunkCoordIntPair(xCoord >> 4, zCoord >> 4);
+    }
+
     /**
      * Invoked when this tower is in range of a BitNet message
      */
@@ -210,6 +223,19 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         // the tower is complete, register it with the system
         if (!worldObj.isRemote) {
             towerID = BitNetRegistry.registerTower(this);
+            if (chunkTicket == null) {
+                chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
+                if (chunkTicket == null) {
+                    LogUtils.info(String.format("Requesting chunk loading ticket for BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
+                    chunkTicket = TicketManager.requestTicket(worldObj, xCoord, yCoord, zCoord);
+                    if (chunkTicket.isPlayerTicket()) {
+                        LogUtils.warning(String.format("The returned ticket is a player ticket for player %s", chunkTicket.getPlayerName()));
+                    }
+                    ForgeChunkManager.forceChunk(chunkTicket, getChunkCoord());
+                } else {
+                    LogUtils.info(String.format("A chunk loading ticket was found from server start for the BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
+                }
+            }
         }
 
         complete = true;
@@ -241,6 +267,13 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         // the tower is no longer complete, deregister it with the system
         if (!worldObj.isRemote) {
             BitNetRegistry.deregisterTower(this);
+            // if there was a chunk loading ticket and the server isn't just stopping
+            if (chunkTicket != null && !MoarPeripherals.isServerStopping) {
+                LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
+                ForgeChunkManager.unforceChunk(chunkTicket, getChunkCoord());
+                TicketManager.releaseTicket(chunkTicket);
+                chunkTicket = null;
+            }
         }
 
         complete = false;

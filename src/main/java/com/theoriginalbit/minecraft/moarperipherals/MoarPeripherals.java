@@ -2,6 +2,7 @@ package com.theoriginalbit.minecraft.moarperipherals;
 
 import com.theoriginalbit.minecraft.framework.peripheral.LuaType;
 import com.theoriginalbit.minecraft.framework.peripheral.PeripheralProvider;
+import com.theoriginalbit.minecraft.moarperipherals.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.minecraft.moarperipherals.converters.ConverterItemStack;
 import com.theoriginalbit.minecraft.moarperipherals.dictionary.ItemSearch;
 import com.theoriginalbit.minecraft.moarperipherals.handler.*;
@@ -17,11 +18,13 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -60,6 +63,8 @@ public class MoarPeripherals {
 
     public static CreativeTabs creativeTab = new CreativeTabMoarPeripheral();
 
+    public static boolean isServerStopping = false;
+
     @EventHandler
     @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
@@ -85,6 +90,8 @@ public class MoarPeripherals {
         ItemRegistry.oreRegistration();
         FluidRegistry.oreRegistration();
 
+        ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
+
         proxy.registerRenderInfo();
     }
 
@@ -102,6 +109,12 @@ public class MoarPeripherals {
         UpgradeRegistry.init();
 
         ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
+    }
+
+    @EventHandler
+    @SuppressWarnings("unused")
+    public void serverStopping(FMLServerStoppingEvent e) {
+        isServerStopping = true;
     }
 
 }
