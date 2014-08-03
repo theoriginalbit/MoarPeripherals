@@ -27,7 +27,7 @@ minecraft {
 
 jar {
     from(sourceSets.api.output) {
-        include 'com/theoriginalbit/**/*'
+        include '**/*'
     }
 }
 
