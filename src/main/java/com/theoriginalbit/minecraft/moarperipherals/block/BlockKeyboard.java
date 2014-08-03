@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.block;
 
+import buildcraft.api.tools.IToolWrench;
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.block.base.BlockPairable;
 import com.theoriginalbit.minecraft.moarperipherals.gui.GuiType;
@@ -7,9 +8,11 @@ import com.theoriginalbit.minecraft.moarperipherals.interfaces.aware.IActivateAw
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.tile.TileKeyboard;
+import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatMessageComponent;
@@ -42,6 +45,8 @@ import java.util.List;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 public class BlockKeyboard extends BlockPairable {
+
+    private final ForgeDirection[] validDirections = new ForgeDirection[]{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST};
 
     public BlockKeyboard() {
         super(Settings.blockIdKeyboard, Material.iron, "keyboard");
@@ -77,6 +82,13 @@ public class BlockKeyboard extends BlockPairable {
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        // check if the item was a wrench first
+        ItemStack equipped = player.getCurrentEquippedItem();
+        if (equipped != null && equipped.getItem() instanceof IToolWrench) {
+            return true;
+        }
+
+        // open the GUI if there is a connection
         TileEntity tile = world.getBlockTileEntity(x, y, z);
 
         if (tile instanceof TileKeyboard) {
@@ -99,6 +111,21 @@ public class BlockKeyboard extends BlockPairable {
         setBlockBounds(0f, 0f, 0f, 0.8f, 0.1f, 0.8f);
         super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
         setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
+    }
+
+    @Override
+    public ForgeDirection[] getValidRotations(World world, int x, int y, int z) {
+        return validDirections;
+    }
+
+    @Override
+    public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection direction) {
+        switch (direction) {
+            case UP: return false;
+            case DOWN: return false;
+            default:
+                return world.getBlockMetadata(x, y, z) == direction.ordinal() || world.setBlockMetadataWithNotify(x, y, z, direction.ordinal(), BlockNotifyFlags.SEND_TO_CLIENTS);
+        }
     }
 
     private boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {

@@ -1,11 +1,11 @@
 package com.theoriginalbit.minecraft.moarperipherals.item;
 
 import buildcraft.api.tools.IToolWrench;
+import com.google.common.collect.ImmutableSet;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockStairs;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,6 +16,8 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class ItemSonic extends ItemMPBase implements IToolWrench {
 
+    private static final ImmutableSet<Class<? extends Block>> blacklist = ImmutableSet.of(BlockLever.class, BlockButton.class, BlockBed.class);
+
     public ItemSonic() {
         super(Settings.itemIdSonic, "sonic");
         setMaxStackSize(1);
@@ -23,32 +25,50 @@ public class ItemSonic extends ItemMPBase implements IToolWrench {
 
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote) {
+        int blockId = world.getBlockId(x, y, z);
+        Block block = Block.blocksList[blockId];
+
+        if (block == null) {
             return false;
         }
-        int blockId = world.getBlockId(x, y, z);
-        int meta = world.getBlockMetadata(x, y, z);
 
-        if (checkIsWooden(blockId)) {
+        // make sure it's not wood, the sonic doesn't work on wood
+        if (Block.blocksList[blockId].blockMaterial == Material.wood) {
             String message = EnumChatFormatting.RED + Constants.CHAT.SONIC_WOOD.getLocalised();
             player.sendChatToPlayer(new ChatMessageComponent().addText(message));
-        } else if (isVanillaSixRotation(blockId) || isRotatablePiston(blockId, meta)) {
-            return rotateSix(stack, player, world, x, y, z, side);
-        } else if (isVanillaFourRotation(blockId) || isMoarPeripheralFourRotation(blockId)) {
-            return rotateFour(stack, player, world, x, y, z, side);
-        } else if (Block.blocksList[blockId] instanceof BlockStairs) {
-            rotateStairs(stack, player, world, x, y, z, side);
+            return true;
         }
 
+        // make sure it's not blacklisted
+        if (blacklist.contains(block.getClass())) {
+            return false;
+        }
+
+        // rotate furnace
+        if (block instanceof BlockFurnace && !(side == 0 || side == 1)) {
+            if (player.isSneaking()) {
+                side = ForgeDirection.getOrientation(side).getOpposite().ordinal();
+            }
+            world.setBlockMetadataWithNotify(x, y, z, side, BlockNotifyFlags.SEND_TO_CLIENTS);
+            player.swingItem();
+            return !world.isRemote;
+        }
+
+        // rotate stairs, if I left this to vanilla it rotates weird
+        if (block instanceof BlockStairs) {
+            return rotateStairs(stack, player, world, x, y, z, side);
+        }
+
+        // attempt to rotate anything else that supports rotations that I don't need to customise
+        return rotate(block, player, world, x, y, z, side);
+    }
+
+    public boolean rotate(Block block, EntityPlayer player, World world, int x, int y, int z, int side) {
+        if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+            player.swingItem();
+            return !world.isRemote;
+        }
         return false;
-    }
-
-    private boolean rotateSix(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side) {
-        return rotate(stack, player, world, x, y, z, side);
-    }
-
-    private boolean rotateFour(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side) {
-        return !(side == 0 || side == 1) && rotate(stack, player, world, x, y, z, side);
     }
 
     private boolean rotateStairs(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side) {
@@ -77,37 +97,6 @@ public class ItemSonic extends ItemMPBase implements IToolWrench {
         world.setBlockMetadataWithNotify(x, y, z, meta, BlockNotifyFlags.SEND_TO_CLIENTS);
         stack.damageItem(1, player);
         return true;
-    }
-
-    private boolean rotate(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side) {
-        ForgeDirection face = ForgeDirection.getOrientation(side);
-        if (player.isSneaking()) {
-            face = face.getOpposite();
-        }
-        world.setBlockMetadataWithNotify(x, y, z, face.ordinal(), BlockNotifyFlags.ALL);
-        stack.damageItem(1, player);
-        return true;
-    }
-
-    private static boolean isVanillaFourRotation(int blockId) {
-        return blockId == Block.furnaceIdle.blockID || blockId == Block.furnaceBurning.blockID;
-    }
-
-    private static boolean isVanillaSixRotation(int blockId) {
-        return blockId == Block.dropper.blockID || blockId == Block.dispenser.blockID;
-    }
-
-    private static boolean isRotatablePiston(int blockId, int meta) {
-        return blockId == Block.pistonBase.blockID && (meta & 8) == 0;
-    }
-
-    private static boolean isMoarPeripheralFourRotation(int blockId) {
-        return blockId == Settings.blockIdKeyboard;
-    }
-
-    private static boolean checkIsWooden(int blockId) {
-        Material material = Block.blocksList[blockId].blockMaterial;
-        return material == Material.wood;
     }
 
     /*
