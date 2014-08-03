@@ -6,9 +6,9 @@ tile.moarperipherals.ironnote.name=Note block de Ferro
 tile.moarperipherals.keyboard.name=Teclado
 tile.moarperipherals.printer.name=Impressora avançada
 tile.moarperipherals.itemDictionary.name=Dicionário de Itens.
-tile.moarperipherals.antenna.name=Torre de Comunicação Bitnet (Mastro)
+tile.moarperipherals.antenna.name=Torre de Comunicação BitNet (Mastro)
 tile.moarperipherals.antennaCell.name=Torre de comunicação BitNet (Celula)
-tile.moarperipherals.antennaModem.name=Modem da Torre de comunicação Bitnet Interface)
+tile.moarperipherals.antennaModem.name=Modem da Torre de comunicação BitNet Interface)
 tile.moarperipherals.antennaController.name=Torre de Comunicação BitNet(Controlador)
 
 item.moarperipherals.inkCartridge.name=Cartucho para Tinta
