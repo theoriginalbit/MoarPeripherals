@@ -16,7 +16,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class ItemSonic extends ItemMPBase implements IToolWrench {
 
-    private static final ImmutableSet<Class<? extends Block>> blacklist = ImmutableSet.of(BlockLever.class, BlockButton.class, BlockBed.class);
+    private static final ImmutableSet<Class<? extends Block>> blacklist = ImmutableSet.of(BlockLever.class, BlockButton.class, BlockBed.class, BlockTorch.class);
 
     public ItemSonic() {
         super(Settings.itemIdSonic, "sonic");
