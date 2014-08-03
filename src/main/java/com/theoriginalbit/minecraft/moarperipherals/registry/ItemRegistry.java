@@ -5,6 +5,7 @@ import com.theoriginalbit.minecraft.moarperipherals.item.ItemInkCartridge;
 import com.theoriginalbit.minecraft.moarperipherals.item.ItemSonic;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -31,7 +32,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegistry {
 
     public static ItemMPBase itemInkCartridge;
-    public static ItemMPBase itemSonic;
+    public static Item itemSonic;
 
     public static void init() {
         if (Settings.enablePrinter) {
@@ -39,12 +40,10 @@ public class ItemRegistry {
             GameRegistry.registerItem(itemInkCartridge, itemInkCartridge.getUnlocalizedName());
         }
 
-        /*
-         for now it is perminently enabled
-         later it should only be enabled when needed
-          */
-        itemSonic = new ItemSonic();
-        GameRegistry.registerItem(itemSonic, itemSonic.getUnlocalizedName());
+        if (Settings.isSonicEnabled()) {
+            itemSonic = new ItemSonic();
+            GameRegistry.registerItem(itemSonic, itemSonic.getUnlocalizedName());
+        }
     }
 
     public static void oreRegistration() {

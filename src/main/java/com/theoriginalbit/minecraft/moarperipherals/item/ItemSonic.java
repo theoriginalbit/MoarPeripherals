@@ -2,25 +2,61 @@ package com.theoriginalbit.minecraft.moarperipherals.item;
 
 import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.ImmutableSet;
+import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
+import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class ItemSonic extends ItemMPBase implements IToolWrench {
+import java.util.List;
+
+public class ItemSonic extends Item implements IToolWrench {
 
     private static final ImmutableSet<Class<? extends Block>> blacklist = ImmutableSet.of(BlockLever.class, BlockButton.class, BlockBed.class, BlockTorch.class);
+    private Icon iconTen;
+    private Icon iconEleven;
 
     public ItemSonic() {
-        super(Settings.itemIdSonic, "sonic");
+        super(Settings.itemIdSonic - 256);
+
+        setUnlocalizedName(ModInfo.RESOURCE_DOMAIN + ".sonic");
+        setCreativeTab(MoarPeripherals.creativeTab);
+        setHasSubtypes(true);
         setMaxStackSize(1);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister registry) {
+        iconTen = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":sonicTen");
+        iconEleven = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":sonicEleven");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Icon getIconFromDamage(int meta) {
+        return meta == 0 ? iconTen : iconEleven;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void getSubItems(int id, CreativeTabs tab, List list) {
+        list.add(new ItemStack(id, 1, 0));
+        list.add(new ItemStack(id, 1, 1));
     }
 
     @Override
@@ -109,6 +145,8 @@ public class ItemSonic extends ItemMPBase implements IToolWrench {
     }
 
     @Override
-    public void wrenchUsed(EntityPlayer player, int x, int y, int z) {}
+    public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
+        player.swingItem();
+    }
 
 }
