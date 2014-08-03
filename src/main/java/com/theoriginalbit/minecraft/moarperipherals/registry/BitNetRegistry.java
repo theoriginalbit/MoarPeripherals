@@ -3,10 +3,14 @@ package com.theoriginalbit.minecraft.moarperipherals.registry;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.moarperipherals.api.IBitNetTower;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Iterator;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -30,10 +34,11 @@ import java.util.ArrayList;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public final class BitNetRegistry {
+public final class BitNetRegistry implements ITickHandler {
 
     private static final ArrayList<IBitNetTower> towers = Lists.newArrayList();
-    private static int nextId = 2048;
+    private static final ArrayList<DelayedMessage> messageQueue = Lists.newArrayList();
+    private static int nextId = 0;
 
     public static int registerTower(IBitNetTower tower) {
         if (!towers.contains(tower)) {
@@ -60,10 +65,59 @@ public final class BitNetRegistry {
                 final Vec3 towerLocation = tower.getWorldPosition();
                 final double distance = Math.sqrt(sendLocation.squareDistanceTo(towerLocation.xCoord, towerLocation.yCoord, towerLocation.zCoord));
                 if (distance > 0 && distance <= range) {
-                    tower.receive(payload, distance);
+                    messageQueue.add(new DelayedMessage(tower, payload, distance));
                 }
             }
         }
+    }
+
+    @Override
+    public void tickStart(EnumSet<TickType> type, Object... tickData) {}
+
+    @Override
+    public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+        Iterator<DelayedMessage> iter = messageQueue.iterator();
+        while (iter.hasNext()) {
+            DelayedMessage message = iter.next();
+            if (message.tick()) {
+                iter.remove();
+            }
+        }
+    }
+
+    @Override
+    public EnumSet<TickType> ticks() {
+        return EnumSet.of(TickType.SERVER);
+    }
+
+    @Override
+    public String getLabel() {
+        return "MoarPeripheral|BitNet";
+    }
+
+    private static final class DelayedMessage {
+
+        private final IBitNetTower receiver;
+        private final double distance;
+        private final Object payload;
+        private int sendDelay;
+
+        public DelayedMessage(IBitNetTower tower, Object message, double dist) {
+            receiver = tower;
+            payload = message;
+            distance = dist;
+            // calculate the cost to send this message
+            sendDelay = (int)(Math.ceil(distance / 100) * Settings.antennaMessageDelay);
+        }
+
+        public boolean tick() {
+            if (--sendDelay <= 0) {
+                receiver.receive(payload, distance);
+                return true;
+            }
+            return false;
+        }
+
     }
 
 }

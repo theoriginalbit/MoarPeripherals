@@ -22,6 +22,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -93,6 +95,10 @@ public class MoarPeripherals {
 
         if (Settings.shouldChunkLoad()) {
             ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
+        }
+
+        if (Settings.enableAntenna) {
+            TickRegistry.registerTickHandler(new BitNetRegistry(), Side.SERVER);
         }
 
         proxy.registerRenderInfo();
