@@ -6,7 +6,7 @@ import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.render.base.CustomItemRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -45,17 +45,26 @@ public class RendererItemSonic extends CustomItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         renderPass = 0;
         super.renderItem(type, stack, data);
-        if (stack.getItemDamage() == 0) {
-            GL11.glEnable(GL11.GL_BLEND);
-            renderPass = 1;
-            super.renderItem(type, stack, data);
-            GL11.glDisable(GL11.GL_BLEND);
-        }
+        GL11.glEnable(GL11.GL_BLEND);
+        renderPass = 1;
+        super.renderItem(type, stack, data);
+        renderPass = 2;
+        super.renderItem(type, stack, data);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     @Override
-    protected ResourceLocation getTexture(ItemStack stack) {
-        return stack.getItemDamage() == 0 ? (renderPass == 0 ? Constants.TEXTURES_MODEL.SONIC_10_0.getResourceLocation() : Constants.TEXTURES_MODEL.SONIC_10_1.getResourceLocation()) : Constants.TEXTURES_MODEL.SONIC_11.getResourceLocation();
+    protected Constants.TextureStore getTexture(ItemRenderType type, ItemStack stack) {
+        boolean ten = stack.getItemDamage() == 0;
+        if (renderPass == 0) {
+            return ten ? Constants.TEXTURES_MODEL.SONIC_10_0 : Constants.TEXTURES_MODEL.SONIC_11_0;
+        } else if (renderPass == 1) {
+            return ten ? Constants.TEXTURES_MODEL.SONIC_10_1 : Constants.TEXTURES_MODEL.SONIC_11_1;
+        }
+        if ((Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
+            return ten ? Constants.TEXTURES_MODEL.SONIC_10_TIPON : Constants.TEXTURES_MODEL.SONIC_11_TIPON;
+        }
+        return ten ? Constants.TEXTURES_MODEL.SONIC_10_TIPOFF : Constants.TEXTURES_MODEL.SONIC_11_TIPOFF;
     }
 
     @Override

@@ -26,14 +26,53 @@ import net.minecraft.entity.Entity;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
+
 public class ModelSonic11 extends ModelBase {
 
-    ModelRenderer emeraldMetalBase, handleEnd, grommet, emeraldBase, emeraldTip,
-            handle, grip, base, gripBodyRing1, gripBodyRing2, connectorRing,
-            arm1, arm2, arm3, arm4, extender1, extender2, extender3, extender4,
-            extenderTip1, extenderTip2, extenderTip3, extenderTip4, gripBody1, gripBody2,
-            handleBody1, handleBody2, baseBody1, baseBody2, handleGripRing1, handleGripRing2,
-            baseHandleRing1, baseHandleRing2, baseRing1, baseRing2, greenTube, body1, body2, body3, body4;
+    ModelRenderer emeraldMetalBase;
+    ModelRenderer handleEnd;
+    ModelRenderer grommet;
+    ModelRenderer emeraldBase;
+    ModelRenderer emeraldTip;
+    ModelRenderer handle;
+    ModelRenderer grip;
+    ModelRenderer base;
+    ModelRenderer gripBodyRing1;
+    ModelRenderer connectorRing;
+    ModelRenderer arm1;
+    ModelRenderer arm2;
+    ModelRenderer arm3;
+    ModelRenderer arm4;
+    ModelRenderer extender1;
+    ModelRenderer extender2;
+    ModelRenderer extender3;
+    ModelRenderer extender4;
+    ModelRenderer extenderTip1;
+    ModelRenderer extenderTip2;
+    ModelRenderer extenderTip3;
+    ModelRenderer extenderTip4;
+    ModelRenderer gripBody1;
+    ModelRenderer gripBody2;
+    ModelRenderer handleBody1;
+    ModelRenderer handleBody2;
+    ModelRenderer baseBody1;
+    ModelRenderer baseBody2;
+    ModelRenderer gripBodyRing2;
+    ModelRenderer handleGripRing1;
+    ModelRenderer handleGripRing2;
+    ModelRenderer baseHandleRing1;
+    ModelRenderer baseHandleRing2;
+    ModelRenderer baseRing1;
+    ModelRenderer baseRing2;
+    ModelRenderer greenTubeWire;
+    ModelRenderer body1;
+    ModelRenderer body2;
+    ModelRenderer body3;
+    ModelRenderer body4;
+    ModelRenderer greenTube1;
+    ModelRenderer greenTube2;
+    ModelRenderer greenTube3;
+    ModelRenderer greenTube4;
 
     public ModelSonic11() {
         textureWidth = 128;
@@ -249,12 +288,12 @@ public class ModelSonic11 extends ModelBase {
         baseRing2.setTextureSize(128, 64);
         baseRing2.mirror = true;
         setRotation(baseRing2, 0F, 0F, 0F);
-        greenTube = new ModelRenderer(this, 85, 0);
-        greenTube.addBox(0F, 0F, 0F, 3, 29, 3);
-        greenTube.setRotationPoint(-1.5F, -40F, -1.5F);
-        greenTube.setTextureSize(128, 64);
-        greenTube.mirror = true;
-        setRotation(greenTube, 0F, 0F, 0F);
+        greenTubeWire = new ModelRenderer(this, 92, 0);
+        greenTubeWire.addBox(0F, 0F, 0F, 1, 29, 1);
+        greenTubeWire.setRotationPoint(-0.5F, -40F, 0F);
+        greenTubeWire.setTextureSize(128, 64);
+        greenTubeWire.mirror = true;
+        setRotation(greenTubeWire, 0F, 0.7853982F, 0F);
         body1 = new ModelRenderer(this, 16, 0);
         body1.addBox(0F, 0F, 0F, 2, 19, 2);
         body1.setRotationPoint(-3F, -30F, 1F);
@@ -279,6 +318,30 @@ public class ModelSonic11 extends ModelBase {
         body4.setTextureSize(128, 64);
         body4.mirror = true;
         setRotation(body4, 0F, 0F, 0F);
+        greenTube1 = new ModelRenderer(this, 85, 0);
+        greenTube1.addBox(0F, 0F, 0F, 3, 29, 0);
+        greenTube1.setRotationPoint(-1.5F, -40F, 1.5F);
+        greenTube1.setTextureSize(128, 64);
+        greenTube1.mirror = true;
+        setRotation(greenTube1, 0F, 0F, 0F);
+        greenTube2 = new ModelRenderer(this, 85, 0);
+        greenTube2.addBox(0F, 0F, 0F, 3, 29, 0);
+        greenTube2.setRotationPoint(-1.5F, -40F, -1.5F);
+        greenTube2.setTextureSize(128, 64);
+        greenTube2.mirror = true;
+        setRotation(greenTube2, 0F, 0F, 0F);
+        greenTube3 = new ModelRenderer(this, 85, 0);
+        greenTube3.addBox(0F, 0F, 0F, 3, 29, 0);
+        greenTube3.setRotationPoint(-1.5F, -40F, -1.5F);
+        greenTube3.setTextureSize(128, 64);
+        greenTube3.mirror = true;
+        setRotation(greenTube3, 0F, -1.570796F, 0F);
+        greenTube4 = new ModelRenderer(this, 85, 0);
+        greenTube4.addBox(0F, 0F, 0F, 3, 29, 0);
+        greenTube4.setRotationPoint(1.5F, -40F, -1.5F);
+        greenTube4.setTextureSize(128, 64);
+        greenTube4.mirror = true;
+        setRotation(greenTube4, 0F, -1.570796F, 0F);
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -319,11 +382,15 @@ public class ModelSonic11 extends ModelBase {
         baseHandleRing2.render(f5);
         baseRing1.render(f5);
         baseRing2.render(f5);
-        greenTube.render(f5);
+        greenTubeWire.render(f5);
         body1.render(f5);
         body2.render(f5);
         body3.render(f5);
         body4.render(f5);
+        greenTube1.render(f5);
+        greenTube2.render(f5);
+        greenTube3.render(f5);
+        greenTube4.render(f5);
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {

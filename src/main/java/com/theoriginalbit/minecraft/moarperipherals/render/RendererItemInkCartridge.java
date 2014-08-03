@@ -41,14 +41,14 @@ public final class RendererItemInkCartridge extends CustomItemRenderer {
     }
 
     @Override
-    protected ResourceLocation getTexture(ItemStack stack) {
+    protected Constants.TextureStore getTexture(ItemRenderType type, ItemStack stack) {
         int inkColor = ItemInkCartridge.getInkColor(stack);
         switch (inkColor) {
-            case 0: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_C.getResourceLocation();
-            case 1: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_M.getResourceLocation();
-            case 2: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_Y.getResourceLocation();
-            case 3: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_K.getResourceLocation();
-            default: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_E.getResourceLocation();
+            case 0: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_C;
+            case 1: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_M;
+            case 2: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_Y;
+            case 3: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_K;
+            default: return Constants.TEXTURES_MODEL.INK_CARTRIDGE_E;
         }
     }
 

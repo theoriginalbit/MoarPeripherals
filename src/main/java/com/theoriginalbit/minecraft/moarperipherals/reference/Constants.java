@@ -82,7 +82,12 @@ public final class Constants {
         public static final TextureStore INK_CARTRIDGE_E = new TextureStore("textures/models/items/inkCartridge/InkCartridgeE");
         public static final TextureStore SONIC_10_0 = new TextureStore("textures/models/items/sonic/Sonic10_0");
         public static final TextureStore SONIC_10_1 = new TextureStore("textures/models/items/sonic/Sonic10_1");
-        public static final TextureStore SONIC_11 = new TextureStore("textures/models/items/sonic/Sonic11");
+        public static final TextureStore SONIC_10_TIPON = new TextureStore("textures/models/items/sonic/Sonic10_On");
+        public static final TextureStore SONIC_10_TIPOFF = new TextureStore("textures/models/items/sonic/Sonic10_Off");
+        public static final TextureStore SONIC_11_0 = new TextureStore("textures/models/items/sonic/Sonic11_0");
+        public static final TextureStore SONIC_11_1 = new TextureStore("textures/models/items/sonic/Sonic11_1");
+        public static final TextureStore SONIC_11_TIPON = new TextureStore("textures/models/items/sonic/Sonic11_On");
+        public static final TextureStore SONIC_11_TIPOFF = new TextureStore("textures/models/items/sonic/Sonic11_Off");
         public static final TextureStore ANTENNA = new TextureStore("textures/models/blocks/antenna/Antenna");
     }
 

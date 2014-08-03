@@ -1,10 +1,10 @@
 package com.theoriginalbit.minecraft.moarperipherals.render.base;
 
+import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
@@ -73,7 +73,7 @@ public abstract class CustomItemRenderer implements IItemRenderer {
     @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         GL11.glPushMatrix();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(getTexture(stack));
+        Minecraft.getMinecraft().getTextureManager().bindTexture(getTexture(type, stack).getResourceLocation());
 
         ModelBase model = selectModel(stack);
 
@@ -105,7 +105,7 @@ public abstract class CustomItemRenderer implements IItemRenderer {
         return modelItem;
     }
 
-    protected abstract ResourceLocation getTexture(ItemStack stack);
+    protected abstract Constants.TextureStore getTexture(ItemRenderType type, ItemStack stack);
 
     protected abstract void manipulateEntityRender(ItemStack stack);
 
