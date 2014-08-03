@@ -48,9 +48,9 @@ public class RendererItemSonic extends CustomItemRenderer {
         GL11.glEnable(GL11.GL_BLEND);
         renderPass = 1;
         super.renderItem(type, stack, data);
+        GL11.glDisable(GL11.GL_BLEND);
         renderPass = 2;
         super.renderItem(type, stack, data);
-        GL11.glDisable(GL11.GL_BLEND);
     }
 
     @Override
