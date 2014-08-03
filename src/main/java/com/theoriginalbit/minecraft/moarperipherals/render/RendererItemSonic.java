@@ -45,10 +45,12 @@ public class RendererItemSonic extends CustomItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         renderPass = 0;
         super.renderItem(type, stack, data);
-        GL11.glEnable(GL11.GL_BLEND);
-        renderPass = 1;
-        super.renderItem(type, stack, data);
-        GL11.glDisable(GL11.GL_BLEND);
+        if (stack.getItemDamage() == 0) {
+            GL11.glEnable(GL11.GL_BLEND);
+            renderPass = 1;
+            super.renderItem(type, stack, data);
+            GL11.glDisable(GL11.GL_BLEND);
+        }
     }
 
     @Override
@@ -86,12 +88,12 @@ public class RendererItemSonic extends CustomItemRenderer {
     }
     @Override
     protected void manipulateFirstPersonRender(ItemStack stack) {
-        float scale = 0.3f;
+        float scale = 0.25f;
         GL11.glScalef(scale, scale, scale);
-        GL11.glRotatef(140, 1, 0, 0);
-        GL11.glRotatef(-60, 0, 1, 0);
-        GL11.glRotatef(-20, 0, 0, 1);
-        GL11.glTranslatef(-2f, -0.5f, -3.8f);
+        GL11.glRotatef(180, 1, 0, 0);
+        GL11.glRotatef(-90, 0, 1, 0);
+        GL11.glRotatef(10, 0, 0, 1);
+        GL11.glTranslatef(-3f, -3f, 0f);
     }
 
 }
