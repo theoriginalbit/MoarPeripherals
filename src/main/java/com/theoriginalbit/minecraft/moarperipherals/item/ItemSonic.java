@@ -1,5 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.item;
 
+import buildcraft.api.tools.IToolWrench;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Constants;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import com.theoriginalbit.minecraft.moarperipherals.utils.BlockNotifyFlags;
@@ -13,7 +14,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class ItemSonic extends ItemMPBase {
+public class ItemSonic extends ItemMPBase implements IToolWrench {
 
     public ItemSonic() {
         super(Settings.itemIdSonic, "sonic");
@@ -108,5 +109,17 @@ public class ItemSonic extends ItemMPBase {
         Material material = Block.blocksList[blockId].blockMaterial;
         return material == Material.wood;
     }
+
+    /*
+     * BC wrench compatibility
+     */
+
+    @Override
+    public boolean canWrench(EntityPlayer player, int x, int y, int z) {
+        return true;
+    }
+
+    @Override
+    public void wrenchUsed(EntityPlayer player, int x, int y, int z) {}
 
 }
