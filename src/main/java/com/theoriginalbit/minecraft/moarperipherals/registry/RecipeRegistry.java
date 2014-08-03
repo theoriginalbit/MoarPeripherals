@@ -6,6 +6,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -52,7 +53,8 @@ public final class RecipeRegistry {
             GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockDictionary), "SBS", "BDB", "SCS", 'S', Block.stone, 'B', Item.book, 'D', Item.diamond, 'C', ComputerCraftInfo.cc_cable);
         }
         if (Settings.isSonicEnabled()) {
-            GameRegistry.addRecipe(new ItemStack(ItemRegistry.itemSonic), "DIG", "IRI", "GIO", 'D', Item.diamond, 'I', Item.ingotIron, 'G', new ItemStack(Item.dyePowder, 1, 8), 'R', Item.redstone, 'O', Block.obsidian);
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemRegistry.itemSonic, 1, 0), "DIG", "IRI", "GIO", 'D', Item.diamond, 'I', Item.ingotIron, 'G', "dyeGray", 'R', Item.redstone, 'O', Block.obsidian));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemRegistry.itemSonic, 1, 1), "EIB", "IRI", "BIO", 'E', Item.emerald, 'I', Item.ingotIron, 'B', "dyeBrown", 'R', Item.redstone, 'O', Block.obsidian));
         }
         if (Settings.enableAntenna) {
             GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockAntenna), "ICI", "ICI", "ICI", 'I', Item.ingotIron, 'C', ComputerCraftInfo.cc_cable);
