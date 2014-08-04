@@ -5,6 +5,10 @@ import com.google.common.collect.Maps;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IChatListener;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.ICommandListener;
 import com.theoriginalbit.minecraft.moarperipherals.interfaces.listener.IDeathListener;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Mods;
+import com.theoriginalbit.minecraft.moarperipherals.utils.LogUtils;
+import cpw.mods.fml.common.Loader;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -19,25 +23,47 @@ import java.util.Map.Entry;
  * http://www.computercraft.info/forums2/index.php?/topic/19357-
  * Official Wiki:
  * http://wiki.theoriginalbit.com/moarperipherals/
- *
+ * <p/>
  * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
- *
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 public final class ChatHandler {
 
     public static final ChatHandler instance = new ChatHandler();
+
+    public static void init() {
+        if (Loader.isModLoaded(Mods.OPENPERIPHERALADDON)) {
+            LogUtils.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command so it is ignored by ChatBoxes.");
+            try {
+                ChatHandler.instance.addCommandListener(new ICommandListener() {
+                    private static final String OPENPCOMMAND = "$$";
+
+                    @Override
+                    public String getToken() {
+                        return OPENPCOMMAND;
+                    }
+
+                    @Override
+                    public void onServerChatEvent(String message, EntityPlayer player) {}
+                });
+            } catch (Exception e) {
+                LogUtils.debug("Failed to register OpenPeripheral-Addon ChatBox command listener");
+                e.printStackTrace();
+            }
+        }
+    }
 
     private final ArrayList<IChatListener> chatListeners = Lists.newArrayList();
     private final ArrayList<IDeathListener> deathListeners = Lists.newArrayList();
