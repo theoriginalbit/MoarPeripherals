@@ -94,10 +94,12 @@ public class MoarPeripherals {
         FluidRegistry.oreRegistration();
 
         if (Settings.shouldChunkLoad()) {
+            LogUtils.debug("Registering chunk loading callback");
             ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
         }
 
         if (Settings.enableAntenna) {
+            LogUtils.debug("Registering BitNet tick handler");
             TickRegistry.registerTickHandler(new BitNetRegistry(), Side.SERVER);
         }
 

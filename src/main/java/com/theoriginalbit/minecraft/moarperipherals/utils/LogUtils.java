@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.moarperipherals.utils;
 
 import com.theoriginalbit.minecraft.moarperipherals.reference.ModInfo;
+import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
 import cpw.mods.fml.common.FMLLog;
 
 import java.util.logging.Level;
@@ -40,6 +41,12 @@ public final class LogUtils {
         logger.info("Copyright (c) Joshua Asbury (@theoriginalbit), 2014");
         logger.info("http://wiki.theoriginalbit.com/moarperipherals/");
         logger.info("");
+    }
+
+    public static void debug(String message, Object... args) {
+        if (Settings.debug) {
+            info(String.format(message, args));
+        }
     }
 
     public static void info(String message) {

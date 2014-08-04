@@ -162,6 +162,8 @@ public final class ConfigurationHandler {
         // Security settings
         Settings.securityOpBreak = getBoolean(SECURITY, "canOpBreakSecurity", "Are OPs able to break blocks that they don't own (when applicable); It is suggested you have this set to false until needed e.g. griefing ");
 
+        Settings.debug = getBoolean("debug", "debugMessages", false, "Print debugging messages to the console. WARNING: Spammy, only enable this if theoriginalbit has asked you to");
+
         if (config.hasChanged()) {
             config.save();
         }

@@ -111,4 +111,6 @@ public final class Settings {
          */
         return antennaKeepChunkLoaded;
     }
+
+    public static boolean debug;
 }
