@@ -39,11 +39,11 @@ public class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
 
     @Override
     public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
-        LogUtils.info("Previous chunk loading tickets exist, loading...");
+        LogUtils.debug("Previous chunk loading tickets exist, loading...");
         for (ForgeChunkManager.Ticket ticket : tickets) {
             try {
                 if (!ticketLoad(ticket, world)) {
-                    LogUtils.warning("Invalid chunk ticket. Releasing.");
+                    LogUtils.warning("Served an invalid chunk loading ticket. Releasing.");
                     TicketManager.releaseTicket(ticket);
                 }
             } catch (Exception e) {
@@ -61,12 +61,12 @@ public class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
         TileEntity tile = world.getBlockTileEntity(x, y, z);
 
         if (tile == null) {
-            LogUtils.warning(String.format("No TileEntity at %d %d %d", x, y, z));
+            LogUtils.debug(String.format("No TileEntity at %d %d %d", x, y, z));
             return false;
         }
 
         if (!(tile instanceof IChunkLoader)) {
-            LogUtils.warning(String.format("Ticket exists for TileEntity at %d %d %d that is not one of mine", x, y, z));
+            LogUtils.warning(String.format("Served ticket for TileEntity at %d %d %d that is not one of mine", x, y, z));
             return false;
         }
 

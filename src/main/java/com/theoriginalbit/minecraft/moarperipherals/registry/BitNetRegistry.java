@@ -3,6 +3,7 @@ package com.theoriginalbit.minecraft.moarperipherals.registry;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.moarperipherals.api.IBitNetTower;
 import com.theoriginalbit.minecraft.moarperipherals.reference.Settings;
+import com.theoriginalbit.minecraft.moarperipherals.utils.LogUtils;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import net.minecraft.util.Vec3;
@@ -41,6 +42,7 @@ public final class BitNetRegistry implements ITickHandler {
     private static int nextId = 0;
 
     public static int registerTower(IBitNetTower tower) {
+        LogUtils.debug("BitNet registerTower invoked, already contains tower: " + towers.contains(tower));
         if (!towers.contains(tower)) {
             towers.add(tower);
             return nextId++;
@@ -49,6 +51,7 @@ public final class BitNetRegistry implements ITickHandler {
     }
 
     public static void deregisterTower(IBitNetTower tower) {
+        LogUtils.debug("BitNet registerTower invoked, tower registered: " + towers.contains(tower));
         if (towers.contains(tower)) {
             towers.remove(tower);
         }
@@ -58,7 +61,6 @@ public final class BitNetRegistry implements ITickHandler {
         final Vec3 sendLocation = sender.getWorldPosition();
         final World sendWorld = sender.getWorld();
         final int range = (sendWorld.isRaining() && sendWorld.isThundering()) ? Settings.antennaRangeStorm : Settings.antennaRange;
-
 
         for (IBitNetTower tower : towers) {
             if (tower.getWorld() == sendWorld) {
@@ -108,10 +110,12 @@ public final class BitNetRegistry implements ITickHandler {
             distance = dist;
             // calculate the cost to send this message
             sendDelay = (int)(Math.ceil(distance / 100) * Settings.antennaMessageDelay);
+            LogUtils.debug("Created delayed message with contents %s and a tick of %d ", payload.toString(), sendDelay);
         }
 
         public boolean tick() {
             if (--sendDelay <= 0) {
+                LogUtils.debug("Ticks expired sending message");
                 receiver.receive(payload, distance);
                 return true;
             }
