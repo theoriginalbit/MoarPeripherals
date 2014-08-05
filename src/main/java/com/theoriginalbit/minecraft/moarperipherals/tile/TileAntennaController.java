@@ -1,9 +1,11 @@
 package com.theoriginalbit.minecraft.moarperipherals.tile;
 
+import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.ComputerList;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.minecraft.moarperipherals.MoarPeripherals;
+import com.theoriginalbit.minecraft.moarperipherals.api.BitNetMessage;
 import com.theoriginalbit.minecraft.moarperipherals.api.IBitNetTower;
 import com.theoriginalbit.minecraft.moarperipherals.block.BlockAntenna;
 import com.theoriginalbit.minecraft.moarperipherals.chunk.ChunkLoadingCallback;
@@ -30,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -57,6 +60,7 @@ import java.util.ArrayList;
 public class TileAntennaController extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile, IBitNetTower, IChunkLoader {
 
     private static final String EVENT_BITNET = "bitnet_message";
+    private final ArrayList<UUID> receivedMessages = Lists.newArrayList();
     private ForgeChunkManager.Ticket chunkTicket;
     private boolean complete = false;
     private boolean registered = false;
@@ -138,7 +142,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     @SuppressWarnings("unused")
     public Object[] transmit(Object payload) {
         if (isTowerComplete()) {
-            BitNetRegistry.transmit(this, payload);
+            BitNetRegistry.transmit(this, new BitNetMessage(payload));
             return new Object[]{true};
         }
         return new Object[]{false, "BitNet Communications Tower incomplete."};
@@ -189,12 +193,22 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
      * Invoked when this tower is in range of a BitNet message
      */
     @Override
-    public void receive(Object payload, Double distance) {
-        // message received over bitnet
-        if (computers != null) {
-            for (IComputerAccess comp : computers) {
-                comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), payload, distance});
+    public void receive(BitNetMessage message) {
+        if (!receivedMessages.contains(message.getMessageId())) {
+            // there is a computer connected, let it handle the message
+            if (computers != null && computers.size() > 0) {
+                LogUtils.debug("BitNet Comms Tower at %d %d %d has computer(s) connected, queueing BitNet message for them to handle...", xCoord, yCoord, zCoord);
+                for (IComputerAccess comp : computers) {
+                    comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), message.getPayload(), message.getDistanceTravelled()});
+                }
+            // there was no connected computer, this is now a repeating tower
+            } else {
+                LogUtils.debug("BitNet Comms Tower at %d %d %d has no computer(s) connected, acting as a repeating tower...", xCoord, yCoord, zCoord);
+                BitNetRegistry.transmit(this, message);
             }
+            receivedMessages.add(message.getMessageId());
+        } else {
+            LogUtils.debug("BitNet Communications Tower at %d %d %d received a previously received message...", xCoord, yCoord, zCoord);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.theoriginalbit.minecraft.moarperipherals.api;
 
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
+import java.util.UUID;
 
 /**
  * A Minecraft mod that adds more peripherals into the ComputerCraft mod.
@@ -25,12 +24,42 @@ import net.minecraft.world.World;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-public interface IBitNetTower {
+public class BitNetMessage {
 
-    public World getWorld();
+    private final UUID messageId;
+    private final Object payload;
+    private double distanceTravelled = 0;
 
-    public Vec3 getWorldPosition();
+    public BitNetMessage(Object message) {
+        messageId = UUID.randomUUID();
+        payload = message;
+    }
 
-    public void receive(BitNetMessage payload);
+    public BitNetMessage(BitNetMessage other) {
+        messageId = other.getMessageId();
+        payload = other.getPayload();
+        distanceTravelled = other.getDistanceTravelled();
+    }
+
+    public UUID getMessageId() {
+        return messageId;
+    }
+
+    public Object getPayload() {
+        return payload;
+    }
+
+    public double getDistanceTravelled() {
+        return distanceTravelled;
+    }
+
+    public BitNetMessage addDistance(double dist) {
+        distanceTravelled += dist;
+        return this;
+    }
+
+    public String toString() {
+        return String.format("{type=BitNet Message, id=#%s payload=%s}", messageId, payload);
+    }
 
 }

@@ -22,7 +22,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-@API(apiVersion = "1.0", owner = "MoarPeripherals", provides = "MoarPeripheralsAPI")
+@API(apiVersion = "1.01", owner = "MoarPeripherals", provides = "MoarPeripheralsAPI")
 package com.theoriginalbit.minecraft.moarperipherals.api;
 
 import cpw.mods.fml.common.API;
