@@ -1,0 +1,19 @@
+[
+    {
+        "modid": "MoarPeripherals",
+        "name": "MoarPeripherals",
+        "description": "Adds a bunch of useful peripherals to ComputerCraft",
+        "version": "${version}",
+        "mcversion" : "${mcversion}",
+        "url": "http://www.computercraft.info/forums2/index.php?/topic/19357-",
+        "updateUrl": "",
+        "authors": [
+            "theoriginalbit"
+        ],
+        "credits": "Created by Joshua Asbury (@theoriginalbit)",
+        "logoFile": "pack.png",
+        "dependencies": [
+            "ComputerCraft"
+        ]
+    }
+]
