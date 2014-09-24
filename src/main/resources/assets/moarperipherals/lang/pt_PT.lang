@@ -1,0 +1,40 @@
+itemGroup.tabMoarPeripherals=MoarPeripherals
+
+tile.moarperipherals:playerdetector.name=Detector de Jogadores
+tile.moarperipherals:chatbox.name=Caixa Falante
+tile.moarperipherals:ironnote.name=Note block de Ferro
+tile.moarperipherals:keyboard.name=Teclado
+tile.moarperipherals:printer.name=Impressora avançada
+tile.moarperipherals:itemDictionary.name=Dicionário de Itens.
+tile.moarperipherals:antenna.name=Torre de Comunicação BitNet (Mastro)
+tile.moarperipherals:antennaCell.name=Torre de comunicação BitNet (Celula)
+tile.moarperipherals:antennaModem.name=Modem da Torre de comunicação BitNet Interface)
+tile.moarperipherals:antennaController.name=Torre de Comunicação BitNet(Controlador)
+
+item.moarperipherals:inkCartridge.name=Cartucho para Tinta
+item.moarperipherals:keyboardPart.name=Parte de Teclado
+item.moarperipherals:sonic.name=Sonic Screwdriver
+
+upgrade.moarperipherals:adjective.chatbox=Falante
+upgrade.moarperipherals:adjective.ironnote=Barulhento
+upgrade.moarperipherals:adjective.dictionary=Informado
+
+moarperipherals:chat.paired=Ligado ao computador em %d %d %d
+moarperipherals:chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador
+
+# this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
+moarperipherals:chat.sonic.wood=It doesn't do wood!
+
+moarperipherals:gui.keyboard.exit=Pressione ESC para sair do teclado
+
+tooltip.moarperipherals:generic.information=Carregue em Shift para mais informação
+tooltip.moarperipherals:pairable.paired=Alvo
+tooltip.moarperipherals:pairable.notPaired=Não Ligado
+
+tooltip.moarperipherals:inkCartridge.contents=Cor da tinta
+tooltip.moarperipherals:inkCartridge.level=Nivel da tinta
+tooltip.moarperipherals:printer.ink.cyan=Ciano
+tooltip.moarperipherals:printer.ink.magenta=Magenta
+tooltip.moarperipherals:printer.ink.yellow=Amarelo
+tooltip.moarperipherals:printer.ink.black=Preto
+tooltip.moarperipherals:printer.ink.empty=Vazio

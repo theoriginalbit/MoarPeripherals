@@ -1,0 +1,40 @@
+itemGroup.tabMoarPeripherals=MoarPeripherals
+
+tile.moarperipherals:playerdetector.name=Player Detector
+tile.moarperipherals:chatbox.name=ChatBox
+tile.moarperipherals:ironnote.name=Iron Note Block
+tile.moarperipherals:keyboard.name=Keyboard
+tile.moarperipherals:printer.name=Advanced Printer
+tile.moarperipherals:itemDictionary.name=Item Dictionary
+tile.moarperipherals:antenna.name=BitNet Communication Tower (Pole)
+tile.moarperipherals:antennaCell.name=BitNet Communication Tower (Cell)
+tile.moarperipherals:antennaModem.name=BitNet Communication Tower (Modem Interface)
+tile.moarperipherals:antennaController.name=BitNet Communication Tower (Controller)
+
+item.moarperipherals:inkCartridge.name=Ink Cartridge
+item.moarperipherals:keyboardPart.name=Keyboard Part
+item.moarperipherals:sonic.name=Sonic Screwdriver
+
+upgrade.moarperipherals:adjective.chatbox=Chatty
+upgrade.moarperipherals:adjective.ironnote=Noisy
+upgrade.moarperipherals:adjective.dictionary=Informed
+
+moarperipherals:chat.paired=Paired with Computer at %d %d %d
+moarperipherals:chat.notPaired=Device not paired. Right-click a computer to pair.
+
+# believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
+moarperipherals:chat.sonic.wood=It doesn't do wood!
+
+moarperipherals:gui.keyboard.exit=Press ESC to exit the Keyboard
+
+tooltip.moarperipherals:generic.information=Hold SHIFT for information
+tooltip.moarperipherals:pairable.paired=Target
+tooltip.moarperipherals:pairable.notPaired=Not Paired
+
+tooltip.moarperipherals:inkCartridge.contents=Ink Colour
+tooltip.moarperipherals:inkCartridge.level=Ink Level
+tooltip.moarperipherals:printer.ink.cyan=Cyan
+tooltip.moarperipherals:printer.ink.magenta=Magenta
+tooltip.moarperipherals:printer.ink.yellow=Yellow
+tooltip.moarperipherals:printer.ink.black=Black
+tooltip.moarperipherals:printer.ink.empty=Empty
