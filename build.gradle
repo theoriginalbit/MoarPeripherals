@@ -22,7 +22,7 @@ group = "com.theoriginalbit.minecraft"
 archivesBaseName = "MoarPeripherals"
 
 minecraft {
-    version = "1.7.10-10.13.1.1217"
+    version = "1.7.10-10.13.1.1219"
     assetDir = "eclipse/assets"
 
     // replacing
