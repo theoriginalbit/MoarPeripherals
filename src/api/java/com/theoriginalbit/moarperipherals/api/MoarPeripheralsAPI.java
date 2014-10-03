@@ -21,6 +21,16 @@ public class MoarPeripheralsAPI {
     private static Method bitNetDeregisterTower;
     private static Method bitNetTransmit;
 
+    /**
+     * Registers a {@link net.minecraft.tileentity.TileEntity}, which implements the
+     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower}, interface
+     * with the BitNet network so that it may receive BitNet messages.
+     *
+     * @param tower the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower} to register
+     *              with the BitNet network
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetMessage
+     */
     public static void registerBitNetTower(IBitNetTower tower) {
         findBitNet();
         try {
@@ -30,6 +40,15 @@ public class MoarPeripheralsAPI {
         }
     }
 
+    /**
+     * De-registers a {@link net.minecraft.tileentity.TileEntity}, which implements the
+     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower}, interface
+     * with the BitNet network so that it no longer receives BitNet messages.
+     *
+     * @param tower the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower} to register
+     *              with the BitNet network
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower
+     */
     public static void deregisterBitNetTower(IBitNetTower tower) {
         findBitNet();
         try {
@@ -39,6 +58,12 @@ public class MoarPeripheralsAPI {
         }
     }
 
+    /**
+     * Sends a BitNet message across the network
+     *
+     * @param tower   the sending tower
+     * @param payload the object to send
+     */
     public static void sendBitNetMessage(IBitNetTower tower, Object payload) {
         findBitNet();
         try {
@@ -51,7 +76,7 @@ public class MoarPeripheralsAPI {
     private static void findBitNet() {
         if (!searched) {
             try {
-                bitNetRegistry = Class.forName("com.theoriginalbit.minecraft.moarperipherals.registry.BitNetRegistry");
+                bitNetRegistry = Class.forName("com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry");
                 bitNetRegisterTower = findBitNetMethod("registerTower", new Class[]{IBitNetTower.class});
                 bitNetDeregisterTower = findBitNetMethod("deregisterTower", new Class[]{IBitNetTower.class});
                 bitNetTransmit = findBitNetMethod("transmit", new Class[]{IBitNetTower.class, Object.class});

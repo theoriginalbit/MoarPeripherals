@@ -10,9 +10,10 @@ package com.theoriginalbit.moarperipherals.common.item;
 
 import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.ImmutableSet;
-import com.theoriginalbit.moarperipherals.reference.Constants;
-import com.theoriginalbit.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.utils.BlockNotifyFlags;
+import com.theoriginalbit.moarperipherals.common.item.abstracts.ItemMoarP;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
+import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.*;
@@ -30,7 +31,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
-public class ItemSonic extends ItemMPBase implements IToolWrench {
+public class ItemSonic extends ItemMoarP implements IToolWrench {
 
     private static final ImmutableSet<Class<? extends Block>> blacklist = ImmutableSet.of(BlockLever.class, BlockButton.class, BlockBed.class, BlockTorch.class);
     private IIcon iconTen;

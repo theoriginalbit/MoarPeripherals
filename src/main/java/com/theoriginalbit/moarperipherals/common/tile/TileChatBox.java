@@ -13,13 +13,14 @@ import com.google.common.collect.Lists;
 import com.theoriginalbit.framework.peripheral.annotation.ComputerList;
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.handler.ChatHandler;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
 import com.theoriginalbit.moarperipherals.api.listener.ICommandListener;
 import com.theoriginalbit.moarperipherals.api.listener.IDeathListener;
-import com.theoriginalbit.moarperipherals.reference.Settings;
-import com.theoriginalbit.moarperipherals.utils.ChatUtils;
+import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.utils.ChatUtils;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @LuaPeripheral("chatbox")
-public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
+public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
 
     private static final String EVENT_CHAT = "chat_message";
     private static final String EVENT_DEATH = "death_message";
@@ -53,7 +54,7 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
 
     @LuaFunction
     public boolean say(String message) throws Exception {
-        Preconditions.checkArgument(count++ <= Settings.chatSayRate, "too many messages (max " + Settings.chatSayRate + " per second)");
+        Preconditions.checkArgument(count++ <= ConfigHandler.chatSayRate, "too many messages (max " + ConfigHandler.chatSayRate + " per second)");
 
         String[] usernames = getPlayerUsernames();
         if (usernames.length == 0) {
@@ -66,11 +67,11 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
 
     @LuaFunction
     public boolean tell(String username, String message) throws Exception {
-        Preconditions.checkArgument(count++ <= Settings.chatSayRate, "too many messages (max " + Settings.chatSayRate + " per second)");
+        Preconditions.checkArgument(count++ <= ConfigHandler.chatSayRate, "too many messages (max " + ConfigHandler.chatSayRate + " per second)");
 
         ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
 
-        final int range = Settings.chatRangeTell;
+        final int range = ConfigHandler.chatRangeTell;
         if (range == 0 || (range > 0 && !entityInRange(scm.func_152612_a(username), range))) {
             return false;
         }
@@ -121,7 +122,7 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
 
     @Override
     public void onServerChatEvent(ServerChatEvent event) {
-        if (Settings.chatRangeRead < 0 || entityInRange(event.player, Settings.chatRangeRead)) {
+        if (ConfigHandler.chatRangeRead < 0 || entityInRange(event.player, ConfigHandler.chatRangeRead)) {
             computerQueueEvent(EVENT_CHAT, event.player.getDisplayName(), event.message);
         }
     }
@@ -139,7 +140,7 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
                     killer = ent.getCommandSenderName();
                 }
             }
-            if (Settings.chatRangeRead < 0 || entityInRange(event.entity, Settings.chatRangeRead)) {
+            if (ConfigHandler.chatRangeRead < 0 || entityInRange(event.entity, ConfigHandler.chatRangeRead)) {
                 computerQueueEvent(EVENT_DEATH, event.entity.getCommandSenderName(), killer, source.getDamageType());
             }
         }
@@ -154,7 +155,7 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
 
     @Override
     public void onServerChatEvent(String message, EntityPlayer player) {
-        if (Settings.chatRangeRead < 0 || entityInRange(player, Settings.chatRangeRead)) {
+        if (ConfigHandler.chatRangeRead < 0 || entityInRange(player, ConfigHandler.chatRangeRead)) {
             computerQueueEvent(EVENT_COMMAND, player.getDisplayName(), message);
         }
     }
@@ -178,7 +179,7 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
         ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
         String[] playerNames = scm.getAllUsernames();
 
-        final int range = Settings.chatRangeSay;
+        final int range = ConfigHandler.chatRangeSay;
         if (range == 0) {
             return new String[0];
         } else if (range > 0) {
@@ -195,7 +196,7 @@ public class TileChatBox extends TileMPBase implements IBreakAwareTile, IChatLis
     }
 
     private String buildMessage(String msg, boolean pm) {
-        return "<ChatBox" + (Settings.displayChatBoxCoords ? String.format(" (%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "> " + (pm ? "[PM] " : "") + msg;
+        return "<ChatBox" + (ConfigHandler.displayChatBoxCoords ? String.format(" (%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "> " + (pm ? "[PM] " : "") + msg;
     }
 
 }

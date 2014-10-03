@@ -10,13 +10,14 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.dictionary.ItemSearch;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
 @LuaPeripheral("item_dictionary")
-public class TileDictionary extends TileMPBase {
+public class TileDictionary extends TileMoarP {
 
     @LuaFunction
     public ArrayList<ItemStack> search(String term) throws Exception {

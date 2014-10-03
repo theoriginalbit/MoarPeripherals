@@ -8,7 +8,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-import com.theoriginalbit.moarperipherals.common.block.base.BlockMoarP;
+import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockMoarP;
 import com.theoriginalbit.moarperipherals.common.tile.TileChatBox;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;

@@ -11,6 +11,7 @@ package com.theoriginalbit.moarperipherals.common.tile;
 import com.theoriginalbit.framework.peripheral.annotation.ComputerList;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
+import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.lang3.ArrayUtils;
@@ -18,7 +19,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 
 @LuaPeripheral("player_detector")
-public class TilePlayerDetector extends TileMPBase implements IActivateAwareTile {
+public class TilePlayerDetector extends TileMoarP implements IActivateAwareTile {
 
     private static final String EVENT_PLAYER = "player";
 

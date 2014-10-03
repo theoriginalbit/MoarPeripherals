@@ -11,22 +11,47 @@ package com.theoriginalbit.moarperipherals.common.registry;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower;
-import com.theoriginalbit.moarperipherals.reference.Settings;
-import com.theoriginalbit.moarperipherals.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public final class BitNetRegistry implements ITickHandler {
+public final class BitNetRegistry {
 
     private static final ArrayList<IBitNetTower> towers = Lists.newArrayList();
     private static final ConcurrentLinkedQueue<DelayedMessage> messageQueue = new ConcurrentLinkedQueue<DelayedMessage>();
     private static int nextId = 0;
 
+    @SubscribeEvent
+    public void onServerTick(ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            final Iterator<DelayedMessage> it = messageQueue.iterator();
+            while (it.hasNext()) {
+                DelayedMessage message = it.next();
+                if (message.tick()) {
+                    it.remove();
+                }
+            }
+        }
+    }
+
+    /**
+     * Registers a {@link net.minecraft.tileentity.TileEntity}, which implements the
+     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower}, interface
+     * with the BitNet network so that it may receive BitNet messages.
+     *
+     * @param tower the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower} to register
+     *              with the BitNet network
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetMessage
+     */
     public static int registerTower(IBitNetTower tower) {
         LogUtils.debug("BitNet registerTower invoked, already contains tower: " + towers.contains(tower));
         if (!towers.contains(tower)) {
@@ -36,6 +61,15 @@ public final class BitNetRegistry implements ITickHandler {
         return -1;
     }
 
+    /**
+     * De-registers a {@link net.minecraft.tileentity.TileEntity}, which implements the
+     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower}, interface
+     * with the BitNet network so that it no longer receives BitNet messages.
+     *
+     * @param tower the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower} to register
+     *              with the BitNet network
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower
+     */
     public static void deregisterTower(IBitNetTower tower) {
         LogUtils.debug("BitNet deregisterTower invoked, tower registered: " + towers.contains(tower));
         if (towers.contains(tower)) {
@@ -43,10 +77,16 @@ public final class BitNetRegistry implements ITickHandler {
         }
     }
 
+    /**
+     * Sends a {@link com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage} across the network
+     *
+     * @param sender  the sending tower
+     * @param payload the object to send
+     */
     public static void transmit(IBitNetTower sender, BitNetMessage payload) {
         final Vec3 sendLocation = sender.getWorldPosition();
         final World sendWorld = sender.getWorld();
-        final int range = (sendWorld.isRaining() && sendWorld.isThundering()) ? Settings.antennaRangeStorm : Settings.antennaRange;
+        final int range = (sendWorld.isRaining() && sendWorld.isThundering()) ? ConfigHandler.antennaRangeStorm : ConfigHandler.antennaRange;
 
         for (IBitNetTower tower : towers) {
             if (tower.getWorld() == sendWorld) {
@@ -64,30 +104,12 @@ public final class BitNetRegistry implements ITickHandler {
         }
     }
 
-    @Override
-    public void tickStart(EnumSet<TickType> type, Object... tickData) {}
-
-    @Override
-    public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-        Iterator<DelayedMessage> iter = messageQueue.iterator();
-        while (iter.hasNext()) {
-            DelayedMessage message = iter.next();
-            if (message.tick()) {
-                iter.remove();
-            }
-        }
-    }
-
-    @Override
-    public EnumSet<TickType> ticks() {
-        return EnumSet.of(TickType.SERVER);
-    }
-
-    @Override
-    public String getLabel() {
-        return "MoarPeripheral|BitNet";
-    }
-
+    /**
+     * A container class for a {@link com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage}, tracking how
+     * many ticks remain before the message payload should be delivered to the receiving tower
+     *
+     * @author theoriginalbit
+     */
     private static final class DelayedMessage {
 
         private final IBitNetTower receiver;
@@ -98,7 +120,7 @@ public final class BitNetRegistry implements ITickHandler {
             receiver = tower;
             payload = message;
             // calculate the cost to send this message
-            sendDelay = (int) (Math.ceil(distance / 100) * Settings.antennaMessageDelay);
+            sendDelay = (int) (Math.ceil(distance / 100) * ConfigHandler.antennaMessageDelay);
             LogUtils.debug(String.format("Created %02d tick delayed message, payload=%s", sendDelay, payload.toString()));
         }
 

@@ -8,13 +8,31 @@
  */
 package com.theoriginalbit.moarperipherals.common;
 
+import com.theoriginalbit.moarperipherals.MoarPeripherals;
+import com.theoriginalbit.moarperipherals.client.gui.GuiHandler;
+import com.theoriginalbit.moarperipherals.common.handler.ChatHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class ProxyCommon {
+
+    public void preInit() {
+        MinecraftForge.EVENT_BUS.register(ChatHandler.instance);
+        NetworkRegistry.INSTANCE.registerGuiHandler(MoarPeripherals.instance, new GuiHandler());
+    }
+
+    public void init() {
+
+    }
+
+    public void postInit() {
+
+    }
 
     public World getClientWorld(int dimId) {
         return MinecraftServer.getServer().worldServerForDimension(dimId);

@@ -8,7 +8,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-import com.theoriginalbit.moarperipherals.reference.ModInfo;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;

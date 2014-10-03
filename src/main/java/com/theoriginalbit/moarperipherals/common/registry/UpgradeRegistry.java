@@ -8,7 +8,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.registry;
 
-import com.theoriginalbit.moarperipherals.reference.Settings;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeChatBox;
 import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeDictionary;
 import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeIronNote;
@@ -17,13 +17,15 @@ import dan200.computercraft.api.ComputerCraftAPI;
 public final class UpgradeRegistry {
 
     public static void init() {
-        if (Settings.enableChatBox) {
+        if (ConfigHandler.enableChatBox) {
             ComputerCraftAPI.registerTurtleUpgrade(new UpgradeChatBox());
         }
-        if (Settings.enableIronNote) {
+
+        if (ConfigHandler.enableIronNote) {
             ComputerCraftAPI.registerTurtleUpgrade(new UpgradeIronNote());
         }
-        if (Settings.enableDictionary) {
+
+        if (ConfigHandler.enableDictionary) {
             ComputerCraftAPI.registerTurtleUpgrade(new UpgradeDictionary());
         }
     }

@@ -9,9 +9,9 @@
 package com.theoriginalbit.moarperipherals.common.upgrades;
 
 import com.theoriginalbit.framework.peripheral.wrapper.PeripheralWrapper;
-import com.theoriginalbit.moarperipherals.reference.Constants;
-import com.theoriginalbit.moarperipherals.reference.Settings;
-import com.theoriginalbit.moarperipherals.common.registry.BlockRegistry;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.tile.TileDictionary;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
@@ -22,7 +22,7 @@ public class UpgradeDictionary implements ITurtleUpgrade {
 
     @Override
     public int getUpgradeID() {
-        return Settings.upgradeIdDictionary;
+        return ConfigHandler.upgradeIdDictionary;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class UpgradeDictionary implements ITurtleUpgrade {
 
     @Override
     public ItemStack getCraftingItem() {
-        return new ItemStack(BlockRegistry.blockDictionary);
+        return new ItemStack(ModBlocks.blockDictionary);
     }
 
     @Override
@@ -52,10 +52,11 @@ public class UpgradeDictionary implements ITurtleUpgrade {
 
     @Override
     public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-        return BlockRegistry.blockDictionary.getIcon(0, 0);
+        return ModBlocks.blockDictionary.getIcon(0, 0);
     }
 
     @Override
-    public void update(ITurtleAccess turtle, TurtleSide side) {}
+    public void update(ITurtleAccess turtle, TurtleSide side) {
+    }
 
 }

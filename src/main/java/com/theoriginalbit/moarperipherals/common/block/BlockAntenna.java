@@ -8,9 +8,9 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-import com.theoriginalbit.moarperipherals.common.block.base.BlockMoarP;
-import com.theoriginalbit.moarperipherals.reference.Constants;
-import com.theoriginalbit.moarperipherals.reference.ModInfo;
+import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockMoarP;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.TileAntennaController;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

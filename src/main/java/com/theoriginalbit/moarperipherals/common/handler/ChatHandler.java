@@ -13,8 +13,8 @@ import com.google.common.collect.Maps;
 import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
 import com.theoriginalbit.moarperipherals.api.listener.ICommandListener;
 import com.theoriginalbit.moarperipherals.api.listener.IDeathListener;
-import com.theoriginalbit.moarperipherals.reference.Mods;
-import com.theoriginalbit.moarperipherals.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.reference.Mods;
+import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +31,7 @@ public final class ChatHandler {
 
     public static void init() {
         if (Loader.isModLoaded(Mods.OPENPERIPHERALADDON)) {
-            LogUtils.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command so it is ignored by ChatBoxes.");
+            LogUtils.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command as a ChatBox command so it is ignored by ChatBoxes.");
             try {
                 ChatHandler.instance.addCommandListener(new ICommandListener() {
                     private static final String OPENPCOMMAND = "$$";
@@ -42,7 +42,8 @@ public final class ChatHandler {
                     }
 
                     @Override
-                    public void onServerChatEvent(String message, EntityPlayer player) {}
+                    public void onServerChatEvent(String message, EntityPlayer player) {
+                    }
                 });
             } catch (Exception e) {
                 LogUtils.debug("Failed to register OpenPeripheral-Addon ChatBox command listener");

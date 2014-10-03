@@ -9,8 +9,8 @@
 package com.theoriginalbit.moarperipherals.client.render;
 
 import com.theoriginalbit.moarperipherals.client.model.ModelKeyboard;
-import com.theoriginalbit.moarperipherals.reference.Constants;
-import com.theoriginalbit.moarperipherals.client.render.base.CustomTileRenderer;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.client.render.abstracts.CustomTileRenderer;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;

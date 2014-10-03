@@ -8,13 +8,14 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.theoriginalbit.moarperipherals.common.registry.BlockRegistry;
 import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
-import com.theoriginalbit.moarperipherals.reference.Settings;
-import com.theoriginalbit.moarperipherals.reference.Constants;
-import com.theoriginalbit.moarperipherals.utils.ComputerUtils;
-import com.theoriginalbit.moarperipherals.utils.NBTUtils;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
+import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.utils.ComputerUtils;
+import com.theoriginalbit.moarperipherals.common.utils.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,7 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class TileKeyboard extends TileMPBase implements IPairableDevice, IActivateAwareTile {
+public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivateAwareTile {
 
     private TileEntity targetTile;
     private Integer nbtTargetX, nbtTargetY, nbtTargetZ;
@@ -125,7 +126,7 @@ public class TileKeyboard extends TileMPBase implements IPairableDevice, IActiva
 
     @Override
     public ItemStack getPairedDrop() {
-        ItemStack stack = new ItemStack(BlockRegistry.blockKeyboard, 1);
+        ItemStack stack = new ItemStack(ModBlocks.blockKeyboard, 1);
         if (targetTile != null) {
             NBTUtils.setInteger(stack, Constants.NBT.TARGET_X, targetTile.xCoord);
             NBTUtils.setInteger(stack, Constants.NBT.TARGET_Y, targetTile.yCoord);
@@ -159,7 +160,7 @@ public class TileKeyboard extends TileMPBase implements IPairableDevice, IActiva
     }
 
     private boolean targetInRange() {
-        return targetTile != null && MathHelper.sqrt_double(getDistanceFrom(targetTile.xCoord, targetTile.yCoord, targetTile.zCoord)) <= Settings.keyboardRange;
+        return targetTile != null && MathHelper.sqrt_double(getDistanceFrom(targetTile.xCoord, targetTile.yCoord, targetTile.zCoord)) <= ConfigHandler.keyboardRange;
     }
 
 }

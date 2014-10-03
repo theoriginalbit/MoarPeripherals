@@ -10,7 +10,6 @@ package com.theoriginalbit.moarperipherals.common.converters;
 
 import com.google.common.collect.Maps;
 import com.theoriginalbit.framework.peripheral.converter.ITypeConverter;
-import com.theoriginalbit.moarperipherals.utils.InventoryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 

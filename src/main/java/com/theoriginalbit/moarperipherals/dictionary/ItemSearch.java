@@ -9,7 +9,6 @@
 package com.theoriginalbit.moarperipherals.dictionary;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.moarperipherals.utils.InventoryUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatAllowedCharacters;
@@ -22,21 +21,14 @@ public final class ItemSearch {
 
     public static LinkedList<ItemStack> itemMap = Lists.newLinkedList();
 
-    public static void init() {
-        // TODO: find where the items list is now
-        for (Item item : Item.itemsList) {
-            if (item != null) {
-                itemMap.add(new ItemStack(item));
-            }
-        }
-    }
+    // TODO: figure out a new way to search blocks more reliably
 
     public static ArrayList<ItemStack> search(String term) throws Exception {
         ArrayList<ItemStack> results = Lists.newArrayList();
 
         Pattern pattern;
         try {
-             pattern = Pattern.compile(term.toLowerCase().replace(".", "").replace("?", ".").replace("*", ".+?"));
+            pattern = Pattern.compile(term.toLowerCase().replace(".", "").replace("?", ".").replace("*", ".+?"));
         } catch (Exception e) {
             throw new Exception("Invalid search term");
         }
@@ -52,10 +44,6 @@ public final class ItemSearch {
 
     private static boolean matches(ItemStack stack, Pattern pattern) {
         return pattern.matcher(stack.getDisplayName().toLowerCase()).find();
-    }
-
-    private static String sanitise(String s) {
-        return ChatAllowedCharacters.filerAllowedCharacters(s.replaceAll("§.", ""));
     }
 
 }

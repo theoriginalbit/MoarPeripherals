@@ -10,12 +10,12 @@ package com.theoriginalbit.moarperipherals.common.block;
 
 import buildcraft.api.tools.IToolWrench;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.moarperipherals.common.block.base.BlockPairable;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
-import com.theoriginalbit.moarperipherals.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockPairable;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
-import com.theoriginalbit.moarperipherals.utils.BlockNotifyFlags;
+import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

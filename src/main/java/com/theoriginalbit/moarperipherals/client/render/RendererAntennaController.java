@@ -8,7 +8,7 @@
  */
 package com.theoriginalbit.moarperipherals.client.render;
 
-import com.theoriginalbit.moarperipherals.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileAntennaController;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

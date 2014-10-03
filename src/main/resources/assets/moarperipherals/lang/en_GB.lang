@@ -19,22 +19,14 @@ upgrade.moarperipherals:adjective.chatbox=Chatty
 upgrade.moarperipherals:adjective.ironnote=Noisy
 upgrade.moarperipherals:adjective.dictionary=Informed
 
-moarperipherals:chat.paired=Paired with Computer at %d %d %d
-moarperipherals:chat.notPaired=Device not paired. Right-click a computer to pair.
+moarperipherals.chat.paired=Paired with Computer at %d %d %d
+moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.
 
 # believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
-moarperipherals:chat.sonic.wood=It doesn't do wood!
+moarperipherals.chat.sonic.wood=It doesn't do wood!
 
-moarperipherals:gui.keyboard.exit=Press ESC to exit the Keyboard
+moarperipherals.gui.keyboard.exit=Press ESC to exit the Keyboard
 
-tooltip.moarperipherals:generic.information=Hold SHIFT for information
-tooltip.moarperipherals:pairable.paired=Target
-tooltip.moarperipherals:pairable.notPaired=Not Paired
-
-tooltip.moarperipherals:inkCartridge.contents=Ink Colour
-tooltip.moarperipherals:inkCartridge.level=Ink Level
-tooltip.moarperipherals:printer.ink.cyan=Cyan
-tooltip.moarperipherals:printer.ink.magenta=Magenta
-tooltip.moarperipherals:printer.ink.yellow=Yellow
-tooltip.moarperipherals:printer.ink.black=Black
-tooltip.moarperipherals:printer.ink.empty=Empty
+tooltip.moarperipherals.generic.information=Hold SHIFT for information
+tooltip.moarperipherals.pairable.paired=Target
+tooltip.moarperipherals.pairable.notPaired=Not Paired

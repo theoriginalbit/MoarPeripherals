@@ -12,11 +12,13 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.reference.Settings;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.network.MessageIronNote;
+import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import net.minecraft.world.World;
 
 @LuaPeripheral("iron_note")
-public class TileIronNote extends TileMPBase {
+public class TileIronNote extends TileMoarP {
 
     private static ImmutableList<String> INSTRUMENTS = ImmutableList.of("harp", "bd", "snare", "hat", "bassattack");
     private static final int MIN_INST = 0;
@@ -31,14 +33,14 @@ public class TileIronNote extends TileMPBase {
         Preconditions.checkArgument(instrument >= MIN_INST && instrument <= MAX_INST, "Expected instrument 0-4");
         Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch 0-24");
         Preconditions.checkArgument(ticker++ <= MAX_TICK, "Too many notes (over " + MAX_TICK + " per tick)");
-        Preconditions.checkArgument(Settings.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
+        Preconditions.checkArgument(ConfigHandler.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 
         play(worldObj, xCoord, yCoord, zCoord, instrument, pitch);
 
         int dimId = worldObj.provider.dimensionId;
-        PacketIronNote packet = new PacketIronNote();
+        MessageIronNote packet = new MessageIronNote();
         packet.intData = new int[]{dimId, xCoord, yCoord, zCoord, instrument, pitch};
-        PacketUtils.sendToPlayersAround(packet, xCoord, yCoord, zCoord, Settings.noteRange, dimId);
+//        PacketUtils.sendToPlayersAround(packet, xCoord, yCoord, zCoord, ConfigHandler.noteRange, dimId);
     }
 
     @Override

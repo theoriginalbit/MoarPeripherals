@@ -19,15 +19,16 @@ import com.theoriginalbit.moarperipherals.common.block.BlockAntenna;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaCell;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaController;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaModem;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.server.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.server.chunk.TicketManager;
 import com.theoriginalbit.moarperipherals.server.chunk.IChunkLoader;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IPlaceAwareTile;
-import com.theoriginalbit.moarperipherals.reference.Settings;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
-import com.theoriginalbit.moarperipherals.utils.BlockNotifyFlags;
-import com.theoriginalbit.moarperipherals.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
+import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,7 +47,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @LuaPeripheral("bitnet_tower")
-public class TileAntennaController extends TileMPBase implements IPlaceAwareTile, IBreakAwareTile, IBitNetTower, IChunkLoader {
+public class TileAntennaController extends TileMoarP implements IPlaceAwareTile, IBreakAwareTile, IBitNetTower, IChunkLoader {
 
     private static final String EVENT_BITNET = "bitnet_message";
     private final ArrayList<UUID> receivedMessages = Lists.newArrayList();
@@ -189,7 +190,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
                 for (IComputerAccess comp : computers) {
                     comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), message.getPayload(), message.getDistanceTravelled()});
                 }
-            // there was no connected computer, this is now a repeating tower
+                // there was no connected computer, this is now a repeating tower
             } else {
                 LogUtils.debug(String.format("BitNet Comms Tower at %d %d %d has no computer(s) connected, acting as a repeating tower...", xCoord, yCoord, zCoord));
                 BitNetRegistry.transmit(this, message);
@@ -237,7 +238,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
     private void registerTower() {
         if (!worldObj.isRemote) {
             BitNetRegistry.registerTower(this);
-            if (Settings.antennaKeepChunkLoaded && chunkTicket == null) {
+            if (ConfigHandler.antennaKeepsChunkLoaded && chunkTicket == null) {
                 chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
                 if (chunkTicket == null) {
                     LogUtils.info(String.format("Requesting chunk loading ticket for BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
@@ -258,7 +259,7 @@ public class TileAntennaController extends TileMPBase implements IPlaceAwareTile
         if (!worldObj.isRemote) {
             BitNetRegistry.deregisterTower(this);
             // if there was a chunk loading ticket and the server isn't just stopping
-            if (Settings.antennaKeepChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
+            if (ConfigHandler.antennaKeepsChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
                 LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
                 ForgeChunkManager.unforceChunk(chunkTicket, getChunkCoord());
                 TicketManager.releaseTicket(chunkTicket);

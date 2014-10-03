@@ -9,7 +9,7 @@
 package com.theoriginalbit.moarperipherals.server.chunk;
 
 import com.google.common.collect.Maps;
-import com.theoriginalbit.moarperipherals.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

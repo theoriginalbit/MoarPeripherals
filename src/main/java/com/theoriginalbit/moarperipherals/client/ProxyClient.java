@@ -9,10 +9,10 @@
 package com.theoriginalbit.moarperipherals.client;
 
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
-import com.theoriginalbit.moarperipherals.common.registry.BlockRegistry;
-import com.theoriginalbit.moarperipherals.common.registry.ItemRegistry;
-import com.theoriginalbit.moarperipherals.reference.Constants;
-import com.theoriginalbit.moarperipherals.reference.Settings;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
+import com.theoriginalbit.moarperipherals.common.registry.ModItems;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.client.render.*;
 import com.theoriginalbit.moarperipherals.common.tile.TileAntennaController;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
@@ -47,27 +47,27 @@ public class ProxyClient extends ProxyCommon {
     @Override
     public void registerRenderInfo() {
         // Register Keyboard renderers
-        if (Settings.enableKeyboard) {
+        if (ConfigHandler.enableKeyboard) {
             RendererKeyboard rendererKeyboard = new RendererKeyboard();
-            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.blockKeyboard), rendererKeyboard);
+            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockKeyboard), rendererKeyboard);
             ClientRegistry.bindTileEntitySpecialRenderer(TileKeyboard.class, rendererKeyboard);
         }
 
         // Register optional renders when enabled
-        if (Settings.enablePrinter && Settings.enablePrinterGfx) {
+        if (ConfigHandler.enablePrinter && ConfigHandler.enablePrinterGfx) {
             // printer
             RendererPrinter rendererPrinter = new RendererPrinter();
-            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.blockPrinter), rendererPrinter);
+            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockPrinter), rendererPrinter);
             ClientRegistry.bindTileEntitySpecialRenderer(TilePrinter.class, rendererPrinter);
             // ink cartridge
-            MinecraftForgeClient.registerItemRenderer(ItemRegistry.itemInkCartridge, new RendererItemInkCartridge());
+//            MinecraftForgeClient.registerItemRenderer(ModItems.itemInkCartridge, new RendererItemInkCartridge());
         }
 
-        if (Settings.isSonicEnabled() && Settings.enableSonicGfx) {
-            MinecraftForgeClient.registerItemRenderer(ItemRegistry.itemSonic, new RendererItemSonic());
+        if (ConfigHandler.isSonicEnabled() && ConfigHandler.enableSonicGfx) {
+            MinecraftForgeClient.registerItemRenderer(ModItems.itemSonic, new RendererItemSonic());
         }
 
-        if (Settings.enableAntenna) {
+        if (ConfigHandler.enableAntenna) {
             Constants.RENDER_ID.ANTENNA = RenderingRegistry.getNextAvailableRenderId();
             Constants.RENDER_ID.ANTENNA_CTRLR = RenderingRegistry.getNextAvailableRenderId();
             RenderingRegistry.registerBlockHandler(Constants.RENDER_ID.ANTENNA, new RendererAntenna());

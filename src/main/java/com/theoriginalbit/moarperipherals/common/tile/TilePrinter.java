@@ -9,8 +9,9 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 
 @LuaPeripheral("advanced_printer")
-public class TilePrinter extends TileMPBase {
+public class TilePrinter extends TileMoarP {
 
 }

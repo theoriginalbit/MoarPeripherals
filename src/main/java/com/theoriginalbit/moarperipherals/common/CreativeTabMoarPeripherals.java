@@ -8,8 +8,8 @@
  */
 package com.theoriginalbit.moarperipherals.common;
 
-import com.theoriginalbit.moarperipherals.common.registry.BlockRegistry;
-import com.theoriginalbit.moarperipherals.reference.Settings;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -25,10 +25,10 @@ public class CreativeTabMoarPeripherals extends CreativeTabs {
     public Item getTabIconItem() {
         final Block block;
 
-        if (Settings.enableChatBox) {
-            block = BlockRegistry.blockChatBox;
-        } else if (Settings.enablePlayerDetector) {
-            block = BlockRegistry.blockPlayerDetector;
+        if (ConfigHandler.enableChatBox) {
+            block = ModBlocks.blockChatBox;
+        } else if (ConfigHandler.enablePlayerDetector) {
+            block = ModBlocks.blockPlayerDetector;
         } else {
             block = null;
         }

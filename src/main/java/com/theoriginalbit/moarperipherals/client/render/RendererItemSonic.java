@@ -10,8 +10,8 @@ package com.theoriginalbit.moarperipherals.client.render;
 
 import com.theoriginalbit.moarperipherals.client.model.ModelSonic10;
 import com.theoriginalbit.moarperipherals.client.model.ModelSonic11;
-import com.theoriginalbit.moarperipherals.reference.Constants;
-import com.theoriginalbit.moarperipherals.client.render.base.CustomItemRenderer;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.client.render.abstracts.CustomItemRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;

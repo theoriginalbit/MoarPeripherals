@@ -19,22 +19,14 @@ upgrade.moarperipherals:adjective.chatbox=Falante
 upgrade.moarperipherals:adjective.ironnote=Barulhento
 upgrade.moarperipherals:adjective.dictionary=Informado
 
-moarperipherals:chat.paired=Ligado ao computador em %d %d %d
-moarperipherals:chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador
+moarperipherals.chat.paired=Ligado ao computador em %d %d %d
+moarperipherals.chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador
 
-# this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
-moarperipherals:chat.sonic.wood=It doesn't do wood!
+# believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
+moarperipherals.chat.sonic.wood=It doesn't do wood!
 
-moarperipherals:gui.keyboard.exit=Pressione ESC para sair do teclado
+moarperipherals.gui.keyboard.exit=Pressione ESC para sair do teclado
 
-tooltip.moarperipherals:generic.information=Carregue em Shift para mais informação
-tooltip.moarperipherals:pairable.paired=Alvo
-tooltip.moarperipherals:pairable.notPaired=Não Ligado
-
-tooltip.moarperipherals:inkCartridge.contents=Cor da tinta
-tooltip.moarperipherals:inkCartridge.level=Nivel da tinta
-tooltip.moarperipherals:printer.ink.cyan=Ciano
-tooltip.moarperipherals:printer.ink.magenta=Magenta
-tooltip.moarperipherals:printer.ink.yellow=Amarelo
-tooltip.moarperipherals:printer.ink.black=Preto
-tooltip.moarperipherals:printer.ink.empty=Vazio
+tooltip.moarperipherals.generic.information=Carregue em Shift para mais informação
+tooltip.moarperipherals.pairable.paired=Alvo
+tooltip.moarperipherals.pairable.notPaired=Não Ligado

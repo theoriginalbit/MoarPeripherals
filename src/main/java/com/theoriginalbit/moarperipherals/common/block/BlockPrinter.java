@@ -8,9 +8,9 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-import com.theoriginalbit.moarperipherals.common.block.base.BlockRotatable;
-import com.theoriginalbit.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.reference.Settings;
+import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockRotatable;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -60,17 +60,17 @@ public class BlockPrinter extends BlockRotatable {
 
     @Override
     public int getRenderType() {
-        return Settings.enablePrinterGfx ? -1 : 0;
+        return ConfigHandler.enablePrinterGfx ? -1 : 0;
     }
 
     @Override
     public boolean isOpaqueCube() {
-        return !Settings.enablePrinterGfx;
+        return !ConfigHandler.enablePrinterGfx;
     }
 
     @Override
     public boolean renderAsNormalBlock() {
-        return !Settings.enablePrinterGfx;
+        return !ConfigHandler.enablePrinterGfx;
     }
 
     @Override

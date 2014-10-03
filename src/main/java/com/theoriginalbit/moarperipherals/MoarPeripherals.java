@@ -10,17 +10,21 @@ package com.theoriginalbit.moarperipherals;
 
 import com.theoriginalbit.framework.peripheral.LuaType;
 import com.theoriginalbit.framework.peripheral.PeripheralProvider;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.handler.ChatHandler;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
+import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
+import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
+import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
+import com.theoriginalbit.moarperipherals.common.registry.ModItems;
+import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
 import com.theoriginalbit.moarperipherals.server.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.converters.ConverterItemStack;
-import com.theoriginalbit.moarperipherals.dictionary.ItemSearch;
-import com.theoriginalbit.moarperipherals.common.handler.*;
-import com.theoriginalbit.moarperipherals.reference.ComputerCraftInfo;
-import com.theoriginalbit.moarperipherals.reference.Settings;
-import com.theoriginalbit.moarperipherals.common.registry.*;
-import com.theoriginalbit.moarperipherals.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
+import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -31,14 +35,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.MinecraftForge;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES, guiFactory = ModInfo.GUI_FACTORY)
 public class MoarPeripherals {
 
     @Instance(ModInfo.ID)
@@ -49,8 +51,6 @@ public class MoarPeripherals {
 
     public static SimpleNetworkWrapper networkWrapper;
 
-    public static GuiHandler guiHandler = new GuiHandler();
-
     public static CreativeTabs creativeTab = new CreativeTabMoarPeripherals();
 
     public static boolean isServerStopping = false;
@@ -60,46 +60,47 @@ public class MoarPeripherals {
     public void preInit(FMLPreInitializationEvent event) {
         LogUtils.init();
 
+        ConfigHandler.init(event.getSuggestedConfigurationFile());
+
+        proxy.preInit();
+
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 
-        ConfigHandler.init(event.getSuggestedConfigurationFile());
         ChatHandler.init();
 
-        MinecraftForge.EVENT_BUS.register(ChatHandler.instance);
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler);
+        FMLCommonHandler.instance().bus().register(new BitNetRegistry());
     }
 
     @EventHandler
     @SuppressWarnings("unused")
     public void init(FMLInitializationEvent event) {
-        MaterialRegistry.init();
-        BlockRegistry.init();
-        ItemRegistry.init();
+        PacketHandler.init();
 
-        MaterialRegistry.oreRegistration();
-        BlockRegistry.oreRegistration();
-        ItemRegistry.oreRegistration();
+        ModItems.INSTANCE.register();
+        ModBlocks.INSTANCE.register();
 
-        if (Settings.shouldChunkLoad()) {
+        if (ConfigHandler.shouldChunkLoad()) {
             LogUtils.debug("Registering chunk loading callback");
             ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
         }
 
-        if (Settings.enableAntenna) {
+        if (ConfigHandler.enableAntenna) {
             LogUtils.debug("Registering BitNet tick handler");
-            TickRegistry.registerTickHandler(new BitNetRegistry(), Side.SERVER);
+//            TickRegistry.registerTickHandler(new BitNetRegistry(), Side.SERVER);
         }
 
+        proxy.init();
         proxy.registerRenderInfo();
     }
 
     @EventHandler
     @SuppressWarnings("unused")
     public void postInit(FMLPostInitializationEvent event) {
-        ItemSearch.init();
-
+        proxy.postInit();
         ComputerCraftInfo.init();
-        RecipeRegistry.init();
+
+        ModItems.INSTANCE.addRecipes();
+        ModBlocks.INSTANCE.addRecipes();
 
         LuaType.registerTypeConverter(new ConverterItemStack());
         LuaType.registerClassToNameMapping(ItemStack.class, "item");

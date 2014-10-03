@@ -8,10 +8,10 @@
  */
 package com.theoriginalbit.moarperipherals.client.gui;
 
-import com.theoriginalbit.moarperipherals.reference.ComputerCraftInfo;
-import com.theoriginalbit.moarperipherals.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
-import com.theoriginalbit.moarperipherals.utils.KeyboardUtils;
+import com.theoriginalbit.moarperipherals.common.utils.KeyboardUtils;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatAllowedCharacters;

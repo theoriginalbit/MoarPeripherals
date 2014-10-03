@@ -8,7 +8,7 @@
  */
 package com.theoriginalbit.moarperipherals.client.render;
 
-import com.theoriginalbit.moarperipherals.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

@@ -9,7 +9,7 @@
 package com.theoriginalbit.moarperipherals.client.render;
 
 import com.theoriginalbit.moarperipherals.client.model.ModelAntenna;
-import com.theoriginalbit.moarperipherals.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileAntennaController;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;

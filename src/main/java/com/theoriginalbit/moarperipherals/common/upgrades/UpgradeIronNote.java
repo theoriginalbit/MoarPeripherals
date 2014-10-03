@@ -9,9 +9,9 @@
 package com.theoriginalbit.moarperipherals.common.upgrades;
 
 import com.theoriginalbit.framework.peripheral.wrapper.PeripheralWrapper;
-import com.theoriginalbit.moarperipherals.reference.Constants;
-import com.theoriginalbit.moarperipherals.reference.Settings;
-import com.theoriginalbit.moarperipherals.common.registry.BlockRegistry;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.tile.TileIronNote;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
@@ -24,7 +24,7 @@ public class UpgradeIronNote implements ITurtleUpgrade {
 
     @Override
     public int getUpgradeID() {
-        return Settings.upgradeIdIronNote;
+        return ConfigHandler.upgradeIdIronNote;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class UpgradeIronNote implements ITurtleUpgrade {
 
     @Override
     public ItemStack getCraftingItem() {
-        return new ItemStack(BlockRegistry.blockIronNote);
+        return new ItemStack(ModBlocks.blockIronNote);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class UpgradeIronNote implements ITurtleUpgrade {
 
     @Override
     public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-        return BlockRegistry.blockIronNote.getIcon(0, 0);
+        return ModBlocks.blockIronNote.getIcon(0, 0);
     }
 
     @Override
