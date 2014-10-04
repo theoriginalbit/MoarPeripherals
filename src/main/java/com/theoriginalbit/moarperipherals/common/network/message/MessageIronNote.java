@@ -17,10 +17,6 @@ import net.minecraft.world.World;
 
 public class MessageIronNote extends MessageGeneric implements IMessageHandler<MessageIronNote, IMessage> {
 
-    public MessageIronNote() {
-        super(MessageType.IRON_NOTE.ordinal());
-    }
-
     @Override
     public IMessage onMessage(MessageIronNote message, MessageContext ctx) {
         final World world = MoarPeripherals.proxy.getClientWorld(intData[0]);

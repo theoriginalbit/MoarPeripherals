@@ -25,23 +25,9 @@ public class MessageGeneric implements IMessage {
     public char[] charData;
     public String[] stringData;
     public NBTTagCompound nbtData;
-    protected int packetType;
-    protected int subPacketType;
-
-    public MessageGeneric(int packetType) {
-        this(packetType, 0);
-    }
-
-    public MessageGeneric(int packetType, int subPacketType) {
-        this.packetType = packetType;
-        this.subPacketType = subPacketType;
-    }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeByte(packetType);
-        buf.writeByte(subPacketType);
-
         // Write any string data
         if (stringData != null) {
             buf.writeInt(stringData.length);
@@ -99,9 +85,6 @@ public class MessageGeneric implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        packetType = buf.readByte();
-        subPacketType = buf.readByte();
-
         int nStr = buf.readInt();
         if (nStr == 0) {
             stringData = null;
