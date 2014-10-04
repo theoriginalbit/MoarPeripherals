@@ -103,7 +103,7 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
     public final ResourceLocation getTextureForRender() {
         if (hasConnection() && targetInRange()) {
             return Constants.TEXTURES_MODEL.KEYBOARD_ON.getResourceLocation();
-        } else if (hasConnection() && !targetInRange()) {
+        } else if (targetTile != null || (hasConnection() && !targetInRange())) {
             return Constants.TEXTURES_MODEL.KEYBOARD_LOST.getResourceLocation();
         }
         return Constants.TEXTURES_MODEL.KEYBOARD.getResourceLocation();
