@@ -10,7 +10,7 @@ package com.theoriginalbit.moarperipherals.common.registry;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class BitNetRegistry {
 
-    private static final ArrayList<IBitNetTower> towers = Lists.newArrayList();
+    private static final ArrayList<IBitNetCompliant> towers = Lists.newArrayList();
     private static final ConcurrentLinkedQueue<DelayedMessage> messageQueue = new ConcurrentLinkedQueue<DelayedMessage>();
     private static int nextId = 0;
 
@@ -44,18 +44,18 @@ public final class BitNetRegistry {
 
     /**
      * Registers a {@link net.minecraft.tileentity.TileEntity}, which implements the
-     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower}, interface
+     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}, interface
      * with the BitNet network so that it may receive BitNet messages.
      *
-     * @param tower the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower} to register
-     *              with the BitNet network
-     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower
+     * @param tile the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}
+     *             {@link net.minecraft.tileentity.TileEntity} to register with the BitNet network
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant
      * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetMessage
      */
-    public static int registerTower(IBitNetTower tower) {
-        LogUtils.debug("BitNet registerTower invoked, already contains tower: " + towers.contains(tower));
-        if (!towers.contains(tower)) {
-            towers.add(tower);
+    public static int registerCompliance(IBitNetCompliant tile) {
+        LogUtils.debug("BitNet registerTower invoked, already contains tower: " + towers.contains(tile));
+        if (!towers.contains(tile)) {
+            towers.add(tile);
             return nextId++;
         }
         return -1;
@@ -63,17 +63,17 @@ public final class BitNetRegistry {
 
     /**
      * De-registers a {@link net.minecraft.tileentity.TileEntity}, which implements the
-     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower}, interface
+     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}, interface
      * with the BitNet network so that it no longer receives BitNet messages.
      *
-     * @param tower the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower} to register
-     *              with the BitNet network
-     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower
+     * @param tile the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}
+     *             {@link net.minecraft.tileentity.TileEntity} to de-register with the BitNet network
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant
      */
-    public static void deregisterTower(IBitNetTower tower) {
-        LogUtils.debug("BitNet deregisterTower invoked, tower registered: " + towers.contains(tower));
-        if (towers.contains(tower)) {
-            towers.remove(tower);
+    public static void deregisterCompliance(IBitNetCompliant tile) {
+        LogUtils.debug("BitNet deregisterTower invoked, tower registered: " + towers.contains(tile));
+        if (towers.contains(tile)) {
+            towers.remove(tile);
         }
     }
 
@@ -83,14 +83,14 @@ public final class BitNetRegistry {
      * @param sender  the sending tower
      * @param payload the object to send
      */
-    public static void transmit(IBitNetTower sender, BitNetMessage payload) {
+    public static void transmit(IBitNetCompliant sender, BitNetMessage payload) {
         final Vec3 sendLocation = sender.getWorldPosition();
         final World sendWorld = sender.getWorld();
         final int range = (sendWorld.isRaining() && sendWorld.isThundering()) ? ConfigHandler.antennaRangeStorm : ConfigHandler.antennaRange;
 
-        for (IBitNetTower tower : towers) {
-            if (tower.getWorld() == sendWorld) {
-                final Vec3 towerLocation = tower.getWorldPosition();
+        for (IBitNetCompliant receiver : towers) {
+            if (receiver.getWorld() == sendWorld) {
+                final Vec3 towerLocation = receiver.getWorldPosition();
                 final double distance = Math.sqrt(sendLocation.squareDistanceTo(towerLocation.xCoord, towerLocation.yCoord, towerLocation.zCoord));
                 if (distance > 0 && distance <= range) {
                     /*
@@ -98,7 +98,7 @@ public final class BitNetRegistry {
                      * especially when its a repeated message; we build it from the current one so it still identifies
                      * as the same message for detection against message propagation
                      */
-                    messageQueue.add(new DelayedMessage(tower, (new BitNetMessage(payload)).addDistance(distance), distance));
+                    messageQueue.add(new DelayedMessage(receiver, (new BitNetMessage(payload)).addDistance(distance), distance));
                 }
             }
         }
@@ -112,11 +112,11 @@ public final class BitNetRegistry {
      */
     private static final class DelayedMessage {
 
-        private final IBitNetTower receiver;
+        private final IBitNetCompliant receiver;
         private final BitNetMessage payload;
         private int sendDelay;
 
-        public DelayedMessage(IBitNetTower tower, BitNetMessage message, double distance) {
+        public DelayedMessage(IBitNetCompliant tower, BitNetMessage message, double distance) {
             receiver = tower;
             payload = message;
             // calculate the cost to send this message

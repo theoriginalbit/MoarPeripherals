@@ -12,9 +12,11 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
-import com.theoriginalbit.moarperipherals.common.network.MessageIronNote;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNote;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.world.World;
 
 @LuaPeripheral("iron_note")
@@ -38,9 +40,9 @@ public class TileIronNote extends TileMoarP {
         play(worldObj, xCoord, yCoord, zCoord, instrument, pitch);
 
         int dimId = worldObj.provider.dimensionId;
-        MessageIronNote packet = new MessageIronNote();
-        packet.intData = new int[]{dimId, xCoord, yCoord, zCoord, instrument, pitch};
-//        PacketUtils.sendToPlayersAround(packet, xCoord, yCoord, zCoord, ConfigHandler.noteRange, dimId);
+        MessageIronNote message = new MessageIronNote();
+        message.intData = new int[]{dimId, xCoord, yCoord, zCoord, instrument, pitch};
+        MoarPeripherals.networkWrapper.sendToAllAround(message, new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord, zCoord, ConfigHandler.noteRange));
     }
 
     @Override

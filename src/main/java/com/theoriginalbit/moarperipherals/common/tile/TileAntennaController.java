@@ -14,7 +14,7 @@ import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetTower;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntenna;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaCell;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaController;
@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @LuaPeripheral("bitnet_tower")
-public class TileAntennaController extends TileMoarP implements IPlaceAwareTile, IBreakAwareTile, IBitNetTower, IChunkLoader {
+public class TileAntennaController extends TileMoarP implements IPlaceAwareTile, IBreakAwareTile, IBitNetCompliant, IChunkLoader {
 
     private static final String EVENT_BITNET = "bitnet_message";
     private final ArrayList<UUID> receivedMessages = Lists.newArrayList();
@@ -237,7 +237,7 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
 
     private void registerTower() {
         if (!worldObj.isRemote) {
-            BitNetRegistry.registerTower(this);
+            BitNetRegistry.registerCompliance(this);
             if (ConfigHandler.antennaKeepsChunkLoaded && chunkTicket == null) {
                 chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
                 if (chunkTicket == null) {
@@ -257,7 +257,7 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
 
     private void unregisterTower() {
         if (!worldObj.isRemote) {
-            BitNetRegistry.deregisterTower(this);
+            BitNetRegistry.deregisterCompliance(this);
             // if there was a chunk loading ticket and the server isn't just stopping
             if (ConfigHandler.antennaKeepsChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
                 LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));

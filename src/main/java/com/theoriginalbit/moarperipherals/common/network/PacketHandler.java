@@ -9,6 +9,7 @@
 package com.theoriginalbit.moarperipherals.common.network;
 
 import com.google.common.collect.Sets;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNote;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
