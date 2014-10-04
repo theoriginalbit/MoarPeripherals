@@ -51,7 +51,7 @@ public abstract class BlockMoarP extends BlockContainer {
     public BlockMoarP(Material material, String name) {
         super(material);
         blockName = name;
-        setHardness(0.5f);
+        setHardness(5.0f);
         setResistance(10.0f);
         setCreativeTab(MoarPeripherals.creativeTab);
         setBlockName(ModInfo.RESOURCE_DOMAIN + ':' + blockName);
