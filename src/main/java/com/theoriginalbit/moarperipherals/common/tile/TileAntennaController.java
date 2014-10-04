@@ -206,9 +206,10 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
      */
 
     private void checkStructure() {
+        // make sure that there are only 13 pole blocks
         for (int y = 1; y < 13; ++y) {
             final Block block = worldObj.getBlock(xCoord, yCoord + y, zCoord);
-            if (!(block instanceof BlockAntennaCell || block instanceof BlockAntennaController || block instanceof BlockAntennaModem)) {
+            if (!(block instanceof BlockAntenna) || block instanceof BlockAntennaCell || block instanceof BlockAntennaController || block instanceof BlockAntennaModem) {
                 return;
             }
         }
