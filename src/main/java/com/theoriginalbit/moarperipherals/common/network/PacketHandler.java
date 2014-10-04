@@ -27,7 +27,7 @@ public class PacketHandler {
     private static int id = 0;
 
     public static void init() {
-        INSTANCE.registerMessage(MessageIronNote.class, MessageIronNote.class, id++, Side.CLIENT);
+        INSTANCE.registerMessage(MessageIronNote.class, MessageIronNote.class, id++, Side.SERVER);
     }
 
     public static Set<EntityPlayer> getPlayersWatchingChunk(WorldServer world, int chunkX, int chunkZ) {

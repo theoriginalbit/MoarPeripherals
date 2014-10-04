@@ -12,8 +12,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNote;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -42,7 +42,7 @@ public class TileIronNote extends TileMoarP {
         int dimId = worldObj.provider.dimensionId;
         MessageIronNote message = new MessageIronNote();
         message.intData = new int[]{dimId, xCoord, yCoord, zCoord, instrument, pitch};
-        MoarPeripherals.networkWrapper.sendToAllAround(message, new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord, zCoord, ConfigHandler.noteRange));
+        PacketHandler.INSTANCE.sendToAllAround(message, new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord, zCoord, ConfigHandler.noteRange));
     }
 
     @Override

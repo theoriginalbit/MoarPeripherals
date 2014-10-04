@@ -32,8 +32,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -48,8 +46,6 @@ public class MoarPeripherals {
     @SidedProxy(clientSide = ModInfo.PROXY_CLIENT, serverSide = ModInfo.PROXY_SERVER)
     public static ProxyCommon proxy;
 
-    public static SimpleNetworkWrapper networkWrapper;
-
     public static CreativeTabs creativeTab = new CreativeTabMoarPeripherals();
 
     public static boolean isServerStopping = false;
@@ -62,8 +58,6 @@ public class MoarPeripherals {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
 
         proxy.preInit();
-
-        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 
         ChatHandler.init();
     }
