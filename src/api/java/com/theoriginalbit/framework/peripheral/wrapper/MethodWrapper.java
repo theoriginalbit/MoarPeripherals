@@ -78,7 +78,9 @@ public class MethodWrapper {
 
     public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws LuaException, InterruptedException {
         // make sure they've provided enough args
-        Preconditions.checkArgument(arguments.length == luaParamsCount, String.format("expected %d arg(s), got %d", luaParamsCount, arguments.length));
+        if (arguments.length != luaParamsCount) {
+            throw new LuaException(String.format("expected %d arg(s), got %d", luaParamsCount, arguments.length));
+        }
 
         Object[] args = new Object[javaParams.length];
         for (int i = 0; i < args.length; ++i) {
@@ -90,7 +92,9 @@ public class MethodWrapper {
                 args[i] = arguments[i];
             } else if (arguments[i] != null) {
                 final Object convert = LuaType.fromLua(arguments[i], javaParams[i]);
-                Preconditions.checkArgument(convert != null, "expected %s, got %s", LuaType.getLuaName(javaParams[i]), LuaType.getLuaName(arguments[i].getClass()));
+                if (convert == null) {
+                    throw new LuaException(String.format("expected %s, got %s", LuaType.getLuaName(javaParams[i]), LuaType.getLuaName(arguments[i].getClass())));
+                }
                 args[i] = convert;
             } else {
                 throw new LuaException(String.format("expected %s, got nil", LuaType.getLuaName(javaParams[i])));
