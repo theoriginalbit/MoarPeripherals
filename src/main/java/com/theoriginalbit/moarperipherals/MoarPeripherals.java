@@ -17,7 +17,6 @@ import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
-import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
 import com.theoriginalbit.moarperipherals.server.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.converters.ConverterItemStack;
@@ -67,8 +66,6 @@ public class MoarPeripherals {
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 
         ChatHandler.init();
-
-        FMLCommonHandler.instance().bus().register(new BitNetRegistry());
     }
 
     @EventHandler
@@ -86,7 +83,7 @@ public class MoarPeripherals {
 
         if (ConfigHandler.enableAntenna) {
             LogUtils.debug("Registering BitNet tick handler");
-//            TickRegistry.registerTickHandler(new BitNetRegistry(), Side.SERVER);
+            FMLCommonHandler.instance().bus().register(new BitNetRegistry());
         }
 
         proxy.init();
@@ -104,8 +101,6 @@ public class MoarPeripherals {
 
         LuaType.registerTypeConverter(new ConverterItemStack());
         LuaType.registerClassToNameMapping(ItemStack.class, "item");
-
-        UpgradeRegistry.init();
 
         ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
     }

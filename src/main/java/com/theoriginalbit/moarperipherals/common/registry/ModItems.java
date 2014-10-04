@@ -34,17 +34,17 @@ public final class ModItems {
     public final void register() {
         if (ConfigHandler.enablePrinter) {
 //            itemInkCartridge = new ItemInkCartridge();
-//            GameRegistry.registerItem(itemInkCartridge, itemInkCartridge.getUnlocalizedName());
+//            GameRegistry.registerItem(itemInkCartridge, "itemInkCartridge");
         }
 
         if (ConfigHandler.isSonicEnabled()) {
             itemSonic = new ItemSonic();
-            GameRegistry.registerItem(itemSonic, itemSonic.getUnlocalizedName());
+            GameRegistry.registerItem(itemSonic, "itemSonic");
         }
 
         if (ConfigHandler.enableKeyboard) {
             itemKeyboardPart = new ItemMoarP("keyboardPart");
-            GameRegistry.registerItem(itemKeyboardPart, itemKeyboardPart.getUnlocalizedName());
+            GameRegistry.registerItem(itemKeyboardPart, "itemKeyboardPart");
         }
     }
 
