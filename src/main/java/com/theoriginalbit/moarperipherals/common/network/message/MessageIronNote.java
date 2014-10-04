@@ -19,8 +19,8 @@ public class MessageIronNote extends MessageGeneric implements IMessageHandler<M
 
     @Override
     public IMessage onMessage(MessageIronNote message, MessageContext ctx) {
-        final World world = MoarPeripherals.proxy.getClientWorld(intData[0]);
-        TileIronNote.play(world, intData[1], intData[2], intData[3], intData[4], intData[5]);
+        final World world = MoarPeripherals.proxy.getClientWorld(message.intData[0]);
+        TileIronNote.play(world, message.intData[1], message.intData[2], message.intData[3], message.intData[4], message.intData[5]);
         return null;
     }
 
