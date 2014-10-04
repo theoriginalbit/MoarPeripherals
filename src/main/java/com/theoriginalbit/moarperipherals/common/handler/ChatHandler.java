@@ -108,10 +108,9 @@ public final class ChatHandler {
         // check if it was a command first, if it is, chat listeners shouldn't get this!
         for (Entry<String, ArrayList<ICommandListener>> entry : commandListeners.entrySet()) {
             final String token = entry.getKey();
-            final int tokenLength = token.length();
-            if (event.message.substring(0, tokenLength).equals(token)) {
+            if (event.message.startsWith(token)) {
                 for (ICommandListener listener : entry.getValue()) {
-                    listener.onServerChatEvent(event.message.substring(tokenLength).trim(), event.player);
+                    listener.onServerChatEvent(event.message.substring(token.length()).trim(), event.player);
                     event.setCanceled(true);
                 }
             }
