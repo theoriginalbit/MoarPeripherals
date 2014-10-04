@@ -11,7 +11,7 @@ package com.theoriginalbit.moarperipherals.common.block;
 public class BlockAntennaModem extends BlockAntenna {
 
     public BlockAntennaModem() {
-        super("antennaModem");
+        super("antennamodem");
     }
 
 }
