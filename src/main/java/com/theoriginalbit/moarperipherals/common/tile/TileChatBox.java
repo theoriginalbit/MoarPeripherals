@@ -141,7 +141,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
                 }
             }
             if (ConfigHandler.chatRangeRead < 0 || entityInRange(event.entity, ConfigHandler.chatRangeRead)) {
-                computerQueueEvent(EVENT_DEATH, event.entity.getCommandSenderName(), killer, source.getDamageType());
+                computerQueueEvent(EVENT_DEATH, event.entity.getCommandSenderName(), source.getDamageType(), killer);
             }
         }
     }
