@@ -68,8 +68,9 @@ public class MessageGeneric implements IMessage {
 
         // Write any NBT data
         if (nbtData != null) {
+            ByteArrayOutputStream stream = null;
             try {
-                final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                stream = new ByteArrayOutputStream();
                 CompressedStreamTools.writeCompressed(nbtData, stream);
                 byte[] bytes = stream.toByteArray();
                 buf.writeBoolean(true);
@@ -77,6 +78,11 @@ public class MessageGeneric implements IMessage {
                 buf.writeBytes(bytes);
             } catch (IOException e) {
                 buf.writeBoolean(false);
+            } finally {
+                try {
+                    if (stream != null) stream.close();
+                } catch (Exception ignored) {
+                }
             }
         } else {
             buf.writeBoolean(false);
@@ -129,8 +135,16 @@ public class MessageGeneric implements IMessage {
                 final int byteLength = buf.readInt();
                 final byte[] bytes = new byte[byteLength];
                 buf.getBytes(buf.readerIndex(), bytes);
-                final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-                nbtData = CompressedStreamTools.readCompressed(stream);
+                ByteArrayInputStream stream = null;
+                try {
+                    stream = new ByteArrayInputStream(bytes);
+                    nbtData = CompressedStreamTools.readCompressed(stream);
+                } finally {
+                    try {
+                        if (stream != null) stream.close();
+                    } catch (Exception ignored) {
+                    }
+                }
             } catch (IOException ignored) {
             }
         }
