@@ -22,7 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class BlockAntennaController extends BlockAntenna {
 
     public BlockAntennaController() {
-        super("antennacontroller");
+        super("antennaController");
     }
 
     @Override

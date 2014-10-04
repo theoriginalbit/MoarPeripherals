@@ -7,9 +7,9 @@ tile.moarperipherals:keyboard.name=Keyboard
 tile.moarperipherals:printer.name=Advanced Printer
 tile.moarperipherals:itemDictionary.name=Item Dictionary
 tile.moarperipherals:antenna.name=BitNet Communication Tower (Pole)
-tile.moarperipherals:antennacell.name=BitNet Communication Tower (Cell)
-tile.moarperipherals:antennamodem.name=BitNet Communication Tower (Modem Interface)
-tile.moarperipherals:antennacontroller.name=BitNet Communication Tower (Controller)
+tile.moarperipherals:antennaCell.name=BitNet Communication Tower (Cell)
+tile.moarperipherals:antennaModem.name=BitNet Communication Tower (Modem Interface)
+tile.moarperipherals:antennaController.name=BitNet Communication Tower (Controller)
 
 item.moarperipherals:inkCartridge.name=Ink Cartridge
 item.moarperipherals:keyboardPart.name=Keyboard Part

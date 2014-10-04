@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 public class BlockAntennaCell extends BlockAntenna {
 
     public BlockAntennaCell() {
-        super("antennacell");
+        super("antennaCell");
     }
 
     @Override
