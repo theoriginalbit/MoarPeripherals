@@ -147,7 +147,7 @@ public abstract class BlockMoarP extends BlockContainer {
     public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z) {
         final TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-        if ((((TileMoarP) tile).canPlayerAccess(player) || isOpBreakable(player))) {
+        if (tile == null || (((TileMoarP) tile).canPlayerAccess(player) || isOpBreakable(player))) {
             return blockHardness;
         }
 
