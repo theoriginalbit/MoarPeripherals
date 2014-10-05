@@ -37,7 +37,6 @@ public class ConfigGuiMoarP extends GuiConfig {
     private static List<IConfigElement> getConfigElements() {
         final ArrayList<IConfigElement> list = Lists.newArrayList();
 
-        list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_ENABLED)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_ANTENNA)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_CHAT_BOX)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_DICTIONARY)));

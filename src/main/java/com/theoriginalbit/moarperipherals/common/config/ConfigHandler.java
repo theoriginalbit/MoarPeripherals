@@ -32,8 +32,6 @@ public final class ConfigHandler {
     public static final String CATEGORY_DICTIONARY = "Item Dictionary";
     public static final String CATEGORY_PLAYER_DETECTOR = "Player Detector";
 
-    public static Configuration config;
-
     // Turtle Upgrade ID
     private static int startUpgradeID = 16384;
     public static int upgradeIdChatBox = startUpgradeID++;
@@ -91,12 +89,28 @@ public final class ConfigHandler {
 
     public static boolean debug;
 
-    public static void init(File c) {
-        if (config == null) {
-            config = new Configuration(c);
-            FMLCommonHandler.instance().bus().register(config);
-            doConfiguration();
+    public static Configuration config;
+
+    private static ConfigHandler INSTANCE;
+
+    public static ConfigHandler instance() {
+        if (INSTANCE == null) {
+            throw new IllegalStateException("ConfigHandler must be initialised");
         }
+        return INSTANCE;
+    }
+
+    private ConfigHandler(File file) {
+        config = new Configuration(file);
+        doConfiguration();
+    }
+
+    public static ConfigHandler init(File file) {
+        if (INSTANCE != null) {
+            throw new IllegalStateException("ConfigHandler already initialised");
+        }
+
+        return INSTANCE = new ConfigHandler(file);
     }
 
     @SubscribeEvent
@@ -107,9 +121,7 @@ public final class ConfigHandler {
         }
     }
 
-    private static void doConfiguration() {
-        config.load();
-
+    private void doConfiguration() {
         // Feature enabled
         enableSonic = getEnabled(CATEGORY_SONIC);
         enableChatBox = getEnabled(CATEGORY_CHAT_BOX);

@@ -55,7 +55,8 @@ public class MoarPeripherals {
     public void preInit(FMLPreInitializationEvent event) {
         LogUtils.init();
 
-        ConfigHandler.init(event.getSuggestedConfigurationFile());
+        final ConfigHandler config = ConfigHandler.init(event.getSuggestedConfigurationFile());
+        FMLCommonHandler.instance().bus().register(config);
 
         proxy.preInit();
 
