@@ -20,7 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -62,16 +61,14 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
     }
 
     @Override
-    public Packet getDescriptionPacket() {
-        if (!hasConnection()) {
-            return null;
+    public NBTTagCompound getDescriptionNbt() {
+        final NBTTagCompound tag = super.getDescriptionNbt();
+        if (targetTile != null) {
+            tag.setInteger("targetX", targetTile.xCoord);
+            tag.setInteger("targetY", targetTile.yCoord);
+            tag.setInteger("targetZ", targetTile.zCoord);
         }
-        final S35PacketUpdateTileEntity packet = (S35PacketUpdateTileEntity) super.getDescriptionPacket();
-        NBTTagCompound tag = packet.func_148857_g();
-        tag.setInteger("targetX", targetTile.xCoord);
-        tag.setInteger("targetY", targetTile.yCoord);
-        tag.setInteger("targetZ", targetTile.zCoord);
-        return packet;
+        return tag;
     }
 
     @Override

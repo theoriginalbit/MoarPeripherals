@@ -33,14 +33,18 @@ public class TileMoarP extends TileEntity {
 
     @Override
     public Packet getDescriptionPacket() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("owner", owner);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tag);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, getDescriptionNbt());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
         setOwnerFromNBT(packet.func_148857_g());
+    }
+
+    protected NBTTagCompound getDescriptionNbt() {
+        final NBTTagCompound tag = new NBTTagCompound();
+        tag.setString("owner", owner);
+        return tag;
     }
 
     public final void setOwner(String username) {
