@@ -28,6 +28,16 @@ public class RendererItemSonic extends CustomItemRenderer {
     }
 
     @Override
+    public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
+        return type != ItemRenderType.INVENTORY && super.handleRenderType(stack, type);
+    }
+
+    @Override
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+        return helper != ItemRendererHelper.INVENTORY_BLOCK && super.shouldUseRenderHelper(type, item, helper);
+    }
+
+    @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         renderPass = 0;
         super.renderItem(type, stack, data);
