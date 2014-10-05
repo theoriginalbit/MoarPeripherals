@@ -15,6 +15,7 @@ public final class ModInfo {
     public static final String VERSION = "@VERSION@";
     public static final String CHANNEL = ID.toLowerCase();
     public static final String RESOURCE_DOMAIN = ID.toLowerCase();
+    public static final String CONFIG_DOMAIN = RESOURCE_DOMAIN + ".config.";
 
     private static final String COM_PACKAGE = "com.theoriginalbit";
     private static final String MOD_PACKAGE = COM_PACKAGE + ".moarperipherals";

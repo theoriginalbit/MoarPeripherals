@@ -30,3 +30,17 @@ moarperipherals.gui.keyboard.exit=Press ESC to exit the Keyboard
 tooltip.moarperipherals.generic.information=Hold SHIFT for information
 tooltip.moarperipherals.pairable.paired=Target
 tooltip.moarperipherals.pairable.notPaired=Not Paired
+
+# Config #
+moarperipherals.config.title=MoarPeripherals Configuration
+moarperipherals.config.category.sonicscrewdriver=Sonic Screwdriver
+moarperipherals.config.category.enabled=Enabled
+moarperipherals.config.category.chatbox=ChatBox
+moarperipherals.config.category.printer=Printer
+moarperipherals.config.category.render=Render
+moarperipherals.config.category.keyboard=Keyboard
+moarperipherals.config.category.security=Security
+moarperipherals.config.category.ironnote=Iron Note
+moarperipherals.config.category.communicationstower=Communications Tower
+moarperipherals.config.category.itemdictionary=Item Dictionary
+moarperipherals.config.category.playerdetector=Player Detector

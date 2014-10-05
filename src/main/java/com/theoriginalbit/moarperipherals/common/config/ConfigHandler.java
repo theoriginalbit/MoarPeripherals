@@ -11,15 +11,16 @@ package com.theoriginalbit.moarperipherals.common.config;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 
 public final class ConfigHandler {
-    private static final String ENABLED = "enabled";
     private static final String ENABLEFORMAT = "Enable the %s";
 
+    public static final String CATEGORY_ENABLED = "Enabled";
     public static final String CATEGORY_SONIC = "Sonic Screwdriver";
     public static final String CATEGORY_CHAT_BOX = "ChatBox";
     public static final String CATEGORY_PRINTER = "Printer";
@@ -93,6 +94,7 @@ public final class ConfigHandler {
     public static void init(File c) {
         if (config == null) {
             config = new Configuration(c);
+            FMLCommonHandler.instance().bus().register(config);
             doConfiguration();
         }
     }
@@ -167,7 +169,7 @@ public final class ConfigHandler {
     }
 
     private static boolean getEnabled(String key) {
-        return getBoolean(ENABLED, key, String.format(ENABLEFORMAT, key));
+        return getBoolean(CATEGORY_ENABLED, key, String.format(ENABLEFORMAT, key));
     }
 
 }
