@@ -11,12 +11,7 @@ package com.theoriginalbit.moarperipherals.common.network.message;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class MessageGeneric implements IMessage {
 
@@ -68,22 +63,8 @@ public class MessageGeneric implements IMessage {
 
         // Write any NBT data
         if (nbtData != null) {
-            ByteArrayOutputStream stream = null;
-            try {
-                stream = new ByteArrayOutputStream();
-                CompressedStreamTools.writeCompressed(nbtData, stream);
-                byte[] bytes = stream.toByteArray();
-                buf.writeBoolean(true);
-                buf.writeInt(bytes.length);
-                buf.writeBytes(bytes);
-            } catch (IOException e) {
-                buf.writeBoolean(false);
-            } finally {
-                try {
-                    if (stream != null) stream.close();
-                } catch (Exception ignored) {
-                }
-            }
+            buf.writeBoolean(true);
+            ByteBufUtils.writeTag(buf, nbtData);
         } else {
             buf.writeBoolean(false);
         }
@@ -131,22 +112,7 @@ public class MessageGeneric implements IMessage {
 
         boolean wasNBT = buf.readBoolean();
         if (wasNBT) {
-            try {
-                final int byteLength = buf.readInt();
-                final byte[] bytes = new byte[byteLength];
-                buf.getBytes(buf.readerIndex(), bytes);
-                ByteArrayInputStream stream = null;
-                try {
-                    stream = new ByteArrayInputStream(bytes);
-                    nbtData = CompressedStreamTools.readCompressed(stream);
-                } finally {
-                    try {
-                        if (stream != null) stream.close();
-                    } catch (Exception ignored) {
-                    }
-                }
-            } catch (IOException ignored) {
-            }
+            nbtData = ByteBufUtils.readTag(buf);
         }
     }
 
