@@ -17,7 +17,6 @@ import com.theoriginalbit.moarperipherals.api.tile.aware.IPlaceAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.IHasGui;
 import com.theoriginalbit.moarperipherals.api.tile.IHasSpecialDrops;
 import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
@@ -145,23 +144,8 @@ public abstract class BlockMoarP extends BlockContainer {
     }
 
     @Override
-    public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z) {
-        final TileEntity tile = world.getTileEntity(x, y, z);
-
-        if (tile == null || (((TileMoarP) tile).canPlayerAccess(player) || isOpBreakable(player))) {
-            return blockHardness;
-        }
-
-        return -1.0f;
-    }
-
-    @Override
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
         return false;
-    }
-
-    private static boolean isOpBreakable(EntityPlayer player) {
-        return ConfigHandler.securityOpBreak && MoarPeripherals.proxy.isOp(player);
     }
 
 }

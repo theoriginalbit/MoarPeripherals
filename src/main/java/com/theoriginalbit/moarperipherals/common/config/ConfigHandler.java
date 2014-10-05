@@ -145,7 +145,7 @@ public final class ConfigHandler {
         enableSonicGfx = getBoolean(CATEGORY_RENDERER, "sonicModel", "Whether or not to render the Sonic Screwdriver normally or as a model");
 
         // Security settings
-        securityOpBreak = getBoolean(CATEGORY_SECURITY, "canOpBreakSecurity", "Are OPs able to break blocks that they don't own (when applicable); It is suggested you have this set to false until needed e.g. griefing");
+//        securityOpBreak = getBoolean(CATEGORY_SECURITY, "canOpBreakSecurity", "Are OPs able to break blocks that they don't own (when applicable); It is suggested you have this set to false until needed e.g. griefing");
 
         debug = getBoolean("debug", "debugMessages", false, "Print debugging messages to the console. WARNING: Spammy, only enable this if theoriginalbit has asked you to");
 
