@@ -14,7 +14,7 @@ import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNote;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageGeneric;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.world.World;
@@ -40,7 +40,7 @@ public class TileIronNote extends TileMoarP {
         play(worldObj, xCoord, yCoord, zCoord, instrument, pitch);
 
         int dimId = worldObj.provider.dimensionId;
-        MessageIronNote message = new MessageIronNote();
+        MessageGeneric message = new MessageGeneric();
         message.intData = new int[]{dimId, xCoord, yCoord, zCoord, instrument, pitch};
         PacketHandler.INSTANCE.sendToAllAround(message, new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord, zCoord, ConfigHandler.noteRange));
     }

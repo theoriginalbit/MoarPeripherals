@@ -15,10 +15,10 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.world.World;
 
-public class MessageIronNote extends MessageGeneric implements IMessageHandler<MessageIronNote, IMessage> {
+public class MessageIronNoteHandler implements IMessageHandler<MessageGeneric, IMessage> {
 
     @Override
-    public IMessage onMessage(MessageIronNote message, MessageContext ctx) {
+    public IMessage onMessage(MessageGeneric message, MessageContext ctx) {
         final World world = MoarPeripherals.proxy.getClientWorld(message.intData[0]);
         TileIronNote.play(world, message.intData[1], message.intData[2], message.intData[3], message.intData[4], message.intData[5]);
         return null;

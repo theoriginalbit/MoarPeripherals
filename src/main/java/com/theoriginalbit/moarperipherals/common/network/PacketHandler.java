@@ -9,7 +9,8 @@
 package com.theoriginalbit.moarperipherals.common.network;
 
 import com.google.common.collect.Sets;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNote;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageGeneric;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNoteHandler;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -27,7 +28,7 @@ public class PacketHandler {
     private static int id = 0;
 
     public static void init() {
-        INSTANCE.registerMessage(MessageIronNote.class, MessageIronNote.class, id++, Side.SERVER);
+        INSTANCE.registerMessage(MessageIronNoteHandler.class, MessageGeneric.class, id++, Side.CLIENT);
     }
 
     public static Set<EntityPlayer> getPlayersWatchingChunk(WorldServer world, int chunkX, int chunkZ) {
