@@ -35,7 +35,7 @@ public class TileIronNote extends TileMoarP {
     public void playNote(int instrument, int pitch) throws Exception {
         Preconditions.checkArgument(instrument >= MIN_INST && instrument <= MAX_INST, "Expected instrument 0-4");
         Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch 0-24");
-        Preconditions.checkArgument(ticker++ <= MAX_TICK, "Too many notes (over " + MAX_TICK + " per tick)");
+        Preconditions.checkArgument(ticker++ < MAX_TICK, "Too many notes (over " + MAX_TICK + " per tick)");
         Preconditions.checkArgument(ConfigHandler.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 
         play(worldObj, xCoord, yCoord, zCoord, instrument, pitch);
