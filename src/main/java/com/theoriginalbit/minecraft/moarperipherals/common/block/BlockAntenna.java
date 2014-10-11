@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class BlockAntenna extends BlockMoarP {
 
@@ -58,8 +59,13 @@ public class BlockAntenna extends BlockMoarP {
     }
 
     @Override
-    public boolean isBlockSolid(IBlockAccess blockAccess, int x, int y, int z, int side) {
+    public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
         return side == 0 || side == 1;
+    }
+
+    @Override
+    public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+        return isBlockSolid(world, x, y, z, side.ordinal());
     }
 
     @Override
