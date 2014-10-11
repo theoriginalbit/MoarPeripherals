@@ -26,7 +26,7 @@ public final class ModItems {
 
     public static final ModItems INSTANCE = new ModItems();
 
-    public static Item itemInkCartridge, itemSonic, itemKeyboardPart, itemCellPart;
+    public static Item itemInkCartridge, itemSonic, itemKeyboardPart, itemMonopoleAntenna;
 
     private ModItems() {
         // prevent other instances being constructed
@@ -49,8 +49,8 @@ public final class ModItems {
         }
 
         if (ConfigHandler.enableAntenna) {
-            itemCellPart = new ItemMoarP("cellPart");
-            GameRegistry.registerItem(itemCellPart, "itemCellPart");
+            itemMonopoleAntenna = new ItemMoarP("monopolePart");
+            GameRegistry.registerItem(itemMonopoleAntenna, "itemMonopoleAntenna");
         }
     }
 
@@ -93,7 +93,7 @@ public final class ModItems {
         }
 
         if (ConfigHandler.enableAntenna) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemCellPart, 4),
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemMonopoleAntenna, 4),
                     "M",
 
                     'M', ComputerCraftInfo.cc_wirelessModem
