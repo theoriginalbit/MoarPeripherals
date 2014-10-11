@@ -15,9 +15,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockAntennaController extends BlockAntenna {
 
@@ -40,11 +38,6 @@ public class BlockAntennaController extends BlockAntenna {
     @Override
     public TileEntity createNewTileEntity(World world, int par1) {
         return new TileAntennaController();
-    }
-
-    @Override
-    public boolean isBlockSolid(IBlockAccess blockAccess, int x, int y, int z, int side) {
-        return ForgeDirection.values()[side] == ForgeDirection.DOWN;
     }
 
 }
