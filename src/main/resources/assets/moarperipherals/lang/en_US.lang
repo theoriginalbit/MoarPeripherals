@@ -14,7 +14,7 @@ tile.moarperipherals.antennaController.name=BitNet Communication Tower (Controll
 item.moarperipherals.inkCartridge.name=Ink Cartridge
 item.moarperipherals.keyboardPart.name=Keyboard Part
 item.moarperipherals.sonic.name=Sonic Screwdriver
-item.moarperipherals.cellPart.name=Cell
+item.moarperipherals.monopolePart.name=Monopole Antenna
 
 upgrade.moarperipherals.adjective.chatbox=Chatty
 upgrade.moarperipherals.adjective.ironnote=Noisy

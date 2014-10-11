@@ -182,7 +182,7 @@ public class ModBlocks {
                     "IMI",
 
                     'I', Item.ingotIron,
-                    'M', ModItems.itemCellPart,
+                    'M', ModItems.itemMonopoleAntenna,
                     'C', ComputerCraftInfo.cc_cable
             ));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAntennaController),

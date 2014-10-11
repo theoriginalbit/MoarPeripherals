@@ -32,7 +32,7 @@ public final class ConfigHandler {
     public static int itemIdInkCartridge = startItemID++;
     public static int itemIdKeyboardPart = startItemID++;
     public static int itemIdSonic = startItemID++;
-    public static int itemIdCellPart = startItemID++;
+    public static int itemIdMonopoleAntenna = startItemID++;
 
     // Upgrade ID
     private static int startUpgradeID = 16384;
@@ -114,6 +114,7 @@ public final class ConfigHandler {
     private static final String DICTIONARY = "Item Dictionary";
     private static final String INKCARTRIDGE = "Ink Cartridge";
     private static final String KEYBOARDPART = "Keyboard Part";
+    private static final String MONOPOLEPART = "Monopole Antenna";
     private static final String PLAYERDETECTOR = "Player Detector";
     private static final String ANTENNAPOLE = "Communications Tower (Pole Block)";
     private static final String ANTENNACELL = "Communications Tower (Cell Block)";
@@ -180,6 +181,7 @@ public final class ConfigHandler {
         itemIdSonic = getItemId(SONIC, itemIdSonic);
         itemIdInkCartridge = getItemId(INKCARTRIDGE, itemIdInkCartridge);
         itemIdKeyboardPart = getItemId(KEYBOARDPART, itemIdKeyboardPart);
+        itemIdMonopoleAntenna = getItemId(MONOPOLEPART, itemIdMonopoleAntenna);
 
         // Fluid ID
 //		fluidInkCyanID = getFluidId("fluidInkCyanID", fluidInkCyanID);
