@@ -17,7 +17,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 
 public class BlockAntennaController extends BlockAntenna {
 
@@ -40,11 +39,6 @@ public class BlockAntennaController extends BlockAntenna {
     @Override
     public TileEntity createNewTileEntity(World world) {
         return new TileAntennaController();
-    }
-
-    @Override
-    public final boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
-        return side == ForgeDirection.DOWN;
     }
 
 }
