@@ -24,7 +24,7 @@ public final class ConfigHandler {
     public static int blockIdDictionary = startBlockID++;
     public static int blockIdAntenna = startBlockID++;
     public static int blockIdAntennaCell = startBlockID++;
-    public static int blockIdAntennaModem = startBlockID++;
+    public static int blockIdAntennaMiniCell = startBlockID++;
     public static int blockIdAntennaController = startBlockID++;
 
     // Item ID
@@ -32,6 +32,7 @@ public final class ConfigHandler {
     public static int itemIdInkCartridge = startItemID++;
     public static int itemIdKeyboardPart = startItemID++;
     public static int itemIdSonic = startItemID++;
+    public static int itemIdCellPart = startItemID++;
 
     // Upgrade ID
     private static int startUpgradeID = 16384;
@@ -63,10 +64,10 @@ public final class ConfigHandler {
     public static int keyboardRange = 16;
 
     // Antenna settings
-    public static int antennaRange = 1000;
-    public static int antennaRangeStorm = 800;
+    public static int antennaRange = 3000;
+    public static int antennaRangeStorm = 2400;
+    public static int antennaMessageDelay = 3;
     public static boolean antennaKeepChunkLoaded;
-    public static int antennaMessageDelay = 5;
 
     // Renderer enabled
     public static boolean enablePrinterGfx;
@@ -117,7 +118,7 @@ public final class ConfigHandler {
     private static final String ANTENNAPOLE = "Communications Tower (Pole Block)";
     private static final String ANTENNACELL = "Communications Tower (Cell Block)";
     private static final String ANTENNACTRLR = "Communications Tower (Controller)";
-    private static final String ANTENNAMODEM = "Communications Tower (Modem Block)";
+    private static final String ANTENNAMINI = "Communications Tower (Mini Cell Block)";
 
     private static Configuration config;
 
@@ -172,7 +173,7 @@ public final class ConfigHandler {
         blockIdPlayerDetector = getBlockId(PLAYERDETECTOR, blockIdPlayerDetector);
         blockIdAntenna = getBlockId(ANTENNAPOLE, blockIdAntenna);
         blockIdAntennaCell = getBlockId(ANTENNACELL, blockIdAntennaCell);
-        blockIdAntennaModem = getBlockId(ANTENNAMODEM, blockIdAntennaModem);
+        blockIdAntennaMiniCell = getBlockId(ANTENNAMINI, blockIdAntennaMiniCell);
         blockIdAntennaController = getBlockId(ANTENNACTRLR, blockIdAntennaController);
 
         // Item ID

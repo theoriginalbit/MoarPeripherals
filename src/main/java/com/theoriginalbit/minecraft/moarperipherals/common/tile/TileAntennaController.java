@@ -211,7 +211,7 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
             }
         }
 
-        if (worldObj.getBlockId(xCoord, yCoord + 13, zCoord) != ConfigHandler.blockIdAntennaModem) {
+        if (worldObj.getBlockId(xCoord, yCoord + 13, zCoord) != ConfigHandler.blockIdAntennaMiniCell) {
             return;
         }
 

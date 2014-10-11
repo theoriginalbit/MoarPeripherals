@@ -10,10 +10,10 @@ package com.theoriginalbit.minecraft.moarperipherals.common.block;
 
 import com.theoriginalbit.minecraft.moarperipherals.common.config.ConfigHandler;
 
-public class BlockAntennaModem extends BlockAntenna {
+public class BlockAntennaMiniCell extends BlockAntenna {
 
-    public BlockAntennaModem() {
-        super(ConfigHandler.blockIdAntennaModem, "antennaModem");
+    public BlockAntennaMiniCell() {
+        super(ConfigHandler.blockIdAntennaMiniCell, "antennaMiniCell");
     }
 
 }

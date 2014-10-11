@@ -29,6 +29,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BlockKeyboard extends BlockPairable {
 
@@ -67,7 +69,7 @@ public class BlockKeyboard extends BlockPairable {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(final World world, final int x, final int y, final int z, final EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         // check if the item was a wrench first
         ItemStack equipped = player.getCurrentEquippedItem();
         if (equipped != null && equipped.getItem() instanceof IToolWrench) {
@@ -80,7 +82,12 @@ public class BlockKeyboard extends BlockPairable {
         if (tile instanceof TileKeyboard) {
             TileKeyboard keyboard = (TileKeyboard) tile;
             if (keyboard.hasConnection()) {
-                player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
+                    }
+                }, 1000);
             } else if (!world.isRemote) {
                 String message = EnumChatFormatting.RED + Constants.CHAT.CHAT_NOT_PAIRED.getLocalised();
                 player.sendChatToPlayer(new ChatMessageComponent().addText(message));

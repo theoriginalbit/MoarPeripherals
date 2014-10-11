@@ -11,6 +11,7 @@ package com.theoriginalbit.minecraft.moarperipherals.common.registry;
 import com.theoriginalbit.minecraft.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.minecraft.moarperipherals.common.item.ItemSonic;
 import com.theoriginalbit.minecraft.moarperipherals.common.item.abstracts.ItemMoarP;
+import com.theoriginalbit.minecraft.moarperipherals.common.reference.ComputerCraftInfo;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -25,7 +26,7 @@ public class ModItems {
 
     public static final ModItems INSTANCE = new ModItems();
 
-    public static Item itemInkCartridge, itemSonic, itemKeyboardPart;
+    public static Item itemInkCartridge, itemSonic, itemKeyboardPart, itemCellPart;
 
     private ModItems() {
         // prevent other instances being constructed
@@ -46,6 +47,12 @@ public class ModItems {
             itemKeyboardPart = new ItemMoarP(ConfigHandler.itemIdKeyboardPart, "keyboardPart");
             GameRegistry.registerItem(itemKeyboardPart, itemKeyboardPart.getUnlocalizedName());
         }
+
+        if (ConfigHandler.enableAntenna) {
+            itemCellPart = new ItemMoarP(ConfigHandler.itemIdCellPart, "cellPart");
+            GameRegistry.registerItem(itemCellPart, "itemCellPart");
+        }
+
     }
 
     public final void addRecipes() {
@@ -83,6 +90,14 @@ public class ModItems {
                     'B', Block.stoneButton,
                     'R', Item.redstone,
                     'S', Block.stone
+            ));
+        }
+
+        if (ConfigHandler.enableAntenna) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemCellPart, 4),
+                    "M",
+
+                    'M', ComputerCraftInfo.cc_wirelessModem
             ));
         }
     }
