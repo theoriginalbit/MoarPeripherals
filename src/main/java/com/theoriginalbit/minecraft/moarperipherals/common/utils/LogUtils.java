@@ -25,6 +25,7 @@ public final class LogUtils {
         logger.info("");
         logger.info("Starting MoarPeripherals v" + ModInfo.VERSION);
         logger.info("Copyright (c) Joshua Asbury (@theoriginalbit), 2014");
+        logger.info("Model assets copyright (c) Dog a.k.a HydrantHunter");
         logger.info("http://wiki.theoriginalbit.com/moarperipherals/");
         logger.info("");
     }
