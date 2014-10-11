@@ -2,11 +2,10 @@
     {
         "modid": "MoarPeripherals",
         "name": "MoarPeripherals",
-        "description": "Adds a bunch of useful peripherals to ComputerCraft",
+        "description": "Adds a bunch of useful peripherals to ComputerCraft. Model assets copyright (c) Dog a.k.a HydrantHunter.",
         "version": "${version}",
         "mcversion" : "${mcversion}",
-        "url": "http://www.computercraft.info/forums2/index.php?/topic/19357-",
-        "updateUrl": "",
+        "url": "http://wiki.theoriginalbit.com/moarperipherals/",
         "authors": [
             "theoriginalbit"
         ],
