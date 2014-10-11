@@ -16,7 +16,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,6 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockAntenna extends BlockMoarP {
 
@@ -66,8 +66,13 @@ public class BlockAntenna extends BlockMoarP {
     }
 
     @Override
-    public boolean isBlockSolid(IBlockAccess blockAccess, int x, int y, int z, int side) {
+    public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
         return side == 0 || side == 1;
+    }
+
+    @Override
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+        return isBlockSolid(world, x, y, z, side.ordinal());
     }
 
     @SideOnly(Side.CLIENT)
@@ -90,13 +95,10 @@ public class BlockAntenna extends BlockMoarP {
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
+            // prevent fall damage
             player.fallDistance = 0f;
+            // make it a slow decent
             player.motionY = Math.max(player.motionY, -0.15d);
-            if (Minecraft.getMinecraft().gameSettings.keyBindForward.getIsKeyPressed()) {
-                if (player.motionY < 0.2d) {
-                    player.motionY = 0.2d;
-                }
-            }
         }
     }
 
