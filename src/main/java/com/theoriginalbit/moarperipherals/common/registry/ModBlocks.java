@@ -38,7 +38,7 @@ public final class ModBlocks {
     }
 
     public static Block blockChatBox, blockPlayerDetector, blockIronNote, blockKeyboard, blockPrinter,
-            blockDictionary, blockAntenna, blockAntennaCell, blockAntennaModem, blockAntennaController;
+            blockDictionary, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController;
 
     public final void register() {
         if (ConfigHandler.enablePlayerDetector) {
@@ -90,8 +90,8 @@ public final class ModBlocks {
             blockAntennaCell = new BlockAntennaCell();
             GameRegistry.registerBlock(blockAntennaCell, "blockAntennaCell");
 
-            blockAntennaModem = new BlockAntennaModem();
-            GameRegistry.registerBlock(blockAntennaModem, "blockAntennaModem");
+            blockAntennaMiniCell = new BlockAntennaMiniCell();
+            GameRegistry.registerBlock(blockAntennaMiniCell, "blockAntennaMiniCell");
 
             blockAntennaController = new BlockAntennaController();
             GameRegistry.registerBlock(blockAntennaController, "blockAntennaController");
@@ -159,7 +159,7 @@ public final class ModBlocks {
         }
 
         if (ConfigHandler.enableAntenna) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAntenna),
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAntenna, 4),
                     "ICI",
                     "ICI",
                     "ICI",
@@ -176,22 +176,22 @@ public final class ModBlocks {
                     'M', ComputerCraftInfo.cc_wirelessModem,
                     'C', ComputerCraftInfo.cc_cable
             ));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAntennaModem),
-                    "ICI",
-                    "CCC",
-                    "ICI",
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAntennaMiniCell),
+                    "IMI",
+                    "MCM",
+                    "IMI",
 
                     'I', "ingotIron",
+                    'M', ModItems.itemCellPart,
                     'C', ComputerCraftInfo.cc_cable
             ));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAntennaController),
                     "ICI",
-                    "DWD",
+                    "IWI",
                     "IPI",
 
                     'I', "ingotIron",
                     'C', ComputerCraftInfo.cc_cable,
-                    'D', "gemDiamond",
                     'W', ComputerCraftInfo.cc_wiredModem,
                     'P', ComputerCraftInfo.cc_blockComputer
             ));

@@ -16,10 +16,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -52,13 +56,48 @@ public class BlockAntenna extends BlockMoarP {
     }
 
     @Override
+    public boolean isNormalCube() {
+        return false;
+    }
+
+    @Override
     public TileEntity createNewTileEntity(World world, int par1) {
         return null;
     }
 
     @Override
     public boolean isBlockSolid(IBlockAccess blockAccess, int x, int y, int z, int side) {
-        return true;
+        return side == 0 || side == 1;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        double border = 0.1625d;
+        return AxisAlignedBB.getBoundingBox(x + border, y, z + border, x + 1 - border, y + 1, z + 1 - border);
+    }
+
+    @Override
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+        int meta = world.getBlockMetadata(x, y, z);
+        if (meta == 1) {
+            double border = 0.1;
+            return AxisAlignedBB.getBoundingBox(x + border, y, z + border, x + 1 - border, y + 1, z + 1 - border);
+        }
+        return AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
+    }
+
+    @Override
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+        if (entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entity;
+            player.fallDistance = 0f;
+            player.motionY = Math.max(player.motionY, -0.15d);
+            if (Minecraft.getMinecraft().gameSettings.keyBindForward.getIsKeyPressed()) {
+                if (player.motionY < 0.2d) {
+                    player.motionY = 0.2d;
+                }
+            }
+        }
     }
 
     @Override

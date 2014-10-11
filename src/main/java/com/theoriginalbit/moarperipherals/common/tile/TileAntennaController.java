@@ -18,7 +18,7 @@ import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntenna;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaCell;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaController;
-import com.theoriginalbit.moarperipherals.common.block.BlockAntennaModem;
+import com.theoriginalbit.moarperipherals.common.block.BlockAntennaMiniCell;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.server.chunk.ChunkLoadingCallback;
@@ -209,12 +209,12 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
         // make sure that there are only 13 pole blocks
         for (int y = 1; y < 13; ++y) {
             final Block block = worldObj.getBlock(xCoord, yCoord + y, zCoord);
-            if (!(block instanceof BlockAntenna) || block instanceof BlockAntennaCell || block instanceof BlockAntennaController || block instanceof BlockAntennaModem) {
+            if (!(block instanceof BlockAntenna) || block instanceof BlockAntennaCell || block instanceof BlockAntennaController || block instanceof BlockAntennaMiniCell) {
                 return;
             }
         }
 
-        if (!(worldObj.getBlock(xCoord, yCoord + 13, zCoord) instanceof BlockAntennaModem)) {
+        if (!(worldObj.getBlock(xCoord, yCoord + 13, zCoord) instanceof BlockAntennaMiniCell)) {
             return;
         }
 

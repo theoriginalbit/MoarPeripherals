@@ -8,7 +8,7 @@ tile.moarperipherals:printer.name=Impressora avançada
 tile.moarperipherals:itemDictionary.name=Dicionário de Itens.
 tile.moarperipherals:antenna.name=Torre de Comunicação BitNet (Mastro)
 tile.moarperipherals:antennaCell.name=Torre de comunicação BitNet (Celula)
-tile.moarperipherals:antennaModem.name=Modem da Torre de comunicação BitNet Interface)
+tile.moarperipherals:antennaMiniCell.name=Torre de comunicação BitNet (Mini Cell)
 tile.moarperipherals:antennaController.name=Torre de Comunicação BitNet(Controlador)
 
 item.moarperipherals:inkCartridge.name=Cartucho para Tinta
@@ -18,6 +18,7 @@ item.moarperipherals:sonic.name=Sonic Screwdriver
 upgrade.moarperipherals:adjective.chatbox=Falante
 upgrade.moarperipherals:adjective.ironnote=Barulhento
 upgrade.moarperipherals:adjective.dictionary=Informado
+item.moarperipherals:cellPart.name=Cell
 
 moarperipherals.chat.paired=Ligado ao computador em %d %d %d
 moarperipherals.chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador

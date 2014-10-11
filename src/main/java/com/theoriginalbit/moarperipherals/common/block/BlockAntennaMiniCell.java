@@ -8,10 +8,10 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-public class BlockAntennaModem extends BlockAntenna {
+public class BlockAntennaMiniCell extends BlockAntenna {
 
-    public BlockAntennaModem() {
-        super("antennaModem");
+    public BlockAntennaMiniCell() {
+        super("antennaMiniCell");
     }
 
 }

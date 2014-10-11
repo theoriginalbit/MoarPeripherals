@@ -11,7 +11,6 @@ package com.theoriginalbit.moarperipherals.common.config;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
 
@@ -60,9 +59,11 @@ public final class ConfigHandler {
 
     // Keyboard settings
     public static int keyboardRange = 16;
-    public static int antennaRange = 1000;
-    public static int antennaRangeStorm = 800;
-    public static int antennaMessageDelay = 5;
+
+    // Antenna settings
+    public static int antennaRange = 3000;
+    public static int antennaRangeStorm = 2400;
+    public static int antennaMessageDelay = 3;
     public static boolean antennaKeepsChunkLoaded;
 
     // Renderer enabled
