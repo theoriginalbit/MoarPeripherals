@@ -8,7 +8,7 @@
  */
 package com.theoriginalbit.minecraft.moarperipherals.common.tile;
 
-import com.theoriginalbit.minecraft.framework.peripheral.annotation.ComputerList;
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.minecraft.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.common.tile.abstracts.TileMoarP;
@@ -25,7 +25,7 @@ public class TilePlayerDetector extends TileMoarP implements IActivateAwareTile 
 
     private static final String EVENT_PLAYER = "player";
 
-    @ComputerList
+    @Computers.List
     public ArrayList<IComputerAccess> computers;
 
     @Override

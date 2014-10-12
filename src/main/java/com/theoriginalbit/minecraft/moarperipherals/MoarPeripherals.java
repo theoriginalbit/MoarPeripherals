@@ -60,7 +60,7 @@ public class MoarPeripherals {
 
         proxy.preInit();
 
-        ChatHandler.init();
+        ChatBoxHandler.init();
     }
 
     @EventHandler

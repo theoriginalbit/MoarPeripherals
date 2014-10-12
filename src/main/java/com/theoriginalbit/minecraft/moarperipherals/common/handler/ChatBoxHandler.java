@@ -13,8 +13,10 @@ import com.google.common.collect.Maps;
 import com.theoriginalbit.minecraft.moarperipherals.api.listener.IChatListener;
 import com.theoriginalbit.minecraft.moarperipherals.api.listener.ICommandListener;
 import com.theoriginalbit.minecraft.moarperipherals.api.listener.IDeathListener;
+import com.theoriginalbit.minecraft.moarperipherals.api.listener.IPlayerEventListener;
 import com.theoriginalbit.minecraft.moarperipherals.common.reference.Mods;
 import com.theoriginalbit.minecraft.moarperipherals.common.utils.LogUtils;
+import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -25,15 +27,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public final class ChatHandler {
+public final class ChatBoxHandler implements IPlayerTracker {
 
-    public static final ChatHandler instance = new ChatHandler();
+    public static final ChatBoxHandler instance = new ChatBoxHandler();
 
     public static void init() {
         if (Loader.isModLoaded(Mods.OPENPERIPHERALADDON)) {
             LogUtils.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command so it is ignored by ChatBoxes.");
             try {
-                ChatHandler.instance.addCommandListener(new ICommandListener() {
+                instance.addCommandListener(new ICommandListener() {
                     private static final String OPENPCOMMAND = "$$";
 
                     @Override
@@ -42,7 +44,8 @@ public final class ChatHandler {
                     }
 
                     @Override
-                    public void onServerChatEvent(String message, EntityPlayer player) {}
+                    public void onServerChatEvent(String message, EntityPlayer player) {
+                    }
                 });
             } catch (Exception e) {
                 LogUtils.debug("Failed to register OpenPeripheral-Addon ChatBox command listener");
@@ -53,46 +56,75 @@ public final class ChatHandler {
 
     private final ArrayList<IChatListener> chatListeners = Lists.newArrayList();
     private final ArrayList<IDeathListener> deathListeners = Lists.newArrayList();
+    private final ArrayList<IPlayerEventListener> playerListeners = Lists.newArrayList();
     private final HashMap<String, ArrayList<ICommandListener>> commandListeners = Maps.newHashMap();
 
     public void addChatListener(IChatListener listener) {
-        if (!chatListeners.contains(listener)) {
-            chatListeners.add(listener);
+        synchronized (chatListeners) {
+            if (!chatListeners.contains(listener)) {
+                chatListeners.add(listener);
+            }
         }
     }
 
     public void removeChatListener(IChatListener listener) {
-        if (chatListeners.contains(listener)) {
-            chatListeners.remove(listener);
+        synchronized (chatListeners) {
+            if (chatListeners.contains(listener)) {
+                chatListeners.remove(listener);
+            }
         }
     }
 
     public void addDeathListener(IDeathListener listener) {
-        if (!deathListeners.contains(listener)) {
-            deathListeners.add(listener);
+        synchronized (deathListeners) {
+            if (!deathListeners.contains(listener)) {
+                deathListeners.add(listener);
+            }
         }
     }
 
     public void removeDeathListener(IDeathListener listener) {
-        if (deathListeners.contains(listener)) {
-            deathListeners.remove(listener);
+        synchronized (deathListeners) {
+            if (deathListeners.contains(listener)) {
+                deathListeners.remove(listener);
+            }
+        }
+    }
+
+    public void addPlayerEventListener(IPlayerEventListener listener) {
+        synchronized (playerListeners) {
+            if (!playerListeners.contains(listener)) {
+                playerListeners.add(listener);
+            }
+        }
+    }
+
+    public void removePlayerEventListener(IPlayerEventListener listener) {
+        synchronized (playerListeners) {
+            if (playerListeners.contains(listener)) {
+                playerListeners.remove(listener);
+            }
         }
     }
 
     public void addCommandListener(ICommandListener listener) throws Exception {
         final String token = listener.getToken();
 
-        if (!commandListeners.containsKey(token)) {
-            commandListeners.put(token, new ArrayList<ICommandListener>());
+        synchronized (commandListeners) {
+            if (!commandListeners.containsKey(token)) {
+                commandListeners.put(token, new ArrayList<ICommandListener>());
+            }
+            commandListeners.get(token).add(listener);
         }
-        commandListeners.get(token).add(listener);
     }
 
     public void removeCommandListener(ICommandListener listener) {
         final String token = listener.getToken();
 
-        if (commandListeners.containsKey(token)) {
-            commandListeners.get(token).remove(listener);
+        synchronized (commandListeners) {
+            if (commandListeners.containsKey(token)) {
+                commandListeners.get(token).remove(listener);
+            }
         }
     }
 
@@ -105,12 +137,14 @@ public final class ChatHandler {
         }
 
         // check if it was a command first, if it is, chat listeners shouldn't get this!
-        for (Entry<String, ArrayList<ICommandListener>> entry : commandListeners.entrySet()) {
-            final String token = entry.getKey();
-            if (event.message.startsWith(token)) {
-                for (ICommandListener listener : entry.getValue()) {
-                    listener.onServerChatEvent(event.message.substring(token.length()).trim(), event.player);
-                    event.setCanceled(true);
+        synchronized (commandListeners) {
+            for (Entry<String, ArrayList<ICommandListener>> entry : commandListeners.entrySet()) {
+                final String token = entry.getKey();
+                if (event.message.startsWith(token)) {
+                    for (ICommandListener listener : entry.getValue()) {
+                        listener.onServerChatEvent(event.message.substring(token.length()).trim(), event.player);
+                        event.setCanceled(true);
+                    }
                 }
             }
         }
@@ -121,8 +155,10 @@ public final class ChatHandler {
         }
 
         // it wasn't a command, IChatListeners can have it now
-        for (IChatListener listener : chatListeners) {
-            listener.onServerChatEvent(event);
+        synchronized (chatListeners) {
+            for (IChatListener listener : chatListeners) {
+                listener.onServerChatEvent(event);
+            }
         }
     }
 
@@ -132,6 +168,34 @@ public final class ChatHandler {
         for (IDeathListener listener : deathListeners) {
             listener.onDeathEvent(event);
         }
+    }
+
+    @Override
+    public void onPlayerLogin(EntityPlayer player) {
+        synchronized (playerListeners) {
+            for (IPlayerEventListener listener : playerListeners) {
+                listener.onPlayerJoin(player.getDisplayName());
+            }
+        }
+    }
+
+    @Override
+    public void onPlayerLogout(EntityPlayer player) {
+        synchronized (playerListeners) {
+            for (IPlayerEventListener listener : playerListeners) {
+                listener.onPlayerLeave(player.getDisplayName());
+            }
+        }
+    }
+
+    @Override
+    public void onPlayerChangedDimension(EntityPlayer player) {
+        // NO-OP
+    }
+
+    @Override
+    public void onPlayerRespawn(EntityPlayer player) {
+        // NO-OP
     }
 
 }

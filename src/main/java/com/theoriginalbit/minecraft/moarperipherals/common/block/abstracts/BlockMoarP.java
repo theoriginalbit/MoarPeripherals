@@ -144,41 +144,8 @@ public abstract class BlockMoarP extends BlockContainer {
     }
 
     @Override
-    public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z) {
-        final TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-        if (tile == null || (((TileMoarP) tile).canPlayerAccess(player) || isOpBreakable(player))) {
-            return blockHardness;
-        }
-
-        return -1.0f;
-    }
-
-    @Override
     public boolean canCreatureSpawn(EnumCreatureType creature, World world, int x, int y, int z) {
         return false;
-    }
-
-    /**
-     * Stops the block from appearing in Not Enough Items
-     */
-    @SuppressWarnings("unused")
-    public final BlockMoarP hideFromNEI() {
-        NEIUtils.hideFromNEI(blockID);
-        return this;
-    }
-
-    /**
-     * Removes the block from the creative menu, by default it is added to the MoarPeripherals creative tab.
-     */
-    @SuppressWarnings("unused")
-    public final BlockMoarP hideFromCreative() {
-        setCreativeTab(null);
-        return this;
-    }
-
-    private static boolean isOpBreakable(EntityPlayer player) {
-        return ConfigHandler.securityOpBreak && MoarPeripherals.proxy.isOp(player);
     }
 
 }

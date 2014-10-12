@@ -26,6 +26,7 @@ public final class ConfigHandler {
     public static int blockIdAntennaCell = startBlockID++;
     public static int blockIdAntennaMiniCell = startBlockID++;
     public static int blockIdAntennaController = startBlockID++;
+    public static int blockIdChatBoxAdmin = startBlockID++;
 
     // Item ID
     private static int startItemID = 4470;
@@ -43,6 +44,7 @@ public final class ConfigHandler {
     // Feature enabled
     public static boolean enablePlayerDetector;
     public static boolean enableChatBox;
+    public static boolean enableChatBoxAdmin;
     public static boolean enableIronNote;
     public static boolean enableKeyboard;
     public static boolean enablePrinter;
@@ -167,6 +169,7 @@ public final class ConfigHandler {
 
         // Block ID
         blockIdChatBox = getBlockId(CHATBOX, blockIdChatBox);
+        blockIdChatBoxAdmin = getBlockId("ChatBox (Admin)", blockIdChatBoxAdmin);
         blockIdPrinter = getBlockId(PRINTER, blockIdPrinter);
         blockIdKeyboard = getBlockId(KEYBOARD, blockIdKeyboard);
         blockIdIronNote = getBlockId(IRONNOTE, blockIdIronNote);
@@ -193,6 +196,7 @@ public final class ConfigHandler {
         // Feature enabled
         enableSonic = getEnabled(SONIC);
         enableChatBox = getEnabled(CHATBOX);
+        enableChatBoxAdmin = getEnabled("ChatBox (Admin)");
         enablePrinter = getEnabled(PRINTER);
         enableKeyboard = getEnabled(KEYBOARD);
         enableIronNote = getEnabled(IRONNOTE);

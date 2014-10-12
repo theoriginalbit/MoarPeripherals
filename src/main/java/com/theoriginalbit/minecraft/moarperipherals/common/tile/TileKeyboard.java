@@ -19,9 +19,6 @@ import com.theoriginalbit.minecraft.moarperipherals.common.utils.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -64,27 +61,24 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
     }
 
     @Override
-    public Packet getDescriptionPacket() {
-        if (!hasConnection()) {
-            return null;
+    public NBTTagCompound getDescriptionNBT() {
+        final NBTTagCompound tag = super.getDescriptionNBT();
+        if (targetTile != null) {
+            tag.setInteger("targetX", targetTile.xCoord);
+            tag.setInteger("targetY", targetTile.yCoord);
+            tag.setInteger("targetZ", targetTile.zCoord);
         }
-        Packet132TileEntityData packet = (Packet132TileEntityData) super.getDescriptionPacket();
-        NBTTagCompound tag = packet.data;
-        tag.setInteger("targetX", targetTile.xCoord);
-        tag.setInteger("targetY", targetTile.yCoord);
-        tag.setInteger("targetZ", targetTile.zCoord);
-        return packet;
+        return tag;
     }
 
     @Override
-    public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {
-        super.onDataPacket(net, packet);
-        NBTTagCompound tag = packet.data;
+    protected void readDescriptionNBT(NBTTagCompound tag) {
+        super.readDescriptionNBT(tag);
         configureTargetFromNbt(tag);
     }
 
     /**
-     * When the Keybaord is right-clicked, it shall turn on the target computer if it is not on
+     * When the Keyboard is right-clicked, it shall turn on the target computer if it is not on
      */
     @Override
     public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {

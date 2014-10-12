@@ -1,6 +1,7 @@
 package com.theoriginalbit.minecraft.framework.peripheral.wrapper;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -43,7 +44,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;
  * with LuaFunction and retain references of methods annotated with OnAttach
  * and OnDetach so that your peripheral will function with ComputerCraft's
  * expected IPeripheral interface.
- *
+ * <p/>
  * IMPORTANT:
  * This is a backend class, you should never need to use this, and
  * modifying this may have unexpected results.
@@ -57,29 +58,38 @@ public class PeripheralWrapper implements IPeripheral {
     private final Object instance;
     private final String peripheralType;
     private final LinkedHashMap<String, MethodWrapper> methods = Maps.newLinkedHashMap();
-	private final String[] methodNames;
+    private final String[] methodNames;
+    private final Method methodAttach;
+    private final Method methodDetach;
     private final ArrayList<IComputerAccess> computers = Lists.newArrayList();
     private final ArrayList<IPFMount> mounts = Lists.newArrayList();
 
     public PeripheralWrapper(Object peripheral) {
-		final Class<?> peripheralClass = peripheral.getClass();
+        final Class<?> peripheralClass = peripheral.getClass();
         final LuaPeripheral peripheralLua = peripheralClass.getAnnotation(LuaPeripheral.class);
 
         // validate the peripheral type
         final String pname = peripheralLua.value().trim();
         Preconditions.checkArgument(!pname.isEmpty(), "Peripheral name cannot be an empty string");
 
-		for (Method m : peripheralClass.getMethods()) {
+        Method attach = null, detach = null;
+        for (Method m : peripheralClass.getMethods()) {
             if (isEnabledLuaFunction(m)) {
                 wrapMethod(peripheral, m);
             } else if (m.isAnnotationPresent(Alias.class)) {
                 throw new RuntimeException("Alias annotations should only occur on LuaFunction annotated methods");
             }
-		}
+            if (m.isAnnotationPresent(Computers.Attach.class)) {
+                attach = m;
+            }
+            if (m.isAnnotationPresent(Computers.Detach.class)) {
+                detach = m;
+            }
+        }
 
         // check for the @Computer fields and assign them to this instances computer list
         for (Field f : peripheralClass.getDeclaredFields()) {
-            if (f.isAnnotationPresent(ComputerList.class)) {
+            if (f.isAnnotationPresent(Computers.List.class)) {
                 try {
                     f.set(peripheral, computers);
                 } catch (IllegalAccessException e) {
@@ -102,39 +112,51 @@ public class PeripheralWrapper implements IPeripheral {
 
         instance = peripheral;
         peripheralType = pname;
+        methodAttach = checkEventMethod(attach, "@Computers.Attach");
+        methodDetach = checkEventMethod(detach, "@Computers.Detach");
         Set<String> keys = methods.keySet();
-		methodNames = keys.toArray(new String[keys.size()]);
-	}
+        methodNames = keys.toArray(new String[keys.size()]);
+    }
 
     public final Object getInstance() {
         return instance;
     }
 
     @Override
-	public String getType() {
-		return peripheralType;
-	}
+    public String getType() {
+        return peripheralType;
+    }
 
-	@Override
-	public String[] getMethodNames() {
-		return methodNames;
-	}
+    @Override
+    public String[] getMethodNames() {
+        return methodNames;
+    }
 
-	@Override
-	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int methodIdx, Object[] arguments) throws Exception {
+    @Override
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int methodIdx, Object[] arguments) throws Exception {
         final String name = methodNames[methodIdx];
         final MethodWrapper method = methods.get(name);
         return method.invoke(computer, context, arguments);
-	}
+    }
 
-	@Override
-	public void attach(IComputerAccess computer) {
+    @Override
+    public void attach(IComputerAccess computer) {
         if (!computers.contains(computer)) {
             computers.add(computer);
         }
 
         if (mounts.isEmpty()) {
             return;
+        }
+
+        if (methodAttach != null) {
+            try {
+                methodAttach.invoke(null);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
 
         int id = computer.getID();
@@ -146,16 +168,26 @@ public class PeripheralWrapper implements IPeripheral {
             computer.mount(mount.getMountLocation(), mount);
         }
         mountMap.put(id, ++mountCount);
-	}
+    }
 
-	@Override
-	public void detach(IComputerAccess computer) {
+    @Override
+    public void detach(IComputerAccess computer) {
         if (computers.contains(computer)) {
             computers.remove(computer);
         }
 
         if (mounts.isEmpty()) {
             return;
+        }
+
+        if (methodDetach != null) {
+            try {
+                methodDetach.invoke(null);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
 
         int id = computer.getID();
@@ -170,15 +202,15 @@ public class PeripheralWrapper implements IPeripheral {
             }
         }
         mountMap.put(id, mountCount);
-	}
+    }
 
     /**
      * dan200, why do we have to do this? why can't we just use Java's native equals?
      */
-	@Override
-	public boolean equals(IPeripheral other) {
+    @Override
+    public boolean equals(IPeripheral other) {
         return other != null && other instanceof PeripheralWrapper && other == this;
-	}
+    }
 
     private void wrapMethod(Object peripheral, Method method) {
         LuaFunction annotation = method.getAnnotation(LuaFunction.class);
@@ -218,6 +250,15 @@ public class PeripheralWrapper implements IPeripheral {
         }
         // mods are specified, none are present, this method shouldn't load
         return false;
+    }
+
+    private Method checkEventMethod(final Method m, String type) {
+        if (m == null) return null;
+        final Class<?>[] params = m.getParameterTypes();
+        if (params.length == 0) return m;
+        final boolean valid = params.length == 1 && IComputerAccess.class.isAssignableFrom(params[0]);
+        Preconditions.checkArgument(valid, type + " method can only have one parameters of type IComputerAccess");
+        return m;
     }
 
 }

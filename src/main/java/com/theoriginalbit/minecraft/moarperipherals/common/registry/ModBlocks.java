@@ -37,7 +37,7 @@ public class ModBlocks {
         // prevent other instances being constructed
     }
 
-    public static Block blockChatBox, blockPlayerDetector, blockIronNote, blockKeyboard, blockPrinter,
+    public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboard, blockPrinter,
             blockDictionary, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController;
 
     public final void register() {
@@ -55,6 +55,12 @@ public class ModBlocks {
             GameRegistry.registerBlock(blockChatBox, blockChatBox.getUnlocalizedName());
             GameRegistry.registerTileEntity(TileChatBox.class, ModInfo.ID + ":tileChatBox");
             ComputerCraftAPI.registerTurtleUpgrade(new UpgradeChatBox());
+        }
+
+        if (ConfigHandler.enableChatBoxAdmin) {
+            blockChatBoxAdmin = new BlockChatBoxAdmin();
+            GameRegistry.registerBlock(blockChatBoxAdmin, "blockChatBoxAdmin");
+            GameRegistry.registerTileEntity(TileChatBoxAdmin.class, "tileChatBoxAdmin");
         }
 
         if (ConfigHandler.enableIronNote) {

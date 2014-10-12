@@ -8,17 +8,16 @@
  */
 package com.theoriginalbit.minecraft.moarperipherals.common.tile;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.minecraft.moarperipherals.common.config.ConfigHandler;
-import com.theoriginalbit.minecraft.moarperipherals.common.handler.ChatBoxHandler;
-import com.theoriginalbit.minecraft.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.minecraft.moarperipherals.api.listener.IChatListener;
 import com.theoriginalbit.minecraft.moarperipherals.api.listener.ICommandListener;
 import com.theoriginalbit.minecraft.moarperipherals.api.listener.IDeathListener;
+import com.theoriginalbit.minecraft.moarperipherals.api.listener.IPlayerEventListener;
+import com.theoriginalbit.minecraft.moarperipherals.api.tile.aware.IBreakAwareTile;
+import com.theoriginalbit.minecraft.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.minecraft.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.minecraft.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.minecraft.moarperipherals.common.utils.ChatUtils;
 import com.theoriginalbit.minecraft.moarperipherals.common.utils.LogUtils;
@@ -33,60 +32,50 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import openperipheral.api.Ignore;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
-@Ignore
-@LuaPeripheral("chatbox")
-public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
-
-    private static final String ERROR_TOO_MANY = "too many messages (max %d per second)";
-    private static final String ERROR_RANGE = "range must be between -1 and the server default";
-    private static final String ERROR_LABEL = "label must be no more than %d characters long";
-
+/**
+ * @author theoriginalbit
+ * @since 12/10/2014
+ */
+@LuaPeripheral("chatbox_admin")
+public class TileChatBoxAdmin extends TileMoarP implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener, IPlayerEventListener {
     private static final String EVENT_CHAT = "chat_message";
     private static final String EVENT_DEATH = "death_message";
+    private static final String EVENT_JOIN = "player_join";
+    private static final String EVENT_LEAVE = "player_leave";
     private static final String EVENT_COMMAND = "chatbox_command";
     private static final String COMMAND_TOKEN = "##";
     private static final int MAX_LABEL_LENGTH = 20;
-    private static final int TICKER_INTERVAL = 20;
 
-    private int ticker = 0;
-    private int count = 0;
     private boolean registered = false;
 
     // user runtime configurable
     private String label = "";
-    private int rangeSay = ConfigHandler.chatRangeSay;
-    private int rangeTell = ConfigHandler.chatRangeTell;
-    private int rangeRead = ConfigHandler.chatRangeRead;
 
     @Computers.List
     public ArrayList<IComputerAccess> computers;
 
     @LuaFunction
     public boolean say(String message) throws Exception {
-        Preconditions.checkArgument(count++ <= ConfigHandler.chatSayRate, ERROR_TOO_MANY, ConfigHandler.chatSayRate);
-
-        final String[] usernames = getPlayerUsernames();
-        if (usernames.length == 0) {
+        ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
+        String[] playerNames = scm.getAllUsernames();
+        if (playerNames.length == 0) {
             return false;
         }
 
-        ChatUtils.sendChatToPlayer(usernames, buildMessage(message, false));
+        ChatUtils.sendChatToPlayer(playerNames, buildMessage(message, false));
         return true;
     }
 
     @LuaFunction
     public boolean tell(String username, String message) throws Exception {
-        Preconditions.checkArgument(count++ <= ConfigHandler.chatSayRate, ERROR_TOO_MANY, ConfigHandler.chatSayRate);
-
         ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
 
-        if (rangeTell == 0 || (rangeTell > 0 && !entityInRange(scm.getPlayerForUsername(username), rangeTell))) {
+        // check existence of the player
+        if (scm.getPlayerForUsername(username) == null) {
             return false;
         }
 
@@ -98,7 +87,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
     public Object[] setLabel(String str) {
         str = ChatAllowedCharacters.filerAllowedCharacters(str.trim());
         if (str.length() > MAX_LABEL_LENGTH) {
-            return new Object[]{false, String.format(ERROR_LABEL, MAX_LABEL_LENGTH)};
+            return new Object[]{false, ""};
         }
         label = str;
         return new Object[]{true};
@@ -109,72 +98,12 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
         return label;
     }
 
-    @LuaFunction(isMultiReturn = true)
-    public Object[] setSayRange(int range) {
-        if (range < -1 || (ConfigHandler.chatRangeSay > -1 && range > ConfigHandler.chatRangeSay)) {
-            return new Object[]{false, ERROR_RANGE};
-        }
-        rangeSay = range;
-        return new Object[]{true};
-    }
-
-    @LuaFunction
-    public int getSayRange() {
-        return rangeSay;
-    }
-
-    @LuaFunction
-    public int getMaxSayRange() {
-        return ConfigHandler.chatRangeSay;
-    }
-
-    @LuaFunction(isMultiReturn = true)
-    public Object[] setTellRange(int range) {
-        if (range < -1 || (ConfigHandler.chatRangeTell > -1 && range > ConfigHandler.chatRangeTell)) {
-            return new Object[]{false, ERROR_RANGE};
-        }
-        rangeTell = range;
-        return new Object[]{true};
-    }
-
-    @LuaFunction
-    public int getTellRange() {
-        return rangeTell;
-    }
-
-    @LuaFunction
-    public int getMaxTellRange() {
-        return ConfigHandler.chatRangeTell;
-    }
-
-    @LuaFunction(isMultiReturn = true)
-    public Object[] setReadRange(int range) {
-        if (range < -1 || (ConfigHandler.chatRangeRead > -1 && range > ConfigHandler.chatRangeRead)) {
-            return new Object[]{false, ERROR_RANGE};
-        }
-        rangeRead = range;
-        return new Object[]{true};
-    }
-
-    @LuaFunction
-    public int getReadRange() {
-        return rangeRead;
-    }
-
-    @LuaFunction
-    public int getMaxReadRange() {
-        return ConfigHandler.chatRangeRead;
-    }
-
     @Override
     public void updateEntity() {
-        if (++ticker > TICKER_INTERVAL) {
-            ticker = count = 0;
-        }
-
         if (!worldObj.isRemote && !registered) {
             ChatBoxHandler.instance.addChatListener(this);
             ChatBoxHandler.instance.addDeathListener(this);
+            ChatBoxHandler.instance.addPlayerEventListener(this);
             try {
                 ChatBoxHandler.instance.addCommandListener(this);
             } catch (Exception e) {
@@ -200,9 +129,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
 
     @Override
     public void onServerChatEvent(ServerChatEvent event) {
-        if (rangeRead < 0 || entityInRange(event.player, rangeRead)) {
-            computerQueueEvent(EVENT_CHAT, event.player.getDisplayName(), event.message);
-        }
+        computerQueueEvent(EVENT_CHAT, event.player.getDisplayName(), event.message);
     }
 
     // IDeathListener
@@ -218,10 +145,19 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
                     killer = ent.getEntityName();
                 }
             }
-            if (rangeRead < 0 || entityInRange(event.entity, rangeRead)) {
-                computerQueueEvent(EVENT_DEATH, event.entity.getEntityName(), source.getDamageType(), killer);
-            }
+            computerQueueEvent(EVENT_DEATH, event.entity.getEntityName(), source.getDamageType(), killer);
         }
+    }
+
+    // IPlayerEventListener
+    @Override
+    public void onPlayerJoin(String username) {
+        computerQueueEvent(EVENT_JOIN, username);
+    }
+
+    @Override
+    public void onPlayerLeave(String username) {
+        computerQueueEvent(EVENT_LEAVE, username);
     }
 
     // ICommandListener
@@ -233,9 +169,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
 
     @Override
     public void onServerChatEvent(String message, EntityPlayer player) {
-        if (rangeRead < 0 || entityInRange(player, rangeRead)) {
-            computerQueueEvent(EVENT_COMMAND, player.getDisplayName(), message);
-        }
+        computerQueueEvent(EVENT_COMMAND, player.getDisplayName(), message);
     }
 
     protected void computerQueueEvent(String event, Object... args) {
@@ -255,30 +189,8 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
             ChatBoxHandler.instance.removeChatListener(this);
             ChatBoxHandler.instance.removeDeathListener(this);
             ChatBoxHandler.instance.removeCommandListener(this);
+            ChatBoxHandler.instance.removePlayerEventListener(this);
         }
-    }
-
-    private boolean entityInRange(Entity entity, int range) {
-        return entity != null && (entity.getDistance(xCoord, yCoord, zCoord) <= range);
-    }
-
-    private String[] getPlayerUsernames() {
-        ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
-        String[] playerNames = scm.getAllUsernames();
-
-        if (rangeSay == 0) {
-            return new String[0];
-        } else if (rangeSay > 0) {
-            List<String> names = Lists.newArrayList();
-            for (String s : playerNames) {
-                if (entityInRange(scm.getPlayerForUsername(s), rangeSay)) {
-                    names.add(s);
-                }
-            }
-            return names.toArray(new String[names.size()]);
-        }
-
-        return playerNames;
     }
 
     private String buildMessage(String msg, boolean pm) {
