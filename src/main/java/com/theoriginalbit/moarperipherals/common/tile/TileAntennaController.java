@@ -9,7 +9,7 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.framework.peripheral.annotation.ComputerList;
+import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
@@ -118,7 +118,7 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
      * @LuaPeripheral implementation
      */
 
-    @ComputerList
+    @Computers.List
     public ArrayList<IComputerAccess> computers;
 
     @LuaFunction

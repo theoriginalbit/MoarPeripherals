@@ -10,7 +10,7 @@ package com.theoriginalbit.moarperipherals.common;
 
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.client.gui.GuiHandler;
-import com.theoriginalbit.moarperipherals.common.handler.ChatHandler;
+import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +22,7 @@ import org.apache.commons.lang3.ArrayUtils;
 public class ProxyCommon {
 
     public void preInit() {
-        MinecraftForge.EVENT_BUS.register(ChatHandler.instance);
+        MinecraftForge.EVENT_BUS.register(ChatBoxHandler.instance);
         NetworkRegistry.INSTANCE.registerGuiHandler(MoarPeripherals.instance, new GuiHandler());
     }
 

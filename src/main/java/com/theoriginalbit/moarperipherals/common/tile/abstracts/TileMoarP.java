@@ -8,7 +8,6 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile.abstracts;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -22,7 +21,7 @@ public class TileMoarP extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        setOwnerFromNBT(tag);
+        owner = tag.getString("owner");
     }
 
     @Override
@@ -32,19 +31,24 @@ public class TileMoarP extends TileEntity {
     }
 
     @Override
-    public Packet getDescriptionPacket() {
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, getDescriptionNbt());
+    public final Packet getDescriptionPacket() {
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, getDescriptionNBT());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-        setOwnerFromNBT(packet.func_148857_g());
+        final NBTTagCompound tag = packet.func_148857_g();
+        readDescriptionNBT(tag);
     }
 
-    protected NBTTagCompound getDescriptionNbt() {
+    protected NBTTagCompound getDescriptionNBT() {
         final NBTTagCompound tag = new NBTTagCompound();
         tag.setString("owner", owner);
         return tag;
+    }
+
+    protected void readDescriptionNBT(NBTTagCompound tag) {
+        owner = tag.getString("owner");
     }
 
     public final void setOwner(String username) {
@@ -53,14 +57,6 @@ public class TileMoarP extends TileEntity {
 
     public final String getOwner() {
         return owner;
-    }
-
-    public boolean canPlayerAccess(EntityPlayer player) {
-        return player != null;
-    }
-
-    private void setOwnerFromNBT(NBTTagCompound tag) {
-        owner = tag.getString("owner");
     }
 
 }

@@ -19,8 +19,6 @@ import com.theoriginalbit.moarperipherals.common.utils.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -61,8 +59,8 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
     }
 
     @Override
-    public NBTTagCompound getDescriptionNbt() {
-        final NBTTagCompound tag = super.getDescriptionNbt();
+    public NBTTagCompound getDescriptionNBT() {
+        final NBTTagCompound tag = super.getDescriptionNBT();
         if (targetTile != null) {
             tag.setInteger("targetX", targetTile.xCoord);
             tag.setInteger("targetY", targetTile.yCoord);
@@ -72,14 +70,13 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-        super.onDataPacket(net, packet);
-        NBTTagCompound tag = packet.func_148857_g();
+    protected void readDescriptionNBT(NBTTagCompound tag) {
+        super.readDescriptionNBT(tag);
         configureTargetFromNbt(tag);
     }
 
     /**
-     * When the Keybaord is right-clicked, it shall turn on the target computer if it is not on
+     * When the Keyboard is right-clicked, it shall turn on the target computer if it is not on
      */
     @Override
     public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {

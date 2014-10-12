@@ -11,7 +11,7 @@ package com.theoriginalbit.moarperipherals;
 import com.theoriginalbit.framework.peripheral.LuaType;
 import com.theoriginalbit.framework.peripheral.PeripheralProvider;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
-import com.theoriginalbit.moarperipherals.common.handler.ChatHandler;
+import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
@@ -60,7 +60,7 @@ public class MoarPeripherals {
 
         proxy.preInit();
 
-        ChatHandler.init();
+        ChatBoxHandler.init();
     }
 
     @EventHandler

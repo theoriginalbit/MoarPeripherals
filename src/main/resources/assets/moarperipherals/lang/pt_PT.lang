@@ -2,6 +2,7 @@ itemGroup.tabMoarPeripherals=MoarPeripherals
 
 tile.moarperipherals:playerdetector.name=Detector de Jogadores
 tile.moarperipherals:chatbox.name=Caixa Falante
+tile.moarperipherals:chatboxAdmin.name=ChatBox (Admin)
 tile.moarperipherals:ironnote.name=Note block de Ferro
 tile.moarperipherals:keyboard.name=Teclado
 tile.moarperipherals:printer.name=Impressora avançada

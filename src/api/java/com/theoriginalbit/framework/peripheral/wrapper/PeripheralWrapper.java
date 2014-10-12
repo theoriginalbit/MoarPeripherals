@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.framework.peripheral.annotation.Alias;
-import com.theoriginalbit.framework.peripheral.annotation.ComputerList;
+import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.interfaces.IPFMount;
@@ -15,6 +15,7 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +65,8 @@ public class PeripheralWrapper implements IPeripheral {
     private final String peripheralType;
     private final LinkedHashMap<String, MethodWrapper> methods = Maps.newLinkedHashMap();
     private final String[] methodNames;
+    private final Method methodAttach;
+    private final Method methodDetach;
     private final ArrayList<IComputerAccess> computers = Lists.newArrayList();
     private final ArrayList<IPFMount> mounts = Lists.newArrayList();
 
@@ -75,17 +78,24 @@ public class PeripheralWrapper implements IPeripheral {
         final String pname = peripheralLua.value().trim();
         Preconditions.checkArgument(!pname.isEmpty(), "Peripheral name cannot be an empty string");
 
+        Method attach = null, detach = null;
         for (Method m : peripheralClass.getMethods()) {
             if (isEnabledLuaFunction(m)) {
                 wrapMethod(peripheral, m);
             } else if (m.isAnnotationPresent(Alias.class)) {
                 throw new RuntimeException("Alias annotations should only occur on LuaFunction annotated methods");
             }
+            if (m.isAnnotationPresent(Computers.Attach.class)) {
+                attach = m;
+            }
+            if (m.isAnnotationPresent(Computers.Detach.class)) {
+                detach = m;
+            }
         }
 
         // check for the @Computer fields and assign them to this instances computer list
         for (Field f : peripheralClass.getDeclaredFields()) {
-            if (f.isAnnotationPresent(ComputerList.class)) {
+            if (f.isAnnotationPresent(Computers.List.class)) {
                 try {
                     f.set(peripheral, computers);
                 } catch (IllegalAccessException e) {
@@ -108,6 +118,8 @@ public class PeripheralWrapper implements IPeripheral {
 
         instance = peripheral;
         peripheralType = pname;
+        methodAttach = checkEventMethod(attach, "@Computers.Attach");
+        methodDetach = checkEventMethod(detach, "@Computers.Detach");
         Set<String> keys = methods.keySet();
         methodNames = keys.toArray(new String[keys.size()]);
     }
@@ -143,6 +155,16 @@ public class PeripheralWrapper implements IPeripheral {
             return;
         }
 
+        if (methodAttach != null) {
+            try {
+                methodAttach.invoke(null);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+
         int id = computer.getID();
         int mountCount = 0;
         if (mountMap.containsKey(id)) {
@@ -162,6 +184,16 @@ public class PeripheralWrapper implements IPeripheral {
 
         if (mounts.isEmpty()) {
             return;
+        }
+
+        if (methodDetach != null) {
+            try {
+                methodDetach.invoke(null);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
 
         int id = computer.getID();
@@ -224,6 +256,15 @@ public class PeripheralWrapper implements IPeripheral {
         }
         // mods are specified, none are present, this method shouldn't load
         return false;
+    }
+
+    private Method checkEventMethod(final Method m, String type) {
+        if (m == null) return null;
+        final Class<?>[] params = m.getParameterTypes();
+        if (params.length == 0) return m;
+        final boolean valid = params.length == 1 && IComputerAccess.class.isAssignableFrom(params[0]);
+        Preconditions.checkArgument(valid, type + " method can only have one parameters of type IComputerAccess");
+        return m;
     }
 
 }

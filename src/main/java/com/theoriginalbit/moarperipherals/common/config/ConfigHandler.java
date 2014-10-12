@@ -40,6 +40,7 @@ public final class ConfigHandler {
     // Feature enabled
     public static boolean enableSonic;
     public static boolean enableChatBox;
+    public static boolean enableChatBoxAdmin;
     public static boolean enablePrinter;
     public static boolean enableKeyboard;
     public static boolean enableIronNote;
@@ -126,6 +127,7 @@ public final class ConfigHandler {
         // Feature enabled
         enableSonic = getEnabled(CATEGORY_SONIC);
         enableChatBox = getEnabled(CATEGORY_CHAT_BOX);
+        enableChatBoxAdmin = getEnabled("ChatBox (Admin)");
         enablePrinter = getEnabled(CATEGORY_PRINTER);
         enableKeyboard = getEnabled(CATEGORY_KEYBOARD);
         enableIronNote = getEnabled(CATEGORY_IRON_NOTE);
