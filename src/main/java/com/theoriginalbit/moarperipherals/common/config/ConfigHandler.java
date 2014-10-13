@@ -72,7 +72,7 @@ public final class ConfigHandler {
     public static boolean antennaKeepsChunkLoaded;
 
     // Turtle Teleport settings
-    public static double fuelMultiplier = 1.2;
+    public static double fuelMultiplier = 1.5;
 
     // Renderer enabled
     public static boolean enablePrinterGfx, enableSonicGfx;
@@ -166,6 +166,9 @@ public final class ConfigHandler {
         antennaMessageDelay = getInt(CATEGORY_ANTENNA, "towerMessageDelay", antennaMessageDelay, "The delay (in ticks) that the Cell Tower takes to send a message per 100 block distance (rounded up).");
         antennaKeepsChunkLoaded = getBoolean(CATEGORY_ANTENNA, "keepChunkLoaded", "Whether a cell tower should keep the chunk it resides in loaded");
 
+        // Turtle Teleport settings
+        fuelMultiplier = getDouble(CATEGORY_TURTLE_TELEPORT, "fuelMultiplier", fuelMultiplier, "The multiplier for the fuel consumption to teleport the Turtle. Formula: Euclidean distance * multiplier");
+
         // Renderer enabled
         enablePrinterGfx = getBoolean(CATEGORY_RENDERER, "printerModel", false, "Whether or not to render items and blocks, related to the printer, normally or as models.");
         enableSonicGfx = getBoolean(CATEGORY_RENDERER, "sonicModel", "Whether or not to render the Sonic Screwdriver normally or as a model");
@@ -190,6 +193,10 @@ public final class ConfigHandler {
 
     private static int getInt(String cat, String key, int defInt, String desc) {
         return config.get(cat, key, defInt, desc).getInt();
+    }
+
+    private static double getDouble(String cat, String key, double defDbl, String desc) {
+        return config.get(cat, key, defDbl, desc).getDouble();
     }
 
     private static boolean getEnabled(String key) {
