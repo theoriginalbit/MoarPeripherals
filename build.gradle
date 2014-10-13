@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10-1.65-1.4"
+version = "1.7.10-1.65-1.5"
 group = "com.theoriginalbit.minecraft"
 archivesBaseName = "MoarPeripherals"
 
