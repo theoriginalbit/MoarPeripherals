@@ -9,7 +9,11 @@
 package com.theoriginalbit.moarperipherals.common.block;
 
 import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockMoarP;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.TileTurtleTeleport;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -20,10 +24,20 @@ import net.minecraft.world.World;
 public class BlockTurtleTeleport extends BlockMoarP {
     public BlockTurtleTeleport() {
         super("turtleTeleport");
+        setHardness(5f);
+        setResistance(2000f);
+        setStepSound(soundTypePiston);
     }
 
     @Override
     public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
         return new TileTurtleTeleport();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister registry) {
+        super.registerBlockIcons(registry);
+        icons[1] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":turtleTeleportTop");
     }
 }
