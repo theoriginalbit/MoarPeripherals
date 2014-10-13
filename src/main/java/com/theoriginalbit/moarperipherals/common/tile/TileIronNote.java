@@ -14,10 +14,10 @@ import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageGeneric;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageParticle;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageSoundEffect;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import net.minecraft.world.World;
 
 @LuaPeripheral("iron_note")
 public class TileIronNote extends TileMoarP {
@@ -37,23 +37,37 @@ public class TileIronNote extends TileMoarP {
         Preconditions.checkArgument(ticker++ < MAX_TICK, "Too many notes (over " + MAX_TICK + " per tick)");
         Preconditions.checkArgument(ConfigHandler.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 
-        play(worldObj, xCoord, yCoord, zCoord, instrument, pitch);
-
         int dimId = worldObj.provider.dimensionId;
-        MessageGeneric message = new MessageGeneric();
-        message.intData = new int[]{dimId, xCoord, yCoord, zCoord, instrument, pitch};
-        PacketHandler.INSTANCE.sendToAllAround(message, new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord, zCoord, ConfigHandler.noteRange));
+        final NetworkRegistry.TargetPoint target = new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord, zCoord, ConfigHandler.noteRange);
+
+        // construct the sound packet
+        final MessageSoundEffect soundEffect = new MessageSoundEffect(
+                worldObj,
+                xCoord + 0.5d,
+                yCoord + 0.5d,
+                zCoord + 0.5d,
+                "note." + INSTRUMENTS.get(instrument),
+                3.0f, (float) Math.pow(2d, (double) (pitch - 12) / 12d)
+        );
+
+        // construct the particle packet
+        final MessageParticle particle = new MessageParticle(
+                worldObj,
+                "note",
+                xCoord + 0.5d,
+                yCoord + 1.2d,
+                zCoord + 0.5d,
+                pitch / 24d
+        );
+
+        // send the packets
+        PacketHandler.INSTANCE.sendToAllAround(soundEffect, target);
+        PacketHandler.INSTANCE.sendToAllAround(particle, target);
     }
 
     @Override
     public void updateEntity() {
         ticker = 0;
-    }
-
-    public static void play(World world, double x, double y, double z, int instrument, int pitch) {
-        float f = (float) Math.pow(2.0D, (double) (pitch - 12) / 12.0D);
-        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "note." + INSTRUMENTS.get(instrument), 3.0F, f);
-        world.spawnParticle("note", x + 0.5D, y + 1.2D, z + 0.5D, (double) pitch / 24.0D, 0.0D, 0.0D);
     }
 
 }

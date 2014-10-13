@@ -13,12 +13,14 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class MessageGeneric implements IMessage {
+class MessageGeneric implements IMessage {
 
-    public int[] intData = new int[0];
-    public byte[] byteData = new byte[0];
-    public char[] charData = new char[0];
-    public String[] stringData = new String[0];
+    public int[] intData;
+    public byte[] byteData;
+    public char[] charData;
+    public float[] floatData;
+    public double[] doubleData;
+    public String[] stringData;
     public NBTTagCompound nbtData;
 
     @Override
@@ -61,6 +63,26 @@ public class MessageGeneric implements IMessage {
             buf.writeInt(0);
         }
 
+        // Write any float data
+        if (floatData != null) {
+            buf.writeInt(floatData.length);
+            for (float f : floatData) {
+                buf.writeFloat(f);
+            }
+        } else {
+            buf.writeInt(0);
+        }
+
+        // Write any double data
+        if (doubleData != null) {
+            buf.writeInt(doubleData.length);
+            for (double d : doubleData) {
+                buf.writeDouble(d);
+            }
+        } else {
+            buf.writeInt(0);
+        }
+
         // Write any NBT data
         if (nbtData != null) {
             buf.writeBoolean(true);
@@ -73,40 +95,48 @@ public class MessageGeneric implements IMessage {
     @Override
     public void fromBytes(ByteBuf buf) {
         int nStr = buf.readInt();
-        if (nStr == 0) {
-            stringData = null;
-        } else {
-            stringData = new String[nStr];
+        stringData = new String[nStr];
+        if (nStr > 0) {
             for (int i = 0; i < nStr; ++i) {
                 stringData[i] = ByteBufUtils.readUTF8String(buf);
             }
         }
 
         int nInt = buf.readInt();
-        if (nInt == 0) {
-            intData = null;
-        } else {
-            intData = new int[nInt];
+        intData = new int[nInt];
+        if (nInt > 0) {
             for (int i = 0; i < nInt; ++i) {
                 intData[i] = buf.readInt();
             }
         }
 
         int nByte = buf.readInt();
-        if (nByte == 0) {
-            byteData = null;
-        } else {
-            byteData = new byte[nByte];
+        byteData = new byte[nByte];
+        if (nByte > 0) {
             buf.readBytes(byteData);
         }
 
         int nChar = buf.readInt();
-        if (nChar == 0) {
-            charData = null;
-        } else {
-            charData = new char[nChar];
+        charData = new char[nChar];
+        if (nChar > 0) {
             for (int i = 0; i < nChar; ++i) {
                 charData[i] = buf.readChar();
+            }
+        }
+
+        int nFloat = buf.readInt();
+        floatData = new float[nFloat];
+        if (nFloat > 0) {
+            for (int i = 0; i < nFloat; ++i) {
+                floatData[i] = buf.readFloat();
+            }
+        }
+
+        int nDouble = buf.readInt();
+        doubleData = new double[nDouble];
+        if (nDouble > 0) {
+            for (int i = 0; i < nDouble; ++i) {
+                doubleData[i] = buf.readDouble();
             }
         }
 
