@@ -14,6 +14,7 @@ import net.minecraft.world.World;
  * @author theoriginalbit
  * @since 13/10/2014
  */
+@SuppressWarnings("unused")
 public class MessageParticle extends MessageGeneric {
 
     public MessageParticle() {

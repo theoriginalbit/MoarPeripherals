@@ -47,7 +47,8 @@ public class TileIronNote extends TileMoarP {
                 yCoord + 0.5d,
                 zCoord + 0.5d,
                 "note." + INSTRUMENTS.get(instrument),
-                3.0f, (float) Math.pow(2d, (double) (pitch - 12) / 12d)
+                3.0f,
+                (float) Math.pow(2d, (double) (pitch - 12) / 12d)
         );
 
         // construct the particle packet

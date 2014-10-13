@@ -14,10 +14,19 @@ import net.minecraft.world.World;
  * @author theoriginalbit
  * @since 13/10/2014
  */
+@SuppressWarnings("unused")
 public class MessageSoundEffect extends MessageGeneric {
 
     public MessageSoundEffect() {
         // required empty constructor
+    }
+
+    public MessageSoundEffect(World world, double x, double y, double z, String name) {
+        this(world, x, y, z, name, 1f);
+    }
+
+    public MessageSoundEffect(World world, double x, double y, double z, String name, float volume) {
+        this(world, x, y, z, name, volume, 1f);
     }
 
     public MessageSoundEffect(World world, double x, double y, double z, String name, float volume, float pitch) {
