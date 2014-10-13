@@ -13,59 +13,21 @@ import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.tile.TileChatBox;
+import com.theoriginalbit.moarperipherals.common.upgrades.abstracts.UpgradePeripheral;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.turtle.*;
+import dan200.computercraft.api.turtle.ITurtleAccess;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IIcon;
 
-public class UpgradeChatBox implements ITurtleUpgrade {
+public class UpgradeChatBox extends UpgradePeripheral {
 
-    @Override
-    public int getUpgradeID() {
-        return ConfigHandler.upgradeIdChatBox;
+    public UpgradeChatBox() {
+        super(ConfigHandler.upgradeIdChatBox, Constants.UPGRADE.CHATBOX, new ItemStack(ModBlocks.blockChatBox), TileChatBox.class);
     }
 
     @Override
-    public String getUnlocalisedAdjective() {
-        return Constants.UPGRADE.CHATBOX.getLocalised();
-    }
-
-    @Override
-    public TurtleUpgradeType getType() {
-        return TurtleUpgradeType.Peripheral;
-    }
-
-    @Override
-    public ItemStack getCraftingItem() {
-        return new ItemStack(ModBlocks.blockChatBox);
-    }
-
-    @Override
-    public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-        TileChatBox tile = new TileChatBox();
-        PeripheralWrapper wrapper = new PeripheralWrapper(tile);
-        updateLocation(turtle, wrapper);
-        return wrapper;
-    }
-
-    @Override
-    public TurtleCommandResult useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, int direction) {
-        return TurtleCommandResult.failure();
-    }
-
-    @Override
-    public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-        return ModBlocks.blockChatBox.getIcon(0, 0);
-    }
-
-    @Override
-    public void update(ITurtleAccess turtle, TurtleSide side) {
-        updateLocation(turtle, turtle.getPeripheral(side));
-    }
-
-    private void updateLocation(ITurtleAccess turtle, IPeripheral peripheral) {
+    protected void updateLocation(ITurtleAccess turtle, IPeripheral peripheral) {
         if (peripheral instanceof PeripheralWrapper) {
             Object instance = ((PeripheralWrapper) peripheral).getInstance();
             if (instance instanceof TileEntity) {

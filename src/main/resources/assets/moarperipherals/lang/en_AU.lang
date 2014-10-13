@@ -11,6 +11,7 @@ tile.moarperipherals:antenna.name=BitNet Communication Tower (Pole)
 tile.moarperipherals:antennaCell.name=BitNet Communication Tower (Cell)
 tile.moarperipherals:antennaMiniCell.name=BitNet Communication Tower (Mini Cell)
 tile.moarperipherals:antennaController.name=BitNet Communication Tower (Controller)
+tile.moarperipherals:turtleTeleport.name=Turtle Teleport
 
 item.moarperipherals:inkCartridge.name=Ink Cartridge
 item.moarperipherals:keyboardPart.name=Keyboard Part
@@ -20,6 +21,7 @@ item.moarperipherals:monopolePart.name=Monopole Antenna
 upgrade.moarperipherals:adjective.chatbox=Chatty
 upgrade.moarperipherals:adjective.ironnote=Noisy
 upgrade.moarperipherals:adjective.dictionary=Informed
+upgrade.moarperipherals:adjective.shears=Shearing
 
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.

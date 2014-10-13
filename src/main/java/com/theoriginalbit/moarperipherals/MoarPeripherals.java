@@ -17,6 +17,7 @@ import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
+import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
 import com.theoriginalbit.moarperipherals.server.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.converters.ConverterItemStack;
@@ -70,6 +71,7 @@ public class MoarPeripherals {
 
         ModItems.INSTANCE.register();
         ModBlocks.INSTANCE.register();
+        UpgradeRegistry.INSTANCE.register();
 
         if (ConfigHandler.shouldChunkLoad()) {
             LogUtils.debug("Registering chunk loading callback");

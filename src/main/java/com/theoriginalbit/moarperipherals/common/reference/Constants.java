@@ -29,9 +29,10 @@ public final class Constants {
     }
 
     public static final class UPGRADE {
-        public static final LocalisationStore CHATBOX = new LocalisationStore("upgrade.moarperipherals.adjective.chatbox");
-        public static final LocalisationStore IRONNOTE = new LocalisationStore("upgrade.moarperipherals.adjective.ironnote");
-        public static final LocalisationStore DICTIONARY = new LocalisationStore("upgrade.moarperipherals.adjective.dictionary");
+        public static final LocalisationStore CHATBOX = new LocalisationStore("upgrade.moarperipherals:adjective.chatbox");
+        public static final LocalisationStore IRONNOTE = new LocalisationStore("upgrade.moarperipherals:adjective.ironnote");
+        public static final LocalisationStore DICTIONARY = new LocalisationStore("upgrade.moarperipherals:adjective.dictionary");
+        public static final LocalisationStore SHEARS = new LocalisationStore("upgrade.moarperipherals:adjective.shears");
     }
 
     public static final class CHAT {

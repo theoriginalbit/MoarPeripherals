@@ -8,6 +8,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.utils;
 
+import dan200.computercraft.api.turtle.ITurtleAccess;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -20,10 +21,13 @@ public final class ComputerUtils {
 
     private static final Class<?> CLAZZ_ICOMPUTER = ReflectionUtils.getClass("dan200.computercraft.shared.computer.core.IComputer");
     private static final Method METHOD_QUEUEEVENT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "queueEvent", new Class[]{String.class, Object[].class});
-    private static final Method METHOD_ISON = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "isOn", new Class[]{});
-    private static final Method METHOD_TURNON = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "turnOn", new Class[]{});
-    private static final Method METHOD_SHUTDOWN = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "shutdown", new Class[]{});
-    private static final Method METHOD_REBOOT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "reboot", new Class[]{});
+    private static final Method METHOD_ISON = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "isOn", new Class[0]);
+    private static final Method METHOD_TURNON = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "turnOn", new Class[0]);
+    private static final Method METHOD_SHUTDOWN = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "shutdown", new Class[0]);
+    private static final Method METHOD_REBOOT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "reboot", new Class[0]);
+
+    private static final Class<?> CLAZZ_ITURTLETILE = ReflectionUtils.getClass("dan200.computercraft.shared.turtle.blocks.ITurtleTile");
+    private static final Method METHOD_GETACCESS = ReflectionUtils.getMethod(CLAZZ_ITURTLETILE, "getAccess", new Class[0]);
 
     private static final String EVENT_TERMINATE = "terminate";
 
@@ -38,10 +42,29 @@ public final class ComputerUtils {
         return null;
     }
 
+    public static TileEntity getTileTurtle(World world, Integer x, Integer y, Integer z) {
+        if (x == null || y == null || z == null) {
+            return null;
+        }
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile != null && CLAZZ_ITURTLETILE.isAssignableFrom(tile.getClass())) {
+            return tile;
+        }
+        return null;
+    }
+
     public static Object getIComputer(World world, int x, int y, int z) {
         TileEntity tile = getTileComputerBase(world, x, y, z);
         if (tile != null) {
             return ReflectionUtils.callMethod(tile, METHOD_GETCOMPUTER);
+        }
+        return null;
+    }
+
+    public static ITurtleAccess getITurtle(World world, int x, int y, int z) {
+        final TileEntity tile = getTileTurtle(world, x, y, z);
+        if (tile != null) {
+            return (ITurtleAccess) ReflectionUtils.callMethod(tile, METHOD_GETACCESS);
         }
         return null;
     }
@@ -106,6 +129,21 @@ public final class ComputerUtils {
             return;
         }
         queueEvent(tile, EVENT_TERMINATE);
+    }
+
+    public static ITurtleAccess findTurtle(World world, int x, int y, int z) {
+        if (isTurtle(world, x + 1, y, z)) return getITurtle(world, x + 1, y, z);
+        if (isTurtle(world, x, y + 1, z)) return getITurtle(world, x, y + 1, z);
+        if (isTurtle(world, x, y, z + 1)) return getITurtle(world, x, y, z + 1);
+        if (isTurtle(world, x - 1, y, z)) return getITurtle(world, x - 1, y, z);
+        if (isTurtle(world, x, y - 1, z)) return getITurtle(world, x, y - 1, z);
+        if (isTurtle(world, x, y, z - 1)) return getITurtle(world, x, y, z - 1);
+        return null;
+    }
+
+    public static boolean isTurtle(World world, int x, int y, int z) {
+        final TileEntity tile = world.getTileEntity(x, y, z);
+        return tile != null && CLAZZ_ITURTLETILE.isAssignableFrom(tile.getClass());
     }
 
 }

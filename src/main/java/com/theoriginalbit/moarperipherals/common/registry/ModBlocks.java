@@ -13,11 +13,7 @@ import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.item.block.ItemBlockPairable;
 import com.theoriginalbit.moarperipherals.common.tile.*;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
-import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeChatBox;
-import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeDictionary;
-import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeIronNote;
 import cpw.mods.fml.common.registry.GameRegistry;
-import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -38,7 +34,7 @@ public final class ModBlocks {
     }
 
     public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboard, blockPrinter,
-            blockDictionary, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController;
+            blockDictionary, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport;
 
     public final void register() {
         if (ConfigHandler.enablePlayerDetector) {
@@ -54,7 +50,6 @@ public final class ModBlocks {
             blockChatBox = new BlockChatBox();
             GameRegistry.registerBlock(blockChatBox, "blockChatBox");
             GameRegistry.registerTileEntity(TileChatBox.class, "tileChatBox");
-            ComputerCraftAPI.registerTurtleUpgrade(new UpgradeChatBox());
         }
 
         if (ConfigHandler.enableChatBoxAdmin) {
@@ -67,7 +62,6 @@ public final class ModBlocks {
             blockIronNote = new BlockIronNote();
             GameRegistry.registerBlock(blockIronNote, "blockIronNote");
             GameRegistry.registerTileEntity(TileIronNote.class, "tileIronNote");
-            ComputerCraftAPI.registerTurtleUpgrade(new UpgradeIronNote());
         }
 
         if (ConfigHandler.enableKeyboard) {
@@ -86,7 +80,6 @@ public final class ModBlocks {
             blockDictionary = new BlockDictionary();
             GameRegistry.registerBlock(blockDictionary, "blockDictionary");
             GameRegistry.registerTileEntity(TileDictionary.class, "tileDictionary");
-            ComputerCraftAPI.registerTurtleUpgrade(new UpgradeDictionary());
         }
 
         if (ConfigHandler.enableAntenna) {
@@ -102,6 +95,12 @@ public final class ModBlocks {
             blockAntennaController = new BlockAntennaController();
             GameRegistry.registerBlock(blockAntennaController, "blockAntennaController");
             GameRegistry.registerTileEntity(TileAntennaController.class, "tileAntennaController");
+        }
+
+        if (ConfigHandler.enableTurtleTeleport) {
+            blockTurtleTeleport = new BlockTurtleTeleport();
+            GameRegistry.registerBlock(blockTurtleTeleport, "blockTurtleTeleport");
+            GameRegistry.registerTileEntity(TileTurtleTeleport.class, "tileTurtleTeleport");
         }
     }
 
@@ -200,6 +199,19 @@ public final class ModBlocks {
                     'C', ComputerCraftInfo.cc_cable,
                     'W', ComputerCraftInfo.cc_wiredModem,
                     'P', ComputerCraftInfo.cc_blockComputer
+            ));
+        }
+
+        if (ConfigHandler.enableTurtleTeleport) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockTurtleTeleport),
+                    "IEI",
+                    "EOE",
+                    "ICI",
+
+                    'I', "ingotIron",
+                    'E', Items.ender_pearl,
+                    'O', Blocks.obsidian,
+                    'C', ComputerCraftInfo.cc_cable
             ));
         }
     }

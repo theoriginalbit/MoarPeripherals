@@ -15,10 +15,10 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class MessageGeneric implements IMessage {
 
-    public int[] intData;
-    public byte[] byteData;
-    public char[] charData;
-    public String[] stringData;
+    public int[] intData = new int[0];
+    public byte[] byteData = new byte[0];
+    public char[] charData = new char[0];
+    public String[] stringData = new String[0];
     public NBTTagCompound nbtData;
 
     @Override

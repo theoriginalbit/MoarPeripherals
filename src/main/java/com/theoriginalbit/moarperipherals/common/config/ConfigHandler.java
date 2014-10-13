@@ -30,12 +30,14 @@ public final class ConfigHandler {
     public static final String CATEGORY_ANTENNA = "Communications Tower";
     public static final String CATEGORY_DICTIONARY = "Item Dictionary";
     public static final String CATEGORY_PLAYER_DETECTOR = "Player Detector";
+    public static final String CATEGORY_TURTLE_TELEPORT = "Turtle Teleport";
 
     // Turtle Upgrade ID
     private static int startUpgradeID = 16384;
     public static int upgradeIdChatBox = startUpgradeID++;
     public static int upgradeIdIronNote = startUpgradeID++;
     public static int upgradeIdDictionary = startUpgradeID++;
+    public static int upgradeIdShears = startUpgradeID++;
 
     // Feature enabled
     public static boolean enableSonic;
@@ -47,6 +49,8 @@ public final class ConfigHandler {
     public static boolean enableDictionary;
     public static boolean enablePlayerDetector;
     public static boolean enableAntenna;
+    public static boolean enableUpgradeShears;
+    public static boolean enableTurtleTeleport;
 
     // ChatBox settings
     public static boolean displayChatBoxCoords;
@@ -66,6 +70,9 @@ public final class ConfigHandler {
     public static int antennaRangeStorm = 2400;
     public static int antennaMessageDelay = 3;
     public static boolean antennaKeepsChunkLoaded;
+
+    // Turtle Teleport settings
+    public static double fuelMultiplier = 1.2;
 
     // Renderer enabled
     public static boolean enablePrinterGfx, enableSonicGfx;
@@ -134,6 +141,8 @@ public final class ConfigHandler {
         enableDictionary = getEnabled(CATEGORY_DICTIONARY);
         enablePlayerDetector = getEnabled(CATEGORY_PLAYER_DETECTOR);
         enableAntenna = getEnabled(CATEGORY_ANTENNA);
+        enableUpgradeShears = getEnabled("Shears Turtle Upgrade");
+        enableTurtleTeleport = getEnabled(CATEGORY_TURTLE_TELEPORT);
 
         // ChatBox settings
         displayChatBoxCoords = getBoolean(CATEGORY_CHAT_BOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
