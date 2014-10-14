@@ -35,6 +35,7 @@ public final class Constants {
         public static final LocalisationStore IRONNOTE = new LocalisationStore("upgrade.moarperipherals:adjective.ironnote");
         public static final LocalisationStore DICTIONARY = new LocalisationStore("upgrade.moarperipherals:adjective.dictionary");
         public static final LocalisationStore SHEARS = new LocalisationStore("upgrade.moarperipherals:adjective.shears");
+        public static final LocalisationStore COMPASS = new LocalisationStore("upgrade.moarperipherals:adjective.compass");
     }
 
     public static final class CHAT {

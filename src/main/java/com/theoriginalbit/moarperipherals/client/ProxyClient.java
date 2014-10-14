@@ -25,10 +25,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 
+@SuppressWarnings("unused")
 public class ProxyClient extends ProxyCommon {
 
     private final Minecraft mc;
+
+    @Override
+    public void postInit() {
+        MinecraftForge.EVENT_BUS.register(Icons.instance);
+    }
 
     public ProxyClient() {
         mc = Minecraft.getMinecraft();

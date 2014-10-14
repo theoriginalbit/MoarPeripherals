@@ -20,6 +20,7 @@ public final class ConfigHandler {
     private static final String ENABLEFORMAT = "Enable the %s";
 
     public static final String CATEGORY_ENABLED = "Enabled";
+    public static final String CATEGORY_UPGRADE = "Upgrades";
     public static final String CATEGORY_CHAT_BOX = "ChatBox";
     public static final String CATEGORY_PRINTER = "Printer";
     public static final String CATEGORY_RENDERER = "Render";
@@ -39,6 +40,7 @@ public final class ConfigHandler {
     public static int upgradeIdChatBox = startUpgradeID++;
     public static int upgradeIdIronNote = startUpgradeID++;
     public static int upgradeIdDictionary = startUpgradeID++;
+    public static int upgradeIdCompass = startUpgradeID++;
     public static int upgradeIdShears = startUpgradeID++;
 
     // Feature enabled
@@ -51,6 +53,7 @@ public final class ConfigHandler {
     public static boolean enablePlayerDetector;
     public static boolean enableAntenna;
     public static boolean enableUpgradeShears;
+    public static boolean enableUpgradeCompass;
     public static boolean enableTurtleTeleport;
     public static boolean enableMiniAntenna;
     public static boolean enableFireworkLauncher;
@@ -147,10 +150,11 @@ public final class ConfigHandler {
         enableDictionary = getEnabled(CATEGORY_DICTIONARY);
         enablePlayerDetector = getEnabled(CATEGORY_PLAYER_DETECTOR);
         enableAntenna = getEnabled(CATEGORY_ANTENNA);
-        enableUpgradeShears = getEnabled("Shears Turtle Upgrade");
         enableTurtleTeleport = getEnabled(CATEGORY_TURTLE_TELEPORT);
         enableMiniAntenna = getEnabled(CATEGORY_MINI_ANTENNA);
         enableFireworkLauncher = getEnabled(CATEGORY_FIREWORK);
+        enableUpgradeShears = getUpgradeEnabled("Shears Turtle");
+        enableUpgradeCompass = getUpgradeEnabled("Compass Turtle");
 
         // ChatBox settings
         displayChatBoxCoords = getBoolean(CATEGORY_CHAT_BOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
@@ -209,6 +213,10 @@ public final class ConfigHandler {
 
     private static boolean getEnabled(String key) {
         return getBoolean(CATEGORY_ENABLED, key, String.format(ENABLEFORMAT, key));
+    }
+
+    private static boolean getUpgradeEnabled(String key) {
+        return getBoolean(CATEGORY_UPGRADE, key, String.format(ENABLEFORMAT, key));
     }
 
 }

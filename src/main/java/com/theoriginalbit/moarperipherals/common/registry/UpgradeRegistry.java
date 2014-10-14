@@ -8,12 +8,11 @@
  */
 package com.theoriginalbit.moarperipherals.common.registry;
 
+import com.theoriginalbit.moarperipherals.client.render.Icons;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
-import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeChatBox;
-import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeDictionary;
-import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeIronNote;
-import com.theoriginalbit.moarperipherals.common.upgrades.UpgradeShears;
+import com.theoriginalbit.moarperipherals.common.upgrades.*;
 import dan200.computercraft.api.ComputerCraftAPI;
+import dan200.computercraft.api.turtle.ITurtleUpgrade;
 
 /**
  * @author theoriginalbit
@@ -29,17 +28,25 @@ public class UpgradeRegistry {
 
     public final void register() {
         if (ConfigHandler.enableChatBox) {
-            ComputerCraftAPI.registerTurtleUpgrade(new UpgradeChatBox());
+            register(new UpgradeChatBox());
         }
         if (ConfigHandler.enableIronNote) {
-            ComputerCraftAPI.registerTurtleUpgrade(new UpgradeIronNote());
+            register(new UpgradeIronNote());
         }
         if (ConfigHandler.enableDictionary) {
-            ComputerCraftAPI.registerTurtleUpgrade(new UpgradeDictionary());
+            register(new UpgradeDictionary());
         }
         if (ConfigHandler.enableUpgradeShears) {
-            ComputerCraftAPI.registerTurtleUpgrade(new UpgradeShears());
+            register(new UpgradeShears());
         }
+        if (ConfigHandler.enableUpgradeCompass) {
+            register(new UpgradeCompass());
+        }
+    }
+
+    private static void register(ITurtleUpgrade upgrade) {
+        ComputerCraftAPI.registerTurtleUpgrade(upgrade);
+        Icons.instance.registerUpgrade(upgrade);
     }
 
 }

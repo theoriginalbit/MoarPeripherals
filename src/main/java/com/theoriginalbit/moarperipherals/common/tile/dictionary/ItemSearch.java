@@ -6,18 +6,20 @@
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-package com.theoriginalbit.moarperipherals.dictionary;
+package com.theoriginalbit.moarperipherals.common.tile.dictionary;
 
 import com.google.common.collect.Lists;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatAllowedCharacters;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
-public final class ItemSearch {
+/**
+ * @author theoriginalbit
+ * @since 14/10/2014
+ */
+public class ItemSearch {
 
     public static LinkedList<ItemStack> itemMap = Lists.newLinkedList();
 

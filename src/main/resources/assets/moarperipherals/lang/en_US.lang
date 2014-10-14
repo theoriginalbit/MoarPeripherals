@@ -24,6 +24,7 @@ upgrade.moarperipherals:adjective.chatbox=Chatty
 upgrade.moarperipherals:adjective.ironnote=Noisy
 upgrade.moarperipherals:adjective.dictionary=Informed
 upgrade.moarperipherals:adjective.shears=Shearing
+upgrade.moarperipherals:adjective.compass=Dizzy
 
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.
