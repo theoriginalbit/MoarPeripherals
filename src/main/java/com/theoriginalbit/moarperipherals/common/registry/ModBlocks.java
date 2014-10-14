@@ -34,7 +34,8 @@ public final class ModBlocks {
     }
 
     public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboard, blockPrinter,
-            blockDictionary, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport;
+            blockDictionary, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport,
+            blockMiniAntenna, blockFireworks, blockFireworksCreative;
 
     public final void register() {
         if (ConfigHandler.enablePlayerDetector) {
@@ -47,12 +48,11 @@ public final class ModBlocks {
         }
 
         if (ConfigHandler.enableChatBox) {
+            // normal ChatBox
             blockChatBox = new BlockChatBox();
             GameRegistry.registerBlock(blockChatBox, "blockChatBox");
             GameRegistry.registerTileEntity(TileChatBox.class, "tileChatBox");
-        }
-
-        if (ConfigHandler.enableChatBoxAdmin) {
+            // admin (creative) ChatBox
             blockChatBoxAdmin = new BlockChatBoxAdmin();
             GameRegistry.registerBlock(blockChatBoxAdmin, "blockChatBoxAdmin");
             GameRegistry.registerTileEntity(TileChatBoxAdmin.class, "tileChatBoxAdmin");
@@ -101,6 +101,23 @@ public final class ModBlocks {
             blockTurtleTeleport = new BlockTurtleTeleport();
             GameRegistry.registerBlock(blockTurtleTeleport, "blockTurtleTeleport");
             GameRegistry.registerTileEntity(TileTurtleTeleport.class, "tileTurtleTeleport");
+        }
+
+        if (ConfigHandler.enableFireworkLauncher) {
+            // standard firework launcher
+            blockFireworks = new BlockFireworks();
+            GameRegistry.registerBlock(blockFireworks, "blockFireworks");
+            GameRegistry.registerTileEntity(TileFireworks.class, "tileFireworks");
+            // creative firework launcher
+            blockFireworksCreative = new BlockFireworksCreative();
+            GameRegistry.registerBlock(blockFireworksCreative, "blockFireworksCreative");
+            GameRegistry.registerTileEntity(TileFireworksCreative.class, "tileFireworksCreative");
+        }
+
+        if (ConfigHandler.enableMiniAntenna) {
+//            blockMiniAntenna = new BlockMiniAntenna();
+//            GameRegistry.registerBlock(blockMiniAntenna, "blockMiniAntenna");
+//            GameRegistry.registerTileEntity(TileMiniAntenna.class, "tileMiniAntenna");
         }
     }
 
@@ -212,6 +229,32 @@ public final class ModBlocks {
                     'E', Items.ender_pearl,
                     'O', Blocks.obsidian,
                     'C', ComputerCraftInfo.cc_cable
+            ));
+        }
+
+        if (ConfigHandler.enableFireworkLauncher) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockFireworks),
+                    "DDD",
+                    "IWI",
+                    "ICI",
+
+                    'I', "ingotIron",
+                    'D', Blocks.dispenser,
+                    'W', Blocks.chest,
+                    'C', ComputerCraftInfo.cc_cable
+            ));
+        }
+
+        if (ConfigHandler.enableMiniAntenna) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMiniAntenna),
+                    "MCM",
+                    "MCM",
+                    "IWI",
+
+                    'M', ModItems.itemMonopoleAntenna,
+                    'C', ComputerCraftInfo.cc_cable,
+                    'I', "ingotIron",
+                    'W', ComputerCraftInfo.cc_wiredModem
             ));
         }
     }

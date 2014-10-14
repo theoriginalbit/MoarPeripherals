@@ -12,6 +12,8 @@ tile.moarperipherals:antennaCell.name=Torre de comunicação BitNet (Celula)
 tile.moarperipherals:antennaMiniCell.name=Torre de comunicação BitNet (Mini Cell)
 tile.moarperipherals:antennaController.name=Torre de Comunicação BitNet(Controlador)
 tile.moarperipherals:turtleTeleport.name=Turtle Teleport
+tile.moarperipherals:fireworks.name=Firework Launcher
+tile.moarperipherals:fireworksCreative.name=Firework Launcher (Creative)
 
 item.moarperipherals:inkCartridge.name=Cartucho para Tinta
 item.moarperipherals:keyboardPart.name=Parte de Teclado

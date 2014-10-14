@@ -12,11 +12,52 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public final class InventoryUtils {
+
+    public static int[] makeSlotArray(IInventory inv) {
+        final int[] slots = new int[inv.getSizeInventory()];
+        for (int i = 0; i < slots.length; i++) {
+            slots[i] = i;
+        }
+        return slots;
+    }
+
+    public static void writeInventoryToNBT(IInventory inv, NBTTagCompound tag) {
+        tag.setTag("Items", writeInventoryToNBT(inv));
+    }
+
+    public static NBTTagList writeInventoryToNBT(IInventory inv) {
+        final NBTTagList list = new NBTTagList();
+        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+            final ItemStack stack = inv.getStackInSlot(i);
+            if (stack != null) {
+                NBTTagCompound itemTag = new NBTTagCompound();
+                itemTag.setByte("Slot", (byte) i);
+                stack.writeToNBT(itemTag);
+                list.appendTag(itemTag);
+            }
+        }
+        return list;
+    }
+
+    public static void readInventoryFromNBT(IInventory inv, NBTTagCompound tag) {
+        readInventoryFromNBT(inv, tag.getTagList("Items", 10));
+    }
+
+    public static void readInventoryFromNBT(IInventory inv, NBTTagList list) {
+        for (int i = 0; i < list.tagCount(); ++i) {
+            NBTTagCompound itemTag = list.getCompoundTagAt(i);
+            int slot = itemTag.getByte("Slot") & 255;
+            if (slot >= 0 && slot < inv.getSizeInventory()) {
+                inv.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(itemTag));
+            }
+        }
+    }
 
     public static void explodeInventory(IInventory inv, World world, int x, int y, int z) {
         Random rand = new Random();

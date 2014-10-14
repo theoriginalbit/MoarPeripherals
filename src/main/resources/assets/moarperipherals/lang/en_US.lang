@@ -12,6 +12,8 @@ tile.moarperipherals:antennaCell.name=BitNet Communication Tower (Cell)
 tile.moarperipherals:antennaMiniCell.name=BitNet Communication Tower (Mini Cell)
 tile.moarperipherals:antennaController.name=BitNet Communication Tower (Controller)
 tile.moarperipherals:turtleTeleport.name=Turtle Teleport
+tile.moarperipherals:fireworks.name=Firework Launcher
+tile.moarperipherals:fireworksCreative.name=Firework Launcher (Creative)
 
 item.moarperipherals:inkCartridge.name=Ink Cartridge
 item.moarperipherals:keyboardPart.name=Keyboard Part

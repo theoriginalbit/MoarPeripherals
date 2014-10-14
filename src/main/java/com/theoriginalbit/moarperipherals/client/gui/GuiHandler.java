@@ -26,8 +26,7 @@ public class GuiHandler implements IGuiHandler {
         if (gui != null) {
             switch (gui) {
                 case KEYBOARD:
-                    TileKeyboard tile = (TileKeyboard) world.getTileEntity(x, y, z);
-                    return new GuiKeyboard(tile, player);
+                    return new GuiKeyboard((TileKeyboard) world.getTileEntity(x, y, z), player);
                 default:
                     return null;
             }

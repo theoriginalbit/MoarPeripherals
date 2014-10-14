@@ -20,17 +20,19 @@ public final class ConfigHandler {
     private static final String ENABLEFORMAT = "Enable the %s";
 
     public static final String CATEGORY_ENABLED = "Enabled";
-    public static final String CATEGORY_SONIC = "Sonic Screwdriver";
     public static final String CATEGORY_CHAT_BOX = "ChatBox";
     public static final String CATEGORY_PRINTER = "Printer";
     public static final String CATEGORY_RENDERER = "Render";
     public static final String CATEGORY_KEYBOARD = "Keyboard";
     public static final String CATEGORY_SECURITY = "Security";
     public static final String CATEGORY_IRON_NOTE = "Iron Note";
-    public static final String CATEGORY_ANTENNA = "Communications Tower";
+    public static final String CATEGORY_SONIC = "Sonic Screwdriver";
     public static final String CATEGORY_DICTIONARY = "Item Dictionary";
+    public static final String CATEGORY_FIREWORK = "Firework Launcher";
+    public static final String CATEGORY_ANTENNA = "Communications Tower";
     public static final String CATEGORY_PLAYER_DETECTOR = "Player Detector";
     public static final String CATEGORY_TURTLE_TELEPORT = "Turtle Teleport";
+    public static final String CATEGORY_MINI_ANTENNA = "Communications Antenna";
 
     // Turtle Upgrade ID
     private static int startUpgradeID = 16384;
@@ -42,7 +44,6 @@ public final class ConfigHandler {
     // Feature enabled
     public static boolean enableSonic;
     public static boolean enableChatBox;
-    public static boolean enableChatBoxAdmin;
     public static boolean enablePrinter;
     public static boolean enableKeyboard;
     public static boolean enableIronNote;
@@ -51,6 +52,8 @@ public final class ConfigHandler {
     public static boolean enableAntenna;
     public static boolean enableUpgradeShears;
     public static boolean enableTurtleTeleport;
+    public static boolean enableMiniAntenna;
+    public static boolean enableFireworkLauncher;
 
     // ChatBox settings
     public static boolean displayChatBoxCoords;
@@ -73,6 +76,10 @@ public final class ConfigHandler {
 
     // Turtle Teleport settings
     public static double fuelMultiplier = 1.5;
+
+    // Mini Antenna settings
+    public static int miniAntennaRange = 650;
+    public static int miniAntennaRangeStorm = 400;
 
     // Renderer enabled
     public static boolean enablePrinterGfx, enableSonicGfx;
@@ -134,7 +141,6 @@ public final class ConfigHandler {
         // Feature enabled
         enableSonic = getEnabled(CATEGORY_SONIC);
         enableChatBox = getEnabled(CATEGORY_CHAT_BOX);
-        enableChatBoxAdmin = getEnabled("ChatBox (Admin)");
         enablePrinter = getEnabled(CATEGORY_PRINTER);
         enableKeyboard = getEnabled(CATEGORY_KEYBOARD);
         enableIronNote = getEnabled(CATEGORY_IRON_NOTE);
@@ -143,6 +149,8 @@ public final class ConfigHandler {
         enableAntenna = getEnabled(CATEGORY_ANTENNA);
         enableUpgradeShears = getEnabled("Shears Turtle Upgrade");
         enableTurtleTeleport = getEnabled(CATEGORY_TURTLE_TELEPORT);
+        enableMiniAntenna = getEnabled(CATEGORY_MINI_ANTENNA);
+        enableFireworkLauncher = getEnabled(CATEGORY_FIREWORK);
 
         // ChatBox settings
         displayChatBoxCoords = getBoolean(CATEGORY_CHAT_BOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
