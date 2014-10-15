@@ -8,7 +8,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.container;
 
-import net.minecraft.entity.item.EntityItem;
+import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -86,35 +86,12 @@ public class QueueBuffer {
     }
 
     public void explodeNext(World world, int x, int y, int z) {
-        final ItemStack item = getNextItemStack();
-        if (item.stackSize > 0) {
-            explodeItemStack(item, world, x, y, z);
-        }
+        InventoryUtils.spawnInWorld(getNextItemStack(), world, x, y, z);
     }
 
     public void explodeBuffer(World world, int x, int y, int z) {
         for (final ItemStack item : inventory) {
-            if (item.stackSize > 0) {
-                explodeItemStack(item, world, x, y, z);
-            }
-        }
-    }
-
-    private void explodeItemStack(ItemStack item, World world, int x, int y, int z) {
-        if (item != null && item.stackSize > 0) {
-            float factor = 0.05f;
-            float rx = rand.nextFloat() * 0.8f + 0.1f;
-            float ry = rand.nextFloat() * 0.8f + 0.1f;
-            float rz = rand.nextFloat() * 0.8f + 0.1f;
-            EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
-            if (item.hasTagCompound()) {
-                entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
-            }
-            entityItem.motionX = rand.nextGaussian() * factor;
-            entityItem.motionY = rand.nextGaussian() * factor + 0.2f;
-            entityItem.motionZ = rand.nextGaussian() * factor;
-            world.spawnEntityInWorld(entityItem);
-            item.stackSize = 0;
+            InventoryUtils.spawnInWorld(item, world, x, y, z);
         }
     }
 }

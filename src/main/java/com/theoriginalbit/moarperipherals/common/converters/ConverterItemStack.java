@@ -10,7 +10,9 @@ package com.theoriginalbit.moarperipherals.common.converters;
 
 import com.google.common.collect.Maps;
 import com.theoriginalbit.framework.peripheral.converter.ITypeConverter;
-import net.minecraft.block.Block;
+import cpw.mods.fml.common.registry.GameRegistry;
+import dan200.computercraft.api.lua.LuaException;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;
@@ -18,44 +20,87 @@ import java.util.Map;
 public class ConverterItemStack implements ITypeConverter {
 
     @Override
-    public Object fromLua(Object obj, Class<?> expected) {
+    public Object fromLua(Object obj, Class<?> expected) throws LuaException {
         if (expected == ItemStack.class && obj instanceof Map) {
-            int quantity = 1;
-            int dmg = 0;
-
-            @SuppressWarnings({"unchecked"})
-            Map<Object, Object> m = (Map<Object, Object>) obj;
+            Map<?, ?> m = (Map<?, ?>) obj;
 
             if (!m.containsKey("id")) {
-                return null;
+                throw new LuaException("expected id for item");
             }
-            final Block block = Block.getBlockFromName((String) m.get("name"));
-            if (m.containsKey("qty")) {
-                quantity = (int) (double) (Double) m.get("qty");
+            String[] parts = ((String) m.get("id")).split(":");
+            if (parts.length != 2) {
+                throw new LuaException("invalid item id should be mod:name");
             }
-            if (m.containsKey("dmg")) {
-                dmg = (int) (double) (Double) m.get("dmg");
-            }
-            return new ItemStack(block, quantity, dmg);
+
+            Item item = GameRegistry.findItem(parts[0], parts[1]);
+            int quantity = getIntValue(m, "qty", 1);
+            int dmg = getIntValue(m, "dmg", 0);
+
+            return new ItemStack(item, quantity, dmg);
         }
         return null;
     }
 
+    private static int getIntValue(Map<?, ?> map, String key, int _default) {
+        final Object value = map.get(key);
+
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+
+        return _default;
+    }
+
     @Override
-    public Object toLua(Object obj) {
+    public Object toLua(Object obj) throws LuaException {
         if (obj instanceof ItemStack) {
-            ItemStack stack = (ItemStack) obj;
-            Map<String, Object> result = Maps.newHashMap();
-
-            result.put("name", stack.getUnlocalizedName());
-            result.put("rawName", stack.getUnlocalizedName());
-            result.put("qty", stack.stackSize);
-            result.put("dmg", stack.getItemDamage());
-            result.put("maxdmg", stack.getMaxDamage());
-            result.put("maxSize", stack.getMaxStackSize());
-
-            return result;
+            return fillBasicProperties((ItemStack) obj);
         }
         return null;
+    }
+
+    private static Map<String, Object> fillBasicProperties(ItemStack stack) throws LuaException {
+        final Map<String, Object> map = Maps.newHashMap();
+
+        final GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+
+        if (id == null) {
+            throw new LuaException(String.format("Invalid item stack: %s", stack));
+        }
+
+        map.put("id", id.toString());
+        map.put("name", id.name);
+        map.put("mod_id", id.modId);
+        map.put("display_name", getNameForItemStack(stack));
+        map.put("raw_name", getRawNameForStack(stack));
+        map.put("qty", stack.stackSize);
+        map.put("dmg", stack.getItemDamage());
+        map.put("max_dmg", stack.getMaxDamage());
+        map.put("max_size", stack.getMaxStackSize());
+
+        return map;
+    }
+
+    private static String getNameForItemStack(ItemStack is) {
+        try {
+            return is.getDisplayName();
+        } catch (Exception ignored) {
+        }
+
+        try {
+            return is.getUnlocalizedName();
+        } catch (Exception ignored) {
+        }
+
+        return "unknown";
+    }
+
+    private static String getRawNameForStack(ItemStack is) {
+        try {
+            return is.getUnlocalizedName().toLowerCase();
+        } catch (Exception ignored) {
+        }
+
+        return "unknown";
     }
 }
