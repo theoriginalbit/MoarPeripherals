@@ -95,6 +95,9 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         // make sure to retain the buffers!
         bufferRocket.readFromNBT(tag);
         bufferStar.readFromNBT(tag);
+        rocketHeight = tag.getInteger("rocketHeight");
+        startedRocket = tag.getBoolean("startedRocket");
+        rocketRemainSlots = tag.getInteger("rocketRemainSlots");
     }
 
     @Override
@@ -103,6 +106,9 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         // make sure to retain the buffers!
         bufferRocket.writeToNBT(tag);
         bufferStar.writeToNBT(tag);
+        tag.setInteger("rocketHeight", rocketHeight);
+        tag.setBoolean("startedRocket", startedRocket);
+        tag.setInteger("rocketRemainSlots", rocketRemainSlots);
     }
 
     /**
