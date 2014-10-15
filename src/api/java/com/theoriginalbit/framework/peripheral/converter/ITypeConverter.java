@@ -22,6 +22,8 @@ package com.theoriginalbit.framework.peripheral.converter;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
+import dan200.computercraft.api.lua.LuaException;
+
 /**
  * Provides a common interface for type converters, instances of this
  * converter should be registered with the LuaType enum.
@@ -53,7 +55,7 @@ public interface ITypeConverter {
      * @param expected the class type of the argument, i.e. String.class
      * @return your Java object or null if you don't convert
      */
-	public Object fromLua(Object obj, Class<?> expected);
+	public Object fromLua(Object obj, Class<?> expected) throws LuaException;
 
     /**
      * Convert the object from a Java object to a Lua object for
@@ -63,6 +65,6 @@ public interface ITypeConverter {
      * @param obj the object from the method call return
      * @return the Lua object or null if you don't convert
      */
-	public Object toLua(Object obj);
+	public Object toLua(Object obj) throws LuaException;
 
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.framework.peripheral.LuaType;
+import dan200.computercraft.api.lua.LuaException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,7 @@ import java.util.Map.Entry;
  */
 public class ConverterList implements ITypeConverter {
     @Override
-    public Object fromLua(Object obj, Class<?> expected) {
+    public Object fromLua(Object obj, Class<?> expected) throws LuaException {
         if (obj instanceof Map && expected == List.class) {
             Map<?, ?> map = (Map<?, ?>) obj;
             if (map.isEmpty()) {
@@ -79,7 +80,7 @@ public class ConverterList implements ITypeConverter {
     }
 
     @Override
-    public Object toLua(Object obj) {
+    public Object toLua(Object obj) throws LuaException {
         if (obj instanceof List) {
             HashMap<Integer, Object> map = Maps.newHashMap();
             List<?> objList = (List<?>) obj;

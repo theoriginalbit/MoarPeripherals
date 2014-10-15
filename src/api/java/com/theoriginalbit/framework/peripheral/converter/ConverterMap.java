@@ -2,6 +2,7 @@ package com.theoriginalbit.framework.peripheral.converter;
 
 import com.google.common.collect.Maps;
 import com.theoriginalbit.framework.peripheral.LuaType;
+import dan200.computercraft.api.lua.LuaException;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,25 +35,25 @@ import java.util.Map.Entry;
  * @author theoriginalbit
  */
 public class ConverterMap implements ITypeConverter {
-	@Override
-	public Object fromLua(Object obj, Class<?> expected) {
-		if (obj instanceof Map && expected == Map.class) {
-			return obj;
-		}
-		return null;
-	}
+    @Override
+    public Object fromLua(Object obj, Class<?> expected) throws LuaException {
+        if (obj instanceof Map && expected == Map.class) {
+            return obj;
+        }
+        return null;
+    }
 
-	@Override
-	public Object toLua(Object obj) {
-		if (obj instanceof Map) {
-			Map<Object, Object> map = Maps.newHashMap();
-			for (Entry<?, ?> e : ((Map<?, ?>) obj).entrySet()) {
-				Object k = LuaType.toLua(e.getKey());
-				Object v = LuaType.toLua(e.getValue());
-				map.put(k, v);
-			}
-			return map;
-		}
-		return null;
-	}
+    @Override
+    public Object toLua(Object obj) throws LuaException {
+        if (obj instanceof Map) {
+            Map<Object, Object> map = Maps.newHashMap();
+            for (Entry<?, ?> e : ((Map<?, ?>) obj).entrySet()) {
+                Object k = LuaType.toLua(e.getKey());
+                Object v = LuaType.toLua(e.getValue());
+                map.put(k, v);
+            }
+            return map;
+        }
+        return null;
+    }
 }

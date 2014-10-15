@@ -88,8 +88,6 @@ public class MethodWrapper {
                 args[i] = access;
             } else if (ILuaContext.class.isAssignableFrom(javaParams[i])) {
                 args[i] = context;
-            } else if (Object.class.isAssignableFrom(javaParams[i])) {
-                args[i] = arguments[i];
             } else if (arguments[i] != null) {
                 final Object convert = LuaType.fromLua(arguments[i], javaParams[i]);
                 if (convert == null) {

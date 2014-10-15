@@ -13,6 +13,7 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
+import net.minecraft.tileentity.TileEntity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -140,6 +141,11 @@ public class PeripheralWrapper implements IPeripheral {
 
     @Override
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int methodIdx, Object[] arguments) throws LuaException, InterruptedException {
+        if (instance instanceof TileEntity) {
+            if (((TileEntity) instance).isInvalid()) {
+                throw new LuaException("peripheral no longer exists");
+            }
+        }
         final String name = methodNames[methodIdx];
         final MethodWrapper method = methods.get(name);
         return method.invoke(computer, context, arguments);

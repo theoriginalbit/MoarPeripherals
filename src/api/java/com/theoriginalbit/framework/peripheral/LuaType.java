@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.framework.peripheral.converter.*;
 import dan200.computercraft.api.lua.ILuaObject;
+import dan200.computercraft.api.lua.LuaException;
 
 import java.util.*;
 
@@ -32,15 +33,15 @@ import java.util.*;
 /**
  * An Enum to specify the mapping between Java classes and Lua types
  * and perform data type conversion between both languages.
- *
+ * <p/>
  * If you have another ITypeConverter to register with this system
  * you can do it in one of your mods initialisation phases. See
  * the registerTypeConverter method for more information.
- *
+ * <p/>
  * IMPORTANT:
  * This is a backend class, you should never need to use this, and
  * modifying this may have unexpected results.
- * 
+ *
  * @author theoriginalbit
  */
 public final class LuaType {
@@ -53,7 +54,7 @@ public final class LuaType {
      * Use this to supply converters for custom classes, such as
      * ItemStack or the likes, so that these objects can be converted
      * to and from Lua.
-     *
+     * <p/>
      * NOTE: it adds it to the start because order is important!
      */
     public static void registerTypeConverter(ITypeConverter converter) {
@@ -98,27 +99,33 @@ public final class LuaType {
         return "?";
     }
 
-	public static Object fromLua(Object obj, Class<?> expected) {
-		for (ITypeConverter converter : CONVERTERS) {
-			Object response = converter.fromLua(obj, expected);
-			if (response != null) { return response; }
-		}
-		return null;
-	}
-	
-	public static Object toLua(Object obj) {
-		if (obj == null || obj instanceof ILuaObject) { return obj; }
-		
-		for (ITypeConverter converter : CONVERTERS) {
-			Object response = converter.toLua(obj);
-			if (response != null) { return response; }
-		}
-		
-		// a catch-all of a catch-all? sure :P
-		throw new IllegalStateException("Conversion failed on " + obj);
-	}
+    public static Object fromLua(Object obj, Class<?> expected) throws LuaException {
+        for (ITypeConverter converter : CONVERTERS) {
+            Object response = converter.fromLua(obj, expected);
+            if (response != null) {
+                return response;
+            }
+        }
+        return null;
+    }
 
-	static {
+    public static Object toLua(Object obj) throws LuaException {
+        if (obj == null || obj instanceof ILuaObject) {
+            return obj;
+        }
+
+        for (ITypeConverter converter : CONVERTERS) {
+            Object response = converter.toLua(obj);
+            if (response != null) {
+                return response;
+            }
+        }
+
+        // a catch-all of a catch-all? sure :P
+        throw new IllegalStateException("Conversion failed on " + obj);
+    }
+
+    static {
         // register default class to name mappings
         CLASS_TO_NAME.put(Object[].class, "table");
         CLASS_TO_NAME.put(Map.class, "table");
@@ -140,13 +147,13 @@ public final class LuaType {
         CLASS_TO_NAME.put(Object.class, "?");
 
         // register default converters order is important!
-		CONVERTERS.add(new ConverterArray());
-		CONVERTERS.add(new ConverterList());
-		CONVERTERS.add(new ConverterMap());
-		CONVERTERS.add(new ConverterSet());
-		CONVERTERS.add(new ConverterDefault());
-		CONVERTERS.add(new ConverterNumber());
-		CONVERTERS.add(new ConverterString()); // catch-all
-	}
+        CONVERTERS.add(new ConverterArray());
+        CONVERTERS.add(new ConverterList());
+        CONVERTERS.add(new ConverterMap());
+        CONVERTERS.add(new ConverterSet());
+        CONVERTERS.add(new ConverterDefault());
+        CONVERTERS.add(new ConverterNumber());
+        CONVERTERS.add(new ConverterString()); // catch-all
+    }
 
 }

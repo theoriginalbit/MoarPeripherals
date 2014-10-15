@@ -3,6 +3,7 @@ package com.theoriginalbit.framework.peripheral.converter;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.theoriginalbit.framework.peripheral.LuaType;
+import dan200.computercraft.api.lua.LuaException;
 
 import java.util.Map;
 import java.util.Set;
@@ -35,23 +36,23 @@ import java.util.Set;
  * @author theoriginalbit
  */
 public class ConverterSet implements ITypeConverter {
-	@Override
-	public Object fromLua(Object obj, Class<?> expected) {
-		if (obj instanceof Map && expected == Set.class) {
-			return Sets.newHashSet(((Map<?, ?>) obj).keySet());
-		}
-		return null;
-	}
+    @Override
+    public Object fromLua(Object obj, Class<?> expected) throws LuaException {
+        if (obj instanceof Map && expected == Set.class) {
+            return Sets.newHashSet(((Map<?, ?>) obj).keySet());
+        }
+        return null;
+    }
 
-	@Override
-	public Object toLua(Object obj) {
-		if (obj instanceof Set) {
-			Map<Object, Boolean> result = Maps.newHashMap();
-			for (Object o : (Set<?>) obj) {
-				result.put(LuaType.toLua(o), true);
-			}
-			return result;
-		}
-		return null;
-	}
+    @Override
+    public Object toLua(Object obj) throws LuaException {
+        if (obj instanceof Set) {
+            Map<Object, Boolean> result = Maps.newHashMap();
+            for (Object o : (Set<?>) obj) {
+                result.put(LuaType.toLua(o), true);
+            }
+            return result;
+        }
+        return null;
+    }
 }
