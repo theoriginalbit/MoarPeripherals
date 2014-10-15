@@ -15,9 +15,11 @@ import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.common.container.QueueBuffer;
+import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileInventory;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
+import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -31,6 +33,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 /**
  * @author theoriginalbit
@@ -487,14 +490,22 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
 
             double nX = OFFSETS.get(offsetX);
             double nZ = OFFSETS.get(offsetY);
-
-            worldObj.spawnEntityInWorld(new EntityFireworkRocket(
+            final EntityFireworkRocket rocket = new EntityFireworkRocket(
                     worldObj,
                     xCoord + nX,
                     yCoord + 1.1d,
                     zCoord + nZ,
                     firework
-            ));
+            );
+
+            TickHandler.addTickCallback(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    LogUtils.info("Callback finished");
+                    worldObj.spawnEntityInWorld(rocket);
+                    return null;
+                }
+            });
 
             return new Object[]{true};
         }
@@ -536,6 +547,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         while (bufferStar.getCurrentSize() > 0) {
             bufferStar.insertOrExplodeNext(this, worldObj, xCoord, yCoord, zCoord);
         }
+        startedRocket = false;
         return new Object[]{true};
     }
 
@@ -570,7 +582,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     private static boolean validColor(int color, boolean multi) {
-        if (color < 0 || color > 32768) return false;
+        if (color < 0 || (multi && color > 65535) || (!multi && color > 32768)) return false;
         if (multi) return true;
         double val = Math.log(color) / Math.log(2);
         return val >= 0 && val <= 15 && val % 1 == 0;

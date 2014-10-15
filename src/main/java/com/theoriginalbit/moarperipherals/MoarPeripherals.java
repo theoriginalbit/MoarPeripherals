@@ -13,6 +13,7 @@ import com.theoriginalbit.framework.peripheral.PeripheralProvider;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
+import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
@@ -81,6 +82,11 @@ public class MoarPeripherals {
         if (ConfigHandler.enableAntenna) {
             LogUtils.debug("Registering BitNet tick handler");
             FMLCommonHandler.instance().bus().register(new BitNetRegistry());
+        }
+
+        if (TickHandler.shouldRegister()) {
+            LogUtils.debug("Registering server tick handler");
+            FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);
         }
 
         proxy.init();
