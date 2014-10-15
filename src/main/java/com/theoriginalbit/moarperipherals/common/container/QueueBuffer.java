@@ -8,14 +8,16 @@
  */
 package com.theoriginalbit.moarperipherals.common.container;
 
+import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import java.util.ArrayDeque;
-import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * @author theoriginalbit
@@ -24,7 +26,6 @@ import java.util.Random;
 public class QueueBuffer {
     private final int maxSize;
     private final String invName;
-    private final Random rand = new Random();
     private final ArrayDeque<ItemStack> inventory;
 
     public QueueBuffer(String name, int size) {
@@ -77,6 +78,10 @@ public class QueueBuffer {
         }
     }
 
+    public ArrayList<ItemStack> getContentsList() {
+        return Lists.newArrayList(inventory);
+    }
+
     public ItemStack getNextItemStack() {
         return inventory.size() > 0 ? inventory.remove() : null;
     }
@@ -85,8 +90,20 @@ public class QueueBuffer {
         return getCurrentSize() < getSizeInventory();
     }
 
-    public void explodeNext(World world, int x, int y, int z) {
-        InventoryUtils.spawnInWorld(getNextItemStack(), world, x, y, z);
+    public void insertOrExplodeNext(IInventory inv, World world, int x, int y, int z) {
+        // get the next rocket that's going to be launched
+        final ItemStack stack = getNextItemStack();
+        if (stack != null) {
+            // see if it can do into the inventory
+            final int slot = InventoryUtils.findEmptySlot(inv, stack);
+            // add to the inventory, or spawn in the world if it wont fit in the inventory
+            if (slot == -1) {
+                InventoryUtils.spawnInWorld(stack, world, x, y, z);
+            } else {
+                inv.getStackInSlot(slot).stackSize += stack.stackSize;
+            }
+            InventoryUtils.spawnInWorld(getNextItemStack(), world, x, y, z);
+        }
     }
 
     public void explodeBuffer(World world, int x, int y, int z) {

@@ -11,7 +11,9 @@ package com.theoriginalbit.moarperipherals.common.tile;
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemFirework;
+import net.minecraft.item.ItemFireworkCharge;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -19,7 +21,7 @@ import net.minecraft.item.ItemStack;
  * @since 13/10/2014
  */
 @LuaPeripheral("firework_launcher")
-public class TileFireworksCreative  extends TileFireworks {
+public class TileFireworksCreative extends TileFireworks {
 
     @Override
     public String getInventoryName() {
@@ -32,31 +34,32 @@ public class TileFireworksCreative  extends TileFireworks {
      */
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return stack.getItem() instanceof ItemFirework;
+        final Item item = stack.getItem();
+        return item instanceof ItemFirework || item instanceof ItemFireworkCharge;
     }
 
     /*
      * This is creative, don't drop the items, just destroy them
      */
     @LuaFunction(isMultiReturn = true)
-    public Object[] cancelNextLaunch() {
-        if (bufferRocket.getCurrentSize() > 0) {
-            bufferRocket.getNextItemStack();
-            return new Object[]{true};
+    public Object[] cancelLaunch() {
+        if (!canLaunch()) {
+            return new Object[]{false, "no launches to cancel"};
         }
-        return new Object[]{false, "no launches to cancel"};
+        // remove the next rocket from the buffer, but in a way they don't get it
+        bufferRocket.getNextItemStack();
+        return new Object[]{true};
     }
 
-    /*
-     * This is creative, don't drop the items, just destroy them
-     */
     @LuaFunction(isMultiReturn = true)
-    public Object[] cancelAllLaunches() {
-        if (bufferRocket.getCurrentSize() > 0) {
-            bufferRocket.clear();
-            return new Object[]{true};
+    public Object[] cancelRocket() {
+        // make there was a started firework
+        if (!isRocketCraftPending()) {
+            return new Object[]{false, "no firework rocket started"};
         }
-        return new Object[]{false, "no launches to cancel"};
+        // remove all the buffer stars from the buffer, without returning it to them
+        bufferStar.clear();
+        return new Object[]{true};
     }
 
     /*

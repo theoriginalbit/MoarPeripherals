@@ -60,6 +60,37 @@ public final class InventoryUtils {
         }
     }
 
+    public static int findEmptySlot(IInventory inv, ItemStack stack) {
+        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+            final ItemStack item = inv.getStackInSlot(i);
+            if (item == null || (stack.isItemEqual(item) && (item.stackSize + stack.stackSize) <= item.getMaxStackSize())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static int findQtyOf(IInventory inv, ItemStack template) {
+        int qty = 0;
+        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (stack != null && stack.isItemEqual(template)) {
+                qty += stack.stackSize;
+            }
+        }
+        return qty;
+    }
+
+    public static ItemStack extract(IInventory inv, ItemStack template, int amount) {
+        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (stack.isItemEqual(template)) {
+                return inv.decrStackSize(i, amount);
+            }
+        }
+        return null;
+    }
+
     public static void spawnInWorld(ItemStack item, World world, int x, int y, int z) {
         if (item != null && item.stackSize > 0) {
             float rx = rand.nextFloat() * 0.8f + 0.1f;
