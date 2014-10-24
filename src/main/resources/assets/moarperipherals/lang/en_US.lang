@@ -14,6 +14,7 @@ tile.moarperipherals:antennaController.name=BitNet Communication Tower (Controll
 tile.moarperipherals:turtleTeleport.name=Turtle Teleport
 tile.moarperipherals:fireworks.name=Firework Launcher
 tile.moarperipherals:fireworksCreative.name=Firework Launcher (Creative)
+tile.moarperipherals:crafter.name=Computer Controlled Crafter
 
 item.moarperipherals:inkCartridge.name=Ink Cartridge
 item.moarperipherals:keyboardPart.name=Keyboard Part
@@ -25,6 +26,7 @@ upgrade.moarperipherals:adjective.ironnote=Noisy
 upgrade.moarperipherals:adjective.dictionary=Informed
 upgrade.moarperipherals:adjective.shears=Shearing
 upgrade.moarperipherals:adjective.compass=Dizzy
+upgrade.moarperipherals:adjective.furnace=Fiery
 
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.

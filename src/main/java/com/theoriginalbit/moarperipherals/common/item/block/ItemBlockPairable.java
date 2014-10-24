@@ -9,7 +9,6 @@
 package com.theoriginalbit.moarperipherals.common.item.block;
 
 import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
-import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.utils.*;
 import cpw.mods.fml.relauncher.Side;

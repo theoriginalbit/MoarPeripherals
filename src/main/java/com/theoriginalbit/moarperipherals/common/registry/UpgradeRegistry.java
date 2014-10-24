@@ -10,7 +10,7 @@ package com.theoriginalbit.moarperipherals.common.registry;
 
 import com.theoriginalbit.moarperipherals.client.render.Icons;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
-import com.theoriginalbit.moarperipherals.common.upgrades.*;
+import com.theoriginalbit.moarperipherals.common.upgrade.*;
 import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
 
@@ -41,6 +41,9 @@ public class UpgradeRegistry {
         }
         if (ConfigHandler.enableUpgradeCompass) {
             register(new UpgradeCompass());
+        }
+        if (ConfigHandler.enableUpgradeFurnace) {
+            register(new UpgradeFurnace());
         }
     }
 

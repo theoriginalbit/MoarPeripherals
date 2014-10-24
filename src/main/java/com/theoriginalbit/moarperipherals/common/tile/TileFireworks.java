@@ -14,13 +14,12 @@ import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
-import com.theoriginalbit.moarperipherals.common.container.QueueBuffer;
-import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
+import com.theoriginalbit.moarperipherals.common.tile.firework.LauncherTube;
+import com.theoriginalbit.moarperipherals.common.tile.firework.QueueBuffer;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileInventory;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
-import net.minecraft.entity.item.EntityFireworkRocket;
+import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
@@ -31,9 +30,9 @@ import net.minecraft.item.ItemFireworkCharge;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatAllowedCharacters;
 
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
 
 /**
  * @author theoriginalbit
@@ -47,8 +46,6 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
             new ItemStack(Items.skull),
             new ItemStack(Items.feather)
     );
-    private static final String[] NAME_SHAPES = new String[]{"fire charge", "gold nugget", "mob head", "feather"};
-    private static final ImmutableList<Double> OFFSETS = ImmutableList.of(0.15d, 0.5d, 0.85d);
     private static final ItemStack GLOWSTONE = new ItemStack(Items.glowstone_dust);
     private static final ItemStack GUNPOWDER = new ItemStack(Items.gunpowder);
     private static final ItemStack DIAMOND = new ItemStack(Items.diamond);
@@ -57,21 +54,28 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
 
     // the temporary storage for crafted rockets and stars
     protected final QueueBuffer bufferRocket = new QueueBuffer("Rocket", 90);
-    protected final QueueBuffer bufferStar = new QueueBuffer("Star", 7);
+    protected final QueueBuffer bufferStar = new QueueBuffer("Star", 90);
+
+    private final LauncherTube[] fireworkTubes = new LauncherTube[9];
 
     // the crafting manager
     final CraftingManager manager = CraftingManager.getInstance();
 
-    // currently crafting rocket properties
-    private int rocketHeight;
-    private boolean startedRocket;
-    private int rocketRemainSlots;
-
-    // a tracker for where it should launch from next
-    private int nextLaunch = 0;
-
     public TileFireworks() {
-        super(27);
+        super(54);
+
+        for (int i = 0; i < fireworkTubes.length; ++i) {
+            fireworkTubes[i] = new LauncherTube(bufferRocket, i);
+        }
+    }
+
+    @Override
+    public void updateEntity() {
+        synchronized (fireworkTubes) {
+            for (final LauncherTube tube : fireworkTubes) {
+                tube.update();
+            }
+        }
     }
 
     @Override
@@ -98,9 +102,6 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         // make sure to retain the buffers!
         bufferRocket.readFromNBT(tag);
         bufferStar.readFromNBT(tag);
-        rocketHeight = tag.getInteger("rocketHeight");
-        startedRocket = tag.getBoolean("startedRocket");
-        rocketRemainSlots = tag.getInteger("rocketRemainSlots");
     }
 
     @Override
@@ -109,9 +110,6 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         // make sure to retain the buffers!
         bufferRocket.writeToNBT(tag);
         bufferStar.writeToNBT(tag);
-        tag.setInteger("rocketHeight", rocketHeight);
-        tag.setBoolean("startedRocket", startedRocket);
-        tag.setInteger("rocketRemainSlots", rocketRemainSlots);
     }
 
     /**
@@ -155,50 +153,24 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
             return new Object[]{false, "slot out of range, should be 1-" + getSizeInventory()};
         }
         // make sure it is a firework rocket
-        ItemStack stack = decrStackSize(slot, 1);
-        Item item = stack.getItem();
-        if (!(item instanceof ItemFirework) && !(item instanceof ItemFireworkCharge)) {
-            return new Object[]{false, "item in slot is not a Firework Rocket or Firework Star"};
+        final ItemStack stack = getStackInSlot(slot);
+        final Item item = stack.getItem();
+        // if it's a rocket, add it
+        if (item instanceof ItemFirework) {
+            bufferRocket.addItemStack(stack);
+            return new Object[]{true};
         }
-        // load the firework rocket or firework charge
-        bufferRocket.addItemStack(stack);
-        return new Object[]{true};
+        // if it's a star, add it
+        if (item instanceof ItemFireworkCharge) {
+            bufferStar.addItemStack(stack);
+            return new Object[]{true};
+        }
+        return new Object[]{false, "item in slot is not a Firework Rocket or Firework Star"};
     }
 
     /**
-     * Starts the crafting of a <a href="http://minecraft.gamepedia.com/Firework_Rocket">Firework Rocket</a> with
-     * a particular launch height
-     *
-     * @param height the height the rocket can travel
-     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
-     * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
-     */
-    @LuaFunction(isMultiReturn = true)
-    public Object[] startRocket(int height) {
-        // make sure that fireworks have been finished before making the next
-        if (startedRocket) {
-            return new Object[]{false, "finish the current firework rocket first"};
-        }
-        if (!bufferRocket.hasFreeSpace()) {
-            return new Object[]{false, "no free space in the rocket launch buffer"};
-        }
-        // validate height
-        if (!(height >= 1 && height <= 3)) {
-            return new Object[]{false, "rocket height should be between 1 and 3"};
-        }
-
-        // setup the properties
-        rocketHeight = height;
-        rocketRemainSlots = MAX_SLOTS - height - 1 - bufferStar.getCurrentSize();
-
-        startedRocket = true;
-        // return success and how many slots remain in crafting
-        return new Object[]{true, rocketRemainSlots};
-    }
-
-    /**
-     * Adds a <a href="http://minecraft.gamepedia.com/Firework_star">Firework Star</a> to the currently crafting
-     * rocket.
+     * Adds a <a href="http://minecraft.gamepedia.com/Firework_star">Firework Star</a> to the currently
+     * crafting rocket.
      *
      * @param color    the <a href="http://computercraft.info/wiki/Colors_(API)">colour(s)</a> for the firework
      * @param shape    the <a href="http://minecraft.gamepedia.com/Firework_Rocket#Effects">shape/effect</a>
@@ -206,17 +178,10 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @param modifier the <a href="http://minecraft.gamepedia.com/Firework_Rocket#Additional_effects">modifier/additional effects</a>
      *                 of the firework
      * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
-     * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
+     * succeeded then it will return true and the ID (not session persistent) of the firework star
      */
     @LuaFunction(isMultiReturn = true)
-    public Object[] addFireworkStar(int color, int shape, int modifier) {
-        // make there was a started firework
-        if (!startedRocket) {
-            return new Object[]{false, "no firework rocket started"};
-        }
-        if (rocketRemainSlots == 0) {
-            return new Object[]{false, "the firework cannot fit any more firework stars"};
-        }
+    public Object[] craftFireworkStar(int color, int shape, int modifier) {
         // make sure the firework colour is valid
         if (!validColor(color, true)) {
             return new Object[]{false, "invalid color colour provided"};
@@ -250,9 +215,23 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
          */
         if (shape != 0) {
             --shape;
-            ItemStack stack = ITEM_SHAPES.get(shape);
-            if (findQtyOf(stack) == 0) {
-                return new Object[]{false, "cannot create firework star, no " + NAME_SHAPES[shape]};
+            switch (shape) {
+                case 3:
+                    boolean found = false;
+                    for (Head head : Head.values()) {
+                        if (findQtyOf(head.getItemStack()) > 0) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) {
+                        break;
+                    }
+                default:
+                    ItemStack stack = ITEM_SHAPES.get(shape);
+                    if (findQtyOf(stack) == 0) {
+                        return new Object[]{false, "cannot create firework star, no " + stack.getDisplayName() + " found"};
+                    }
             }
             hasShape = true;
             --remaining;
@@ -336,39 +315,52 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         }
 
         // craft, hopefully!
-        ItemStack result = manager.findMatchingRecipe(crafting, worldObj);
+        final ItemStack result = manager.findMatchingRecipe(crafting, worldObj);
         if (result == null) {
             return new Object[]{false, "we have the resources, but crafting failed"};
         }
 
-        // add the newly crafted star to the buffer for the rocket
-        bufferStar.addItemStack(result);
-        return new Object[]{true, --rocketRemainSlots};
+        // add the newly crafted star to the buffer for the rocket and put it's ID in the return result
+        return new Object[]{true, bufferStar.addItemStack(result)};
     }
 
     /**
-     * Crafts the rocket with the added height, and firework stars. After crafting it will add the rocket to the
-     * launch queue. If there are not enough ingredients to finalise the rocket, it will not craft or add the rocket
-     * to the queue.
+     * Crafts a <a href="http://minecraft.gamepedia.com/Firework_Rocket">Firework Rocket</a> with a particular height,
+     * and firework stars. After crafting it will add the rocket to the launch queue. If there are not enough ingredients
+     * to finalise the rocket, it will not craft or add the rocket to the queue.
      *
+     * @param height  the height the rocket can travel
+     * @param starIds the list of firework star IDs to include in the rocket
      * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
-     * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
+     * succeeded then it will return true and the ID (not session persistent) of the firework rocket
      */
     @LuaFunction(isMultiReturn = true)
-    public Object[] finishRocket() {
-        // make there was a started firework
-        if (!startedRocket) {
-            return new Object[]{false, "no firework rocket started"};
+    public Object[] craftFireworkRocket(int height, ArrayList<Integer> starIds) {
+        if (!bufferRocket.hasFreeSpace()) {
+            return new Object[]{false, "no free space in the rocket launch buffer"};
         }
-
+        // validate height
+        if (!(height >= 1 && height <= 3)) {
+            return new Object[]{false, "rocket height should be between 1 and 3"};
+        }
         // check we have the paper to craft
         if (findQtyOf(PAPER) == 0) {
             return new Object[]{false, "cannot create firework, no paper"};
         }
         // check if we have the gunpowder to craft
         final int qty = findQtyOf(GUNPOWDER);
-        if (qty < rocketHeight) {
-            return new Object[]{false, "cannot create firework, missing " + (rocketHeight - qty) + " gunpowder"};
+        if (qty < height) {
+            return new Object[]{false, "cannot create firework, missing " + (height - qty) + " gunpowder"};
+        }
+        // validate number of stars, slot count, gunpowder for height, and paper
+        if (starIds.size() > (MAX_SLOTS - height - 1)) {
+            return new Object[]{false, "cannot craft, too many firework stars"};
+        }
+        // check existence of the stars
+        for (final Integer id : starIds) {
+            if (!bufferStar.containsItemStackWithId(id)) {
+                return new Object[]{false, "cannot craft, no firework rocket with ID " + id};
+            }
         }
 
         /*
@@ -382,14 +374,13 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         items.add(extract(PAPER));
 
         // add the gunpowder
-        for (int i = 0; i < rocketHeight; ++i) {
+        for (int i = 0; i < height; ++i) {
             items.add(extract(GUNPOWDER));
         }
 
         // add in the firework stars
-        ItemStack temp;
-        while ((temp = bufferStar.getNextItemStack()) != null) {
-            items.add(temp);
+        for (final Integer id : starIds) {
+            items.add(bufferStar.getItemStackWithId(id));
         }
 
         // create the crafting inventory
@@ -411,27 +402,78 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
             return new Object[]{false, "we have the resources, but crafting failed"};
         }
 
-        bufferRocket.addItemStack(result);
+        return new Object[]{true, bufferRocket.addItemStack(result)};
+    }
 
-        rocketHeight = 0;
-        startedRocket = false;
+    /**
+     * Launches the rocket that is next in the launch queue
+     *
+     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
+     * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
+     */
+    @LuaFunction(isMultiReturn = true)
+    public Object[] launch() {
+        // attempt to launch a rocket
+        synchronized (fireworkTubes) {
+            for (final LauncherTube tube : fireworkTubes) {
+                if (tube.canLaunch()) {
+                    return tube.launch(worldObj, xCoord, yCoord, zCoord);
+                }
+            }
+        }
+
+        // it didn't launch
+        return new Object[]{false, "cannot launch rocket, rockets currently reloading"};
+    }
+
+    /**
+     * Unloads the rocket with the supplied ID, returning the firework to the inventory, or spawned in the
+     * world if there is no space in the inventory.
+     *
+     * @param id the ID of the rocket
+     * @return the success of unloading
+     */
+    @LuaFunction(isMultiReturn = true)
+    public Object[] unloadFireworkRocket(int id) {
+        if (!bufferRocket.containsItemStackWithId(id)) {
+            return new Object[]{"No Firework Rocket with that ID found"};
+        }
+        bufferRocket.insertOrExplode(this, worldObj, xCoord, yCoord, zCoord, id);
         return new Object[]{true};
     }
 
     /**
-     * @return whether there is a rocket currently crafting
+     * Unloads the firework star with the supplied ID, returning the star to the inventory, or spawned in the
+     * world if there is no space in the inventory.
+     *
+     * @param id the ID of the star
+     * @return the success of unloading
      */
-    @LuaFunction
-    public boolean isRocketCraftPending() {
-        return startedRocket;
+    @LuaFunction(isMultiReturn = true)
+    public Object[] unloadFireworkStar(int id) {
+        if (!bufferStar.containsItemStackWithId(id)) {
+            return new Object[]{"No Firework Star with that ID found"};
+        }
+        bufferStar.insertOrExplode(this, worldObj, xCoord, yCoord, zCoord, id);
+        return new Object[]{true};
     }
 
     /**
-     * @return the height the crafted rocket is for
+     * @return whether there is a rocket in the launch queue
      */
     @LuaFunction
-    public int getRocketHeight() {
-        return rocketHeight;
+    public boolean canLaunch() {
+        if (bufferRocket.getCurrentSize() == 0) {
+            return false;
+        }
+        synchronized (fireworkTubes) {
+            for (final LauncherTube tube : fireworkTubes) {
+                if (tube.canLaunch()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -443,14 +485,6 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     /**
-     * @return a list of all the firework stars that have been crafted
-     */
-    @LuaFunction
-    public ArrayList<ItemStack> getFireworkStarsList() {
-        return bufferStar.getContentsList();
-    }
-
-    /**
      * @return the number of Firework Rockets that can be launched
      */
     @LuaFunction
@@ -459,96 +493,35 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     /**
-     * @return a list of all the Firework Rockets that are in the buffer
+     * @return all the IDs of the firework stars within the buffer
      */
     @LuaFunction
-    public ArrayList<ItemStack> getFireworkRocketList() {
-        return bufferRocket.getContentsList();
+    public ArrayList<Integer> getFireworkStarIds() {
+        return bufferStar.getWrapperIds();
     }
 
     /**
-     * @return whether there is a rocket in the launch queue
+     * @return all the IDs of the firework rockets within the buffer
      */
     @LuaFunction
-    public boolean canLaunch() {
-        return bufferRocket.getCurrentSize() > 0;
+    public ArrayList<Integer> getFireworkRocketIds() {
+        return bufferRocket.getWrapperIds();
     }
 
-    /**
-     * Launches the rocket that is next in the launch queue
-     *
-     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
-     * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
-     */
-    @LuaFunction(isMultiReturn = true)
-    public Object[] launch() {
-        final ItemStack firework = bufferRocket.getNextItemStack();
-        if (firework != null) {
-            int offsetX = nextLaunch % 3;
-            int offsetY = (int) Math.ceil(nextLaunch / 3);
-            nextLaunch = ++nextLaunch % MAX_SLOTS;
-
-            double nX = OFFSETS.get(offsetX);
-            double nZ = OFFSETS.get(offsetY);
-            final EntityFireworkRocket rocket = new EntityFireworkRocket(
-                    worldObj,
-                    xCoord + nX,
-                    yCoord + 1.1d,
-                    zCoord + nZ,
-                    firework
-            );
-
-            TickHandler.addTickCallback(new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    LogUtils.info("Callback finished");
-                    worldObj.spawnEntityInWorld(rocket);
-                    return null;
-                }
-            });
-
-            return new Object[]{true};
+    @LuaFunction
+    public ArrayList<String> getFireworkRocketDescription(int id) throws LuaException {
+        if (!bufferRocket.containsItemStackWithId(id)) {
+            throw new LuaException("No Firework Rocket with that ID found");
         }
-        return new Object[]{false, "no firework to launch"};
+        return getDescription(bufferRocket, id);
     }
 
-    /**
-     * Cancels the rocket that is next in the launch queue, returning the Firework to the inventory, or spawned
-     * in the world if there is no space in the inventory.
-     *
-     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
-     * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
-     */
-    @LuaFunction(isMultiReturn = true)
-    public Object[] cancelLaunch() {
-        if (!canLaunch()) {
-            return new Object[]{false, "no launches to cancel"};
+    @LuaFunction
+    public ArrayList<String> getFireworkStarDescription(int id) throws LuaException {
+        if (!bufferStar.containsItemStackWithId(id)) {
+            throw new LuaException("No Firework Star with that ID found");
         }
-        // remove the next rocket from the buffer
-        bufferRocket.insertOrExplodeNext(this, worldObj, xCoord, yCoord, zCoord);
-        return new Object[]{true};
-    }
-
-    /**
-     * Cancels the rocket that is currently being crafted, returning any crafted Firework Stars to the inventory,
-     * or spawned in the world if there is no space in the inventory.
-     *
-     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
-     * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
-     * @see #startRocket(int)
-     */
-    @LuaFunction(isMultiReturn = true)
-    public Object[] cancelRocket() {
-        // make there was a started firework
-        if (!startedRocket) {
-            return new Object[]{false, "no firework rocket started"};
-        }
-        // remove all the buffer stars from the buffer
-        while (bufferStar.getCurrentSize() > 0) {
-            bufferStar.insertOrExplodeNext(this, worldObj, xCoord, yCoord, zCoord);
-        }
-        startedRocket = false;
-        return new Object[]{true};
+        return getDescription(bufferStar, id);
     }
 
     /**
@@ -574,7 +547,11 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     protected ItemStack extract(ItemStack template) {
-        return InventoryUtils.extract(this, template, 1);
+        return extract(template, false);
+    }
+
+    protected ItemStack extract(ItemStack template, boolean ignoreMeta) {
+        return InventoryUtils.extract(this, template, 1, ignoreMeta);
     }
 
     private static boolean test(int colors, int color) {
@@ -588,8 +565,35 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         return val >= 0 && val <= 15 && val % 1 == 0;
     }
 
-    private ItemStack colorToDye(int color) {
+    private static ItemStack colorToDye(int color) {
         return new ItemStack(Items.dye, 1, 15 - color);
+    }
+
+    private static ArrayList<String> getDescription(QueueBuffer buffer, int id) throws LuaException {
+        final ArrayList<String> info = Lists.newArrayList();
+        final ItemStack stack = buffer.getItemStackWithId(id);
+        // build the info from tooltip info
+        stack.getItem().addInformation(stack, null, info, true);
+        // sanitise the output
+        for (int i = 0; i < info.size(); ++i) {
+            info.set(i, ChatAllowedCharacters.filerAllowedCharacters(info.get(i)));
+        }
+        return info;
+    }
+
+    private enum Head {
+
+        SKELETON, WITHER, ZOMBIE, PLAYER, CREEPER;
+
+        private final ItemStack itemStack;
+
+        private Head() {
+            itemStack = new ItemStack(Items.skull, 1, ordinal());
+        }
+
+        public ItemStack getItemStack() {
+            return itemStack;
+        }
     }
 
 }

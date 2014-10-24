@@ -35,7 +35,7 @@ public final class ModBlocks {
 
     public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboard, blockPrinter,
             blockDictionary, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport,
-            blockMiniAntenna, blockFireworks, blockFireworksCreative;
+            blockMiniAntenna, blockFireworks, blockFireworksCreative, blockComputerCrafter;
 
     public final void register() {
         if (ConfigHandler.enablePlayerDetector) {
@@ -118,6 +118,12 @@ public final class ModBlocks {
 //            blockMiniAntenna = new BlockMiniAntenna();
 //            GameRegistry.registerBlock(blockMiniAntenna, "blockMiniAntenna");
 //            GameRegistry.registerTileEntity(TileMiniAntenna.class, "tileMiniAntenna");
+        }
+
+        if (ConfigHandler.enableComputerCrafter) {
+            blockComputerCrafter = new BlockComputerCrafter();
+            GameRegistry.registerBlock(blockComputerCrafter, "blockComputerCrafter");
+            GameRegistry.registerTileEntity(TileComputerCrafter.class, "tileComputerCrafter");
         }
     }
 
@@ -235,12 +241,13 @@ public final class ModBlocks {
         if (ConfigHandler.enableFireworkLauncher) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockFireworks),
                     "DDD",
-                    "IWI",
+                    "WFW",
                     "ICI",
 
-                    'I', "ingotIron",
                     'D', Blocks.dispenser,
                     'W', Blocks.chest,
+                    'F', Items.flint_and_steel,
+                    'I', "ingotIron",
                     'C', ComputerCraftInfo.cc_cable
             ));
         }
@@ -255,6 +262,19 @@ public final class ModBlocks {
                     'C', ComputerCraftInfo.cc_cable,
                     'I', "ingotIron",
                     'W', ComputerCraftInfo.cc_wiredModem
+            ));
+        }
+
+        if (ConfigHandler.enableComputerCrafter) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockComputerCrafter),
+                    "ITI",
+                    "IWI",
+                    "ICI",
+
+                    'I', "ingotIron",
+                    'T', Blocks.crafting_table,
+                    'W', Blocks.chest,
+                    'C', ComputerCraftInfo.cc_cable
             ));
         }
     }

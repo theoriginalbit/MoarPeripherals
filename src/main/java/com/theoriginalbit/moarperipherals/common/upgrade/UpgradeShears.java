@@ -6,12 +6,12 @@
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-package com.theoriginalbit.moarperipherals.common.upgrades;
+package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.google.common.collect.ImmutableList;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.common.upgrades.abstracts.UpgradeTool;
+import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradeTool;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

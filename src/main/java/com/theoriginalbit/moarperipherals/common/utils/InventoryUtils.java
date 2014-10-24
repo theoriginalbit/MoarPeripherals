@@ -20,6 +20,27 @@ import java.util.Random;
 public final class InventoryUtils {
     private static final Random rand = new Random();
 
+    public static boolean areItemsStackable(ItemStack a, ItemStack b) {
+        if (a == b) {
+            return true;
+        }
+        if (a == null || b == null) {
+            return false;
+        }
+
+        if (a.getItem() == b.getItem()) {
+            if (((!a.getHasSubtypes()) && (!a.isItemStackDamageable())) || (a.getItemDamage() == b.getItemDamage())) {
+                if (a.stackTagCompound == null && b.stackTagCompound == null) {
+                    return true;
+                }
+                if (a.stackTagCompound != null && b.stackTagCompound != null && a.stackTagCompound.equals(b.stackTagCompound)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static int[] makeSlotArray(IInventory inv) {
         final int[] slots = new int[inv.getSizeInventory()];
         for (int i = 0; i < slots.length; i++) {
@@ -60,31 +81,31 @@ public final class InventoryUtils {
         }
     }
 
-    public static int findEmptySlot(IInventory inv, ItemStack stack) {
+    public static int findSlotFor(IInventory inv, ItemStack stack) {
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             final ItemStack item = inv.getStackInSlot(i);
-            if (item == null || (stack.isItemEqual(item) && (item.stackSize + stack.stackSize) <= item.getMaxStackSize())) {
+            if (areItemsStackable(item, stack)) {
                 return i;
             }
         }
         return -1;
     }
 
-    public static int findQtyOf(IInventory inv, ItemStack template) {
+    public static int findQtyOf(IInventory inv, ItemStack stack) {
         int qty = 0;
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
-            if (stack != null && stack.isItemEqual(template)) {
+            final ItemStack item = inv.getStackInSlot(i);
+            if (areItemsStackable(item, stack)) {
                 qty += stack.stackSize;
             }
         }
         return qty;
     }
 
-    public static ItemStack extract(IInventory inv, ItemStack template, int amount) {
+    public static ItemStack extract(IInventory inv, ItemStack template, int amount, boolean ignoreMeta) {
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
-            if (stack.isItemEqual(template)) {
+            final ItemStack stack = inv.getStackInSlot(i);
+            if (stack != null && (stack.isItemEqual(template) || (ignoreMeta && stack.getItem().equals(template.getItem())))) {
                 return inv.decrStackSize(i, amount);
             }
         }

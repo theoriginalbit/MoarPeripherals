@@ -22,6 +22,7 @@ public final class Constants {
         public static final LocalisationStore KEYBOARD_EXIT = new LocalisationStore("moarperipherals.gui.keyboard.exit");
         public static final LocalisationStore FIREWORKS = new LocalisationStore("tile.moarperipherals:fireworks.name");
         public static final LocalisationStore FIREWORKS_CREATIVE = new LocalisationStore("tile.moarperipherals:fireworksCreative.name");
+        public static final LocalisationStore CRAFTER = new LocalisationStore("tile.moarperipherals:crafter.name");
     }
 
     public static final class TOOLTIPS {
@@ -36,6 +37,7 @@ public final class Constants {
         public static final LocalisationStore DICTIONARY = new LocalisationStore("upgrade.moarperipherals:adjective.dictionary");
         public static final LocalisationStore SHEARS = new LocalisationStore("upgrade.moarperipherals:adjective.shears");
         public static final LocalisationStore COMPASS = new LocalisationStore("upgrade.moarperipherals:adjective.compass");
+        public static final LocalisationStore FURNACE = new LocalisationStore("upgrade.moarperipherals:adjective.furnace");
     }
 
     public static final class CHAT {

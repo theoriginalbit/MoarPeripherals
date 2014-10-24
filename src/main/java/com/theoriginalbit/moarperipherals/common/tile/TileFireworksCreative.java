@@ -51,17 +51,6 @@ public class TileFireworksCreative extends TileFireworks {
         return new Object[]{true};
     }
 
-    @LuaFunction(isMultiReturn = true)
-    public Object[] cancelRocket() {
-        // make there was a started firework
-        if (!isRocketCraftPending()) {
-            return new Object[]{false, "no firework rocket started"};
-        }
-        // remove all the buffer stars from the buffer, without returning it to them
-        bufferStar.clear();
-        return new Object[]{true};
-    }
-
     /*
      * This is creative, we always have everything!
      */

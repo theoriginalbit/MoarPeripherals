@@ -91,7 +91,7 @@ public final class LuaType {
         }
 
         for (Map.Entry<Class<?>, String> entry : CLASS_TO_NAME.entrySet()) {
-            if (entry.getKey().isAssignableFrom(clazz)) {
+            if (entry.getKey().isAssignableFrom(clazz) || clazz.isAssignableFrom(entry.getKey())) {
                 return entry.getValue();
             }
         }

@@ -6,7 +6,7 @@
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-package com.theoriginalbit.moarperipherals.common.upgrades.abstracts;
+package com.theoriginalbit.moarperipherals.common.upgrade.abstracts;
 
 import com.theoriginalbit.framework.peripheral.wrapper.PeripheralWrapper;
 import com.theoriginalbit.moarperipherals.common.reference.Constants.LocalisationStore;
@@ -54,7 +54,7 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
     }
 
     @Override
-    public final IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
+    public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
         try {
             final TileEntity te = tile.newInstance();
             final PeripheralWrapper wrapper = new PeripheralWrapper(te);

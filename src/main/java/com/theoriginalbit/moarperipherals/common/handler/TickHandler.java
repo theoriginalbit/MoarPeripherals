@@ -32,7 +32,6 @@ public class TickHandler {
         if (event.type == TickEvent.Type.SERVER) {
             FutureTask callback;
             while ((callback = callbacks.poll()) != null) {
-                LogUtils.info("Callbacks exist");
                 callback.run();
             }
         }
@@ -43,7 +42,6 @@ public class TickHandler {
             @Override
             protected void done() {
                 try {
-                    LogUtils.info("Running callback");
                     if (!isCancelled()) get();
                 } catch (Throwable t) {
                     LogUtils.warn("Exception while executing callback! " + this);
