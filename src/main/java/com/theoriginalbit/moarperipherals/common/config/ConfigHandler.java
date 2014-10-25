@@ -43,6 +43,7 @@ public final class ConfigHandler {
     public static int upgradeIdCompass = startUpgradeID++;
     public static int upgradeIdShears = startUpgradeID++;
     public static int upgradeIdFurnace = startUpgradeID++;
+    public static int upgradeIdSolar = startUpgradeID++;
 
     // Feature enabled
     public static boolean enableSonic;
@@ -53,13 +54,15 @@ public final class ConfigHandler {
     public static boolean enableDictionary;
     public static boolean enablePlayerDetector;
     public static boolean enableAntenna;
-    public static boolean enableUpgradeShears;
-    public static boolean enableUpgradeCompass;
     public static boolean enableTurtleTeleport;
     public static boolean enableMiniAntenna;
     public static boolean enableFireworkLauncher;
     public static boolean enableComputerCrafter;
+
+    public static boolean enableUpgradeShears;
+    public static boolean enableUpgradeCompass;
     public static boolean enableUpgradeFurnace;
+    public static boolean enableUpgradeSolar;
 
     // ChatBox settings
     public static boolean displayChatBoxCoords;
@@ -165,6 +168,7 @@ public final class ConfigHandler {
         enableUpgradeShears = getUpgradeEnabled("Shears Turtle");
         enableUpgradeCompass = getUpgradeEnabled("Compass Turtle");
         enableUpgradeCompass = getUpgradeEnabled("Furnace Turtle");
+        enableUpgradeSolar = getUpgradeEnabled("Solar Turtle");
         upgradeFurnaceFuelCost = getInt(CATEGORY_UPGRADE, "furnaceFuelCost", upgradeFurnaceFuelCost, "The cost in Turtle fuel to smelt items. Default is 10 as 1 coal is 80, and 1 coal can smelt 8 items in a furnace");
 
 

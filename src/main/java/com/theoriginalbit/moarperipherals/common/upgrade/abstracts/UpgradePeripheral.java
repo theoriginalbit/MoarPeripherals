@@ -26,7 +26,7 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
     private final ItemStack stack;
     private final Class<? extends TileEntity> tile;
 
-    protected UpgradePeripheral(int upgradeId, LocalisationStore localisation, ItemStack itemStack, Class<? extends TileEntity> tileentity) {
+    public UpgradePeripheral(int upgradeId, LocalisationStore localisation, ItemStack itemStack, Class<? extends TileEntity> tileentity) {
         id = upgradeId;
         adjective = localisation.getLocalised();
         stack = itemStack;
@@ -55,10 +55,13 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
 
     @Override
     public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
+        if (tile == null) {
+            return null;
+        }
         try {
             final TileEntity te = tile.newInstance();
             final PeripheralWrapper wrapper = new PeripheralWrapper(te);
-            updateLocation(turtle, wrapper);
+            update(turtle, wrapper);
             return wrapper;
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,15 +75,15 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
     }
 
     @Override
-    public final IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
+    public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
         return stack.getIconIndex();
     }
 
     @Override
-    public final void update(ITurtleAccess turtle, TurtleSide side) {
-        updateLocation(turtle, turtle.getPeripheral(side));
+    public void update(ITurtleAccess turtle, TurtleSide side) {
+        update(turtle, turtle.getPeripheral(side));
     }
 
-    protected abstract void updateLocation(ITurtleAccess turtle, IPeripheral peripheral);
+    protected abstract void update(ITurtleAccess turtle, IPeripheral peripheral);
 
 }

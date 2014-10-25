@@ -26,7 +26,11 @@ public final class ModItems {
 
     public static final ModItems INSTANCE = new ModItems();
 
-    public static Item itemInkCartridge, itemSonic, itemKeyboardPart, itemMonopoleAntenna;
+    // custom items
+    public static Item itemInkCartridge, itemSonic, itemMonopoleAntenna;
+
+    // materials, don't need custom implementations
+    public static Item itemKeyboardPart, itemUpgradeSolar;
 
     private ModItems() {
         // prevent other instances being constructed
@@ -51,6 +55,11 @@ public final class ModItems {
         if (ConfigHandler.enableAntenna) {
             itemMonopoleAntenna = new ItemMoarP("monopolePart");
             GameRegistry.registerItem(itemMonopoleAntenna, "itemMonopoleAntenna");
+        }
+
+        if (ConfigHandler.enableUpgradeSolar) {
+            itemUpgradeSolar = new ItemMoarP("upgradeSolar");
+            GameRegistry.registerItem(itemUpgradeSolar, "itemSolarUpgrade");
         }
     }
 
@@ -97,6 +106,17 @@ public final class ModItems {
                     "M",
 
                     'M', ComputerCraftInfo.cc_wirelessModem
+            ));
+        }
+
+        if (ConfigHandler.enableUpgradeSolar) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgradeSolar),
+                    "SSS",
+                    "ICI",
+
+                    'S', Blocks.daylight_detector,
+                    'I', "ingotIron",
+                    'C', ComputerCraftInfo.cc_cable
             ));
         }
     }

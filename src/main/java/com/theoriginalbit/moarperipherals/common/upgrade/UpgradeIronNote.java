@@ -27,7 +27,7 @@ public class UpgradeIronNote extends UpgradePeripheral {
     }
 
     @Override
-    protected void updateLocation(ITurtleAccess turtle, IPeripheral peripheral) {
+    protected void update(ITurtleAccess turtle, IPeripheral peripheral) {
         if (peripheral instanceof PeripheralWrapper) {
             Object instance = ((PeripheralWrapper) peripheral).getInstance();
             if (instance instanceof TileEntity) {

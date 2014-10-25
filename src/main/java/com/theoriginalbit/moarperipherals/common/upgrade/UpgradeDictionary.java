@@ -24,7 +24,7 @@ public class UpgradeDictionary extends UpgradePeripheral {
     }
 
     @Override
-    protected void updateLocation(ITurtleAccess turtle, IPeripheral peripheral) {
+    protected void update(ITurtleAccess turtle, IPeripheral peripheral) {
         // NO-OP
     }
 

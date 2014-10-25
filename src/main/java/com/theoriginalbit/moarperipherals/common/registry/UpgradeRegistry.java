@@ -45,6 +45,9 @@ public class UpgradeRegistry {
         if (ConfigHandler.enableUpgradeFurnace) {
             register(new UpgradeFurnace());
         }
+        if (ConfigHandler.enableUpgradeSolar) {
+            register(new UpgradeSolar());
+        }
     }
 
     private static void register(ITurtleUpgrade upgrade) {
