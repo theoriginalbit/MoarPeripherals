@@ -17,7 +17,10 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10-1.65-1.5"
+// Grab system env
+ext.env = System.getenv()
+
+version = "1.7.10-1.65-1.5-snapshot-" + env.BUILD_NUMBER
 group = "com.theoriginalbit.minecraft"
 archivesBaseName = "MoarPeripherals"
 
