@@ -38,16 +38,41 @@ public class TileFireworksCreative extends TileFireworks {
         return item instanceof ItemFirework || item instanceof ItemFireworkCharge;
     }
 
+    @Override
+    public void onBreak(int x, int y, int z) {
+        // NO-OP we don't want the buffers returned!
+    }
+
+    @Override
+    @LuaFunction
+    public boolean isCreativeLauncher() {
+        return true;
+    }
+
     /*
      * This is creative, don't drop the items, just destroy them
      */
+    @Override
     @LuaFunction(isMultiReturn = true)
-    public Object[] cancelLaunch() {
-        if (!canLaunch()) {
-            return new Object[]{false, "no launches to cancel"};
+    public Object[] unloadFireworkRocket(int id) {
+        if (!bufferRocket.containsItemStackWithId(id)) {
+            return new Object[]{"No Firework Rocket with that ID found"};
         }
-        // remove the next rocket from the buffer, but in a way they don't get it
         bufferRocket.getNextItemStack();
+        bufferRocket.insertOrExplode(this, worldObj, xCoord, yCoord, zCoord, id);
+        return new Object[]{true};
+    }
+
+    /*
+     * This is creative, don't drop the items, just destroy them
+     */
+    @Override
+    @LuaFunction(isMultiReturn = true)
+    public Object[] unloadFireworkStar(int id) {
+        if (!bufferStar.containsItemStackWithId(id)) {
+            return new Object[]{"No Firework Star with that ID found"};
+        }
+        bufferStar.getNextItemStack();
         return new Object[]{true};
     }
 

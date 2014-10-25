@@ -135,6 +135,11 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         return getSizeInventory();
     }
 
+    @LuaFunction
+    public boolean isCreativeLauncher() {
+        return false;
+    }
+
     /**
      * Loads a pre-made Firework Rocket from the Firework Launchers inventory into the end of the
      * firework rocket launch queue. Or loads a Firework Star from the inventory into the star queue.

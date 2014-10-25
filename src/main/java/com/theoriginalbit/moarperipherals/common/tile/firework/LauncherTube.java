@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
  */
 public class LauncherTube {
     private static final ImmutableList<Double> OFFSETS = ImmutableList.of(0.15d, 0.5d, 0.85d);
-    private static final int TICKS_RELOAD = 10;
+    private static final int TICKS_COOL_DOWN = 20;
 
     private final QueueBuffer rocketBuffer;
     private int tick = 0;
@@ -37,7 +37,7 @@ public class LauncherTube {
     }
 
     public void update() {
-        if (coolDownActive && ++tick >= TICKS_RELOAD) {
+        if (coolDownActive && ++tick >= TICKS_COOL_DOWN) {
             tick = 0;
             coolDownActive = false;
         }
