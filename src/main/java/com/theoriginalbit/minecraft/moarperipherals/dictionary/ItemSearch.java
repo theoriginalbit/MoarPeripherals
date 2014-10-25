@@ -43,11 +43,7 @@ public final class ItemSearch {
     }
 
     private static boolean matches(ItemStack stack, Pattern pattern) {
-        return pattern.matcher(sanitise(InventoryUtils.getItemName(stack).toLowerCase())).find();
-    }
-
-    private static String sanitise(String s) {
-        return ChatAllowedCharacters.filerAllowedCharacters(s.replaceAll("§.", ""));
+        return pattern.matcher(ChatAllowedCharacters.filerAllowedCharacters(InventoryUtils.getItemName(stack).toLowerCase())).find();
     }
 
 }

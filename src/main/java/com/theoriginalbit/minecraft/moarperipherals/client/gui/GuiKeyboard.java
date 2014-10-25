@@ -105,7 +105,7 @@ public class GuiKeyboard extends GuiScreen {
         } else if (terminateTimer < 10 && shutdownTimer < 10 && rebootTimer < 10) {
             // A different key was pressed, queue it to the computer
             tile.queueEventToTarget(ComputerCraftInfo.EVENT.KEY, keyCode);
-            if (ChatAllowedCharacters.isAllowedCharacter(ch) && ch < 'Ā') {
+            if (ChatAllowedCharacters.isAllowedCharacter(ch) && ch < '\256') {
                 tile.queueEventToTarget(ComputerCraftInfo.EVENT.CHAR, Character.toString(ch));
             }
         }
