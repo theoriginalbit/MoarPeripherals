@@ -209,11 +209,11 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         // make sure we have the materials for the required shape
         /*
          * Shape type:
-         * 0 – none, small ball
-         * 1 – fire charge, large ball
-         * 2 – gold nugget, star-shaped
-         * 3 – head, creeper-shaped
-         * 4 – feather, burst explosion
+         * 0 - none, small ball
+         * 1 - fire charge, large ball
+         * 2 - gold nugget, star-shaped
+         * 3 - head, creeper-shaped
+         * 4 - feather, burst explosion
          */
         if (shape != 0) {
             --shape;
@@ -242,10 +242,10 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         // make sure we have the materials for the required modifier
         /*
          * Modifier / Additional effects:
-         * 0 – none
-         * 1 – glowstone, twinkle
-         * 2 – diamond, trail effect
-         * 3 – both
+         * 0 - none
+         * 1 - glowstone, twinkle
+         * 2 - diamond, trail effect
+         * 3 - both
          */
         if (modifier != 0) {
             shouldTwinkle = modifier == 1 || modifier == 3;
