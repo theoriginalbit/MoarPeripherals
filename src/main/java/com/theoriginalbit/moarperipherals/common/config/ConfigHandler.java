@@ -61,7 +61,6 @@ public final class ConfigHandler {
 
     public static boolean enableUpgradeShears;
     public static boolean enableUpgradeCompass;
-    public static boolean enableUpgradeFurnace;
     public static boolean enableUpgradeSolar;
 
     // ChatBox settings
@@ -92,9 +91,6 @@ public final class ConfigHandler {
 
     // Renderer enabled
     public static boolean enablePrinterGfx, enableSonicGfx;
-
-    // Turtle upgrade settings
-    public static int upgradeFurnaceFuelCost = 10;
 
     // Security settings
     public static boolean securityOpBreak;
@@ -169,8 +165,6 @@ public final class ConfigHandler {
         enableUpgradeCompass = getUpgradeEnabled("Compass Turtle");
         enableUpgradeCompass = getUpgradeEnabled("Furnace Turtle");
         enableUpgradeSolar = getUpgradeEnabled("Solar Turtle");
-        upgradeFurnaceFuelCost = getInt(CATEGORY_UPGRADE, "furnaceFuelCost", upgradeFurnaceFuelCost, "The cost in Turtle fuel to smelt items. Default is 10 as 1 coal is 80, and 1 coal can smelt 8 items in a furnace");
-
 
         // ChatBox settings
         displayChatBoxCoords = getBoolean(CATEGORY_CHAT_BOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");

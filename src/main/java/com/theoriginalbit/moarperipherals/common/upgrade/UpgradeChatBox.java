@@ -16,14 +16,21 @@ import com.theoriginalbit.moarperipherals.common.tile.TileChatBox;
 import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradePeripheral;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
+import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.IIcon;
 
 public class UpgradeChatBox extends UpgradePeripheral {
 
     public UpgradeChatBox() {
         super(ConfigHandler.upgradeIdChatBox, Constants.UPGRADE.CHATBOX, new ItemStack(ModBlocks.blockChatBox), TileChatBox.class);
+    }
+
+    @Override
+    public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
+        return ModBlocks.blockChatBox.getIcon(0, 0);
     }
 
     @Override

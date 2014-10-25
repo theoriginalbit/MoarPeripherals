@@ -15,12 +15,19 @@ import com.theoriginalbit.moarperipherals.common.tile.TileDictionary;
 import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradePeripheral;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
+import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 public class UpgradeDictionary extends UpgradePeripheral {
 
     public UpgradeDictionary() {
         super(ConfigHandler.upgradeIdDictionary, Constants.UPGRADE.DICTIONARY, new ItemStack(ModBlocks.blockDictionary), TileDictionary.class);
+    }
+
+    @Override
+    public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
+        return ModBlocks.blockDictionary.getIcon(0, 0);
     }
 
     @Override

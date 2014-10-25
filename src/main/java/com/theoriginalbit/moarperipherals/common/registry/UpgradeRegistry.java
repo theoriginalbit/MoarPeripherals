@@ -42,9 +42,6 @@ public class UpgradeRegistry {
         if (ConfigHandler.enableUpgradeCompass) {
             register(new UpgradeCompass());
         }
-        if (ConfigHandler.enableUpgradeFurnace) {
-            register(new UpgradeFurnace());
-        }
         if (ConfigHandler.enableUpgradeSolar) {
             register(new UpgradeSolar());
         }

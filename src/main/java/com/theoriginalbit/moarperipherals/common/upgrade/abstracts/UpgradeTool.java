@@ -9,17 +9,22 @@
 package com.theoriginalbit.moarperipherals.common.upgrade.abstracts;
 
 import com.theoriginalbit.moarperipherals.common.reference.Constants.LocalisationStore;
-import com.theoriginalbit.moarperipherals.common.utils.WorldUtils;
+import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.Facing;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author theoriginalbit
@@ -28,51 +33,44 @@ import java.util.ArrayList;
 public abstract class UpgradeTool implements ITurtleUpgrade {
     private final int id;
     private final String adjective;
-    private final ItemStack stack;
 
-    protected UpgradeTool(int upgradeId, LocalisationStore localisation, ItemStack itemStack) {
+    protected final ItemStack itemStack;
+    protected ITurtleAccess turtle;
+
+    protected UpgradeTool(int upgradeId, LocalisationStore localisation, ItemStack stack) {
         id = upgradeId;
+        itemStack = stack;
         adjective = localisation.getLocalised();
-        stack = itemStack;
     }
 
     @Override
-    public int getUpgradeID() {
+    public final int getUpgradeID() {
         return id;
     }
 
     @Override
-    public String getUnlocalisedAdjective() {
+    public final String getUnlocalisedAdjective() {
         return adjective;
     }
 
     @Override
-    public TurtleUpgradeType getType() {
+    public final TurtleUpgradeType getType() {
         return TurtleUpgradeType.Tool;
     }
 
     @Override
-    public ItemStack getCraftingItem() {
-        return stack;
+    public final ItemStack getCraftingItem() {
+        return itemStack;
     }
 
     @Override
-    public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-        return stack.getIconIndex();
-    }
-
-    @Override
-    public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
+    public final IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
         return null;
     }
 
     @Override
-    public void update(ITurtleAccess turtle, TurtleSide side) {
-        // NO-OP
-    }
-
-    @Override
     public TurtleCommandResult useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, int direction) {
+        this.turtle = turtle;
         switch (verb) {
             case Attack:
                 return attack(turtle, direction);
@@ -82,100 +80,102 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
         return TurtleCommandResult.failure("Unsupported action");
     }
 
-    protected boolean canBreakBlock(World world, int x, int y, int z) {
-        final Block block = world.getBlock(x, y, z);
-        return !((block.isAir(world, x, y, z)) || (block == Blocks.bedrock) || (block.getBlockHardness(world, x, y, z) <= -1.0F));
+    @Override
+    public void update(ITurtleAccess turtle, TurtleSide side) {
+        // NO-OP
     }
 
     protected abstract boolean canHarvestBlock(World world, int x, int y, int z);
 
-    protected float getDamageMultiplier() {
-        return 3f;
-    }
+    protected abstract ArrayList<ItemStack> harvestBlock(World world, int x, int y, int z);
 
-    private TurtleCommandResult attack(final ITurtleAccess turtle, int direction) {
+    protected TurtleCommandResult dig(ITurtleAccess turtle, int dir) {
         final World world = turtle.getWorld();
-        final ChunkCoordinates position = turtle.getPosition();
-//        FakePlayer turtlePlayer = new FakePlayer(); //TurtlePlaceCommand.createPlayer(world, position, turtle, direction);
+        final ChunkCoordinates coordinates = turtle.getPosition();
+        int x = coordinates.posX + Facing.offsetsXForSide[dir];
+        int y = coordinates.posY + Facing.offsetsYForSide[dir];
+        int z = coordinates.posZ + Facing.offsetsZForSide[dir];
 
-//        Vec3 turtlePos = Vec3.func_72443_a(turtlePlayer.field_70165_t, turtlePlayer.field_70163_u, turtlePlayer.field_70161_v);
-//        Vec3 rayDir = turtlePlayer.func_70676_i(1.0F);
-//        Vec3 rayStart = turtlePos.func_72441_c(rayDir.field_72450_a * 0.4D, rayDir.field_72448_b * 0.4D, rayDir.field_72449_c * 0.4D);
-//        Entity hitEntity = WorldUtils.rayTraceEntities(world, rayStart, rayDir, 1.1D);
-//        if (hitEntity != null) {
-//            ItemStack stackCopy = this.m_item.func_77946_l();
-//            turtlePlayer.loadInventory(stackCopy);
-//
-//            ComputerCraft.setEntityDropConsumer(hitEntity, new IEntityDropConsumer() {
-//                public void consumeDrop(Entity entity, ItemStack drop) {
-//                    ItemStack remainder = InventoryUtil.storeItems(drop, turtle.getInventory(), 0, turtle.getInventory().func_70302_i_(), turtle.getSelectedSlot());
-//                    if (remainder != null) {
-//                        WorldUtil.dropItemStack(remainder, world, position.posX, position.posY, position.posZ, net.minecraft.util.Facing.field_71588_a[turtle.getDirection()]);
-//                    }
-//                }
-//            });
-//            boolean placed = false;
-//            if ((hitEntity.func_70075_an()) && (!hitEntity.func_85031_j(turtlePlayer))) {
-//                float damage = (float) turtlePlayer.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111126_e();
-//                damage *= getDamageMultiplier();
-//                if (damage > 0.0F) {
-//                    if (hitEntity.func_70097_a(DamageSource.func_76365_a(turtlePlayer), damage)) {
-//                        placed = true;
-//                    }
-//                }
-//
-//            }
-//
-//            ComputerCraft.clearEntityDropConsumer(hitEntity);
-//
-//            if (placed) {
-//                turtlePlayer.unloadInventory(turtle);
-//                return TurtleCommandResult.success();
-//            }
-//        }
+        final Block block = world.getBlock(x, y, z);
+        if (!world.isAirBlock(x, y, z) && block.getBlockHardness(world, x, y, z) > -1f && canHarvestBlock(world, x, y, z)) {
+            final ArrayList<ItemStack> result = harvestBlock(world, x, y, z);
+            if (result != null) {
+                store(result);
+                world.setBlockToAir(x, y, z);
+                world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + world.getBlockMetadata(x, y, z) * 4096);
+                return TurtleCommandResult.success();
+            }
+        }
 
-        return TurtleCommandResult.failure("Nothing to attack here");
+        return TurtleCommandResult.failure("Nothing to dig");
     }
 
-    private TurtleCommandResult dig(ITurtleAccess turtle, int direction) {
-        World world = turtle.getWorld();
-        ChunkCoordinates position = turtle.getPosition();
-        ChunkCoordinates newPosition = WorldUtils.moveCoords(position, direction);
+    protected TurtleCommandResult attack(ITurtleAccess turtle, int dir) {
+        final World world = turtle.getWorld();
+        final ChunkCoordinates coordinates = turtle.getPosition();
+        int x = coordinates.posX + Facing.offsetsXForSide[dir];
+        int y = coordinates.posY + Facing.offsetsYForSide[dir];
+        int z = coordinates.posZ + Facing.offsetsZForSide[dir];
 
-//        if ((WorldUtils.isBlockInWorld(world, newPosition)) && (!world.isAirBlock(newPosition.posX, newPosition.posY, newPosition.posZ)) && (!WorldUtils.isLiquidBlock(world, newPosition))) {
-//            if (!canBreakBlock(world, newPosition.posX, newPosition.posY, newPosition.posZ)) {
-//                return TurtleCommandResult.failure("Unbreakable block detected");
-//            }
-//
-//            if (canHarvestBlock(world, newPosition.posX, newPosition.posY, newPosition.posZ)) {
-//                ArrayList items = getBlockDropped(world, newPosition.posX, newPosition.posY, newPosition.posZ);
-//                if ((items != null) && (items.size() > 0)) {
-//                    for (Object item : items) {
-//                        ItemStack stack = (ItemStack) item;
-//                        ItemStack remainder = InventoryUtils.storeItems(stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
-//                        if (remainder != null) {
-//                            WorldUtils.dropItemStack(remainder, world, position.posX, position.posY, position.posZ, direction);
-//                        }
-//                    }
-//                }
-//
-//            }
-//
-//            Block block = world.func_147439_a(newPosition.posX, newPosition.posY, newPosition.posZ);
-//            if (block != null) {
-//                world.func_72908_a(newPosition.posX + 0.5D, newPosition.posY + 0.5D, newPosition.posZ + 0.5D, block.field_149762_H.func_150495_a(), (block.field_149762_H.func_150497_c() + 1.0F) / 2.0F, block.field_149762_H.func_150494_d() * 0.8F);
-//            }
-//            world.func_147468_f(newPosition.posX, newPosition.posY, newPosition.posZ);
-//            return TurtleCommandResult.success();
-//        }
+        final EntityPlayer player = new PlayerTurtle(turtle);
+        @SuppressWarnings("unchecked")
+        final List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, AxisAlignedBB.getBoundingBox(x, y, z, x + 1d, y + 1d, z + 1d));
 
-        return TurtleCommandResult.failure("Nothing to dig here");
+        for (Entity entity : list) {
+            if (entity instanceof IShearable) {
+                final ItemStack shears = itemStack.copy();
+                if (((IShearable) entity).isShearable(shears, entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ)) {
+                    store(((IShearable) entity).onSheared(shears, entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ, 0));
+                    return TurtleCommandResult.success();
+                }
+            }
+        }
+
+        return TurtleCommandResult.failure("Nothing to attack");
     }
 
-    private ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z) {
-//        Block block = world.func_147439_a(x, y, z);
-//        int metadata = world.func_72805_g(x, y, z);
-//        return block.getDrops(world, x, y, z, metadata, 0);
-        return null;
+    private void store(final ArrayList<ItemStack> list) {
+        if (list != null) {
+            for (final ItemStack stack : list) {
+                store(stack);
+            }
+        }
     }
+
+    private void store(final ItemStack stack) {
+        if (!storeItemStack(stack)) {
+            ChunkCoordinates coordinates = turtle.getPosition();
+            int direction = turtle.getDirection();
+            int x = coordinates.posX + Facing.offsetsXForSide[direction];
+            int y = coordinates.posY + Facing.offsetsYForSide[direction];
+            int z = coordinates.posZ + Facing.offsetsZForSide[direction];
+            InventoryUtils.spawnInWorld(stack, turtle.getWorld(), x, y, z);
+        }
+    }
+
+    protected boolean storeItemStack(ItemStack stack) {
+        final IInventory inventory = turtle.getInventory();
+
+        for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+            ItemStack currentStack = inventory.getStackInSlot(i);
+            if (currentStack == null) {
+                inventory.setInventorySlotContents(i, stack.copy());
+                stack.stackSize = 0;
+                return true;
+            } else if (currentStack.isStackable() && currentStack.isItemEqual(stack)) {
+                int space = currentStack.getMaxStackSize() - currentStack.stackSize;
+                if (space >= stack.stackSize) {
+                    currentStack.stackSize += stack.stackSize;
+                    stack.stackSize = 0;
+                    return true;
+                } else {
+                    currentStack.stackSize = currentStack.getMaxStackSize();
+                    stack.stackSize -= space;
+                }
+            }
+        }
+
+        return false;
+    }
+
 }

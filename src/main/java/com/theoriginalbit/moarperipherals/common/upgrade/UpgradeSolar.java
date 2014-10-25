@@ -56,9 +56,9 @@ public class UpgradeSolar extends UpgradePeripheral implements IUpgradeToolIcon 
             float angle = world.getCelestialAngleRadians(1f);
 
             if (angle < (float) Math.PI) {
-                angle += (0.0F - angle) * 0.2F;
+                angle += (0f - angle) * 0.2f;
             } else {
-                angle += (((float) Math.PI * 2F) - angle) * 0.2F;
+                angle += (((float) Math.PI * 2f) - angle) * 0.2f;
             }
 
             light = Math.round((float) light * MathHelper.cos(angle));

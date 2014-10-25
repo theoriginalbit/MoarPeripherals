@@ -14,7 +14,6 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 
 /**
  * @author theoriginalbit
@@ -72,11 +71,6 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
     @Override
     public final TurtleCommandResult useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, int direction) {
         return TurtleCommandResult.failure();
-    }
-
-    @Override
-    public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-        return stack.getIconIndex();
     }
 
     @Override

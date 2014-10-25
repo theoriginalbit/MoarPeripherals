@@ -16,7 +16,8 @@ import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradePeripheral;
 import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralCompass;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.turtle.*;
+import dan200.computercraft.api.turtle.ITurtleAccess;
+import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -26,7 +27,7 @@ import net.minecraft.util.IIcon;
  * @author theoriginalbit
  * @since 14/10/2014
  */
-public class UpgradeCompass extends UpgradePeripheral implements ITurtleUpgrade, IUpgradeToolIcon {
+public class UpgradeCompass extends UpgradePeripheral implements IUpgradeToolIcon {
     private IIcon icon;
 
     public UpgradeCompass() {
@@ -34,13 +35,13 @@ public class UpgradeCompass extends UpgradePeripheral implements ITurtleUpgrade,
     }
 
     @Override
-    public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-        return new PeripheralWrapper(new PeripheralCompass(turtle));
+    public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
+        return icon;
     }
 
     @Override
-    public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-        return icon;
+    public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
+        return new PeripheralWrapper(new PeripheralCompass(turtle));
     }
 
     @Override
