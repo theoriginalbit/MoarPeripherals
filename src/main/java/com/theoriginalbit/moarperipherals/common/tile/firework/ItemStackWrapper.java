@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
  * @author theoriginalbit
  * @since 22/10/14
  */
-public class ItemStackWrapper {
+class ItemStackWrapper {
     public static int NEXT_ID = 0;
 
     private final ItemStack itemStack;

@@ -24,13 +24,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFirework;
-import net.minecraft.item.ItemFireworkCharge;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatAllowedCharacters;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -560,14 +558,140 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
 
     private static ArrayList<String> getDescription(QueueBuffer buffer, int id) throws LuaException {
         final ArrayList<String> info = Lists.newArrayList();
-        final ItemStack stack = buffer.peekItemStackWithId(id);
-        // build the info from tooltip info
-        stack.getItem().addInformation(stack, null, info, true);
-        // sanitise the output
-        for (int i = 0; i < info.size(); ++i) {
-            info.set(i, ChatAllowedCharacters.filerAllowedCharacters(info.get(i)));
-        }
+        addInformation(buffer.peekItemStackWithId(id), info);
         return info;
+    }
+
+    private static void addInformation(ItemStack stack, ArrayList<String> list) {
+        if (!stack.hasTagCompound()) {
+            return;
+        }
+        final Item item = stack.getItem();
+        if (item instanceof ItemFirework) {
+            addFireworkRocketInfo(stack.getTagCompound().getCompoundTag("Fireworks"), list);
+        } else if (item instanceof ItemFireworkCharge) {
+            addFireworkChargeInfo(stack.getTagCompound().getCompoundTag("Explosion"), list);
+        }
+    }
+
+    /*
+     * Code taken from the Minecraft class so that it may be used on Side.SERVER as well as Side.CLIENT
+     */
+    private static void addFireworkRocketInfo(NBTTagCompound tag, ArrayList<String> list) {
+        if (tag.hasKey("Flight", 99)) {
+            list.add(StatCollector.translateToLocal("item.fireworks.flight") + " " + tag.getByte("Flight"));
+        }
+
+        NBTTagList nbttaglist = tag.getTagList("Explosions", 10);
+
+        if (nbttaglist != null && nbttaglist.tagCount() > 0) {
+            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
+                final NBTTagCompound compound = nbttaglist.getCompoundTagAt(i);
+                final ArrayList<String> other = Lists.newArrayList();
+                addFireworkChargeInfo(compound, other);
+
+                if (other.size() > 0) {
+                    for (int j = 1; j < other.size(); ++j) {
+                        other.set(j, other.get(j));
+                    }
+
+                    list.addAll(other);
+                }
+            }
+        }
+    }
+
+    /*
+     * Code taken from the Minecraft class so that it may be used on Side.SERVER as well as Side.CLIENT
+     */
+    private static void addFireworkChargeInfo(NBTTagCompound tag, ArrayList<String> list) {
+        byte b0 = tag.getByte("Type");
+
+        if (b0 >= 0 && b0 <= 4) {
+            list.add(StatCollector.translateToLocal("item.fireworksCharge.type." + b0).trim());
+        } else {
+            list.add(StatCollector.translateToLocal("item.fireworksCharge.type").trim());
+        }
+
+        int[] aInt = tag.getIntArray("Colors");
+        int j, k;
+
+        if (aInt.length > 0) {
+            boolean flag = true;
+            String s = "";
+            int i = aInt.length;
+
+            for (j = 0; j < i; ++j) {
+                k = aInt[j];
+
+                if (!flag) {
+                    s = s + ", ";
+                }
+
+                flag = false;
+                boolean flag1 = false;
+
+                for (int l = 0; l < 16; ++l) {
+                    if (k == ItemDye.field_150922_c[l]) {
+                        flag1 = true;
+                        s = s + StatCollector.translateToLocal("item.fireworksCharge." + ItemDye.field_150923_a[l]);
+                        break;
+                    }
+                }
+
+                if (!flag1) {
+                    s = s + StatCollector.translateToLocal("item.fireworksCharge.customColor");
+                }
+            }
+
+            list.add(s);
+        }
+
+        int[] aint2 = tag.getIntArray("FadeColors");
+        boolean flag2;
+
+        if (aint2.length > 0) {
+            flag2 = true;
+            String s1 = StatCollector.translateToLocal("item.fireworksCharge.fadeTo") + " ";
+            j = aint2.length;
+
+            for (k = 0; k < j; ++k) {
+                int j1 = aint2[k];
+
+                if (!flag2) {
+                    s1 = s1 + ", ";
+                }
+
+                flag2 = false;
+                boolean flag4 = false;
+
+                for (int i1 = 0; i1 < 16; ++i1) {
+                    if (j1 == ItemDye.field_150922_c[i1]) {
+                        flag4 = true;
+                        s1 = s1 + StatCollector.translateToLocal("item.fireworksCharge." + ItemDye.field_150923_a[i1]);
+                        break;
+                    }
+                }
+
+                if (!flag4) {
+                    s1 = s1 + StatCollector.translateToLocal("item.fireworksCharge.customColor");
+                }
+            }
+
+            list.add(s1);
+        }
+
+        flag2 = tag.getBoolean("Trail");
+
+        if (flag2) {
+            list.add(StatCollector.translateToLocal("item.fireworksCharge.trail"));
+        }
+
+        boolean flag3 = tag.getBoolean("Flicker");
+
+        if (flag3) {
+            list.add(StatCollector.translateToLocal("item.fireworksCharge.flicker"));
+        }
     }
 
     private enum Head {
