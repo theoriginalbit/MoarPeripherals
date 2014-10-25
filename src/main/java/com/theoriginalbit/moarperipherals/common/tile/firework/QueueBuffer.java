@@ -80,7 +80,7 @@ public class QueueBuffer {
     }
 
     public ItemStack getNextItemStack() {
-        return inventory.size() > 0 ? inventory.remove(1).getItemStack() : null;
+        return inventory.size() > 0 ? inventory.remove(0).getItemStack() : null;
     }
 
     public boolean containsItemStackWithId(int id) {
@@ -90,6 +90,15 @@ public class QueueBuffer {
             }
         }
         return false;
+    }
+
+    public ItemStack peekItemStackWithId(int id) {
+        for (final ItemStackWrapper wrapper : inventory) {
+            if (wrapper.getId() == id) {
+                return wrapper.getItemStack();
+            }
+        }
+        return null;
     }
 
     public ItemStack getItemStackWithId(int id) {

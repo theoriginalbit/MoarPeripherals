@@ -157,12 +157,12 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         final Item item = stack.getItem();
         // if it's a rocket, add it
         if (item instanceof ItemFirework) {
-            bufferRocket.addItemStack(stack);
+            bufferRocket.addItemStack(stack.splitStack(1));
             return new Object[]{true};
         }
         // if it's a star, add it
         if (item instanceof ItemFireworkCharge) {
-            bufferStar.addItemStack(stack);
+            bufferStar.addItemStack(stack.splitStack(1));
             return new Object[]{true};
         }
         return new Object[]{false, "item in slot is not a Firework Rocket or Firework Star"};
@@ -477,26 +477,10 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     /**
-     * @return the number of Firework Stars crafted and stored in the buffer
-     */
-    @LuaFunction
-    public int getFireworkStarCount() {
-        return bufferStar.getCurrentSize();
-    }
-
-    /**
-     * @return the number of Firework Rockets that can be launched
-     */
-    @LuaFunction
-    public int getFireworkRocketCount() {
-        return bufferRocket.getCurrentSize();
-    }
-
-    /**
      * @return all the IDs of the firework stars within the buffer
      */
     @LuaFunction
-    public ArrayList<Integer> getFireworkStarIds() {
+    public ArrayList<Integer> getFireworkStarInfo() {
         return bufferStar.getWrapperIds();
     }
 
@@ -504,7 +488,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @return all the IDs of the firework rockets within the buffer
      */
     @LuaFunction
-    public ArrayList<Integer> getFireworkRocketIds() {
+    public ArrayList<Integer> getFireworkRocketInfo() {
         return bufferRocket.getWrapperIds();
     }
 
@@ -571,7 +555,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
 
     private static ArrayList<String> getDescription(QueueBuffer buffer, int id) throws LuaException {
         final ArrayList<String> info = Lists.newArrayList();
-        final ItemStack stack = buffer.getItemStackWithId(id);
+        final ItemStack stack = buffer.peekItemStackWithId(id);
         // build the info from tooltip info
         stack.getItem().addInformation(stack, null, info, true);
         // sanitise the output
