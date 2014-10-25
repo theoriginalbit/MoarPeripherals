@@ -485,7 +485,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @return all the IDs of the firework stars within the buffer
      */
     @LuaFunction
-    public ArrayList<Integer> getFireworkStarInfo() {
+    public ArrayList<Integer> getFireworkStarIds() {
         return bufferStar.getWrapperIds();
     }
 
@@ -493,12 +493,12 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @return all the IDs of the firework rockets within the buffer
      */
     @LuaFunction
-    public ArrayList<Integer> getFireworkRocketInfo() {
+    public ArrayList<Integer> getFireworkRocketIds() {
         return bufferRocket.getWrapperIds();
     }
 
     @LuaFunction
-    public ArrayList<String> getFireworkRocketDescription(int id) throws LuaException {
+    public ArrayList<String> inspectFireworkRocket(int id) throws LuaException {
         if (!bufferRocket.containsItemStackWithId(id)) {
             throw new LuaException("No Firework Rocket with that ID found");
         }
@@ -506,7 +506,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     @LuaFunction
-    public ArrayList<String> getFireworkStarDescription(int id) throws LuaException {
+    public ArrayList<String> inspectFireworkStar(int id) throws LuaException {
         if (!bufferStar.containsItemStackWithId(id)) {
             throw new LuaException("No Firework Star with that ID found");
         }
