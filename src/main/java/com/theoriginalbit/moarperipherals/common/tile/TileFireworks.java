@@ -33,6 +33,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatAllowedCharacters;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author theoriginalbit
@@ -152,8 +153,11 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         if (slot < 0 || slot > getSizeInventory()) {
             return new Object[]{false, "slot out of range, should be 1-" + getSizeInventory()};
         }
-        // make sure it is a firework rocket
+        // make sure there is a stack
         final ItemStack stack = getStackInSlot(slot);
+        if (stack == null) {
+            return new Object[]{false, "nothing in slot"};
+        }
         final Item item = stack.getItem();
         // if it's a rocket, add it
         if (item instanceof ItemFirework) {
@@ -335,7 +339,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * succeeded then it will return true and the ID (not session persistent) of the firework rocket
      */
     @LuaFunction(isMultiReturn = true)
-    public Object[] craftFireworkRocket(int height, ArrayList<Integer> starIds) {
+    public Object[] craftFireworkRocket(int height, List<Double> starIds) {
         if (!bufferRocket.hasFreeSpace()) {
             return new Object[]{false, "no free space in the rocket launch buffer"};
         }
@@ -357,9 +361,10 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
             return new Object[]{false, "cannot craft, too many firework stars"};
         }
         // check existence of the stars
-        for (final Integer id : starIds) {
-            if (!bufferStar.containsItemStackWithId(id)) {
-                return new Object[]{false, "cannot craft, no firework rocket with ID " + id};
+        for (final Double id : starIds) {
+            int rId = id.intValue();
+            if (!bufferStar.containsItemStackWithId(rId)) {
+                return new Object[]{false, "cannot craft, no firework rocket with ID " + rId};
             }
         }
 
@@ -379,8 +384,8 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         }
 
         // add in the firework stars
-        for (final Integer id : starIds) {
-            items.add(bufferStar.getItemStackWithId(id));
+        for (final Double id : starIds) {
+            items.add(bufferStar.getItemStackWithId(id.intValue()));
         }
 
         // create the crafting inventory
