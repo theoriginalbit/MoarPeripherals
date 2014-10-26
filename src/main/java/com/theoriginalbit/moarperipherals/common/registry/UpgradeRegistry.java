@@ -45,6 +45,9 @@ public class UpgradeRegistry {
         if (ConfigHandler.enableUpgradeSolar) {
             register(new UpgradeSolar());
         }
+        if (ConfigHandler.enableUpgradeIgniter) {
+            register(new UpgradeIgniter());
+        }
     }
 
     private static void register(ITurtleUpgrade upgrade) {

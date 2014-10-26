@@ -29,6 +29,7 @@ upgrade.moarperipherals:adjective.dictionary=Informed
 upgrade.moarperipherals:adjective.shears=Shearing
 upgrade.moarperipherals:adjective.compass=Dizzy
 upgrade.moarperipherals:adjective.solar=Outdoorsy
+upgrade.moarperipherals:adjective.pyro=Pyromaniac
 
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.

@@ -29,6 +29,7 @@ upgrade.moarperipherals:adjective.dictionary=Informado
 upgrade.moarperipherals:adjective.shears=Shearing
 upgrade.moarperipherals:adjective.compass=Dizzy
 upgrade.moarperipherals:adjective.solar=Outdoorsy
+upgrade.moarperipherals:adjective.pyro=Pyromaniac
 
 moarperipherals.chat.paired=Ligado ao computador em %d %d %d
 moarperipherals.chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador

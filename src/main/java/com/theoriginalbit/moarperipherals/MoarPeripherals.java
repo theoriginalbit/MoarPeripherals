@@ -24,7 +24,7 @@ import com.theoriginalbit.moarperipherals.common.converter.ConverterItemStack;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
-import com.theoriginalbit.moarperipherals.server.chunk.ChunkLoadingCallback;
+import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
