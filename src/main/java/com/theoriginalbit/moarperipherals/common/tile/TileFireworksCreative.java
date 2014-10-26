@@ -80,7 +80,7 @@ public class TileFireworksCreative extends TileFireworks {
      * This is creative, we always have everything!
      */
     @Override
-    protected int findQtyOf(ItemStack template) {
+    protected int findQtyOf(ItemStack stack) {
         return 64;
     }
 
@@ -88,10 +88,10 @@ public class TileFireworksCreative extends TileFireworks {
      * This is creative, lets just dupe the item
      */
     @Override
-    protected ItemStack extract(ItemStack template) {
-        final ItemStack stack = template.copy();
-        stack.stackSize = 1;
-        return stack;
+    protected ItemStack extract(ItemStack stack) {
+        final ItemStack s = stack.copy();
+        s.stackSize = 1;
+        return s;
     }
 
 }

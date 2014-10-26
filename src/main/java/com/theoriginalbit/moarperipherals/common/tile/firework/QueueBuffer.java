@@ -122,27 +122,12 @@ public class QueueBuffer {
     }
 
     public void insertOrExplode(IInventory inv, World world, int x, int y, int z, int id) {
-        // get the rocket with the supplied id
-        insertOrExplodeInternal(getItemStackWithId(id), inv, world, x, y, z);
+        InventoryUtils.storeOrDropItemStack(inv, getItemStackWithId(id), world, x, y, z);
     }
 
     public void explodeBuffer(World world, int x, int y, int z) {
         for (final ItemStackWrapper item : inventory) {
-            InventoryUtils.spawnInWorld(item.getItemStack(), world, x, y, z);
-        }
-    }
-
-    private void insertOrExplodeInternal(ItemStack stack, IInventory inv, World world, int x, int y, int z) {
-        if (stack != null) {
-            // see if it can do into the inventory
-            final int slot = InventoryUtils.findSlotFor(inv, stack);
-            // add to the inventory, or spawn in the world if it wont fit in the inventory
-            if (slot == -1) {
-                InventoryUtils.spawnInWorld(stack, world, x, y, z);
-            } else {
-                inv.getStackInSlot(slot).stackSize += stack.stackSize;
-            }
-            InventoryUtils.spawnInWorld(getNextItemStack(), world, x, y, z);
+            InventoryUtils.spawnItemStackInWorld(item.getItemStack(), world, x, y, z);
         }
     }
 

@@ -141,7 +141,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     /**
-     * Loads a pre-made Firework Rocket from the Firework Launchers inventory into the end of the
+     * Loads a single pre-made Firework Rocket from the Firework Launchers inventory into the end of the
      * firework rocket launch queue. Or loads a Firework Star from the inventory into the star queue.
      *
      * @param slot the slot the rocket is in
@@ -162,17 +162,26 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
             return new Object[]{false, "nothing in slot"};
         }
         final Item item = stack.getItem();
+
+        QueueBuffer buffer = null;
         // if it's a rocket, add it
         if (item instanceof ItemFirework) {
-            bufferRocket.addItemStack(stack.splitStack(1));
-            return new Object[]{true};
+            buffer = bufferRocket;
         }
         // if it's a star, add it
         if (item instanceof ItemFireworkCharge) {
-            bufferStar.addItemStack(stack.splitStack(1));
-            return new Object[]{true};
+            buffer = bufferStar;
         }
-        return new Object[]{false, "item in slot is not a Firework Rocket or Firework Star"};
+
+        if (buffer == null) {
+            return new Object[]{false, "item in slot is not a Firework Rocket or Firework Star"};
+        }
+
+        if (stack.stackSize == 1) {
+            setInventorySlotContents(slot, null);
+        }
+
+        return new Object[]{true, buffer.addItemStack(stack.splitStack(1))};
     }
 
     /**
@@ -534,16 +543,12 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         return colors;
     }
 
-    protected int findQtyOf(ItemStack template) {
-        return InventoryUtils.findQtyOf(this, template);
+    protected int findQtyOf(ItemStack stack) {
+        return InventoryUtils.findQtyOf(this, stack);
     }
 
-    protected ItemStack extract(ItemStack template) {
-        return extract(template, false);
-    }
-
-    protected ItemStack extract(ItemStack template, boolean ignoreMeta) {
-        return InventoryUtils.extract(this, template, 1, ignoreMeta);
+    protected ItemStack extract(ItemStack stack) {
+        return InventoryUtils.takeItems(this, stack, 1);
     }
 
     private static boolean test(int colors, int color) {
@@ -551,7 +556,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     private static boolean validColor(int color, boolean multi) {
-        if (color < 0 || (multi && color > 65535) || (!multi && color > 32768)) return false;
+        if (color < 1 || (multi && color > 65535) || (!multi && color > 32768)) return false;
         if (multi) return true;
         double val = Math.log(color) / Math.log(2);
         return val >= 0 && val <= 15 && val % 1 == 0;

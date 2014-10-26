@@ -149,7 +149,7 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
             int x = coordinates.posX + Facing.offsetsXForSide[direction];
             int y = coordinates.posY + Facing.offsetsYForSide[direction];
             int z = coordinates.posZ + Facing.offsetsZForSide[direction];
-            InventoryUtils.spawnInWorld(stack, turtle.getWorld(), x, y, z);
+            InventoryUtils.spawnItemStackInWorld(stack, turtle.getWorld(), x, y, z);
         }
     }
 
