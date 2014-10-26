@@ -231,23 +231,23 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
          */
         if (shape != 0) {
             --shape;
-            switch (shape) {
-                case 3:
-                    boolean found = false;
-                    for (Head head : Head.values()) {
-                        if (findQtyOf(head.getItemStack()) > 0) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (found) {
+            // if we want a head, look for it
+            if (shape == 2) {
+                boolean found = false;
+                for (Head head : Head.values()) {
+                    if (findQtyOf(head.getItemStack()) > 0) {
+                        found = true;
                         break;
                     }
-                default:
-                    ItemStack stack = ITEM_SHAPES.get(shape);
-                    if (findQtyOf(stack) == 0) {
-                        return new Object[]{false, "cannot create firework star, no " + stack.getDisplayName() + " found"};
-                    }
+                }
+                if (!found) {
+                    return new Object[]{false, "cannot create firework star, no mob head found"};
+                }
+            } else {
+                final ItemStack stack = ITEM_SHAPES.get(shape);
+                if (findQtyOf(stack) == 0) {
+                    return new Object[]{false, "cannot create firework star, no " + stack.getDisplayName() + " found"};
+                }
             }
             hasShape = true;
             --remaining;
@@ -310,7 +310,18 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         }
         // get the material for the shape
         if (hasShape) {
-            items.add(extract(ITEM_SHAPES.get(shape)));
+            // if we want a head, attempt to extract one
+            if (shape == 2) {
+                for (Head head : Head.values()) {
+                    ItemStack s = extract(head.getItemStack());
+                    if (s != null && s.stackSize > 0) {
+                        items.add(s);
+                        break;
+                    }
+                }
+            } else {
+                items.add(extract(ITEM_SHAPES.get(shape)));
+            }
         }
         // get the dyes from the inventory
         for (ItemStack dye : dyes) {
