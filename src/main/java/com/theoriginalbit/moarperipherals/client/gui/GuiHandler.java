@@ -8,6 +8,8 @@
  */
 package com.theoriginalbit.moarperipherals.client.gui;
 
+import com.theoriginalbit.moarperipherals.common.block.container.ContainerCrafter;
+import com.theoriginalbit.moarperipherals.common.tile.TileComputerCrafter;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +19,13 @@ public class GuiHandler implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        GuiType gui = GuiType.valueOf(id);
+        if (gui != null) {
+            switch (gui) {
+                case CRAFTER:
+                    return new ContainerCrafter(player, (TileComputerCrafter) world.getTileEntity(x,y, z));
+            }
+        }
         return null;
     }
 
@@ -27,8 +36,8 @@ public class GuiHandler implements IGuiHandler {
             switch (gui) {
                 case KEYBOARD:
                     return new GuiKeyboard((TileKeyboard) world.getTileEntity(x, y, z), player);
-                default:
-                    return null;
+                case CRAFTER:
+                    return new GuiComputerCrafter(new ContainerCrafter(player, (TileComputerCrafter) world.getTileEntity(x,y, z)));
             }
         }
         return null;

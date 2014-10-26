@@ -10,7 +10,7 @@ package com.theoriginalbit.moarperipherals.client.gui;
 
 public enum GuiType {
 
-    KEYBOARD;
+    KEYBOARD, CRAFTER;
 
     public static GuiType valueOf(int id) {
         for (GuiType gui : values()) {
