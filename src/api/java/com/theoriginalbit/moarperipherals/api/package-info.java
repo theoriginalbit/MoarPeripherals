@@ -6,7 +6,7 @@
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-@API(apiVersion = "1.1", owner = "MoarPeripherals", provides = "MoarPeripherals|API")
+@API(apiVersion = "1.5", owner = "MoarPeripherals", provides = "MoarPeripherals|API")
 package com.theoriginalbit.moarperipherals.api;
 
 import cpw.mods.fml.common.API;

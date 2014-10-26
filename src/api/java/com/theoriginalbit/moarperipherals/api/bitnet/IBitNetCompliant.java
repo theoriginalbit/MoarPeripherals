@@ -19,4 +19,8 @@ public interface IBitNetCompliant {
 
     public void receive(BitNetMessage payload);
 
+    public int getReceiveRange();
+
+    public int getReceiveRangeDuringStorm();
+
 }

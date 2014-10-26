@@ -122,13 +122,11 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
     public ArrayList<IComputerAccess> computers;
 
     @LuaFunction
-    @SuppressWarnings("unused")
     public boolean isTowerComplete() {
         return complete;
     }
 
     @LuaFunction(isMultiReturn = true)
-    @SuppressWarnings("unused")
     public Object[] transmit(Object payload) {
         if (isTowerComplete()) {
             BitNetRegistry.transmit(this, new BitNetMessage(payload));
@@ -199,6 +197,16 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
         } else {
             LogUtils.debug(String.format("BitNet Communications Tower at %d %d %d received a previously received message...", xCoord, yCoord, zCoord));
         }
+    }
+
+    @Override
+    public int getReceiveRange() {
+        return ConfigHandler.antennaRange;
+    }
+
+    @Override
+    public int getReceiveRangeDuringStorm() {
+        return ConfigHandler.antennaRangeStorm;
     }
 
     /*

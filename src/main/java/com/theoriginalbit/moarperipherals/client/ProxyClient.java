@@ -16,6 +16,7 @@ import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.client.render.*;
 import com.theoriginalbit.moarperipherals.common.tile.TileAntennaController;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
+import com.theoriginalbit.moarperipherals.common.tile.TileMiniAntenna;
 import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -82,6 +83,11 @@ public class ProxyClient extends ProxyCommon {
             ClientRegistry.bindTileEntitySpecialRenderer(TileAntennaController.class, new RendererTileAntenna());
         }
 
+        if (ConfigHandler.enableMiniAntenna) {
+            RendererMiniAntenna rendererMiniAntenna = new RendererMiniAntenna();
+            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockMiniAntenna), rendererMiniAntenna);
+            ClientRegistry.bindTileEntitySpecialRenderer(TileMiniAntenna.class, rendererMiniAntenna);
+        }
     }
 
     @Override

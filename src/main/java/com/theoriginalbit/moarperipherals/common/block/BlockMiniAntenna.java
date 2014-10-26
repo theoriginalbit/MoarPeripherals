@@ -9,6 +9,7 @@
 package com.theoriginalbit.moarperipherals.common.block;
 
 import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockMoarP;
+import com.theoriginalbit.moarperipherals.common.tile.TileMiniAntenna;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -17,12 +18,34 @@ import net.minecraft.world.World;
  * @since 13/10/2014
  */
 public class BlockMiniAntenna extends BlockMoarP {
+
     public BlockMiniAntenna() {
         super("miniAntenna");
+        setBlockBounds(0.2f, 0f, 0.2f, 0.8f, 1.5f, 0.8f);
     }
 
     @Override
-    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-        return null;
+    public int getRenderType() {
+        return -1;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+        return y < world.getHeight() - 1 && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && super.canPlaceBlockAt(world, x, y, z) && super.canPlaceBlockAt(world, x, y + 1, z);
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World world, int par2) {
+        return new TileMiniAntenna();
     }
 }

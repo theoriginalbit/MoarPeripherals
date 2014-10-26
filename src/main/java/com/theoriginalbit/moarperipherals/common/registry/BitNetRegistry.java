@@ -86,12 +86,18 @@ public final class BitNetRegistry {
     public static void transmit(IBitNetCompliant sender, BitNetMessage payload) {
         final Vec3 sendLocation = sender.getWorldPosition();
         final World sendWorld = sender.getWorld();
-        final int range = (sendWorld.isRaining() && sendWorld.isThundering()) ? ConfigHandler.antennaRangeStorm : ConfigHandler.antennaRange;
+        final boolean isStorming = (sendWorld.isRaining() && sendWorld.isThundering());
 
         for (IBitNetCompliant receiver : towers) {
             if (receiver.getWorld() == sendWorld) {
                 final Vec3 towerLocation = receiver.getWorldPosition();
+
+                // distance from A to B
                 final double distance = Math.sqrt(sendLocation.squareDistanceTo(towerLocation.xCoord, towerLocation.yCoord, towerLocation.zCoord));
+
+                // range specified by the tower
+                final int range = isStorming ? receiver.getReceiveRangeDuringStorm() : receiver.getReceiveRange();
+
                 if (distance > 0 && distance <= range) {
                     /*
                      * create a new instance of the message from the current one so that the distance updates correctly

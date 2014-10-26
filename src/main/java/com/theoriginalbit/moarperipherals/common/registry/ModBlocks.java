@@ -115,9 +115,9 @@ public final class ModBlocks {
         }
 
         if (ConfigHandler.enableMiniAntenna) {
-//            blockMiniAntenna = new BlockMiniAntenna();
-//            GameRegistry.registerBlock(blockMiniAntenna, "blockMiniAntenna");
-//            GameRegistry.registerTileEntity(TileMiniAntenna.class, "tileMiniAntenna");
+            blockMiniAntenna = new BlockMiniAntenna();
+            GameRegistry.registerBlock(blockMiniAntenna, "blockMiniAntenna");
+            GameRegistry.registerTileEntity(TileMiniAntenna.class, "tileMiniAntenna");
         }
 
         if (ConfigHandler.enableComputerCrafter) {

@@ -15,6 +15,7 @@ tile.moarperipherals:turtleTeleport.name=Turtle Teleport
 tile.moarperipherals:fireworks.name=Firework Launcher
 tile.moarperipherals:fireworksCreative.name=Firework Launcher (Creative)
 tile.moarperipherals:crafter.name=Computer Controlled Crafter
+tile.moarperipherals:miniAntenna.name=BitNet Mini Antenna
 
 item.moarperipherals:inkCartridge.name=Ink Cartridge
 item.moarperipherals:keyboardPart.name=Keyboard Part
