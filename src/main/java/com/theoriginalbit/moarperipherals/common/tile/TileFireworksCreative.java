@@ -10,10 +10,6 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFirework;
-import net.minecraft.item.ItemFireworkCharge;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -23,30 +19,36 @@ import net.minecraft.item.ItemStack;
 @LuaPeripheral("firework_launcher")
 public class TileFireworksCreative extends TileFireworks {
 
-    @Override
-    public String getInventoryName() {
-        return Constants.GUI.FIREWORKS_CREATIVE.getLocalised();
+    public TileFireworksCreative() {
+        super(0);
     }
 
     /*
-     * This is creative, we don't need to accept items, but sure,
-     * lets accept only fireworks that can be loaded in
+     * We don't want the buffers returned on the creative launcher, the player shouldn't get free resources
      */
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        final Item item = stack.getItem();
-        return item instanceof ItemFirework || item instanceof ItemFireworkCharge;
+    public void onBreak(int x, int y, int z) {
+        // NO-OP
     }
 
+    /*
+     * We have no inventory
+     */
     @Override
-    public void onBreak(int x, int y, int z) {
-        // NO-OP we don't want the buffers returned!
+    @LuaFunction(name = "getStackInSlot")
+    public ItemStack stackInSlot(int slot) {
+        return null;
     }
 
     @Override
     @LuaFunction
     public boolean isCreativeLauncher() {
         return true;
+    }
+
+    @LuaFunction(isMultiReturn = true)
+    public Object[] load(int slot) {
+        return new Object[]{false, "Cannot invoke load on creative launcher"};
     }
 
     /*
@@ -59,7 +61,6 @@ public class TileFireworksCreative extends TileFireworks {
             return new Object[]{"No Firework Rocket with that ID found"};
         }
         bufferRocket.getNextItemStack();
-        bufferRocket.insertOrExplode(this, worldObj, xCoord, yCoord, zCoord, id);
         return new Object[]{true};
     }
 
@@ -74,24 +75,6 @@ public class TileFireworksCreative extends TileFireworks {
         }
         bufferStar.getNextItemStack();
         return new Object[]{true};
-    }
-
-    /*
-     * This is creative, we always have everything!
-     */
-    @Override
-    protected int findQtyOf(ItemStack stack) {
-        return 64;
-    }
-
-    /*
-     * This is creative, lets just dupe the item
-     */
-    @Override
-    protected ItemStack extract(ItemStack stack) {
-        final ItemStack s = stack.copy();
-        s.stackSize = 1;
-        return s;
     }
 
 }

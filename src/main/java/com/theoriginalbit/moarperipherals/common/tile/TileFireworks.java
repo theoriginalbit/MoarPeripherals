@@ -61,7 +61,11 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     final CraftingManager manager = CraftingManager.getInstance();
 
     public TileFireworks() {
-        super(54);
+        this(54);
+    }
+
+    protected TileFireworks(int invSize) {
+        super(invSize);
 
         for (int i = 0; i < fireworkTubes.length; ++i) {
             fireworkTubes[i] = new LauncherTube(bufferRocket, i);
@@ -84,8 +88,11 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
 
     @Override
     public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        player.displayGUIChest(this);
-        return true;
+        if (!isCreativeLauncher()) {
+            player.displayGUIChest(this);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -451,7 +458,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
         }
 
         // it didn't launch
-        return new Object[]{false, "cannot launch rocket, rockets currently reloading"};
+        return new Object[]{false, "Cannot launch rocket, rockets currently reloading"};
     }
 
     /**
@@ -555,10 +562,17 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     protected int findQtyOf(ItemStack stack) {
-        return InventoryUtils.findQtyOf(this, stack);
+        // if this is creative, we always have everything!
+        return isCreativeLauncher() ? 64 : InventoryUtils.findQtyOf(this, stack);
     }
 
     protected ItemStack extract(ItemStack stack) {
+        // if this is creative, lets just dupe the item
+        if (isCreativeLauncher()) {
+            final ItemStack s = stack.copy();
+            s.stackSize = 1;
+            return s;
+        }
         return InventoryUtils.takeItems(this, stack, 1);
     }
 

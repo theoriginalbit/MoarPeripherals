@@ -21,7 +21,6 @@ public final class Constants {
     public static final class GUI {
         public static final LocalisationStore KEYBOARD_EXIT = new LocalisationStore("moarperipherals.gui.keyboard.exit");
         public static final LocalisationStore FIREWORKS = new LocalisationStore("tile.moarperipherals:fireworks.name");
-        public static final LocalisationStore FIREWORKS_CREATIVE = new LocalisationStore("tile.moarperipherals:fireworksCreative.name");
         public static final LocalisationStore CRAFTER = new LocalisationStore("tile.moarperipherals:crafter.name");
     }
 
