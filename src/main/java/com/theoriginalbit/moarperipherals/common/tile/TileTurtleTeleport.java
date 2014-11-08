@@ -12,15 +12,12 @@ import com.theoriginalbit.framework.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageParticle;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageSoundEffect;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxTeleport;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.ComputerUtils;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import net.minecraft.util.ChunkCoordinates;
-
-import java.util.Random;
 
 /**
  * @author theoriginalbit
@@ -28,7 +25,6 @@ import java.util.Random;
  */
 @LuaPeripheral("turtle_teleport")
 public class TileTurtleTeleport extends TileMoarP {
-    private final Random rand = new Random();
 
     @LuaFunction(isMultiReturn = true)
     public Object[] getTurtleLocation() {
@@ -89,36 +85,12 @@ public class TileTurtleTeleport extends TileMoarP {
     }
 
     private void doTeleportFX(ChunkCoordinates target) {
-        // the locations
-        final int dimId = worldObj.provider.dimensionId;
-        final NetworkRegistry.TargetPoint sourcePoint = new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord, zCoord, 64d);
-        final NetworkRegistry.TargetPoint targetPoint = new NetworkRegistry.TargetPoint(dimId, target.posX, target.posY, target.posZ, 64d);
-
-        final short short1 = 8;
-
-        for (int i = 0; i < short1; ++i) {
-            double rX = rand.nextDouble();
-            double rY = rand.nextDouble() - 0.5d;
-            double rZ = rand.nextDouble();
-            float vX = (rand.nextFloat() - 0.5f) * 0.1f;
-            float vY = (rand.nextFloat() - 0.5f) * 0.1f;
-            float vZ = (rand.nextFloat() - 0.5f) * 0.1f;
-
-            // construct the particle packets
-            final MessageParticle sourceParticle = new MessageParticle(worldObj, "portal", xCoord + rX, yCoord + 1 + rY, zCoord + rZ, vX, vY, vZ);
-            final MessageParticle targetParticle = new MessageParticle(worldObj, "portal", target.posX + rX, target.posY + rY, target.posZ + rZ, vX, vY, vZ);
-
-            // send the packets
-            PacketHandler.INSTANCE.sendToAllAround(sourceParticle, sourcePoint);
-            PacketHandler.INSTANCE.sendToAllAround(targetParticle, targetPoint);
+        if (!worldObj.isRemote) {
+            final int dimId = worldObj.provider.dimensionId;
+            final MessageFxTeleport sourceMessage = new MessageFxTeleport(worldObj, dimId, xCoord, yCoord, zCoord);
+            final MessageFxTeleport targetMessage = new MessageFxTeleport(worldObj, dimId, target.posX, target.posY, target.posZ);
+            PacketHandler.INSTANCE.sendToAllAround(sourceMessage, new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord + 1, zCoord, 64d));
+            PacketHandler.INSTANCE.sendToAllAround(targetMessage, new NetworkRegistry.TargetPoint(dimId, target.posX, target.posY, target.posZ, 64d));
         }
-
-        // construct the sound packets
-        final MessageSoundEffect sourceSound = new MessageSoundEffect(worldObj, xCoord, yCoord, zCoord, "mob.endermen.portal", 0.4f);
-        final MessageSoundEffect targetSound = new MessageSoundEffect(worldObj, target.posX, target.posY, target.posZ, "mob.endermen.portal", 0.4f);
-
-        // send the packets
-        PacketHandler.INSTANCE.sendToAllAround(sourceSound, sourcePoint);
-        PacketHandler.INSTANCE.sendToAllAround(targetSound, targetPoint);
     }
 }

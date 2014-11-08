@@ -9,8 +9,10 @@
 package com.theoriginalbit.moarperipherals.common.network;
 
 import com.google.common.collect.Sets;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxTeleport;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageParticle;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageSoundEffect;
+import com.theoriginalbit.moarperipherals.common.network.message.handler.MessageHandlerFXTeleport;
 import com.theoriginalbit.moarperipherals.common.network.message.handler.MessageHandlerParticle;
 import com.theoriginalbit.moarperipherals.common.network.message.handler.MessageHandlerSoundEffect;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
@@ -32,6 +34,7 @@ public class PacketHandler {
     public static void init() {
         INSTANCE.registerMessage(MessageHandlerParticle.class, MessageParticle.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(MessageHandlerSoundEffect.class, MessageSoundEffect.class, id++, Side.CLIENT);
+        INSTANCE.registerMessage(MessageHandlerFXTeleport.class, MessageFxTeleport.class, id++, Side.CLIENT);
     }
 
     public static Set<EntityPlayer> getPlayersWatchingChunk(WorldServer world, int chunkX, int chunkZ) {
