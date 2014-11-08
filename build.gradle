@@ -17,6 +17,9 @@ buildscript {
 
 apply plugin: 'forge'
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 // Grab system env
 ext.env = System.getenv()
 
@@ -24,36 +27,38 @@ version = "1.7.10-1.65-1.5"
 if (env.BUILD_NUMBER != null) {
     version += "-snapshot-" + env.BUILD_NUMBER
 }
-group = "com.theoriginalbit.minecraft"
+group = "com.theoriginalbit.moarperipherals"
 archivesBaseName = "MoarPeripherals"
 
 minecraft {
     version = "1.7.10-10.13.2.1230"
-    assetDir = "eclipse/assets"
+    runDir = "eclipse"
 
     // replacing
-    replace "@VERSION@", project.version
     replaceIn "ModInfo.java"
+    replace "@VERSION@", project.version
 }
 
 dependencies {
 
 }
 
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
+    from('LICENSE')
+    from('CREDITS')
+
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
