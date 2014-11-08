@@ -20,7 +20,9 @@ import com.google.common.collect.ImmutableSet;
 import com.theoriginalbit.moarperipherals.common.item.abstracts.ItemMoarP;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
+import com.theoriginalbit.moarperipherals.common.reference.Mods;
 import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.*;
@@ -38,6 +40,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
+@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = Mods.BUILDCRAFT_CORE)
 public class ItemSonic extends ItemMoarP implements IToolWrench {
 
     private static final ImmutableSet<Class<? extends Block>> blacklist = ImmutableSet.of(BlockLever.class, BlockButton.class, BlockBed.class, BlockTorch.class);
@@ -146,16 +149,14 @@ public class ItemSonic extends ItemMoarP implements IToolWrench {
         return true;
     }
 
-    /*
-     * BC wrench compatibility
-     */
-
     @Override
+    @Optional.Method(modid = Mods.BUILDCRAFT_CORE)
     public boolean canWrench(EntityPlayer player, int x, int y, int z) {
         return true;
     }
 
     @Override
+    @Optional.Method(modid = Mods.BUILDCRAFT_CORE)
     public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
         player.swingItem();
     }

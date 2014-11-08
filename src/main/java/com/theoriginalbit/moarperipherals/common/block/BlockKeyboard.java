@@ -15,17 +15,19 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-import buildcraft.api.tools.IToolWrench;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockPairable;
+import com.theoriginalbit.moarperipherals.common.item.ItemSonic;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
 import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
+import com.theoriginalbit.moarperipherals.common.utils.ReflectionUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -39,7 +41,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BlockKeyboard extends BlockPairable {
-
+    private static final Class<?> CLASS_ITOOLWRENCH = ReflectionUtils.getClass("buildcraft.api.tools.IToolWrench");
     private final ForgeDirection[] validDirections = new ForgeDirection[]{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST};
 
     public BlockKeyboard() {
@@ -77,7 +79,7 @@ public class BlockKeyboard extends BlockPairable {
     public boolean onBlockActivated(final World world, final int x, final int y, final int z, final EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         // check if the item was a wrench first
         ItemStack equipped = player.getCurrentEquippedItem();
-        if (equipped != null && equipped.getItem() instanceof IToolWrench) {
+        if (equipped != null && isItemWrench(equipped.getItem())) {
             return true;
         }
 
@@ -135,6 +137,10 @@ public class BlockKeyboard extends BlockPairable {
         y += side.offsetY;
         z += side.offsetZ;
         return world.isSideSolid(x, y, z, side.getOpposite());
+    }
+
+    private static boolean isItemWrench(Item item) {
+        return item.getClass().isAssignableFrom(CLASS_ITOOLWRENCH) || item instanceof ItemSonic;
     }
 
 }

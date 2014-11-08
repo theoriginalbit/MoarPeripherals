@@ -93,6 +93,10 @@ public final class LuaType {
     }
 
     public static Object fromLua(Object obj, Class<?> expected) throws LuaException {
+        if (expected == Object.class) {
+            return obj;
+        }
+
         for (ITypeConverter converter : CONVERTERS) {
             Object response = converter.fromLua(obj, expected);
             if (response != null) {
