@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@API(apiVersion = "1.5", owner = "MoarPeripherals", provides = "Peripheral-Framework|Interfaces")
+@API(apiVersion = "@VERSION@", owner = "MoarPeripherals", provides = "Peripheral-Framework|Interfaces")
 package com.theoriginalbit.moarperipherals.api.peripheral.interfaces;
 
 import cpw.mods.fml.common.API;
