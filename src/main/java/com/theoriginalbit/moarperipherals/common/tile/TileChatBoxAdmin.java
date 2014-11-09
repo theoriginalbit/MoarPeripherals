@@ -16,9 +16,10 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.listener.IPlayerEventListener;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
@@ -90,7 +91,8 @@ public class TileChatBoxAdmin extends TileMoarP implements IBreakAwareTile, ICha
         return true;
     }
 
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] setLabel(String str) {
         str = ChatAllowedCharacters.filerAllowedCharacters(str.trim());
         if (str.length() > MAX_LABEL_LENGTH) {

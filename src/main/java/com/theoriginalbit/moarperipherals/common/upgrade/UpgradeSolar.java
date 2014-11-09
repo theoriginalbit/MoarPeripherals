@@ -15,34 +15,29 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
+import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
-import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradePeripheral;
-import dan200.computercraft.api.peripheral.IPeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradePeripheral;
+import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralSolar;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.World;
 
 /**
  * @author theoriginalbit
  * @since 25/10/14
  */
 public class UpgradeSolar extends UpgradePeripheral implements IUpgradeToolIcon {
-    private static final int TICK_ADD_FUEL = 100; // 5 seconds
-    private int tick = 0;
     private IIcon icon;
 
     public UpgradeSolar() {
-        super(ConfigHandler.upgradeIdSolar, Constants.UPGRADE.SOLAR, new ItemStack(ModItems.itemUpgradeSolar), null);
+        super(ConfigHandler.upgradeIdSolar, Constants.UPGRADE.SOLAR.getLocalised(), new ItemStack(ModItems.itemUpgradeSolar));
     }
 
     @Override
@@ -51,31 +46,13 @@ public class UpgradeSolar extends UpgradePeripheral implements IUpgradeToolIcon 
     }
 
     @Override
-    protected void update(ITurtleAccess turtle, TurtleSide side, IPeripheral peripheral) {
-        final World world = turtle.getWorld();
-        // if the world has a sky, this code is being run on a server, the turtle needs fuel, and 20 ticks have passed
-        if (!world.provider.hasNoSky && !world.isRemote && turtle.isFuelNeeded() && turtle.getFuelLevel() < turtle.getFuelLimit() && ++tick > TICK_ADD_FUEL) {
-            final ChunkCoordinates coordinates = turtle.getPosition();
-            if (!world.canBlockSeeTheSky(coordinates.posX, coordinates.posY, coordinates.posZ)) {
-                return;
-            }
-            int light = world.getSavedLightValue(EnumSkyBlock.Sky, coordinates.posX, coordinates.posY, coordinates.posZ) - world.skylightSubtracted;
-            float angle = world.getCelestialAngleRadians(1f);
+    protected WrapperComputer getPeripheralWrapper(ITurtleAccess access, TurtleSide side) {
+        return new WrapperComputer(new PeripheralSolar(access));
+    }
 
-            if (angle < (float) Math.PI) {
-                angle += (0f - angle) * 0.2f;
-            } else {
-                angle += (((float) Math.PI * 2f) - angle) * 0.2f;
-            }
-
-            light = Math.round((float) light * MathHelper.cos(angle));
-
-            // if the turtle can see sky above it
-            if (light > 7) {
-                turtle.addFuel(1);
-            }
-            tick = 0;
-        }
+    @Override
+    protected void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral) {
+        ((PeripheralSolar) peripheral.getInstance()).update();
     }
 
     @Override

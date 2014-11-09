@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.common.upgrade.abstracts;
+package com.theoriginalbit.moarperipherals.api.peripheral.turtle;
 
 import com.mojang.authlib.GameProfile;
 import dan200.computercraft.api.turtle.ITurtleAccess;

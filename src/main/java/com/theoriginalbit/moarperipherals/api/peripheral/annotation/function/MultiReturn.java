@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.api.peripheral.annotation;
+package com.theoriginalbit.moarperipherals.api.peripheral.annotation.function;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,29 +21,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks a Java method in your peripheral as a Lua accessible method.
+ * If your method returns an Object[] and you don't want it to be handled by
+ * the framework's automatic conversion utility, set this flag to true.
+ *
  * @author theoriginalbit
+ * @since 8/11/14
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LuaFunction {
-
-    /**
-     * This value will determine what the corresponding Lua function will be called. 
-     * By default, the Lua function will go by the same name as the method it is created from.
-     */
-    public String name() default "";
-
-    /**
-     * If your method returns an Object[] and you don't want it to be handled by
-     * the framework's automatic conversion utility, set this flag to true.
-     */
-    public boolean isMultiReturn() default false;
-
-    /**
-     * Use this to only enable this method when certain mods are found installed in
-     * this Minecraft instance, these values should be the Mod's ID
-     */
-    public String[] modIds() default {};
-
+public @interface MultiReturn {
 }

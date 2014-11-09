@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.tile.dictionary.ItemSearch;

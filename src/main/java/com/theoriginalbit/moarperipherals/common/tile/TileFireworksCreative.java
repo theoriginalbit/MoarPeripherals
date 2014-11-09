@@ -15,8 +15,9 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -42,7 +43,7 @@ public class TileFireworksCreative extends TileFireworks {
      * We have no inventory
      */
     @Override
-    @LuaFunction(name = "getStackInSlot")
+    @LuaFunction("getStackInSlot")
     public ItemStack stackInSlot(int slot) {
         return null;
     }
@@ -53,7 +54,8 @@ public class TileFireworksCreative extends TileFireworks {
         return true;
     }
 
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] load(int slot) {
         return new Object[]{false, "Cannot invoke load on creative launcher"};
     }
@@ -62,7 +64,8 @@ public class TileFireworksCreative extends TileFireworks {
      * This is creative, don't drop the items, just destroy them
      */
     @Override
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] unloadFireworkRocket(int id) {
         if (!bufferRocket.containsItemStackWithId(id)) {
             return new Object[]{"No Firework Rocket with that ID found"};
@@ -75,7 +78,8 @@ public class TileFireworksCreative extends TileFireworks {
      * This is creative, don't drop the items, just destroy them
      */
     @Override
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] unloadFireworkStar(int id) {
         if (!bufferStar.containsItemStackWithId(id)) {
             return new Object[]{"No Firework Star with that ID found"};

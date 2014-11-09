@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;

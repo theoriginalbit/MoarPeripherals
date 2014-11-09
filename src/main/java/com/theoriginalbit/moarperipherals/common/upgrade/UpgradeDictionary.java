@@ -15,12 +15,12 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
+import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.tile.TileDictionary;
-import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradePeripheral;
-import dan200.computercraft.api.peripheral.IPeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradePeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.item.ItemStack;
@@ -29,7 +29,7 @@ import net.minecraft.util.IIcon;
 public class UpgradeDictionary extends UpgradePeripheral {
 
     public UpgradeDictionary() {
-        super(ConfigHandler.upgradeIdDictionary, Constants.UPGRADE.DICTIONARY, new ItemStack(ModBlocks.blockDictionary), TileDictionary.class);
+        super(ConfigHandler.upgradeIdDictionary, Constants.UPGRADE.DICTIONARY.getLocalised(), new ItemStack(ModBlocks.blockDictionary));
     }
 
     @Override
@@ -38,8 +38,12 @@ public class UpgradeDictionary extends UpgradePeripheral {
     }
 
     @Override
-    protected void update(ITurtleAccess turtle, TurtleSide side, IPeripheral peripheral) {
-        // NO-OP
+    protected WrapperComputer getPeripheralWrapper(ITurtleAccess access, TurtleSide side) {
+        return new WrapperComputer(new TileDictionary());
     }
 
+    @Override
+    protected void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral) {
+        // NO-OP
+    }
 }

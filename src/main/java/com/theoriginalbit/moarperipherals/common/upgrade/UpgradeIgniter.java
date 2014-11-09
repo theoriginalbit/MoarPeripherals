@@ -17,18 +17,15 @@ package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.PlayerTurtle;
-import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradeTool;
+import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradeTool;
 import dan200.computercraft.api.turtle.ITurtleAccess;
-import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Facing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -43,7 +40,7 @@ public class UpgradeIgniter extends UpgradeTool {
     private final Random rand = new Random();
 
     public UpgradeIgniter() {
-        super(ConfigHandler.upgradeIdIgniter, Constants.UPGRADE.IGNITER, new ItemStack(Items.flint_and_steel));
+        super(ConfigHandler.upgradeIdIgniter, Constants.UPGRADE.IGNITER.getLocalised(), new ItemStack(Items.flint_and_steel));
     }
 
     @Override
@@ -51,32 +48,41 @@ public class UpgradeIgniter extends UpgradeTool {
         return Items.flint_and_steel.getIconFromDamage(0);
     }
 
-    @Override
-    protected TurtleCommandResult dig(ITurtleAccess turtle, int dir) {
-        return TurtleCommandResult.failure();
+    protected String getAttackFailureMessage() {
+        return "Cannot ignite block";
+    }
+
+    protected String getDigFailureMessage() {
+        return "Nothing to dig";
     }
 
     @Override
-    protected TurtleCommandResult attack(ITurtleAccess turtle, int dir) {
-        final World world = turtle.getWorld();
-        final ChunkCoordinates coordinates = turtle.getPosition();
-        int x = coordinates.posX + Facing.offsetsXForSide[dir];
-        int y = coordinates.posY + Facing.offsetsYForSide[dir];
-        int z = coordinates.posZ + Facing.offsetsZForSide[dir];
+    protected boolean canAttackEntity(Entity entity) {
+        return false;
+    }
 
-        final EntityPlayer player = new PlayerTurtle(turtle);
-        if (world.isAirBlock(x, y, z) && player.canPlayerEdit(x, y, z, dir, itemStack)) {
-            world.playSoundEffect((double) x + 0.5D, (double) y + 0.5D, (double) z + 0.5D, "fire.ignite", 1.0F, rand.nextFloat() * 0.4F + 0.8F);
-            world.setBlock(x, y, z, Blocks.fire);
-            return TurtleCommandResult.success();
-        }
-        if (world.getBlock(x, y, z) == Blocks.portal && player.canPlayerEdit(x, y, z, dir, itemStack)) {
-            world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(Blocks.portal) + world.getBlockMetadata(x, y, z) * 4096);
-            world.setBlock(x, y, z, Blocks.air);
-            return TurtleCommandResult.success();
-        }
+    @Override
+    protected ArrayList<ItemStack> attackEntity(Entity entity) {
+        return null;
+    }
 
-        return TurtleCommandResult.failure("Cannot ignite block");
+    @Override
+    protected boolean canAttackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle) {
+        return turtle.canPlayerEdit(x, y, z, dir, craftingStack) && (world.isAirBlock(x, y, z) || world.getBlock(x, y, z) == Blocks.portal);
+    }
+
+    @Override
+    protected ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle) {
+        if (turtle.canPlayerEdit(x, y, z, dir, craftingStack)) {
+            if (world.isAirBlock(x, y, z)) {
+                world.playSoundEffect((double) x + 0.5D, (double) y + 0.5D, (double) z + 0.5D, "fire.ignite", 1.0F, rand.nextFloat() * 0.4F + 0.8F);
+                world.setBlock(x, y, z, Blocks.fire);
+            } else if (world.getBlock(x, y, z) == Blocks.portal) {
+                world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(Blocks.portal) + world.getBlockMetadata(x, y, z) * 4096);
+                world.setBlock(x, y, z, Blocks.air);
+            }
+        }
+        return null;
     }
 
     @Override

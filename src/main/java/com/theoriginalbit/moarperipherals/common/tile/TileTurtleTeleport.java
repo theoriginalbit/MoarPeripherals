@@ -15,8 +15,9 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxTeleport;
@@ -33,7 +34,8 @@ import net.minecraft.util.ChunkCoordinates;
 @LuaPeripheral("turtle_teleport")
 public class TileTurtleTeleport extends TileMoarP {
 
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] getTurtleLocation() {
         // look for the Turtle above
         ITurtleAccess turtle = ComputerUtils.getITurtle(worldObj, xCoord, yCoord + 1, zCoord);
@@ -48,7 +50,8 @@ public class TileTurtleTeleport extends TileMoarP {
         return new Object[]{false, "No Turtle found above the teleport"};
     }
 
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] teleportTo(int x, int y, int z) {
         // look for the Turtle above
         final ITurtleAccess turtle = ComputerUtils.getITurtle(worldObj, xCoord, yCoord + 1, zCoord);

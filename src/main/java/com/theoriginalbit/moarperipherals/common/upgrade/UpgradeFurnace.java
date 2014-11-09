@@ -15,13 +15,12 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.PeripheralWrapper;
+import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradePeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradePeripheral;
 import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralFurnace;
-import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -38,25 +37,25 @@ public class UpgradeFurnace extends UpgradePeripheral implements IUpgradeToolIco
     private IIcon iconOn;
 
     public UpgradeFurnace() {
-        super(ConfigHandler.upgradeIdFurnace, Constants.UPGRADE.FURNACE, new ItemStack(Blocks.furnace), null);
+        super(ConfigHandler.upgradeIdFurnace, Constants.UPGRADE.FURNACE.getLocalised(), new ItemStack(Blocks.furnace));
     }
 
     @Override
-    public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-        return new PeripheralWrapper(new PeripheralFurnace(turtle, side));
+    protected WrapperComputer getPeripheralWrapper(ITurtleAccess access, TurtleSide side) {
+        return new WrapperComputer(new PeripheralFurnace(access, side));
     }
 
     @Override
-    protected void update(ITurtleAccess turtle, TurtleSide side, IPeripheral peripheral) {
+    protected void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral) {
         if (!turtle.getWorld().isRemote) {
-            final PeripheralFurnace furnace = (PeripheralFurnace) ((PeripheralWrapper) peripheral).getInstance();
+            final PeripheralFurnace furnace = (PeripheralFurnace) peripheral.getInstance();
             furnace.update(turtle, side);
         }
     }
 
     @Override
     public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-        final PeripheralFurnace furnace = (PeripheralFurnace) ((PeripheralWrapper) turtle.getPeripheral(side)).getInstance();
+        final PeripheralFurnace furnace = (PeripheralFurnace) ((WrapperComputer) turtle.getPeripheral(side)).getInstance();
         return furnace.isBurning() ? iconOn : icon;
     }
 

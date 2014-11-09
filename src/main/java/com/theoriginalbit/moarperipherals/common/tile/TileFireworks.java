@@ -17,8 +17,9 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.common.tile.firework.LauncherTube;
@@ -131,7 +132,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @param slot the slot to get the item from
      * @return the item in the slot
      */
-    @LuaFunction(name = "getStackInSlot")
+    @LuaFunction("getStackInSlot")
     public ItemStack stackInSlot(int slot) {
         // convert from Lua indexes that start at 1
         --slot;
@@ -162,7 +163,8 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
      * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
      */
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] load(int slot) {
         // convert from Lua indexes that start at 1
         --slot;
@@ -210,7 +212,8 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
      * succeeded then it will return true and the ID (not session persistent) of the firework star
      */
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] craftFireworkStar(int color, int shape, int modifier) {
         // make sure the firework colour is valid
         if (!validColor(color, true)) {
@@ -375,7 +378,8 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
      * succeeded then it will return true and the ID (not session persistent) of the firework rocket
      */
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] craftFireworkRocket(int height, List<Double> starIds) {
         if (!bufferRocket.hasFreeSpace()) {
             return new Object[]{false, "no free space in the rocket launch buffer"};
@@ -453,7 +457,8 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
      * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
      */
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] launch() {
         // attempt to launch a rocket
         synchronized (fireworkTubes) {
@@ -475,7 +480,8 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @param id the ID of the rocket
      * @return the success of unloading
      */
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] unloadFireworkRocket(int id) {
         if (!bufferRocket.containsItemStackWithId(id)) {
             return new Object[]{"No Firework Rocket with that ID found"};
@@ -491,7 +497,8 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
      * @param id the ID of the star
      * @return the success of unloading
      */
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] unloadFireworkStar(int id) {
         if (!bufferStar.containsItemStackWithId(id)) {
             return new Object[]{"No Firework Star with that ID found"};

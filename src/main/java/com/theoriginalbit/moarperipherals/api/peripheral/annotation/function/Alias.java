@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.api.peripheral.annotation;
+package com.theoriginalbit.moarperipherals.api.peripheral.annotation.function;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,6 +31,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Alias {
 
-    String[] value() default {};
+    String[] value();
 
 }

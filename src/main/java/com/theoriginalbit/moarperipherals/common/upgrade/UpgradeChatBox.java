@@ -15,13 +15,12 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.PeripheralWrapper;
+import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
+import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradePeripheral;
 import com.theoriginalbit.moarperipherals.common.tile.TileChatBox;
-import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradePeripheral;
-import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.item.ItemStack;
@@ -32,7 +31,7 @@ import net.minecraft.util.IIcon;
 public class UpgradeChatBox extends UpgradePeripheral {
 
     public UpgradeChatBox() {
-        super(ConfigHandler.upgradeIdChatBox, Constants.UPGRADE.CHATBOX, new ItemStack(ModBlocks.blockChatBox), TileChatBox.class);
+        super(ConfigHandler.upgradeIdChatBox, Constants.UPGRADE.CHATBOX.getLocalised(), new ItemStack(ModBlocks.blockChatBox));
     }
 
     @Override
@@ -41,18 +40,21 @@ public class UpgradeChatBox extends UpgradePeripheral {
     }
 
     @Override
-    protected void update(ITurtleAccess turtle, TurtleSide side, IPeripheral peripheral) {
-        if (peripheral instanceof PeripheralWrapper) {
-            Object instance = ((PeripheralWrapper) peripheral).getInstance();
-            if (instance instanceof TileEntity) {
-                TileEntity tile = (TileEntity) instance;
-                ChunkCoordinates coords = turtle.getPosition();
-                tile.setWorldObj(turtle.getWorld());
-                tile.xCoord = coords.posX;
-                tile.yCoord = coords.posY;
-                tile.zCoord = coords.posZ;
-                tile.updateEntity();
-            }
+    protected WrapperComputer getPeripheralWrapper(ITurtleAccess turtle, TurtleSide side) {
+        return new WrapperComputer(new TileChatBox());
+    }
+
+    @Override
+    protected void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral) {
+        final Object instance = peripheral.getInstance();
+        if (instance instanceof TileEntity) {
+            TileEntity tile = (TileEntity) instance;
+            ChunkCoordinates coords = turtle.getPosition();
+            tile.setWorldObj(turtle.getWorld());
+            tile.xCoord = coords.posX;
+            tile.yCoord = coords.posY;
+            tile.zCoord = coords.posZ;
+            tile.updateEntity();
         }
     }
 

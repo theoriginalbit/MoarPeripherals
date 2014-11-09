@@ -17,7 +17,8 @@ package com.theoriginalbit.moarperipherals.api.peripheral.wrapper;
 
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.moarperipherals.api.peripheral.LuaType;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -39,7 +40,7 @@ import java.lang.reflect.Method;
  *
  * @author theoriginalbit
  */
-public class MethodWrapper {
+public class WrapperMethod {
 
     private final Method method;
     private final Object instance;
@@ -47,14 +48,14 @@ public class MethodWrapper {
     private final Class<?>[] javaParams;
     private final boolean isMultiReturn;
 
-    public MethodWrapper(Object peripheral, Method m) {
+    public WrapperMethod(Object peripheral, Method m) {
         // why? just 'cause
         Preconditions.checkArgument(m.isAnnotationPresent(LuaFunction.class));
 
         instance = peripheral;
         method = m;
         javaParams = method.getParameterTypes();
-        isMultiReturn = m.getAnnotation(LuaFunction.class).isMultiReturn();
+        isMultiReturn = m.isAnnotationPresent(MultiReturn.class);
 
         // count how many parameters are required from Lua
         int count = javaParams.length;
@@ -105,17 +106,14 @@ public class MethodWrapper {
                 // return the result converted, if the method returns Object[] this will be converted to a Map
                 return new Object[]{LuaType.toLua(method.invoke(instance, args))};
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            throw new LuaException("Developer problem, please present your client log file to the developer of this peripheral.");
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException | IllegalArgumentException e) {
             e.printStackTrace();
             throw new LuaException("Developer problem, please present your client log file to the developer of this peripheral.");
         } catch (InvocationTargetException e) {
             String message;
             Throwable cause = e;
-            while ((message = cause.getMessage()) == null
-                    && (cause = cause.getCause()) != null) {
+            while (true) {
+                if (!((message = cause.getMessage()) == null && (cause = cause.getCause()) != null)) break;
             }
             throw new LuaException(message);
         } catch (Exception e) {

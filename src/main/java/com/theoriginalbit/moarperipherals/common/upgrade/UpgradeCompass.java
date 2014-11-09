@@ -15,14 +15,13 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.PeripheralWrapper;
+import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradePeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradePeripheral;
 import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralCompass;
-import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -38,7 +37,7 @@ public class UpgradeCompass extends UpgradePeripheral implements IUpgradeToolIco
     private IIcon icon;
 
     public UpgradeCompass() {
-        super(ConfigHandler.upgradeIdCompass, Constants.UPGRADE.COMPASS, new ItemStack(Items.compass), null);
+        super(ConfigHandler.upgradeIdCompass, Constants.UPGRADE.COMPASS.getLocalised(), new ItemStack(Items.compass));
     }
 
     @Override
@@ -47,12 +46,12 @@ public class UpgradeCompass extends UpgradePeripheral implements IUpgradeToolIco
     }
 
     @Override
-    public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-        return new PeripheralWrapper(new PeripheralCompass(turtle));
+    protected WrapperComputer getPeripheralWrapper(ITurtleAccess turtle, TurtleSide side) {
+        return new WrapperComputer(new PeripheralCompass(turtle));
     }
 
     @Override
-    protected void update(ITurtleAccess turtle, TurtleSide side, IPeripheral peripheral) {
+    protected void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral) {
         // NO-OP
     }
 
@@ -60,5 +59,4 @@ public class UpgradeCompass extends UpgradePeripheral implements IUpgradeToolIco
     public void registerIcons(IIconRegister register) {
         icon = register.registerIcon(ModInfo.RESOURCE_DOMAIN + ":upgradeCompass");
     }
-
 }

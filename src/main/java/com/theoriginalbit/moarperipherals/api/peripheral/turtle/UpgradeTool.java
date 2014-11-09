@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.common.upgrade.abstracts;
+package com.theoriginalbit.moarperipherals.api.peripheral.turtle;
 
-import com.theoriginalbit.moarperipherals.common.reference.Constants.LocalisationStore;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
@@ -28,7 +27,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Facing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,15 +37,13 @@ import java.util.List;
  */
 public abstract class UpgradeTool implements ITurtleUpgrade {
     private final int id;
-    private final String adjective;
+    private final String name;
+    protected final ItemStack craftingStack;
 
-    protected final ItemStack itemStack;
-    protected ITurtleAccess turtle;
-
-    protected UpgradeTool(int upgradeId, LocalisationStore localisation, ItemStack stack) {
+    protected UpgradeTool(int upgradeId, String adjective, ItemStack craftingItemStack) {
         id = upgradeId;
-        itemStack = stack;
-        adjective = localisation.getLocalised();
+        name = adjective;
+        craftingStack = craftingItemStack;
     }
 
     @Override
@@ -57,7 +53,7 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
 
     @Override
     public final String getUnlocalisedAdjective() {
-        return adjective;
+        return name;
     }
 
     @Override
@@ -67,7 +63,7 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
 
     @Override
     public final ItemStack getCraftingItem() {
-        return itemStack;
+        return craftingStack;
     }
 
     @Override
@@ -76,8 +72,7 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
     }
 
     @Override
-    public TurtleCommandResult useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, int direction) {
-        this.turtle = turtle;
+    public final TurtleCommandResult useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, int direction) {
         switch (verb) {
             case Attack:
                 return attack(turtle, direction);
@@ -88,36 +83,50 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
     }
 
     @Override
-    public void update(ITurtleAccess turtle, TurtleSide side) {
+    public final void update(ITurtleAccess turtle, TurtleSide side) {
         // NO-OP
     }
+
+    protected abstract boolean canAttackEntity(Entity entity);
+
+    protected abstract ArrayList<ItemStack> attackEntity(Entity entity);
+
+    protected abstract boolean canAttackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle);
+
+    protected abstract ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle);
 
     protected abstract boolean canHarvestBlock(World world, int x, int y, int z);
 
     protected abstract ArrayList<ItemStack> harvestBlock(World world, int x, int y, int z);
 
-    protected TurtleCommandResult dig(ITurtleAccess turtle, int dir) {
-        final World world = turtle.getWorld();
-        final ChunkCoordinates coordinates = turtle.getPosition();
-        int x = coordinates.posX + Facing.offsetsXForSide[dir];
-        int y = coordinates.posY + Facing.offsetsYForSide[dir];
-        int z = coordinates.posZ + Facing.offsetsZForSide[dir];
-
-        final Block block = world.getBlock(x, y, z);
-        if (!world.isAirBlock(x, y, z) && block.getBlockHardness(world, x, y, z) > -1f && canHarvestBlock(world, x, y, z)) {
-            final ArrayList<ItemStack> result = harvestBlock(world, x, y, z);
-            if (result != null) {
-                store(result);
-                world.setBlockToAir(x, y, z);
-                world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + world.getBlockMetadata(x, y, z) * 4096);
-                return TurtleCommandResult.success();
-            }
-        }
-
-        return TurtleCommandResult.failure("Nothing to dig");
+    protected String getAttackFailureMessage() {
+        return "Nothing to attack";
     }
 
-    protected TurtleCommandResult attack(ITurtleAccess turtle, int dir) {
+    protected String getDigFailureMessage() {
+        return "Nothing to dig";
+    }
+
+    protected final void store(final ITurtleAccess turtle, final ArrayList<ItemStack> list) {
+        if (list != null) {
+            for (final ItemStack stack : list) {
+                store(turtle, stack);
+            }
+        }
+    }
+
+    protected final void store(final ITurtleAccess turtle, final ItemStack stack) {
+        if (!storeItemStack(turtle, stack)) {
+            ChunkCoordinates coordinates = turtle.getPosition();
+            int direction = turtle.getDirection();
+            int x = coordinates.posX + Facing.offsetsXForSide[direction];
+            int y = coordinates.posY + Facing.offsetsYForSide[direction];
+            int z = coordinates.posZ + Facing.offsetsZForSide[direction];
+            InventoryUtils.spawnItemStackInWorld(stack, turtle.getWorld(), x, y, z);
+        }
+    }
+
+    private TurtleCommandResult attack(ITurtleAccess turtle, int dir) {
         final World world = turtle.getWorld();
         final ChunkCoordinates coordinates = turtle.getPosition();
         int x = coordinates.posX + Facing.offsetsXForSide[dir];
@@ -129,38 +138,42 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
         final List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, AxisAlignedBB.getBoundingBox(x, y, z, x + 1d, y + 1d, z + 1d));
 
         for (Entity entity : list) {
-            if (entity instanceof IShearable) {
-                final ItemStack shears = itemStack.copy();
-                if (((IShearable) entity).isShearable(shears, entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ)) {
-                    store(((IShearable) entity).onSheared(shears, entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ, 0));
-                    return TurtleCommandResult.success();
-                }
+            if (canAttackEntity(entity)) {
+                store(turtle, attackEntity(entity));
+                return TurtleCommandResult.success();
             }
         }
 
-        return TurtleCommandResult.failure("Nothing to attack");
+        if (canAttackBlock(world, x, y, z, dir, player)) {
+            store(turtle, attackBlock(world, x, y, z, dir, player));
+            return TurtleCommandResult.success();
+        }
+
+        return TurtleCommandResult.failure(getAttackFailureMessage());
     }
 
-    private void store(final ArrayList<ItemStack> list) {
-        if (list != null) {
-            for (final ItemStack stack : list) {
-                store(stack);
+    private TurtleCommandResult dig(ITurtleAccess turtle, int dir) {
+        final World world = turtle.getWorld();
+        final ChunkCoordinates coordinates = turtle.getPosition();
+        int x = coordinates.posX + Facing.offsetsXForSide[dir];
+        int y = coordinates.posY + Facing.offsetsYForSide[dir];
+        int z = coordinates.posZ + Facing.offsetsZForSide[dir];
+
+        final Block block = world.getBlock(x, y, z);
+        if (!world.isAirBlock(x, y, z) && block.getBlockHardness(world, x, y, z) > -1f && canHarvestBlock(world, x, y, z)) {
+            final ArrayList<ItemStack> result = harvestBlock(world, x, y, z);
+            if (result != null) {
+                store(turtle, result);
+                world.setBlockToAir(x, y, z);
+                world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + world.getBlockMetadata(x, y, z) * 4096);
+                return TurtleCommandResult.success();
             }
         }
+
+        return TurtleCommandResult.failure(getDigFailureMessage());
     }
 
-    private void store(final ItemStack stack) {
-        if (!storeItemStack(stack)) {
-            ChunkCoordinates coordinates = turtle.getPosition();
-            int direction = turtle.getDirection();
-            int x = coordinates.posX + Facing.offsetsXForSide[direction];
-            int y = coordinates.posY + Facing.offsetsYForSide[direction];
-            int z = coordinates.posZ + Facing.offsetsZForSide[direction];
-            InventoryUtils.spawnItemStackInWorld(stack, turtle.getWorld(), x, y, z);
-        }
-    }
-
-    protected boolean storeItemStack(ItemStack stack) {
+    private boolean storeItemStack(final ITurtleAccess turtle, ItemStack stack) {
         final IInventory inventory = turtle.getInventory();
 
         for (int i = 0; i < inventory.getSizeInventory(); ++i) {
@@ -184,5 +197,4 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
 
         return false;
     }
-
 }

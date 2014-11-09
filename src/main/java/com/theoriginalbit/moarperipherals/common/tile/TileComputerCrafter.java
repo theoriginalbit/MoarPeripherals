@@ -15,8 +15,9 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.api.tile.IHasGui;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
@@ -63,7 +64,7 @@ public class TileComputerCrafter extends TileInventory implements IActivateAware
         return getSizeInventory();
     }
 
-    @LuaFunction(name = "getStackInSlot")
+    @LuaFunction("getStackInSlot")
     public ItemStack stackInSlot(int slot) {
         // convert from Lua indexes that start at 1
         --slot;
@@ -118,12 +119,14 @@ public class TileComputerCrafter extends TileInventory implements IActivateAware
         return null;
     }
 
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] setCraftingSlot(int slot, String modId, String blockName) {
         return setCraftingSlotInternal(slot, modId, blockName, 0);
     }
 
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] setCraftingSlotWithMeta(int slot, String modId, String blockName, int meta) {
         return setCraftingSlotInternal(slot, modId, blockName, meta);
     }
@@ -135,7 +138,8 @@ public class TileComputerCrafter extends TileInventory implements IActivateAware
         }
     }
 
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
+    @MultiReturn
     public Object[] craft() {
         // TODO: make sure the items are in the inventory
 
@@ -155,7 +159,7 @@ public class TileComputerCrafter extends TileInventory implements IActivateAware
         return null;
     }
 
-    private final Object[] setCraftingSlotInternal(int slot, String modId, String blockName, int meta) {
+    private Object[] setCraftingSlotInternal(int slot, String modId, String blockName, int meta) {
         --slot; // convert from Lua indexes that start at 1
         if (slot < 0 || slot > craftingInv.getSizeInventory()) {
             return new Object[]{false, "expected slot between 1 and " + craftingInv.getSizeInventory()};

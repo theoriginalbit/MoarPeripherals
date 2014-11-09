@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
@@ -52,7 +52,7 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetCompliant {
     @Computers.List
     public ArrayList<IComputerAccess> computers;
 
-    @LuaFunction(isMultiReturn = true)
+    @LuaFunction
     public void transmit(Object payload) {
         BitNetRegistry.transmit(this, new BitNetMessage(payload));
     }

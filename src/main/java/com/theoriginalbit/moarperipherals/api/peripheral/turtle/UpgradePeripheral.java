@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.common.upgrade.abstracts;
+package com.theoriginalbit.moarperipherals.api.peripheral.turtle;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.PeripheralWrapper;
-import com.theoriginalbit.moarperipherals.common.reference.Constants.LocalisationStore;
+import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.WrapperComputer;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 /**
  * @author theoriginalbit
@@ -28,15 +26,13 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class UpgradePeripheral implements ITurtleUpgrade {
     private final int id;
-    private final String adjective;
+    private final String name;
     private final ItemStack stack;
-    private final Class<? extends TileEntity> tile;
 
-    public UpgradePeripheral(int upgradeId, LocalisationStore localisation, ItemStack itemStack, Class<? extends TileEntity> tileentity) {
+    public UpgradePeripheral(int upgradeId, String adjective, ItemStack craftingItemStack) {
         id = upgradeId;
-        adjective = localisation.getLocalised();
-        stack = itemStack;
-        tile = tileentity;
+        name = adjective;
+        stack = craftingItemStack;
     }
 
     @Override
@@ -46,7 +42,7 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
 
     @Override
     public final String getUnlocalisedAdjective() {
-        return adjective;
+        return name;
     }
 
     @Override
@@ -60,13 +56,9 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
     }
 
     @Override
-    public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-        if (tile == null) {
-            return null;
-        }
+    public final IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
         try {
-            final TileEntity te = tile.newInstance();
-            final PeripheralWrapper wrapper = new PeripheralWrapper(te);
+            final WrapperComputer wrapper = getPeripheralWrapper(turtle, side);
             update(turtle, side, wrapper);
             return wrapper;
         } catch (Exception e) {
@@ -81,10 +73,12 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
     }
 
     @Override
-    public void update(ITurtleAccess turtle, TurtleSide side) {
-        update(turtle, side, turtle.getPeripheral(side));
+    public final void update(ITurtleAccess turtle, TurtleSide side) {
+        update(turtle, side, (WrapperComputer) turtle.getPeripheral(side));
     }
 
-    protected abstract void update(ITurtleAccess turtle, TurtleSide side, IPeripheral peripheral);
+    protected abstract void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral);
+
+    protected abstract WrapperComputer getPeripheralWrapper(ITurtleAccess access, TurtleSide side);
 
 }

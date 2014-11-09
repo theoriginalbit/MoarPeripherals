@@ -18,10 +18,12 @@ package com.theoriginalbit.moarperipherals.common.upgrade;
 import com.google.common.collect.ImmutableList;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.common.upgrade.abstracts.UpgradeTool;
+import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradeTool;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -39,12 +41,32 @@ public class UpgradeShears extends UpgradeTool {
     private static final ImmutableList<Block> SHEAR_DIG = ImmutableList.of(Blocks.wool, Blocks.web);
 
     public UpgradeShears() {
-        super(ConfigHandler.upgradeIdShears, Constants.UPGRADE.SHEARS, new ItemStack(Items.shears));
+        super(ConfigHandler.upgradeIdShears, Constants.UPGRADE.SHEARS.getLocalised(), new ItemStack(Items.shears));
     }
 
     @Override
     public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
         return Items.shears.getIconFromDamage(0);
+    }
+
+    @Override
+    protected boolean canAttackEntity(Entity entity) {
+        return entity instanceof IShearable && ((IShearable) entity).isShearable(craftingStack.copy(), entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ);
+    }
+
+    @Override
+    protected ArrayList<ItemStack> attackEntity(Entity entity) {
+        return ((IShearable) entity).onSheared(craftingStack.copy(), entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ, 0);
+    }
+
+    @Override
+    protected boolean canAttackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle) {
+        return false;
+    }
+
+    @Override
+    protected ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle) {
+        return null;
     }
 
     @Override
@@ -59,7 +81,7 @@ public class UpgradeShears extends UpgradeTool {
         final int metadata = world.getBlockMetadata(x, y, z);
 
         if (block instanceof IShearable) {
-            return ((IShearable) block).onSheared(itemStack, world, x, y, z, 0);
+            return ((IShearable) block).onSheared(craftingStack, world, x, y, z, 0);
         }
 
         return block.getDrops(world, x, y, z, metadata, 0);

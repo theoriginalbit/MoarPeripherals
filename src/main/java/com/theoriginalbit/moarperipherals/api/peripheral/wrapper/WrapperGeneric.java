@@ -18,11 +18,11 @@ package com.theoriginalbit.moarperipherals.api.peripheral.wrapper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Alias;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.api.peripheral.interfaces.IPFMount;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Requires;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.Alias;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import cpw.mods.fml.common.Loader;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
@@ -31,40 +31,26 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.tileentity.TileEntity;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
- * This wraps the object annotated with LuaPeripheral that is supplied to
- * it from the Peripheral Provider, it will then wrap any methods annotated
- * with LuaFunction and retain references of methods annotated with OnAttach
- * and OnDetach so that your peripheral will function with ComputerCraft's
- * expected IPeripheral interface.
- * <p/>
- * IMPORTANT:
- * This is a backend class, you should never need to use this, and
- * modifying this may have unexpected results.
- *
  * @author theoriginalbit
+ * @since 8/11/14
  */
-public class PeripheralWrapper implements IPeripheral {
+class WrapperGeneric implements IPeripheral {
+    protected final Object instance;
+    protected final String peripheralType;
+    protected final LinkedHashMap<String, WrapperMethod> methods = Maps.newLinkedHashMap();
+    protected final String[] methodNames;
+    protected final Method methodAttach;
+    protected final Method methodDetach;
+    protected final ArrayList<IComputerAccess> computers = Lists.newArrayList();
 
-    private static HashMap<Integer, Integer> mountMap = Maps.newHashMap();
 
-    private final Object instance;
-    private final String peripheralType;
-    private final LinkedHashMap<String, MethodWrapper> methods = Maps.newLinkedHashMap();
-    private final String[] methodNames;
-    private final Method methodAttach;
-    private final Method methodDetach;
-    private final ArrayList<IComputerAccess> computers = Lists.newArrayList();
-    private final ArrayList<IPFMount> mounts = Lists.newArrayList();
-
-    public PeripheralWrapper(Object peripheral) {
+    public WrapperGeneric(Object peripheral) {
         final Class<?> peripheralClass = peripheral.getClass();
         final LuaPeripheral peripheralLua = peripheralClass.getAnnotation(LuaPeripheral.class);
 
@@ -98,18 +84,6 @@ public class PeripheralWrapper implements IPeripheral {
             }
         }
 
-        // Build the specified mount classes
-        for (Class<? extends IPFMount> clazz : peripheralLua.mounts()) {
-            IPFMount mount;
-            try {
-                mount = clazz.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-                continue;
-            }
-            mounts.add(mount);
-        }
-
         instance = peripheral;
         peripheralType = pname;
         methodAttach = checkEventMethod(attach, "@Computers.Attach");
@@ -140,7 +114,7 @@ public class PeripheralWrapper implements IPeripheral {
             }
         }
         final String name = methodNames[methodIdx];
-        final MethodWrapper method = methods.get(name);
+        final WrapperMethod method = methods.get(name);
         return method.invoke(computer, context, arguments);
     }
 
@@ -149,30 +123,6 @@ public class PeripheralWrapper implements IPeripheral {
         if (!computers.contains(computer)) {
             computers.add(computer);
         }
-
-        if (mounts.isEmpty()) {
-            return;
-        }
-
-        if (methodAttach != null) {
-            try {
-                methodAttach.invoke(null);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-
-        int id = computer.getID();
-        int mountCount = 0;
-        if (mountMap.containsKey(id)) {
-            mountCount = mountMap.get(id);
-        }
-        for (IPFMount mount : mounts) {
-            computer.mount(mount.getMountLocation(), mount);
-        }
-        mountMap.put(id, ++mountCount);
     }
 
     @Override
@@ -180,33 +130,6 @@ public class PeripheralWrapper implements IPeripheral {
         if (computers.contains(computer)) {
             computers.remove(computer);
         }
-
-        if (mounts.isEmpty()) {
-            return;
-        }
-
-        if (methodDetach != null) {
-            try {
-                methodDetach.invoke(null);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-
-        int id = computer.getID();
-        int mountCount = 0;
-        if (mountMap.containsKey(id)) {
-            mountCount = mountMap.get(id);
-        }
-        if (--mountCount < 1) {
-            mountCount = 0;
-            for (IPFMount mount : mounts) {
-                computer.unmount(mount.getMountLocation());
-            }
-        }
-        mountMap.put(id, mountCount);
     }
 
     /**
@@ -214,17 +137,17 @@ public class PeripheralWrapper implements IPeripheral {
      */
     @Override
     public boolean equals(IPeripheral other) {
-        return other != null && other instanceof PeripheralWrapper && other == this;
+        return super.equals(other);
     }
 
     private void wrapMethod(Object peripheral, Method method) {
         LuaFunction annotation = method.getAnnotation(LuaFunction.class);
         // extract the method name either from the annotation or the actual name
-        final String name = annotation.name().trim().isEmpty() ? method.getName() : annotation.name().trim();
+        final String name = annotation.value().trim().isEmpty() ? method.getName() : annotation.value().trim();
         // make sure it doesn't already exist
         Preconditions.checkArgument(!methods.containsKey(name), "Duplicate method found " + name + ". Either make use of the name in the LuaFunction annotation, or if these methods do the same purpose use the Alias annotation instead.");
         // wrap and store the method
-        final MethodWrapper wrapper = new MethodWrapper(peripheral, method);
+        final WrapperMethod wrapper = new WrapperMethod(peripheral, method);
         methods.put(name, wrapper);
         // add Alias references too
         if (method.isAnnotationPresent(Alias.class)) {
@@ -236,25 +159,32 @@ public class PeripheralWrapper implements IPeripheral {
     }
 
     private boolean isEnabledLuaFunction(Method method) {
+        // if there is no annotation, we ignore it
         if (!method.isAnnotationPresent(LuaFunction.class)) {
             return false;
         }
-
-        // get the mod ids specified that this method should be enabled for
-        final String[] modIds = method.getAnnotation(LuaFunction.class).modIds();
-        // if there are not mod ids, then we should enable this
-        if (modIds.length == 0) {
+        // if there is no Requires annotation we can assume it should always be enabled
+        if (!method.isAnnotationPresent(Requires.class)) {
             return true;
         }
-        // loop through the mod ids and see if any are present
-        for (String mid : modIds) {
-            // if one was present, load
-            if (Loader.isModLoaded(mid)) {
+
+        // get the mod IDs specified that this method should be enabled for
+        final Requires requires = method.getAnnotation(Requires.class);
+        final String[] modIds = requires.modIds();
+        final boolean allRequired = requires.allRequired();
+
+        // loop through the mod IDs and see if any are present
+        for (final String mid : modIds) {
+            final boolean loaded = Loader.isModLoaded(mid);
+            if (loaded && !allRequired) { // if it is loaded, and not all are required, we can enable this method
                 return true;
+            } else if (!loaded && allRequired) { // if it's not loaded, and all are required, we cannot enable this method
+                return false;
             }
         }
-        // mods are specified, none are present, this method shouldn't load
-        return false;
+
+        // all mods were required, and all were loaded
+        return true;
     }
 
     private Method checkEventMethod(final Method m, String type) {
@@ -265,5 +195,4 @@ public class PeripheralWrapper implements IPeripheral {
         Preconditions.checkArgument(valid, type + " method can only have one parameters of type IComputerAccess");
         return m;
     }
-
 }
