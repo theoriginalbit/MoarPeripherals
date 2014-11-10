@@ -39,6 +39,9 @@ public class MessageHandlerFXTeleport implements IMessageHandler<MessageFxTelepo
         final double yPos = message.doubleData[1];
         final double zPos = message.doubleData[2];
         final World world = MoarPeripherals.proxy.getClientWorld(dimId);
+        if (world == null) {
+            return null;
+        }
 
         for (int i = 0; i < PARTICLE_COUNT; ++i) {
             double rX = rand.nextDouble();

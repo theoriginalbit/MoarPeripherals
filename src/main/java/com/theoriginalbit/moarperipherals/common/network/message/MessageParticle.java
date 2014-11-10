@@ -41,8 +41,6 @@ public class MessageParticle extends MessageGeneric {
         stringData = new String[]{name};
         intData = new int[]{world.provider.dimensionId};
         doubleData = new double[]{x, y, z, velX, velY, velZ};
-        // spawn the particle in case the source was a client
-        world.spawnParticle(name, x, y, z, velX, velY, velZ);
     }
 
 }

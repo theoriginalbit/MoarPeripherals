@@ -39,7 +39,9 @@ public class MessageHandlerParticle implements IMessageHandler<MessageParticle, 
         final double yVel = message.doubleData[4];
         final double zVel = message.doubleData[5];
         final World world = MoarPeripherals.proxy.getClientWorld(dimId);
-        world.spawnParticle(name, xPos, yPos, zPos, xVel, yVel, zVel);
+        if (world != null) {
+            world.spawnParticle(name, xPos, yPos, zPos, xVel, yVel, zVel);
+        }
         return null;
     }
 

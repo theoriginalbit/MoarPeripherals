@@ -42,7 +42,8 @@ public class MessageSoundEffect extends MessageGeneric {
         intData = new int[]{world.provider.dimensionId};
         doubleData = new double[]{x, y, z};
         floatData = new float[]{volume, pitch};
-        // play the sound in case the source was a client
+        // this is needed or the sound wont play
+        // TODO: figure out why!
         world.playSoundEffect(x, y, z, name, volume, pitch);
     }
 

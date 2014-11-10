@@ -51,7 +51,10 @@ public class ProxyClient extends ProxyCommon {
 
     @Override
     public World getClientWorld(int dimId) {
-        return mc.theWorld;
+        if (mc.theWorld.provider.dimensionId == dimId) {
+            return mc.theWorld;
+        }
+        return null;
     }
 
     @Override

@@ -37,7 +37,9 @@ public class MessageHandlerSoundEffect implements IMessageHandler<MessageSoundEf
         final float pitch = message.floatData[1];
         final String name = message.stringData[0];
         final World world = MoarPeripherals.proxy.getClientWorld(dimId);
-        world.playSoundEffect(xPos, yPos, zPos, name, volume, pitch);
+        if (world != null) {
+            world.playSoundEffect(xPos, yPos, zPos, name, volume, pitch);
+        }
         return null;
     }
 }
