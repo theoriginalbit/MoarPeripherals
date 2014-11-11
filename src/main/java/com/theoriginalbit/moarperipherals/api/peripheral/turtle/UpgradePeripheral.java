@@ -74,7 +74,10 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
 
     @Override
     public final void update(ITurtleAccess turtle, TurtleSide side) {
-        update(turtle, side, (WrapperComputer) turtle.getPeripheral(side));
+        IPeripheral peripheral = turtle.getPeripheral(side);
+        if (peripheral instanceof WrapperComputer) {
+            update(turtle, side, (WrapperComputer) peripheral);
+        }
     }
 
     protected abstract void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral);
