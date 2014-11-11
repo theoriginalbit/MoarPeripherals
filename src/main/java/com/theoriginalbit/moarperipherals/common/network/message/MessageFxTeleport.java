@@ -31,6 +31,5 @@ public class MessageFxTeleport extends MessageGeneric {
     public MessageFxTeleport(World world, int dimensionId, int xPos, int yPos, int zPos) {
         intData = new int[]{dimensionId};
         doubleData = new double[]{xPos, yPos, zPos};
-        world.playSoundEffect(xPos, yPos, zPos, "mob.endermen.portal", 0.4f, 1f);
     }
 }

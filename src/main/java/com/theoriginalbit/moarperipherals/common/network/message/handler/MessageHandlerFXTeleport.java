@@ -39,6 +39,7 @@ public class MessageHandlerFXTeleport implements IMessageHandler<MessageFxTelepo
         final double yPos = message.doubleData[1];
         final double zPos = message.doubleData[2];
         final World world = MoarPeripherals.proxy.getClientWorld(dimId);
+
         if (world == null) {
             return null;
         }
@@ -54,8 +55,15 @@ public class MessageHandlerFXTeleport implements IMessageHandler<MessageFxTelepo
             world.spawnParticle("portal", xPos + rX, yPos + rY, zPos + rZ, vX, vY, vZ);
         }
 
-        world.playSoundEffect(xPos, yPos, zPos, "mob.endermen.portal", 0.4f, 1f);
+        MoarPeripherals.proxy.playSound(
+                xPos + 0.5d,
+                yPos + 0.5d,
+                zPos + 0.5d,
+                "mob.endermen.portal",
+                0.4f, // volume
+                1f, // pitch
+                false // delayed
+        );
         return null;
     }
-
 }
