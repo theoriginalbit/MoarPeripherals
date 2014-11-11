@@ -97,8 +97,8 @@ public class TileTurtleTeleport extends TileMoarP {
     private void doTeleportFX(ChunkCoordinates target) {
         if (!worldObj.isRemote) {
             final int dimId = worldObj.provider.dimensionId;
-            final MessageFxTeleport sourceMessage = new MessageFxTeleport(worldObj, dimId, xCoord, yCoord, zCoord);
-            final MessageFxTeleport targetMessage = new MessageFxTeleport(worldObj, dimId, target.posX, target.posY, target.posZ);
+            final MessageFxTeleport sourceMessage = new MessageFxTeleport(dimId, xCoord, yCoord, zCoord);
+            final MessageFxTeleport targetMessage = new MessageFxTeleport(dimId, target.posX, target.posY, target.posZ);
             PacketHandler.INSTANCE.sendToAllAround(sourceMessage, new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord + 1, zCoord, 64d));
             PacketHandler.INSTANCE.sendToAllAround(targetMessage, new NetworkRegistry.TargetPoint(dimId, target.posX, target.posY, target.posZ, 64d));
         }

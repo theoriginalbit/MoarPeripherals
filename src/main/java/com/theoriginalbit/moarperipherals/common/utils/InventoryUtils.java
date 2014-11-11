@@ -20,6 +20,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -46,6 +47,31 @@ public final class InventoryUtils {
             }
         }
         return false;
+    }
+
+    public static boolean canStoreItem(IInventory inv, ItemStack stack) {
+        int count = stack.stackSize;
+
+        for (int slot = 0; slot < inv.getSizeInventory(); ++slot) {
+            final ItemStack contents = inv.getStackInSlot(slot);
+            if (contents == null) {
+                return true;
+            } else if (areItemsStackable(contents, stack)) {
+                int space = Math.min(contents.getMaxStackSize(), inv.getInventoryStackLimit()) - contents.stackSize;
+                if (space >= count) {
+                    return true;
+                }
+                if (space > 0) {
+                    count -= space;
+                }
+            }
+        }
+
+        return count == 0;
+    }
+
+    public static void storeOrDropItemStack(IInventory inv, ItemStack stack, World world, ChunkCoordinates coords) {
+        storeOrDropItemStack(inv, stack, world, coords.posX, coords.posY, coords.posZ);
     }
 
     public static void storeOrDropItemStack(IInventory inv, ItemStack stack, World world, int x, int y, int z) {

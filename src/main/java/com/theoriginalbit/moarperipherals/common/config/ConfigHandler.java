@@ -40,6 +40,7 @@ public final class ConfigHandler {
     public static final String CATEGORY_PLAYER_DETECTOR = "Player Detector";
     public static final String CATEGORY_TURTLE_TELEPORT = "Turtle Teleport";
     public static final String CATEGORY_MINI_ANTENNA = "Communications Antenna";
+    public static final String CATEGORY_UPGRADE_FURNACE = "Furnace Turtle";
 
     // Turtle Upgrade ID
     private static int startUpgradeID = 16384;
@@ -96,6 +97,9 @@ public final class ConfigHandler {
     public static int miniAntennaRange = 650;
     public static int miniAntennaRangeStorm = 400;
     public static int miniAntennaMessageDelay = 3;
+
+    // Upgrade Furnace Turtle
+    public static int upgradeFurnaceFuelConsumption = 20;
 
     // Renderer enabled
     public static boolean enablePrinterGfx, enableSonicGfx;
@@ -200,7 +204,10 @@ public final class ConfigHandler {
         // Turtle Teleport settings
         fuelMultiplier = getDouble(CATEGORY_TURTLE_TELEPORT, "fuelMultiplier", fuelMultiplier, "The multiplier for the fuel consumption to teleport the Turtle. Formula: Euclidean distance * multiplier");
 
-        // TODO: don't allow values less than 10 for the furnace turtle's fuel consumption per item
+        // Upgrade Furnace Turtle settings
+        upgradeFurnaceFuelConsumption = getInt(CATEGORY_UPGRADE_FURNACE, "fuelConsumption", upgradeFurnaceFuelConsumption, "The fuel consumption per item to smelt items in the Furnace Turtle Upgrade (Minimum value: 10)");
+        upgradeFurnaceFuelConsumption = Math.max(upgradeFurnaceFuelConsumption, 10);
+        config.get(CATEGORY_UPGRADE_FURNACE, "fuelConsumption", upgradeFurnaceFuelConsumption).setToDefault();
 
         // Mini Antenna settings
         miniAntennaRange = getInt(CATEGORY_MINI_ANTENNA, "miniAntennaRange", miniAntennaRange, "The range in blocks the BitNet Mini Antenna can transmit");

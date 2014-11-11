@@ -34,7 +34,6 @@ import net.minecraft.util.IIcon;
  */
 public class UpgradeFurnace extends UpgradePeripheral implements IUpgradeToolIcon {
     private IIcon icon;
-    private IIcon iconOn;
 
     public UpgradeFurnace() {
         super(ConfigHandler.upgradeIdFurnace, Constants.UPGRADE.FURNACE.getLocalised(), new ItemStack(Blocks.furnace));
@@ -47,21 +46,16 @@ public class UpgradeFurnace extends UpgradePeripheral implements IUpgradeToolIco
 
     @Override
     protected void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral) {
-        if (!turtle.getWorld().isRemote) {
-            final PeripheralFurnace furnace = (PeripheralFurnace) peripheral.getInstance();
-            furnace.update(turtle, side);
-        }
+        // NO-OP
     }
 
     @Override
     public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-        final PeripheralFurnace furnace = (PeripheralFurnace) ((WrapperComputer) turtle.getPeripheral(side)).getInstance();
-        return furnace.isBurning() ? iconOn : icon;
+        return icon;
     }
 
     @Override
     public void registerIcons(IIconRegister register) {
         icon = register.registerIcon("furnace_front_off");
-        iconOn = register.registerIcon("furnace_front_on");
     }
 }

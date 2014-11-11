@@ -28,6 +28,7 @@ upgrade.moarperipherals:adjective.shears=Стригущая
 upgrade.moarperipherals:adjective.compass=Головокружительная
 upgrade.moarperipherals:adjective.solar=Походная
 upgrade.moarperipherals:adjective.pyro=Пироманская
+upgrade.moarperipherals:adjective.furnace=Fiery
 
 moarperipherals.chat.paired=Привязана к компьютеру по координатам: %d %d %d
 moarperipherals.chat.notPaired=Устройство не связано с компьютером. Нажмите правой кнопкой мыши по нему, чтобы привязать.

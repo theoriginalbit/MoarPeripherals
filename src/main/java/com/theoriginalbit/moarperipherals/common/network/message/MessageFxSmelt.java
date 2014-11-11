@@ -17,16 +17,16 @@ package com.theoriginalbit.moarperipherals.common.network.message;
 
 /**
  * @author theoriginalbit
- * @since 8/11/14
+ * @since 12/11/14
  */
 @SuppressWarnings("unused")
-public class MessageFxTeleport extends MessageGeneric {
+public class MessageFxSmelt extends MessageGeneric {
 
-    public MessageFxTeleport() {
+    public MessageFxSmelt() {
         // required empty constructor
     }
 
-    public MessageFxTeleport(int dimensionId, int xPos, int yPos, int zPos) {
+    public MessageFxSmelt(int dimensionId, double xPos, double yPos, double zPos) {
         intData = new int[]{dimensionId};
         doubleData = new double[]{xPos, yPos, zPos};
     }
