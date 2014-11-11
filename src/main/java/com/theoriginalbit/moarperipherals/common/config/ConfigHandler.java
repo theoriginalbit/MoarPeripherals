@@ -35,7 +35,6 @@ public final class ConfigHandler {
     public static final String CATEGORY_SECURITY = "Security";
     public static final String CATEGORY_IRON_NOTE = "Iron Note";
     public static final String CATEGORY_SONIC = "Sonic Screwdriver";
-    public static final String CATEGORY_DICTIONARY = "Item Dictionary";
     public static final String CATEGORY_FIREWORK = "Firework Launcher";
     public static final String CATEGORY_ANTENNA = "Communications Tower";
     public static final String CATEGORY_PLAYER_DETECTOR = "Player Detector";
@@ -46,7 +45,6 @@ public final class ConfigHandler {
     private static int startUpgradeID = 16384;
     public static int upgradeIdChatBox = startUpgradeID++;
     public static int upgradeIdIronNote = startUpgradeID++;
-    public static int upgradeIdDictionary = startUpgradeID++;
     public static int upgradeIdCompass = startUpgradeID++;
     public static int upgradeIdShears = startUpgradeID++;
     public static int upgradeIdFurnace = startUpgradeID++;
@@ -59,7 +57,6 @@ public final class ConfigHandler {
     public static boolean enablePrinter;
     public static boolean enableKeyboard;
     public static boolean enableIronNote;
-    public static boolean enableDictionary;
     public static boolean enablePlayerDetector;
     public static boolean enableAntenna;
     public static boolean enableTurtleTeleport;
@@ -162,7 +159,6 @@ public final class ConfigHandler {
         enablePrinter = getEnabled(CATEGORY_PRINTER);
         enableKeyboard = getEnabled(CATEGORY_KEYBOARD);
         enableIronNote = getEnabled(CATEGORY_IRON_NOTE);
-        enableDictionary = getEnabled(CATEGORY_DICTIONARY);
         enablePlayerDetector = getEnabled(CATEGORY_PLAYER_DETECTOR);
         enableAntenna = getEnabled(CATEGORY_ANTENNA);
         enableTurtleTeleport = getEnabled(CATEGORY_TURTLE_TELEPORT);
@@ -202,6 +198,8 @@ public final class ConfigHandler {
 
         // Turtle Teleport settings
         fuelMultiplier = getDouble(CATEGORY_TURTLE_TELEPORT, "fuelMultiplier", fuelMultiplier, "The multiplier for the fuel consumption to teleport the Turtle. Formula: Euclidean distance * multiplier");
+
+        // TODO: don't allow values less than 10 for the furnace turtle's fuel consumption per item
 
         // Renderer enabled
         enablePrinterGfx = getBoolean(CATEGORY_RENDERER, "printerModel", false, "Whether or not to render items and blocks, related to the printer, normally or as models.");

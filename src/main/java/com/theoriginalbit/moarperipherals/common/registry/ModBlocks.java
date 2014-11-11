@@ -41,7 +41,7 @@ public final class ModBlocks {
     }
 
     public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboard, blockPrinter,
-            blockDictionary, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport,
+            blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport,
             blockMiniAntenna, blockFireworks, blockFireworksCreative, blockComputerCrafter;
 
     public final void register() {
@@ -81,12 +81,6 @@ public final class ModBlocks {
             blockPrinter = new BlockPrinter();
 //            GameRegistry.registerBlock(blockPrinter, "blockPrinter");
 //            GameRegistry.registerTileEntity(TilePrinter.class, "tilePrinter");
-        }
-
-        if (ConfigHandler.enableDictionary) {
-            blockDictionary = new BlockDictionary();
-            GameRegistry.registerBlock(blockDictionary, "blockDictionary");
-            GameRegistry.registerTileEntity(TileDictionary.class, "tileDictionary");
         }
 
         if (ConfigHandler.enableAntenna) {
@@ -177,19 +171,6 @@ public final class ModBlocks {
                     "KKK",
 
                     'K', ModItems.itemKeyboardPart
-            ));
-        }
-
-        if (ConfigHandler.enableDictionary) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockDictionary),
-                    "SBS",
-                    "BDB",
-                    "SCS",
-
-                    'S', "stone",
-                    'B', Items.book,
-                    'D', "gemDiamond",
-                    'C', ComputerCraftInfo.cc_cable
             ));
         }
 

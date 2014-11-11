@@ -46,7 +46,6 @@ public class ConfigGuiMoarP extends GuiConfig {
 
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_ANTENNA)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_CHAT_BOX)));
-        list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_DICTIONARY)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_IRON_NOTE)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_KEYBOARD)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_PLAYER_DETECTOR)));

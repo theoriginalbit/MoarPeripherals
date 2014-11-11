@@ -40,9 +40,6 @@ public class UpgradeRegistry {
         if (ConfigHandler.enableIronNote) {
             register(new UpgradeIronNote());
         }
-        if (ConfigHandler.enableDictionary) {
-            register(new UpgradeDictionary());
-        }
         if (ConfigHandler.enableUpgradeShears) {
             register(new UpgradeShears());
         }
