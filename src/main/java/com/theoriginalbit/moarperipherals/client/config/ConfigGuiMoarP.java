@@ -46,13 +46,16 @@ public class ConfigGuiMoarP extends GuiConfig {
 
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_ANTENNA)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_CHAT_BOX)));
+        list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_FIREWORK)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_IRON_NOTE)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_KEYBOARD)));
+        list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_MINI_ANTENNA)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_PLAYER_DETECTOR)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_PRINTER)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_RENDERER)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_SECURITY)));
         list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_SONIC)));
+        list.add(new ConfigElement<ConfigCategory>(getCategory(CATEGORY_TURTLE_TELEPORT)));
 
         return list;
     }
