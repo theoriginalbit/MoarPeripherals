@@ -15,8 +15,6 @@
  */
 package com.theoriginalbit.moarperipherals.common.network.message;
 
-import net.minecraft.world.World;
-
 /**
  * @author theoriginalbit
  * @since 13/10/2014
@@ -28,23 +26,19 @@ public class MessageSoundEffect extends MessageGeneric {
         // required empty constructor
     }
 
-    public MessageSoundEffect(World world, double x, double y, double z, String name) {
-        this(world, x, y, z, name, 1f);
+    public MessageSoundEffect(double x, double y, double z, String name) {
+        this(x, y, z, name, 1f);
     }
 
-    public MessageSoundEffect(World world, double x, double y, double z, String name, float volume) {
-        this(world, x, y, z, name, volume, 1f);
+    public MessageSoundEffect(double x, double y, double z, String name, float volume) {
+        this(x, y, z, name, volume, 1f);
     }
 
-    public MessageSoundEffect(World world, double x, double y, double z, String name, float volume, float pitch) {
+    public MessageSoundEffect(double x, double y, double z, String name, float volume, float pitch) {
         // make the packet for the clients
         stringData = new String[]{name};
-        intData = new int[]{world.provider.dimensionId};
         doubleData = new double[]{x, y, z};
         floatData = new float[]{volume, pitch};
-        // this is needed or the sound wont play
-        // TODO: figure out why!
-        world.playSoundEffect(x, y, z, name, volume, pitch);
     }
 
 }

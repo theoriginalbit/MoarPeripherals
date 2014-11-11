@@ -29,8 +29,10 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,6 +57,22 @@ public class ProxyClient extends ProxyCommon {
             return mc.theWorld;
         }
         return null;
+    }
+
+    /*
+     * Method sourced from WorldClient
+     */
+    @Override
+    public void playSound(double x, double y, double z, String name, float volume, float pitch, boolean delayed) {
+        double distanceSq = mc.renderViewEntity.getDistanceSq(x, y, z);
+        final PositionedSoundRecord sound = new PositionedSoundRecord(new ResourceLocation(name), volume, pitch, (float) x, (float) y, (float) z);
+
+        if (delayed && distanceSq > 100.0d) {
+            double distance = Math.sqrt(distanceSq) / 40.0d;
+            mc.getSoundHandler().playDelayedSound(sound, (int) (distance * 20.0d));
+        } else {
+            mc.getSoundHandler().playSound(sound);
+        }
     }
 
     @Override

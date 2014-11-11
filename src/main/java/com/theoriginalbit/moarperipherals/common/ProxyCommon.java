@@ -34,15 +34,19 @@ public class ProxyCommon {
     }
 
     public void init() {
-
+        // NO-OP
     }
 
     public void postInit() {
-
+        // NO-OP
     }
 
     public World getClientWorld(int dimId) {
         return MinecraftServer.getServer().worldServerForDimension(dimId);
+    }
+
+    public void playSound(double x, double y, double z, String name, float volume, float pitch, boolean delayed) {
+        // NO-OP
     }
 
     public boolean isClient() {
@@ -50,6 +54,7 @@ public class ProxyCommon {
     }
 
     public void registerRenderInfo() {
+        // NO-OP
     }
 
     public boolean isOp(EntityPlayer player) {

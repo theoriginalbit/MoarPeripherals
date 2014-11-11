@@ -20,7 +20,6 @@ import com.theoriginalbit.moarperipherals.common.network.message.MessageSoundEff
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import net.minecraft.world.World;
 
 /**
  * @author theoriginalbit
@@ -29,17 +28,15 @@ import net.minecraft.world.World;
 public class MessageHandlerSoundEffect implements IMessageHandler<MessageSoundEffect, IMessage> {
     @Override
     public IMessage onMessage(MessageSoundEffect message, MessageContext ctx) {
-        final int dimId = message.intData[0];
         final double xPos = message.doubleData[0];
         final double yPos = message.doubleData[1];
         final double zPos = message.doubleData[2];
         final float volume = message.floatData[0];
         final float pitch = message.floatData[1];
         final String name = message.stringData[0];
-        final World world = MoarPeripherals.proxy.getClientWorld(dimId);
-        if (world != null) {
-            world.playSoundEffect(xPos, yPos, zPos, name, volume, pitch);
-        }
+        MoarPeripherals.proxy.playSound(xPos, yPos, zPos, name, volume, pitch, false);
         return null;
     }
+
+
 }
