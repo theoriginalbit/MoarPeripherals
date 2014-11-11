@@ -95,6 +95,7 @@ public final class ConfigHandler {
     // Mini Antenna settings
     public static int miniAntennaRange = 650;
     public static int miniAntennaRangeStorm = 400;
+    public static int miniAntennaMessageDelay = 3;
 
     // Renderer enabled
     public static boolean enablePrinterGfx, enableSonicGfx;
@@ -191,15 +192,20 @@ public final class ConfigHandler {
         keyboardRange = getInt(CATEGORY_KEYBOARD, "keyboardRange", keyboardRange, "The range that a keyboard can connect to a computer from. This cannot be infinite.");
 
         // Antenna settings
-        antennaRange = getInt(CATEGORY_ANTENNA, "towerRange", antennaRange, "The range in blocks the Cell Tower can transmit");
-        antennaRangeStorm = getInt(CATEGORY_ANTENNA, "towerRangeStorm", antennaRangeStorm, "The range in blocks the Cell Tower can transmit during a storm");
-        antennaMessageDelay = getInt(CATEGORY_ANTENNA, "towerMessageDelay", antennaMessageDelay, "The delay (in ticks) that the Cell Tower takes to send a message per 100 block distance (rounded up).");
-        antennaKeepsChunkLoaded = getBoolean(CATEGORY_ANTENNA, "keepChunkLoaded", "Whether a cell tower should keep the chunk it resides in loaded");
+        antennaRange = getInt(CATEGORY_ANTENNA, "towerRange", antennaRange, "The range in blocks the BitNet Communications Tower can transmit");
+        antennaRangeStorm = getInt(CATEGORY_ANTENNA, "towerRangeStorm", antennaRangeStorm, "The range in blocks the BitNet Communications Tower can transmit during a storm");
+        antennaMessageDelay = getInt(CATEGORY_ANTENNA, "towerMessageDelay", antennaMessageDelay, "The delay (in ticks) that the BitNet Communications Tower takes to send a message per 100 block distance (rounded up).");
+        antennaKeepsChunkLoaded = getBoolean(CATEGORY_ANTENNA, "keepChunkLoaded", "Whether a BitNet Communications Tower should keep the chunk it resides in loaded");
 
         // Turtle Teleport settings
         fuelMultiplier = getDouble(CATEGORY_TURTLE_TELEPORT, "fuelMultiplier", fuelMultiplier, "The multiplier for the fuel consumption to teleport the Turtle. Formula: Euclidean distance * multiplier");
 
         // TODO: don't allow values less than 10 for the furnace turtle's fuel consumption per item
+
+        // Mini Antenna settings
+        miniAntennaRange = getInt(CATEGORY_MINI_ANTENNA, "miniAntennaRange", miniAntennaRange, "The range in blocks the BitNet Mini Antenna can transmit");
+        miniAntennaRangeStorm = getInt(CATEGORY_MINI_ANTENNA, "miniAntennaRangeStorm", miniAntennaRange, "The range in blocks the BitNet Mini Antenna can transmit during a storm");
+        miniAntennaMessageDelay = getInt(CATEGORY_MINI_ANTENNA, "miniAntennaMessageDelay", miniAntennaMessageDelay, "The delay (in ticks) that the BitNet Mini Antenna takes to send a message per 100 block distance (rounded up).");
 
         // Renderer enabled
         enablePrinterGfx = getBoolean(CATEGORY_RENDERER, "printerModel", false, "Whether or not to render items and blocks, related to the printer, normally or as models.");
