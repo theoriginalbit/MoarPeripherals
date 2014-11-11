@@ -136,7 +136,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     public ItemStack stackInSlot(int slot) {
         // convert from Lua indexes that start at 1
         --slot;
-        if (slot >= 0 || slot <= getSizeInventory()) {
+        if (slot >= 0 && slot < getSizeInventory()) {
             return getStackInSlot(slot);
         }
         return null;
