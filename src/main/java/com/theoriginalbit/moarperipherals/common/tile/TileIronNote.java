@@ -21,8 +21,7 @@ import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.Lua
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageParticle;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageSoundEffect;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNote;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
@@ -34,48 +33,40 @@ public class TileIronNote extends TileMoarP {
     private static final int MAX_INST = 4;
     private static final int MIN_PITCH = 0;
     private static final int MAX_PITCH = 24;
-    private static final int MAX_TICK = 5; // this is 5 notes per tick, allowing for 5 note chords
-    private int ticker = 0;
+    private static final int MAX_NOTES = 5; // this is 5 notes per tick, allowing for 5 note chords
+    private int notesCount = 0;
+    private MessageIronNote message;
 
     @LuaFunction
     public void playNote(int instrument, int pitch) throws Exception {
         Preconditions.checkArgument(instrument >= MIN_INST && instrument <= MAX_INST, "Expected instrument 0-4");
         Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch 0-24");
-        Preconditions.checkArgument(ticker++ < MAX_TICK, "Too many notes (over " + MAX_TICK + " per tick)");
+        Preconditions.checkArgument(notesCount++ < MAX_NOTES, "Too many notes (over " + MAX_NOTES + " per tick)");
         Preconditions.checkArgument(ConfigHandler.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 
-        int dimId = worldObj.provider.dimensionId;
-        final NetworkRegistry.TargetPoint target = new NetworkRegistry.TargetPoint(dimId, xCoord, yCoord, zCoord, ConfigHandler.noteRange);
+        if (message == null) {
+            message = new MessageIronNote();
+        }
 
-        // construct the sound packet
-        final MessageSoundEffect soundEffect = new MessageSoundEffect(
-                worldObj,
-                xCoord + 0.5d,
-                yCoord + 0.5d,
-                zCoord + 0.5d,
-                "note." + INSTRUMENTS.get(instrument),
-                3.0f,
-                (float) Math.pow(2d, (double) (pitch - 12) / 12d)
-        );
-
-        // construct the particle packet
-        final MessageParticle particle = new MessageParticle(
-                worldObj,
-                "note",
-                xCoord + 0.5d,
-                yCoord + 1.2d,
-                zCoord + 0.5d,
-                pitch / 24d
-        );
-
-        // send the packets
-        PacketHandler.INSTANCE.sendToAllAround(soundEffect, target);
-        PacketHandler.INSTANCE.sendToAllAround(particle, target);
+        message.addNote("note." + INSTRUMENTS.get(instrument), pitch);
     }
 
     @Override
     public void updateEntity() {
-        ticker = 0;
-    }
+        notesCount = 0;
 
+        // if there is a message, send it
+        if (message != null) {
+            // packs all the notes into the message
+            message.pack(worldObj.provider.dimensionId, xCoord, yCoord, zCoord);
+            PacketHandler.INSTANCE.sendToAllAround(message, new NetworkRegistry.TargetPoint(
+                    worldObj.provider.dimensionId,
+                    xCoord,
+                    yCoord,
+                    zCoord,
+                    ConfigHandler.noteRange
+            ));
+            message = null;
+        }
+    }
 }
