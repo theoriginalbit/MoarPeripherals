@@ -28,7 +28,7 @@ import java.util.Random;
  * @author theoriginalbit
  * @since 8/11/14
  */
-public class MessageHandlerFxTeleport implements IMessageHandler<MessageFxTeleport, IMessage> {
+public class MessageHandlerFXTeleport implements IMessageHandler<MessageFxTeleport, IMessage> {
     private static final Random rand = new Random();
     private static final int PARTICLE_COUNT = 64;
 
