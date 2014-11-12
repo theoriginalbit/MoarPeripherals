@@ -17,13 +17,14 @@ package com.theoriginalbit.moarperipherals.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 /**
  * @author theoriginalbit
  * @since 13/10/2014
  */
 public class ModelMiniAntenna extends ModelBase {
+    private static final float scale = 0.0625F;
+
     ModelRenderer centralMastBase;
     ModelRenderer stand1;
     ModelRenderer base;
@@ -85,26 +86,26 @@ public class ModelMiniAntenna extends ModelBase {
         upperSupport.mirror = true;
         setRotation(upperSupport, 0F, 0F, 0F);
         antenna1 = new ModelRenderer(this, 5, 22);
-        antenna1.addBox(0F, 0F, 0F, 1, 8, 1);
-        antenna1.setRotationPoint(-0.5F, 0F, 1.5F);
+        antenna1.addBox(-0.5F, 0F, 1.5F, 1, 8, 1);
+        antenna1.setRotationPoint(0F, 0F, 0F);
         antenna1.setTextureSize(64, 32);
         antenna1.mirror = true;
         setRotation(antenna1, 0F, 0F, 0F);
         antenna2 = new ModelRenderer(this, 5, 22);
-        antenna2.addBox(0F, 0F, 0F, 1, 8, 1);
-        antenna2.setRotationPoint(1.5F, 0F, -0.5F);
+        antenna2.addBox(1.5F, 0F, -0.5F, 1, 8, 1);
+        antenna2.setRotationPoint(0F, 0F, 0F);
         antenna2.setTextureSize(64, 32);
         antenna2.mirror = true;
         setRotation(antenna2, 0F, 0F, 0F);
         antenna3 = new ModelRenderer(this, 5, 22);
-        antenna3.addBox(0F, 0F, 0F, 1, 8, 1);
-        antenna3.setRotationPoint(-2.5F, 0F, -0.5F);
+        antenna3.addBox(-2.5F, 0F, -0.5F, 1, 8, 1);
+        antenna3.setRotationPoint(0F, 0F, 0F);
         antenna3.setTextureSize(64, 32);
         antenna3.mirror = true;
         setRotation(antenna3, 0F, 0F, 0F);
         antenna4 = new ModelRenderer(this, 5, 22);
-        antenna4.addBox(0F, 0F, 0F, 1, 8, 1);
-        antenna4.setRotationPoint(-0.5F, 0F, -2.5F);
+        antenna4.addBox(-0.5F, 0F, -2.5F, 1, 8, 1);
+        antenna4.setRotationPoint(0F, 0F, 0F);
         antenna4.setTextureSize(64, 32);
         antenna4.mirror = true;
         setRotation(antenna4, 0F, 0F, 0F);
@@ -115,29 +116,36 @@ public class ModelMiniAntenna extends ModelBase {
         lowerSupport.mirror = true;
         setRotation(lowerSupport, 0F, 0F, 0F);
         centralMast = new ModelRenderer(this, 10, 21);
-        centralMast.addBox(0F, 0F, 0F, 1, 10, 1);
-        centralMast.setRotationPoint(-0.5F, 4F, -0.5F);
+        centralMast.addBox(-0.5F, 0F, -0.5F, 1, 10, 1);
+        centralMast.setRotationPoint(0F, 4F, 0F);
         centralMast.setTextureSize(64, 32);
         centralMast.mirror = true;
         setRotation(centralMast, 0F, 0F, 0F);
     }
 
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        super.render(entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        centralMastBase.render(f5);
-        stand1.render(f5);
-        base.render(f5);
-        stand2.render(f5);
-        stand3.render(f5);
-        stand4.render(f5);
-        upperSupport.render(f5);
-        antenna1.render(f5);
-        antenna2.render(f5);
-        antenna3.render(f5);
-        antenna4.render(f5);
-        lowerSupport.render(f5);
-        centralMast.render(f5);
+    public void render(float degrees, float amount) {
+        float rotation = (degrees * (float) Math.PI / 180f) % 360;
+        centralMastBase.render(scale);
+        stand1.render(scale);
+        base.render(scale);
+        stand2.render(scale);
+        stand3.render(scale);
+        stand4.render(scale);
+        upperSupport.render(scale);
+        antenna1.rotateAngleY = rotation;
+        antenna2.rotateAngleY = rotation;
+        antenna3.rotateAngleY = rotation;
+        antenna4.rotateAngleY = rotation;
+        antenna1.offsetY = amount;
+        antenna2.offsetY = amount;
+        antenna3.offsetY = amount;
+        antenna4.offsetY = amount;
+        antenna1.render(scale);
+        antenna2.render(scale);
+        antenna3.render(scale);
+        antenna4.render(scale);
+        lowerSupport.render(scale);
+        centralMast.render(scale);
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {

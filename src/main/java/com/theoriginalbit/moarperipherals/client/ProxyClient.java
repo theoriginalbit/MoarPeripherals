@@ -113,7 +113,6 @@ public class ProxyClient extends ProxyCommon {
 
         if (ConfigHandler.enableMiniAntenna) {
             RendererMiniAntenna rendererMiniAntenna = new RendererMiniAntenna();
-            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockMiniAntenna), rendererMiniAntenna);
             ClientRegistry.bindTileEntitySpecialRenderer(TileMiniAntenna.class, rendererMiniAntenna);
         }
     }

@@ -65,35 +65,13 @@ public abstract class CustomTileRenderer extends TileEntitySpecialRenderer imple
     //##############################//
 
     @Override
-    public final boolean handleRenderType(ItemStack stack, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return true; // item on the ground
-            case EQUIPPED:
-                return true; // item being seen in 3rd person
-            case EQUIPPED_FIRST_PERSON:
-                return true; // item being seen in 1st person
-            case INVENTORY:
-                return true; // item being seen in the inventory
-            default:
-                return false;
-        }
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+        return type != ItemRenderType.FIRST_PERSON_MAP;
     }
 
     @Override
-    public final boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-        switch (helper) {
-            case INVENTORY_BLOCK:
-                return true;
-            case ENTITY_BOBBING:
-                return true; // this makes the item bob when on the ground
-            case ENTITY_ROTATION:
-                return true; // this makes the item rotate when on the ground
-            case EQUIPPED_BLOCK:
-                return true;
-            default:
-                return false;
-        }
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+        return helper != ItemRendererHelper.BLOCK_3D;
     }
 
     @Override

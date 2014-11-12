@@ -39,14 +39,30 @@ import java.util.UUID;
 @LuaPeripheral("bitnet_antenna")
 public class TileMiniAntenna extends TileMoarP implements IBitNetCompliant {
     private static final String EVENT_BITNET = "bitnet_message";
+    private static final float ROTATION_SPEED = 1.0f;
+    private static final float BOB_MULTIPLIER = 0.02f;
+    private static final float BOB_SPEED = 16.0f;
     private final ArrayList<UUID> receivedMessages = Lists.newArrayList();
     private boolean registered = false;
+    private float rotation = 0.0f;
+    private float bob = 0.0f;
+    private int tick = 0;
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public float getBob() {
+        return bob;
+    }
 
     @Override
     public void updateEntity() {
         if (!registered) {
             registerTower();
         }
+        rotation = (rotation + ROTATION_SPEED) % 360f;
+        bob = BOB_MULTIPLIER * (float) Math.sin(++tick / BOB_SPEED);
     }
 
     @Computers.List

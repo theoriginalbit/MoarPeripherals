@@ -76,7 +76,6 @@ public final class Constants {
         public static final TextureStore SONIC_11_TIPON = new TextureStore("textures/models/items/sonic/Sonic11_On");
         public static final TextureStore SONIC_11_TIPOFF = new TextureStore("textures/models/items/sonic/Sonic11_Off");
         public static final TextureStore ANTENNA = new TextureStore("textures/models/blocks/antenna/Antenna");
-        public static final TextureStore MINI_ANTENNA = new TextureStore("textures/models/blocks/antenna/MiniAntenna");
     }
 
     public static final class LocalisationStore {
