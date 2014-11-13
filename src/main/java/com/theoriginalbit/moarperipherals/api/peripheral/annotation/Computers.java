@@ -15,6 +15,8 @@
  */
 package com.theoriginalbit.moarperipherals.api.peripheral.annotation;
 
+import com.theoriginalbit.moarperipherals.api.peripheral.interfaces.IPFMount;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -45,6 +47,12 @@ public class Computers {
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Detach {
+    }
+
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Mount {
+        public Class<? extends IPFMount>[] value();
     }
 
 }

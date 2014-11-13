@@ -15,8 +15,6 @@
  */
 package com.theoriginalbit.moarperipherals.api.peripheral.annotation;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.interfaces.IPFMount;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,7 +33,5 @@ import java.lang.annotation.Target;
 public @interface LuaPeripheral {
 
     public String value();
-
-    public Class<? extends IPFMount>[] mounts() default {};
 
 }

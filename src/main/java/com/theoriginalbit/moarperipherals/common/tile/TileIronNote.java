@@ -17,15 +17,18 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNote;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 @LuaPeripheral("iron_note")
+@Computers.Mount(MountMoarP.class)
 public class TileIronNote extends TileMoarP {
 
     private static ImmutableList<String> INSTRUMENTS = ImmutableList.of("harp", "bd", "snare", "hat", "bassattack");

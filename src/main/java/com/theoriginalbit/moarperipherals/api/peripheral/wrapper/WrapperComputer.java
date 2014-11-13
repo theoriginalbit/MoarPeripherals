@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.api.peripheral.wrapper;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
 import com.theoriginalbit.moarperipherals.api.peripheral.interfaces.IPFMount;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 
@@ -43,18 +43,18 @@ public class WrapperComputer extends WrapperGeneric {
         super(peripheral);
 
         final Class<?> peripheralClass = peripheral.getClass();
-        final LuaPeripheral peripheralLua = peripheralClass.getAnnotation(LuaPeripheral.class);
+        if (peripheralClass.isAnnotationPresent(Computers.Mount.class)) {
+            final Computers.Mount annotationMount = peripheralClass.getAnnotation(Computers.Mount.class);
 
-        // Build the specified mount classes
-        for (Class<? extends IPFMount> clazz : peripheralLua.mounts()) {
-            IPFMount mount;
-            try {
-                mount = clazz.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-                continue;
+            // Build the specified mount classes
+            for (Class<? extends IPFMount> clazz : annotationMount.value()) {
+                try {
+                    final IPFMount mount = clazz.newInstance();
+                    mounts.add(mount);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            mounts.add(mount);
         }
     }
 

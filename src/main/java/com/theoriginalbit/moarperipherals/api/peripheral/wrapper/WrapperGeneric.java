@@ -31,6 +31,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.tileentity.TileEntity;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -123,12 +124,26 @@ class WrapperGeneric implements IPeripheral {
         if (!computers.contains(computer)) {
             computers.add(computer);
         }
+        if (methodAttach != null) {
+            try {
+                methodAttach.invoke(instance, computer);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void detach(IComputerAccess computer) {
         if (computers.contains(computer)) {
             computers.remove(computer);
+        }
+        if (methodDetach != null) {
+            try {
+                methodDetach.invoke(instance, computer);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
     }
 

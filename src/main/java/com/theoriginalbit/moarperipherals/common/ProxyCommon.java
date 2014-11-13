@@ -18,13 +18,22 @@ package com.theoriginalbit.moarperipherals.common;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.client.gui.GuiHandler;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
+import com.theoriginalbit.moarperipherals.common.utils.ResourceExtractingUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ProxyCommon {
 
@@ -34,7 +43,7 @@ public class ProxyCommon {
     }
 
     public void init() {
-        // NO-OP
+        setupLuaFiles();
     }
 
     public void postInit() {
@@ -60,6 +69,35 @@ public class ProxyCommon {
     public boolean isOp(EntityPlayer player) {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         return ArrayUtils.contains(server.getConfigurationManager().func_152606_n(), player.getDisplayName().toLowerCase());
+    }
+
+    public File getBase() {
+        if (FMLLaunchHandler.side().isClient()) {
+            return Minecraft.getMinecraft().mcDataDir;
+        } else {
+            return new File(".");
+        }
+    }
+
+    /*
+     * Code modified from OpenCCSensors: https://github.com/Cloudhunter/OpenCCSensors
+     */
+    private boolean setupLuaFiles() {
+        final ModContainer container = FMLCommonHandler.instance().findContainerFor(MoarPeripherals.instance);
+        final File modFile = container.getSource();
+        try {
+            if (modFile.isDirectory()) {
+                final File destFile = new File(getBase(), ModInfo.EXTRACTED_LUA_PATH);
+                if (destFile.exists()) {
+                    FileUtils.deleteDirectory(destFile);
+                }
+                ResourceExtractingUtils.copy(new File(modFile, ModInfo.LUA_PATH), destFile);
+            } else {
+                ResourceExtractingUtils.extractZipToLocation(modFile, ModInfo.LUA_PATH, ModInfo.EXTRACTED_LUA_PATH);
+            }
+        } catch (IOException ignored) {
+        }
+        return true;
     }
 
 }
