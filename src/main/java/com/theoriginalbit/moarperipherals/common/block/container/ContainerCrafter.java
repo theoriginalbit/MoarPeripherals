@@ -21,6 +21,7 @@ import com.theoriginalbit.moarperipherals.common.tile.TileComputerCrafter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
 /**
@@ -54,6 +55,18 @@ public class ContainerCrafter extends ContainerCommon {
     public void detectAndSendChanges() {
         craftResult.putStack(CraftingManager.getInstance().findMatchingRecipe(crafter.craftingInv, crafter.getWorldObj()));
         super.detectAndSendChanges();
+    }
+
+    @Override
+    public ItemStack slotClick(int slot, int x, int y, EntityPlayer player) {
+        if (!player.worldObj.isRemote && slot == craftResult.slotNumber) {
+            try {
+                crafter.doCraft();
+            } catch (Exception ignored) {
+            }
+            detectAndSendChanges();
+        }
+        return super.slotClick(slot, x, y, player);
     }
 
 }

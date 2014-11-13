@@ -15,17 +15,16 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
+import com.google.common.collect.Maps;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.api.tile.IHasGui;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileInventory;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
-import cpw.mods.fml.common.registry.GameRegistry;
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -35,12 +34,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.HashMap;
+
 /**
  * @author theoriginalbit
  * @since 14/10/2014
  */
 @LuaPeripheral("computer_crafter")
-public class TileComputerCrafter extends TileInventory implements IActivateAwareTile, IBreakAwareTile, IHasGui {
+public class TileComputerCrafter extends TileInventory implements IActivateAwareTile, IHasGui {
     public InventoryCrafting craftingInv = new InventoryCrafting(new Container() {
         @Override
         public boolean canInteractWith(EntityPlayer player) {
@@ -95,12 +96,6 @@ public class TileComputerCrafter extends TileInventory implements IActivateAware
     }
 
     @Override
-    public void onBreak(int x, int y, int z) {
-        // make sure they get the crafting stuff back
-        InventoryUtils.explodeInventory(craftingInv, worldObj, x, y, z);
-    }
-
-    @Override
     public GuiType getGuiId() {
         return GuiType.CRAFTER;
     }
@@ -121,18 +116,28 @@ public class TileComputerCrafter extends TileInventory implements IActivateAware
 
     @LuaFunction
     @MultiReturn
-    public Object[] setCraftingSlot(int slot, String modId, String blockName) {
-        return setCraftingSlotInternal(slot, modId, blockName, 0);
+    public Object[] setCraftingSlot(int slot, ItemStack stack) {
+        --slot; // convert from Lua indexes that start at 1
+        if (slot < 0 || slot > craftingInv.getSizeInventory()) {
+            return new Object[]{false, "expected slot between 1 and " + craftingInv.getSizeInventory()};
+        }
+        stack.stackSize = 1;
+        craftingInv.setInventorySlotContents(slot, stack);
+        return new Object[]{true};
     }
 
     @LuaFunction
-    @MultiReturn
-    public Object[] setCraftingSlotWithMeta(int slot, String modId, String blockName, int meta) {
-        return setCraftingSlotInternal(slot, modId, blockName, meta);
+    public Object[] clearCraftingSlot(int slot) {
+        --slot; // convert from Lua indexes that start at 1
+        if (slot < 0 || slot > craftingInv.getSizeInventory()) {
+            return new Object[]{false, "expected slot between 1 and " + craftingInv.getSizeInventory()};
+        }
+        craftingInv.setInventorySlotContents(slot, null);
+        return new Object[]{true};
     }
 
     @LuaFunction
-    public void clearCrafting() {
+    public void clearCraftingGrid() {
         for (int i = 0; i < craftingInv.getSizeInventory(); ++i) {
             craftingInv.setInventorySlotContents(i, null);
         }
@@ -141,35 +146,53 @@ public class TileComputerCrafter extends TileInventory implements IActivateAware
     @LuaFunction
     @MultiReturn
     public Object[] craft() {
-        // TODO: make sure the items are in the inventory
+        try {
+            doCraft();
+            return new Object[]{true};
+        } catch (Exception e) {
+            return new Object[]{false, e.getMessage()};
+        }
+    }
 
+    public void doCraft() throws Exception {
         final ItemStack result = manager.findMatchingRecipe(craftingInv, worldObj);
         if (result == null) {
-            return new Object[]{false, "no matching recipe"};
+            throw new Exception("invalid recipe");
         }
 
-        // TODO: maybe consume the items, we shall see
+        // count all the items that we need
+        final HashMap<Class<? extends Item>, Integer> counts = Maps.newHashMap();
+        for (int slot = 0; slot < craftingInv.getSizeInventory(); ++slot) {
+            final ItemStack itemStack = craftingInv.getStackInSlot(slot);
+            if (itemStack != null) {
+                final Class<? extends Item> itemClass = itemStack.getItem().getClass();
+                if (!counts.containsKey(itemClass)) {
+                    counts.put(itemClass, 0);
+                }
+                counts.put(itemClass, counts.get(itemClass) + 1);
+            }
+        }
 
+        // make sure we have those items
+        for (int slot = 0; slot < craftingInv.getSizeInventory(); ++slot) {
+            final ItemStack itemStack = craftingInv.getStackInSlot(slot);
+            if (itemStack != null) {
+                final Class<? extends Item> itemClass = itemStack.getItem().getClass();
+                if (InventoryUtils.findQtyOf(this, itemStack) < counts.get(itemClass)) {
+                    throw new Exception("cannot craft, missing items");
+                }
+            }
+        }
+
+        // consume items
+        for (int slot = 0; slot < craftingInv.getSizeInventory(); ++slot) {
+            final ItemStack itemStack = craftingInv.getStackInSlot(slot);
+            if (itemStack != null) {
+                InventoryUtils.takeItems(this, itemStack, 1);
+            }
+        }
+
+        // add the 'crafted' item to the inventory, or pop into the world
         InventoryUtils.storeOrDropItemStack(this, result, worldObj, xCoord, yCoord, zCoord);
-
-        return new Object[]{true};
     }
-
-    public ItemStack craft(int amount) {
-        return null;
-    }
-
-    private Object[] setCraftingSlotInternal(int slot, String modId, String blockName, int meta) {
-        --slot; // convert from Lua indexes that start at 1
-        if (slot < 0 || slot > craftingInv.getSizeInventory()) {
-            return new Object[]{false, "expected slot between 1 and " + craftingInv.getSizeInventory()};
-        }
-        final Item item = GameRegistry.findItem(modId, blockName);
-        if (item != null) {
-            craftingInv.setInventorySlotContents(slot, new ItemStack(item, 1, meta));
-            return new Object[]{true};
-        }
-        return new Object[]{false, "No block found for " + modId + ":" + blockName};
-    }
-
 }
