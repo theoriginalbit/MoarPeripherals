@@ -15,6 +15,8 @@
  */
 package com.theoriginalbit.moarperipherals.api.peripheral.turtle;
 
+import com.theoriginalbit.moarperipherals.api.peripheral.exception.TurtleFailureAttack;
+import com.theoriginalbit.moarperipherals.api.peripheral.exception.TurtleFailureDig;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
@@ -89,15 +91,15 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
 
     protected abstract boolean canAttackEntity(Entity entity);
 
-    protected abstract ArrayList<ItemStack> attackEntity(Entity entity);
+    protected abstract ArrayList<ItemStack> attackEntity(ITurtleAccess turtle, Entity entity) throws TurtleFailureAttack;
 
     protected abstract boolean canAttackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle);
 
-    protected abstract ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle);
+    protected abstract ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle) throws TurtleFailureAttack;
 
     protected abstract boolean canHarvestBlock(World world, int x, int y, int z);
 
-    protected abstract ArrayList<ItemStack> harvestBlock(World world, int x, int y, int z);
+    protected abstract ArrayList<ItemStack> harvestBlock(World world, int x, int y, int z) throws TurtleFailureDig;
 
     protected String getAttackFailureMessage() {
         return "Nothing to attack";
@@ -126,6 +128,19 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
         }
     }
 
+    protected AxisAlignedBB getEntitySearchAABB(ITurtleAccess turtle, int dir) {
+        final ChunkCoordinates coordinates = turtle.getPosition();
+        int x = coordinates.posX + Facing.offsetsXForSide[dir];
+        int y = coordinates.posY + Facing.offsetsYForSide[dir];
+        int z = coordinates.posZ + Facing.offsetsZForSide[dir];
+        return AxisAlignedBB.getBoundingBox(
+                x, y, z,
+                x + 1d,
+                y + 1d,
+                z + 1d
+        );
+    }
+
     private TurtleCommandResult attack(ITurtleAccess turtle, int dir) {
         final World world = turtle.getWorld();
         final ChunkCoordinates coordinates = turtle.getPosition();
@@ -135,21 +150,34 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
 
         final EntityPlayer player = new PlayerTurtle(turtle);
         @SuppressWarnings("unchecked")
-        final List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, AxisAlignedBB.getBoundingBox(x, y, z, x + 1d, y + 1d, z + 1d));
+        final List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(
+                player,
+                getEntitySearchAABB(turtle, dir)
+        );
 
-        for (Entity entity : list) {
-            if (canAttackEntity(entity)) {
-                store(turtle, attackEntity(entity));
+        try {
+            boolean someThingDone = false;
+
+            for (Entity entity : list) {
+                if (canAttackEntity(entity)) {
+                    store(turtle, attackEntity(turtle, entity));
+                    someThingDone = true;
+                }
+            }
+
+            if (canAttackBlock(world, x, y, z, dir, player)) {
+                store(turtle, attackBlock(world, x, y, z, dir, player));
+                someThingDone = true;
+            }
+
+            if (someThingDone) {
                 return TurtleCommandResult.success();
             }
-        }
 
-        if (canAttackBlock(world, x, y, z, dir, player)) {
-            store(turtle, attackBlock(world, x, y, z, dir, player));
-            return TurtleCommandResult.success();
+            return TurtleCommandResult.failure(getAttackFailureMessage());
+        } catch (TurtleFailureAttack e) {
+            return TurtleCommandResult.failure(e.getMessage());
         }
-
-        return TurtleCommandResult.failure(getAttackFailureMessage());
     }
 
     private TurtleCommandResult dig(ITurtleAccess turtle, int dir) {
@@ -161,12 +189,16 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
 
         final Block block = world.getBlock(x, y, z);
         if (!world.isAirBlock(x, y, z) && block.getBlockHardness(world, x, y, z) > -1f && canHarvestBlock(world, x, y, z)) {
-            final ArrayList<ItemStack> result = harvestBlock(world, x, y, z);
-            if (result != null) {
-                store(turtle, result);
-                world.setBlockToAir(x, y, z);
-                world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + world.getBlockMetadata(x, y, z) * 4096);
-                return TurtleCommandResult.success();
+            try {
+                final ArrayList<ItemStack> result = harvestBlock(world, x, y, z);
+                if (result != null) {
+                    store(turtle, result);
+                    world.setBlockToAir(x, y, z);
+                    world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + world.getBlockMetadata(x, y, z) * 4096);
+                    return TurtleCommandResult.success();
+                }
+            } catch (TurtleFailureDig e) {
+                return TurtleCommandResult.failure(e.getMessage());
             }
         }
 

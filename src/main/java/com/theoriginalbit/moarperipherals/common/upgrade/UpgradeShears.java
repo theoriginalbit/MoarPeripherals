@@ -55,7 +55,7 @@ public class UpgradeShears extends UpgradeTool {
     }
 
     @Override
-    protected ArrayList<ItemStack> attackEntity(Entity entity) {
+    protected ArrayList<ItemStack> attackEntity(ITurtleAccess turtle, Entity entity) {
         return ((IShearable) entity).onSheared(craftingStack.copy(), entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ, 0);
     }
 

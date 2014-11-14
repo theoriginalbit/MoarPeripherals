@@ -55,6 +55,9 @@ public class UpgradeRegistry {
         if (ConfigHandler.enableUpgradeFurnace) {
             register(new UpgradeFurnace());
         }
+        if (ConfigHandler.enableUpgradeFeeder) {
+            register(new UpgradeFeeder());
+        }
     }
 
     private static void register(ITurtleUpgrade upgrade) {

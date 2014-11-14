@@ -62,7 +62,7 @@ public class UpgradeIgniter extends UpgradeTool {
     }
 
     @Override
-    protected ArrayList<ItemStack> attackEntity(Entity entity) {
+    protected ArrayList<ItemStack> attackEntity(ITurtleAccess turtle, Entity entity) {
         return null;
     }
 

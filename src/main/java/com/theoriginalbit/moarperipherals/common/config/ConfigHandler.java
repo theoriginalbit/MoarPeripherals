@@ -51,6 +51,7 @@ public final class ConfigHandler {
     public static int upgradeIdFurnace = startUpgradeID++;
     public static int upgradeIdSolar = startUpgradeID++;
     public static int upgradeIdIgniter = startUpgradeID++;
+    public static int upgradeIdFeeder = startUpgradeID++;
 
     // Feature enabled
     public static boolean enableSonic;
@@ -70,6 +71,7 @@ public final class ConfigHandler {
     public static boolean enableUpgradeSolar;
     public static boolean enableUpgradeIgniter;
     public static boolean enableUpgradeFurnace;
+    public static boolean enableUpgradeFeeder;
 
     // ChatBox settings
     public static boolean displayChatBoxCoords;
@@ -178,6 +180,7 @@ public final class ConfigHandler {
         enableUpgradeSolar = getUpgradeEnabled("Solar Turtle");
         enableUpgradeIgniter = getUpgradeEnabled("Igniter Turtle");
         enableUpgradeFurnace = getUpgradeEnabled("Furnace Turtle");
+        enableUpgradeFeeder = getUpgradeEnabled("Feeding Turtle");
 
         // ChatBox settings
         displayChatBoxCoords = getBoolean(CATEGORY_CHAT_BOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
