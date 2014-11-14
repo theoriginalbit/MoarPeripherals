@@ -45,6 +45,7 @@ public final class Constants {
         public static final LocalisationStore FURNACE = new LocalisationStore("upgrade.moarperipherals:adjective.furnace");
         public static final LocalisationStore SOLAR = new LocalisationStore("upgrade.moarperipherals:adjective.solar");
         public static final LocalisationStore IGNITER = new LocalisationStore("upgrade.moarperipherals:adjective.pyro");
+        public static final LocalisationStore FEEDER = new LocalisationStore("upgrade.moarperipherals:adjective.feeder");
     }
 
     public static final class CHAT {
@@ -60,9 +61,6 @@ public final class Constants {
     }
 
     public static final class TEXTURES_MODEL {
-        public static final TextureStore KEYBOARD = new TextureStore("textures/models/blocks/keyboard/Keyboard");
-        public static final TextureStore KEYBOARD_ON = new TextureStore("textures/models/blocks/keyboard/Keyboard_On");
-        public static final TextureStore KEYBOARD_LOST = new TextureStore("textures/models/blocks/keyboard/Keyboard_Lost");
         public static final TextureStore PRINTER = new TextureStore("textures/models/blocks/printer/Printer_Printing");
         public static final TextureStore PRINTER_IDLE = new TextureStore("textures/models/blocks/printer/Printer_Idle");
         public static final TextureStore PRINTER_ERROR = new TextureStore("textures/models/blocks/printer/Printer_Error");

@@ -40,8 +40,8 @@ public final class ModBlocks {
         // prevent other instances being constructed
     }
 
-    public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboard, blockPrinter,
-            blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport,
+    public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboardMac, blockKeyboardPc,
+            blockPrinter, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport,
             blockMiniAntenna, blockFireworks, blockFireworksCreative, blockComputerCrafter;
 
     public final void register() {
@@ -72,8 +72,10 @@ public final class ModBlocks {
         }
 
         if (ConfigHandler.enableKeyboard) {
-            blockKeyboard = new BlockKeyboard();
-            GameRegistry.registerBlock(blockKeyboard, ItemBlockPairable.class, "blockKeyboard");
+            blockKeyboardMac = new BlockKeyboardMac();
+            blockKeyboardPc = new BlockKeyboardPc();
+            GameRegistry.registerBlock(blockKeyboardMac, ItemBlockPairable.class, "blockKeyboardMac");
+            GameRegistry.registerBlock(blockKeyboardPc, ItemBlockPairable.class, "blockKeyboardPc");
             GameRegistry.registerTileEntity(TileKeyboard.class, "tileKeyboard");
         }
 
@@ -167,10 +169,19 @@ public final class ModBlocks {
         }
 
         if (ConfigHandler.enableKeyboard) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockKeyboard),
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockKeyboardMac),
                     "KKK",
+                    " A ",
 
-                    'K', ModItems.itemKeyboardPart
+                    'K', ModItems.itemKeyboardPart,
+                    'A', Items.apple
+            ));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockKeyboardPc),
+                    "KKK",
+                    " W ",
+
+                    'K', ModItems.itemKeyboardPart,
+                    'W', Blocks.glass_pane
             ));
         }
 

@@ -85,7 +85,8 @@ public class ProxyClient extends ProxyCommon {
         // Register Keyboard renderers
         if (ConfigHandler.enableKeyboard) {
             RendererKeyboard rendererKeyboard = new RendererKeyboard();
-            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockKeyboard), rendererKeyboard);
+            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockKeyboardMac), rendererKeyboard);
+            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockKeyboardPc), rendererKeyboard);
             ClientRegistry.bindTileEntitySpecialRenderer(TileKeyboard.class, rendererKeyboard);
         }
 

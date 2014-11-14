@@ -4,7 +4,8 @@ tile.moarperipherals:playerdetector.name=Player Detector
 tile.moarperipherals:chatbox.name=ChatBox
 tile.moarperipherals:chatboxAdmin.name=ChatBox (Admin)
 tile.moarperipherals:ironnote.name=Iron Note Block
-tile.moarperipherals:keyboard.name=Keyboard
+tile.moarperipherals:keyboardMac.name=Keyboard (Mac)
+tile.moarperipherals:keyboardPc.name=Keyboard (PC)
 tile.moarperipherals:printer.name=Advanced Printer
 tile.moarperipherals:antenna.name=BitNet Communication Tower (Pole)
 tile.moarperipherals:antennaCell.name=BitNet Communication Tower (Cell)
@@ -29,6 +30,7 @@ upgrade.moarperipherals:adjective.compass=Dizzy
 upgrade.moarperipherals:adjective.solar=Outdoorsy
 upgrade.moarperipherals:adjective.pyro=Pyromaniac
 upgrade.moarperipherals:adjective.furnace=Fiery
+upgrade.moarperipherals:adjective.feeder=Feeding
 
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.

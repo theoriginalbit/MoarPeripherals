@@ -17,9 +17,10 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
+import com.theoriginalbit.moarperipherals.common.block.BlockKeyboardPc;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.ComputerUtils;
 import com.theoriginalbit.moarperipherals.common.utils.NBTUtils;
@@ -102,12 +103,19 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
      * Used by the renderer to get which texture to display based on the connection status
      */
     public final ResourceLocation getTextureForRender() {
+        final String state;
         if (hasConnection() && targetInRange()) {
-            return Constants.TEXTURES_MODEL.KEYBOARD_ON.getResourceLocation();
+            state = "On";
         } else if (targetTile != null || (hasConnection() && !targetInRange())) {
-            return Constants.TEXTURES_MODEL.KEYBOARD_LOST.getResourceLocation();
+            state = "Lost";
+        } else {
+            state = "Off";
         }
-        return Constants.TEXTURES_MODEL.KEYBOARD.getResourceLocation();
+        final int meta = getBlockType() instanceof BlockKeyboardPc ? 1 : 0;
+        return new ResourceLocation(
+                ModInfo.RESOURCE_DOMAIN,
+                String.format("textures/models/blocks/keyboard/Keyboard_%d_%s.png", meta, state)
+        );
     }
 
     @Override
@@ -127,7 +135,7 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
 
     @Override
     public ItemStack getPairedDrop() {
-        ItemStack stack = new ItemStack(ModBlocks.blockKeyboard, 1);
+        ItemStack stack = new ItemStack(getBlockType(), 1);
         if (targetTile != null) {
             NBTUtils.setInteger(stack, Constants.NBT.TARGET_X, targetTile.xCoord);
             NBTUtils.setInteger(stack, Constants.NBT.TARGET_Y, targetTile.yCoord);

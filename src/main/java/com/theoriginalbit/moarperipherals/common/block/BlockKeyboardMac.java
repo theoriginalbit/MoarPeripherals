@@ -40,12 +40,16 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class BlockKeyboard extends BlockPairable {
+public class BlockKeyboardMac extends BlockPairable {
     private static final Class<?> CLASS_ITOOLWRENCH = ReflectionUtils.getClass("buildcraft.api.tools.IToolWrench");
     private final ForgeDirection[] validDirections = new ForgeDirection[]{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST};
 
-    public BlockKeyboard() {
-        super(Material.iron, "keyboard");
+    public BlockKeyboardMac() {
+        this("keyboardMac");
+    }
+
+    protected BlockKeyboardMac(String name) {
+        super(Material.iron, name);
         setRotationMode(RotationMode.FOUR);
         setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
     }
@@ -121,8 +125,10 @@ public class BlockKeyboard extends BlockPairable {
     @Override
     public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection direction) {
         switch (direction) {
-            case UP: return false;
-            case DOWN: return false;
+            case UP:
+                return false;
+            case DOWN:
+                return false;
             default:
                 return world.getBlockMetadata(x, y, z) == direction.ordinal() || world.setBlockMetadataWithNotify(x, y, z, direction.ordinal(), BlockNotifyFlags.SEND_TO_CLIENTS);
         }

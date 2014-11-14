@@ -4,7 +4,8 @@ tile.moarperipherals:playerdetector.name=Детектор игроков
 tile.moarperipherals:chatbox.name=ЧатБокс
 tile.moarperipherals:chatboxAdmin.name=ЧатБокс (администраторский)
 tile.moarperipherals:ironnote.name=Железный нотный блок
-tile.moarperipherals:keyboard.name=Клавиатура
+tile.moarperipherals:keyboardMac.name=Клавиатура (Mac)
+tile.moarperipherals:keyboardPc.name=Клавиатура (PC)
 tile.moarperipherals:printer.name=Улучшенный принтер
 tile.moarperipherals:antenna.name=Коммуникационная башня BitNet (столб)
 tile.moarperipherals:antennaCell.name=Коммуникационная башня BitNet (ячейка)
@@ -29,6 +30,7 @@ upgrade.moarperipherals:adjective.compass=Головокружительная
 upgrade.moarperipherals:adjective.solar=Походная
 upgrade.moarperipherals:adjective.pyro=Пироманская
 upgrade.moarperipherals:adjective.furnace=Fiery
+upgrade.moarperipherals:adjective.feeder=Feeding
 
 moarperipherals.chat.paired=Привязана к компьютеру по координатам: %d %d %d
 moarperipherals.chat.notPaired=Устройство не связано с компьютером. Нажмите правой кнопкой мыши по нему, чтобы привязать.
