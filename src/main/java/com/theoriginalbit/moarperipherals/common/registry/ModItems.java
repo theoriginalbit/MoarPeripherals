@@ -65,8 +65,8 @@ public final class ModItems {
         }
 
         if (ConfigHandler.enableUpgradeSolar) {
-            itemUpgradeSolar = new ItemMoarP("upgradeSolar");
-            GameRegistry.registerItem(itemUpgradeSolar, "itemSolarUpgrade");
+            itemUpgradeSolar = new ItemMoarP("solarPanel");
+            GameRegistry.registerItem(itemUpgradeSolar, "itemSolarPanel");
         }
     }
 
