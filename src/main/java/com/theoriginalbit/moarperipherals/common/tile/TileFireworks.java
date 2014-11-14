@@ -17,11 +17,13 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
+import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
 import com.theoriginalbit.moarperipherals.common.tile.firework.LauncherTube;
 import com.theoriginalbit.moarperipherals.common.tile.firework.QueueBuffer;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
@@ -46,6 +48,7 @@ import java.util.List;
  * @since 13/10/2014
  */
 @LuaPeripheral("firework_launcher")
+@Computers.Mount(MountMoarP.class)
 public class TileFireworks extends TileInventory implements IActivateAwareTile, IBreakAwareTile {
     private static final ImmutableList<ItemStack> ITEM_SHAPES = ImmutableList.of(
             new ItemStack(Items.fire_charge),

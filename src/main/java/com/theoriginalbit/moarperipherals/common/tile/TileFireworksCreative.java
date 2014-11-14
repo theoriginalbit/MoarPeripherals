@@ -15,9 +15,11 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
+import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -25,6 +27,7 @@ import net.minecraft.item.ItemStack;
  * @since 13/10/2014
  */
 @LuaPeripheral("firework_launcher")
+@Computers.Mount(MountMoarP.class)
 public class TileFireworksCreative extends TileFireworks {
 
     public TileFireworksCreative() {
