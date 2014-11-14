@@ -16,13 +16,21 @@
 package com.theoriginalbit.moarperipherals.common;
 
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
+import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
+import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.List;
 
 public class CreativeTabMoarPeripherals extends CreativeTabs {
+    private static final String UPGRADE_LEFT = "leftUpgrade";
 
     public CreativeTabMoarPeripherals() {
         super("tabMoarPeripherals");
@@ -32,8 +40,8 @@ public class CreativeTabMoarPeripherals extends CreativeTabs {
     public Item getTabIconItem() {
         final Block block;
 
-        if (ConfigHandler.enableChatBox) {
-            block = ModBlocks.blockChatBox;
+        if (ConfigHandler.enableAntenna) {
+            block = ModBlocks.blockAntennaController;
         } else if (ConfigHandler.enablePlayerDetector) {
             block = ModBlocks.blockPlayerDetector;
         } else {
@@ -41,5 +49,25 @@ public class CreativeTabMoarPeripherals extends CreativeTabs {
         }
 
         return block == null ? Items.skull : Item.getItemFromBlock(block);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void displayAllReleventItems(List list) {
+        super.displayAllReleventItems(list);
+        // add the upgrades to the Normal Turtles
+        for (final ITurtleUpgrade upgrade : UpgradeRegistry.UPGRADES) {
+            final ItemStack normal = ComputerCraftInfo.cc_turtle.copy();
+            normal.stackTagCompound = new NBTTagCompound();
+            normal.stackTagCompound.setShort(UPGRADE_LEFT, (short) upgrade.getUpgradeID());
+            list.add(normal);
+        }
+        // add the upgrades to the Advanced Turtles
+        for (final ITurtleUpgrade upgrade : UpgradeRegistry.UPGRADES) {
+            final ItemStack advanced = ComputerCraftInfo.cc_turtle_adv.copy();
+            advanced.stackTagCompound = new NBTTagCompound();
+            advanced.stackTagCompound.setShort(UPGRADE_LEFT, (short) upgrade.getUpgradeID());
+            list.add(advanced);
+        }
     }
 }

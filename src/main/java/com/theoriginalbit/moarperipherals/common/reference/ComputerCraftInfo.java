@@ -28,6 +28,8 @@ public final class ComputerCraftInfo {
     public static ItemStack cc_cable;
     public static ItemStack cc_wiredModem;
     public static ItemStack cc_wirelessModem;
+    public static ItemStack cc_turtle;
+    public static ItemStack cc_turtle_adv;
 
     public static class EVENT {
 
@@ -42,6 +44,9 @@ public final class ComputerCraftInfo {
         cc_blockComputer = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Computer");
         cc_blockPeripheral = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Peripheral");
         cc_blockCable = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Cable");
+        cc_turtle = GameRegistry.findItemStack("ComputerCraft", "CC-TurtleExpanded", 1);
+        cc_turtle_adv = GameRegistry.findItemStack("ComputerCraft", "CC-TurtleAdvanced", 1);
+
         cc_cable = new ItemStack(cc_blockCable, 1, 0);
         cc_wiredModem = new ItemStack(cc_blockCable, 1, 1);
         cc_wirelessModem = new ItemStack(cc_blockPeripheral, 1, 1);

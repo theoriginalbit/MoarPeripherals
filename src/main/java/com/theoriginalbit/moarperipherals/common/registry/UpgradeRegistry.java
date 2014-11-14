@@ -15,11 +15,14 @@
  */
 package com.theoriginalbit.moarperipherals.common.registry;
 
+import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.client.render.Icons;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.upgrade.*;
 import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
+
+import java.util.ArrayList;
 
 /**
  * @author theoriginalbit
@@ -28,6 +31,7 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade;
 public class UpgradeRegistry {
 
     public static final UpgradeRegistry INSTANCE = new UpgradeRegistry();
+    public static final ArrayList<ITurtleUpgrade> UPGRADES = Lists.newArrayList();
 
     private UpgradeRegistry() {
         // prevent other instances being constructed
@@ -63,6 +67,7 @@ public class UpgradeRegistry {
     private static void register(ITurtleUpgrade upgrade) {
         ComputerCraftAPI.registerTurtleUpgrade(upgrade);
         Icons.instance.registerUpgrade(upgrade);
+        UPGRADES.add(upgrade);
     }
 
 }
