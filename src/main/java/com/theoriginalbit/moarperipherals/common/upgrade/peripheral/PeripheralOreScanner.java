@@ -19,13 +19,12 @@ import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageSoundEffect;
-import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxOreScanner;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import net.minecraft.block.*;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 @LuaPeripheral("ore_scanner")
 public class PeripheralOreScanner {
     private static final ArrayList<Class<? extends Block>> BLACKLIST = Lists.newArrayList();
-    private static final String SOUND_EFFECT = ModInfo.RESOURCE_DOMAIN + ":densityScan";
     private static final int SCAN_RADIUS = 5;
     private static final int MAX_DEPTH = 40;
     private final ITurtleAccess turtle;
@@ -49,28 +47,38 @@ public class PeripheralOreScanner {
 
     @LuaFunction
     public double getOreDensity() throws LuaException {
+        // get the turtle world and location
         final World world = turtle.getWorld();
         final ChunkCoordinates coords = turtle.getPosition();
-        if (world.isAirBlock(coords.posX, coords.posY - 1, coords.posZ)) {
+        final int x = coords.posX, y = coords.posY, z = coords.posZ;
+
+        // make sure the Turtle is on the ground-ish
+        final Block blockBelow = world.getBlock(x, y - 1, z);
+        if (blockBelow.getMaterial() == Material.air) {
             throw new LuaException("Turtle not on the ground");
         }
+
+        // send the effects packet
         PacketHandler.INSTANCE.sendToAllAround(
-                new MessageSoundEffect(coords.posX, coords.posY, coords.posZ, SOUND_EFFECT),
-                new NetworkRegistry.TargetPoint(world.provider.dimensionId, coords.posX, coords.posY, coords.posZ, 64d)
+                new MessageFxOreScanner(world.provider.dimensionId, x, y, z),
+                new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 64d)
         );
+
+        // figure out the scan area
         int diameter = (int) Math.floor(SCAN_RADIUS / 2);
-        int minX = coords.posX - diameter;
-        int maxX = coords.posX + diameter;
-        int maxY = coords.posY - 1;
-        int minY = Math.max(maxY - MAX_DEPTH, 0);
-        int minZ = coords.posZ - diameter;
-        int maxZ = coords.posZ + diameter;
+        int maxX = x + diameter, minX = x - diameter;
+        int maxY = y - 1, minY = Math.max(maxY - MAX_DEPTH, 0);
+        int maxZ = z + diameter, minZ = z - diameter;
+
+        // scan the area
         int count = 0;
-        for (int x = minX; x <= maxX; ++x) {
-            for (int z = minZ; z <= maxZ; ++z) {
-                for (int y = minY; y <= maxY; ++y) {
-                    final Block block = world.getBlock(x, y, z);
-                    if (block != Blocks.bedrock && !BLACKLIST.contains(block.getClass())) {
+        for (int xPos = minX; xPos <= maxX; ++xPos) {
+            for (int zPos = minZ; zPos <= maxZ; ++zPos) {
+                for (int yPos = minY; yPos <= maxY; ++yPos) {
+                    final Block block = world.getBlock(xPos, yPos, zPos);
+                    final float hardness = block.getBlockHardness(world, xPos, yPos, zPos);
+                    // if the block is breakable, and not what we want to ignore, count it
+                    if (hardness > -1f && !BLACKLIST.contains(block.getClass())) {
                         ++count;
                     }
                 }

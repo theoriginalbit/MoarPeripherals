@@ -40,6 +40,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageHandlerFxTeleport.class, MessageFxTeleport.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(MessageHandlerIronNote.class, MessageIronNote.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(MessageHandlerFxSmelt.class, MessageFxSmelt.class, id++, Side.CLIENT);
+        INSTANCE.registerMessage(MessageHandlerFxOreScanner.class, MessageFxOreScanner.class, id++, Side.CLIENT);
     }
 
     public static Set<EntityPlayer> getPlayersWatchingChunk(WorldServer world, int chunkX, int chunkZ) {
