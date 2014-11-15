@@ -23,7 +23,7 @@ public final class ModInfo {
     public static final String CHANNEL = ID.toLowerCase();
     public static final String RESOURCE_DOMAIN = ID.toLowerCase();
     public static final String CONFIG_DOMAIN = RESOURCE_DOMAIN + ".config.";
-    public static final String LUA_PATH = "assets/" + RESOURCE_DOMAIN + "/lua";
+    public static final String LUA_PATH = "/assets/" + RESOURCE_DOMAIN + "/lua";
     public static final String EXTRACTED_LUA_PATH = "mods/" + RESOURCE_DOMAIN + "/lua";
 
     private static final String COM_PACKAGE = "com.theoriginalbit";
