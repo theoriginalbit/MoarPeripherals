@@ -21,7 +21,8 @@ item.moarperipherals:inkCartridge.name=Cartucho para Tinta
 item.moarperipherals:keyboardPart.name=Parte de Teclado
 item.moarperipherals:sonic.name=Sonic Screwdriver
 item.moarperipherals:monopolePart.name=Antena Monopola
-item.moarperipherals:upgradeSolar.name=Painél Solar
+item.moarperipherals:solarPanel.name=Painél Solar
+item.moarperipherals:oreScanner.name=Ore Density Scanner
 
 upgrade.moarperipherals:adjective.chatbox=Caixa Falante
 upgrade.moarperipherals:adjective.ironnote=Barulhento
@@ -31,6 +32,7 @@ upgrade.moarperipherals:adjective.solar=Ao Ar livre
 upgrade.moarperipherals:adjective.pyro=Piromaníaco
 upgrade.moarperipherals:adjective.furnace=Fiery
 upgrade.moarperipherals:adjective.feeder=Feeding
+upgrade.moarperipherals:adjective.orescanner=Ore Scanning
 
 moarperipherals.chat.paired=Ligado ao computador em %d %d %d
 moarperipherals.chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador

@@ -46,6 +46,7 @@ public final class Constants {
         public static final LocalisationStore SOLAR = new LocalisationStore("upgrade.moarperipherals:adjective.solar");
         public static final LocalisationStore IGNITER = new LocalisationStore("upgrade.moarperipherals:adjective.pyro");
         public static final LocalisationStore FEEDER = new LocalisationStore("upgrade.moarperipherals:adjective.feeder");
+        public static final LocalisationStore ORESCANNER = new LocalisationStore("upgrade.moarperipherals:adjective.orescanner");
     }
 
     public static final class CHAT {

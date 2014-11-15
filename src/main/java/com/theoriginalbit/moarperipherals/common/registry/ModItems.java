@@ -21,6 +21,7 @@ import com.theoriginalbit.moarperipherals.common.item.ItemSonic;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -37,7 +38,7 @@ public final class ModItems {
     public static Item itemInkCartridge, itemSonic, itemMonopoleAntenna;
 
     // materials, don't need custom implementations
-    public static Item itemKeyboardPart, itemUpgradeSolar;
+    public static Item itemKeyboardPart, itemUpgradeSolar, itemUpgradeOreScanner;
 
     private ModItems() {
         // prevent other instances being constructed
@@ -67,6 +68,11 @@ public final class ModItems {
         if (ConfigHandler.enableUpgradeSolar) {
             itemUpgradeSolar = new ItemMoarP("solarPanel");
             GameRegistry.registerItem(itemUpgradeSolar, "itemSolarPanel");
+        }
+
+        if (ConfigHandler.enableUpgradeOreScanner) {
+            itemUpgradeOreScanner = new ItemMoarP("oreScanner");
+            GameRegistry.registerItem(itemUpgradeOreScanner, "itemOreScanner");
         }
     }
 
@@ -123,6 +129,21 @@ public final class ModItems {
 
                     'S', Blocks.daylight_detector,
                     'I', "ingotIron",
+                    'C', ComputerCraftInfo.cc_cable
+            ));
+        }
+
+        if (ConfigHandler.enableUpgradeOreScanner) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgradeOreScanner),
+                    "III",
+                    "DGS",
+                    "ECE",
+
+                    'I', "ingotIron",
+                    'D', new ItemStack(Blocks.dirt, 1, 0),
+                    'G', Blocks.gravel,
+                    'S', "stone",
+                    'E', Items.ender_eye,
                     'C', ComputerCraftInfo.cc_cable
             ));
         }

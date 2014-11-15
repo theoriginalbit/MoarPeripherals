@@ -21,7 +21,8 @@ item.moarperipherals:inkCartridge.name=Ink Cartridge
 item.moarperipherals:keyboardPart.name=Keyboard Part
 item.moarperipherals:sonic.name=Sonic Screwdriver
 item.moarperipherals:monopolePart.name=Monopole Antenna
-item.moarperipherals:upgradeSolar.name=Solar Panel
+item.moarperipherals:solarPanel.name=Solar Panel
+item.moarperipherals:oreScanner.name=Ore Density Scanner
 
 upgrade.moarperipherals:adjective.chatbox=Chatty
 upgrade.moarperipherals:adjective.ironnote=Noisy
@@ -31,6 +32,7 @@ upgrade.moarperipherals:adjective.solar=Outdoorsy
 upgrade.moarperipherals:adjective.pyro=Pyromaniac
 upgrade.moarperipherals:adjective.furnace=Fiery
 upgrade.moarperipherals:adjective.feeder=Feeding
+upgrade.moarperipherals:adjective.orescanner=Ore Scanning
 
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.

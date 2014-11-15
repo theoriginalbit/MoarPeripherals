@@ -62,6 +62,9 @@ public class UpgradeRegistry {
         if (ConfigHandler.enableUpgradeFeeder) {
             register(new UpgradeFeeder());
         }
+        if (ConfigHandler.enableUpgradeOreScanner) {
+            register(new UpgradeOreScanner());
+        }
     }
 
     private static void register(ITurtleUpgrade upgrade) {
