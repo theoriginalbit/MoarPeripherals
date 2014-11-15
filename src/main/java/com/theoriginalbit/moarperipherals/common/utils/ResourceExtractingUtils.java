@@ -113,6 +113,7 @@ public final class ResourceExtractingUtils {
                 entryName = entryName.replace('\\', File.separatorChar);
                 int n;
                 FileOutputStream fileoutputstream;
+                // allows for .lua extensions in development env, but removes for play env
                 File newFile = new File(entryName);
                 if (zipEntry.isDirectory()) {
                     if (!newFile.mkdirs()) {
@@ -121,6 +122,9 @@ public final class ResourceExtractingUtils {
                     continue;
                 }
 
+                if (entryName.endsWith(".lua")) {
+                    entryName = entryName.substring(0, entryName.length() - 4);
+                }
                 fileoutputstream = new FileOutputStream(entryName);
 
                 while ((n = inputStream.read(buf, 0, 1024)) > -1) {

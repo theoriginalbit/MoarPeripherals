@@ -16,12 +16,15 @@
 package com.theoriginalbit.moarperipherals.api.peripheral.wrapper;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
 import com.theoriginalbit.moarperipherals.api.peripheral.interfaces.IPFMount;
+import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This wraps the object annotated with LuaPeripheral that is supplied to
@@ -37,6 +40,7 @@ import java.util.ArrayList;
  * @author theoriginalbit
  */
 public class WrapperComputer extends WrapperGeneric {
+    private static final HashMap<Integer, Integer> MOUNT_COUNTS = Maps.newHashMap();
     private final ArrayList<IPFMount> mounts = Lists.newArrayList();
 
     public WrapperComputer(Object peripheral) {
@@ -75,9 +79,24 @@ public class WrapperComputer extends WrapperGeneric {
             }
         }
 
-        for (IPFMount mount : mounts) {
-            computer.mount(mount.getMountLocation(), mount);
+        final int id = computer.getID();
+
+        // make an entry for this computer if there isn't one
+        if (!MOUNT_COUNTS.containsKey(id)) {
+            MOUNT_COUNTS.put(id, 0);
         }
+
+        // perform the mount if needed
+        int count = MOUNT_COUNTS.get(id);
+        LogUtils.info("Attach before Count: " + count);
+        if (count++ == 0) {
+            for (IPFMount mount : mounts) {
+                computer.mount(mount.getMountLocation(), mount);
+            }
+        }
+        LogUtils.info("Attach after Count: " + count);
+        // remember how many peripherals are attached to this computer
+        MOUNT_COUNTS.put(id, count);
     }
 
     @Override
@@ -97,9 +116,24 @@ public class WrapperComputer extends WrapperGeneric {
             }
         }
 
-        for (IPFMount mount : mounts) {
-            computer.unmount(mount.getMountLocation());
+        final int id = computer.getID();
+
+        // if there is no entry for this computer something has gon seriously wrong, but lets ignore it
+        if (!MOUNT_COUNTS.containsKey(id)) {
+            return;
         }
+
+        // if it was the last peripheral mounted to the computer, un-mount the mounts
+        int count = MOUNT_COUNTS.get(id);
+        LogUtils.info("Detach before Count: " + count);
+        if (--count == 0) {
+            for (IPFMount mount : mounts) {
+                computer.unmount(mount.getMountLocation());
+            }
+        }
+        LogUtils.info("Detach after Count: " + count);
+        // remember how many peripherals are attached to this computer
+        MOUNT_COUNTS.put(id, count);
     }
 
 }
