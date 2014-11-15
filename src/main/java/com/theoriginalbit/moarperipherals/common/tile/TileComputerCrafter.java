@@ -20,7 +20,6 @@ import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.Lua
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.api.tile.IHasGui;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileInventory;
@@ -41,7 +40,7 @@ import java.util.HashMap;
  * @since 14/10/2014
  */
 @LuaPeripheral("computer_crafter")
-public class TileComputerCrafter extends TileInventory implements IActivateAwareTile, IHasGui {
+public class TileComputerCrafter extends TileInventory implements IHasGui {
     public InventoryCrafting craftingInv = new InventoryCrafting(new Container() {
         @Override
         public boolean canInteractWith(EntityPlayer player) {
@@ -87,12 +86,6 @@ public class TileComputerCrafter extends TileInventory implements IActivateAware
         super.writeToNBT(tag);
         // make sure the crafting inventory is persistent across world restarts
         tag.setTag("craft", InventoryUtils.writeInventoryToNBT(craftingInv));
-    }
-
-    @Override
-    public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        player.displayGUIChest(this);
-        return true;
     }
 
     @Override
