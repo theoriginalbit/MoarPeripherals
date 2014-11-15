@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.network.message.handler;
 
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageParticle;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxIronNote;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -24,25 +24,43 @@ import net.minecraft.world.World;
 
 /**
  * @author theoriginalbit
- * @since 13/10/2014
+ * @since 11/11/14
  */
-public class MessageHandlerParticle implements IMessageHandler<MessageParticle, IMessage> {
-
+public class MessageHandlerFxIronNote implements IMessageHandler<MessageFxIronNote, IMessage> {
     @Override
-    public IMessage onMessage(MessageParticle message, MessageContext ctx) {
-        final String name = message.stringData[0];
+    public IMessage onMessage(MessageFxIronNote message, MessageContext ctx) {
         final int dimId = message.intData[0];
+        final int noteCount = message.intData[1];
         final double xPos = message.doubleData[0];
         final double yPos = message.doubleData[1];
         final double zPos = message.doubleData[2];
-        final double xVel = message.doubleData[3];
-        final double yVel = message.doubleData[4];
-        final double zVel = message.doubleData[5];
+
         final World world = MoarPeripherals.proxy.getClientWorld(dimId);
-        if (world != null) {
-            world.spawnParticle(name, xPos, yPos, zPos, xVel, yVel, zVel);
+
+        if (world == null) {
+            return null;
         }
+
+        for (int i = 0; i < noteCount; ++i) {
+            final String name = message.stringData[i];
+            final float pitch = message.floatData[i];
+            playNote(world, xPos, yPos, zPos, name, pitch);
+        }
+
         return null;
     }
 
+    private void playNote(World world, double xPos, double yPos, double zPos, String instrument, float pitch) {
+        MoarPeripherals.proxy.playSound(
+                xPos + 0.5d,
+                yPos + 0.5d,
+                zPos + 0.5d,
+                instrument,
+                3.0f,
+                (float) Math.pow(2d, (double) (pitch - 12) / 12d),
+                false
+        );
+
+        world.spawnParticle("note", xPos + 0.5d, yPos + 1.2d, zPos + 0.5d, pitch / 24d, 0f, 0f);
+    }
 }

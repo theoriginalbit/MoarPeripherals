@@ -35,10 +35,8 @@ public class PacketHandler {
     private static int id = 0;
 
     public static void init() {
-        INSTANCE.registerMessage(MessageHandlerParticle.class, MessageParticle.class, id++, Side.CLIENT);
-        INSTANCE.registerMessage(MessageHandlerSoundEffect.class, MessageSoundEffect.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(MessageHandlerFxTeleport.class, MessageFxTeleport.class, id++, Side.CLIENT);
-        INSTANCE.registerMessage(MessageHandlerIronNote.class, MessageIronNote.class, id++, Side.CLIENT);
+        INSTANCE.registerMessage(MessageHandlerFxIronNote.class, MessageFxIronNote.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(MessageHandlerFxSmelt.class, MessageFxSmelt.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(MessageHandlerFxOreScanner.class, MessageFxOreScanner.class, id++, Side.CLIENT);
     }

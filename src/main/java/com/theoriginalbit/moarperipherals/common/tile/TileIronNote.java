@@ -23,7 +23,7 @@ import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeriphera
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
-import com.theoriginalbit.moarperipherals.common.network.message.MessageIronNote;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxIronNote;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
@@ -38,7 +38,7 @@ public class TileIronNote extends TileMoarP {
     private static final int MAX_PITCH = 24;
     private static final int MAX_NOTES = 5; // this is 5 notes per tick, allowing for 5 note chords
     private int notesCount = 0;
-    private MessageIronNote message;
+    private MessageFxIronNote message;
 
     @LuaFunction
     public void playNote(int instrument, int pitch) throws Exception {
@@ -48,7 +48,7 @@ public class TileIronNote extends TileMoarP {
         Preconditions.checkArgument(ConfigHandler.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 
         if (message == null) {
-            message = new MessageIronNote();
+            message = new MessageFxIronNote();
         }
 
         message.addNote("note." + INSTRUMENTS.get(instrument), pitch);

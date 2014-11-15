@@ -23,10 +23,10 @@ import java.util.ArrayList;
  * @author theoriginalbit
  * @since 9/11/14
  */
-public class MessageIronNote extends MessageGeneric {
+public class MessageFxIronNote extends MessageGeneric {
     private final ArrayList<PendingNote> notes = Lists.newArrayList();
 
-    public MessageIronNote() {
+    public MessageFxIronNote() {
         // required empty constructor
     }
 
@@ -34,7 +34,7 @@ public class MessageIronNote extends MessageGeneric {
         notes.add(new PendingNote(instrument, pitch));
     }
 
-    public MessageIronNote pack(int dimensionId, int xPos, int yPos, int zPos) {
+    public MessageFxIronNote pack(int dimensionId, int xPos, int yPos, int zPos) {
         final int size = notes.size();
         intData = new int[]{dimensionId, size};
         doubleData = new double[]{xPos, yPos, zPos};
