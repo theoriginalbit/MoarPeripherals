@@ -21,8 +21,6 @@ import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradePeripheral;
 import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralFurnace;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -57,7 +55,6 @@ public class UpgradeFurnace extends UpgradePeripheral implements IUpgradeToolIco
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister register) {
         icon = register.registerIcon("furnace_front_off");
     }

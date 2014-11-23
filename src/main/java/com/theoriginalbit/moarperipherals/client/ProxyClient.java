@@ -15,12 +15,15 @@
  */
 package com.theoriginalbit.moarperipherals.client;
 
+import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeIcon;
+import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.client.render.*;
+import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
 import com.theoriginalbit.moarperipherals.common.tile.TileAntennaController;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
 import com.theoriginalbit.moarperipherals.common.tile.TileMiniAntenna;
@@ -28,13 +31,17 @@ import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings("unused")
@@ -44,7 +51,7 @@ public class ProxyClient extends ProxyCommon {
 
     @Override
     public void postInit() {
-        MinecraftForge.EVENT_BUS.register(Icons.instance);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public ProxyClient() {
@@ -121,6 +128,28 @@ public class ProxyClient extends ProxyCommon {
     @Override
     public boolean isOp(EntityPlayer player) {
         return false;
+    }
+
+    @SubscribeEvent
+    public void onPreTextureStitch(TextureStitchEvent.Pre event) {
+        addTextures(event.map);
+    }
+
+    private void addTextures(TextureMap map) {
+        boolean terrain = map.getTextureType() == 1;
+        if (terrain) {
+            for (ITurtleUpgrade upgrade : UpgradeRegistry.UPGRADES) {
+                if (upgrade instanceof IUpgradeIcon) {
+                    ((IUpgradeIcon) upgrade).registerIcons(map);
+                }
+            }
+        } else {
+            for (ITurtleUpgrade upgrade : UpgradeRegistry.UPGRADES) {
+                if (upgrade instanceof IUpgradeToolIcon) {
+                    ((IUpgradeToolIcon) upgrade).registerIcons(map);
+                }
+            }
+        }
     }
 
 }

@@ -69,7 +69,6 @@ public class UpgradeRegistry {
 
     private static void register(ITurtleUpgrade upgrade) {
         ComputerCraftAPI.registerTurtleUpgrade(upgrade);
-        Icons.instance.registerUpgrade(upgrade);
         UPGRADES.add(upgrade);
     }
 

@@ -15,8 +15,6 @@
  */
 package com.theoriginalbit.moarperipherals.api.upgrade;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 /**
@@ -25,7 +23,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
  */
 public interface IUpgradeIcon {
 
-    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister register);
 
 }
