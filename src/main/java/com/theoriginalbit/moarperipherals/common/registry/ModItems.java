@@ -16,6 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.registry;
 
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.item.ItemInkCartridge;
 import com.theoriginalbit.moarperipherals.common.item.abstracts.ItemMoarP;
 import com.theoriginalbit.moarperipherals.common.item.ItemSonic;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
@@ -46,8 +47,8 @@ public final class ModItems {
 
     public final void register() {
         if (ConfigHandler.enablePrinter) {
-//            itemInkCartridge = new ItemInkCartridge();
-//            GameRegistry.registerItem(itemInkCartridge, "itemInkCartridge");
+            itemInkCartridge = new ItemInkCartridge();
+            GameRegistry.registerItem(itemInkCartridge, "itemInkCartridge");
         }
 
         if (ConfigHandler.isSonicEnabled()) {
@@ -77,6 +78,19 @@ public final class ModItems {
     }
 
     public final void addRecipes() {
+        if (ConfigHandler.enablePrinter) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemInkCartridge, 1, 4),
+                    "SSS",
+                    "SBS",
+                    "SRS",
+
+                    'S', "stone",
+                    'B', Items.bucket,
+                    'R', "dustRedstone"
+            ));
+            // TODO: make the Fake recipe stuff for loading ink cartridges
+        }
+
         if (ConfigHandler.isSonicEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemSonic, 1, 0),
                     "DIG",

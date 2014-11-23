@@ -81,8 +81,8 @@ public final class ModBlocks {
 
         if (ConfigHandler.enablePrinter) {
             blockPrinter = new BlockPrinter();
-//            GameRegistry.registerBlock(blockPrinter, "blockPrinter");
-//            GameRegistry.registerTileEntity(TilePrinter.class, "tilePrinter");
+            GameRegistry.registerBlock(blockPrinter, "blockPrinter");
+            GameRegistry.registerTileEntity(TilePrinter.class, "tilePrinter");
         }
 
         if (ConfigHandler.enableAntenna) {
@@ -182,6 +182,18 @@ public final class ModBlocks {
 
                     'K', ModItems.itemKeyboardPart,
                     'W', Blocks.glass_pane
+            ));
+        }
+
+        if (ConfigHandler.enablePrinter) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockPrinter),
+                    "GGG",
+                    "GRG",
+                    "GIG",
+
+                    'G', "ingotGold",
+                    'R', "dustRedstone",
+                    'I', new ItemStack(ModItems.itemInkCartridge, 1, 4)
             ));
         }
 

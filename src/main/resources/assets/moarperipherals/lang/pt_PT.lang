@@ -45,6 +45,13 @@ moarperipherals.gui.keyboard.exit=Pressione ESC para sair do teclado
 tooltip.moarperipherals.generic.information=Carregue em Shift para mais informação
 tooltip.moarperipherals.pairable.paired=Alvo
 tooltip.moarperipherals.pairable.notPaired=Não Ligado
+tooltip.moarperipherals.inkCartridge.contents=Contents
+tooltip.moarperipherals.inkCartridge.level=Ink Level
+tooltip.moarperipherals.inkCartridge.ink.cyan=Cyan
+tooltip.moarperipherals.inkCartridge.ink.magenta=Magenta
+tooltip.moarperipherals.inkCartridge.ink.yellow=Yellow
+tooltip.moarperipherals.inkCartridge.ink.black=Black
+tooltip.moarperipherals.inkCartridge.ink.empty=Empty
 
 # Config #
 moarperipherals.config.title=Configuração de MoarPeripherals

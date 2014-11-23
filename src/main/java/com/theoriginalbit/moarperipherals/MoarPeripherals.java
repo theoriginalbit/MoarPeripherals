@@ -26,7 +26,7 @@ import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
 import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
-import com.theoriginalbit.moarperipherals.common.CreativeTabMoarPeripherals;
+import com.theoriginalbit.moarperipherals.client.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.converter.ConverterItemStack;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;

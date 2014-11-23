@@ -44,6 +44,13 @@ moarperipherals.gui.keyboard.exit=Нажмите ESC для того, чтобы
 tooltip.moarperipherals.generic.information=Зажмите SHIFT для получения информации
 tooltip.moarperipherals.pairable.paired=Связанный
 tooltip.moarperipherals.pairable.notPaired=Несвязанный
+tooltip.moarperipherals.inkCartridge.contents=Contents
+tooltip.moarperipherals.inkCartridge.level=Ink Level
+tooltip.moarperipherals.inkCartridge.ink.cyan=Cyan
+tooltip.moarperipherals.inkCartridge.ink.magenta=Magenta
+tooltip.moarperipherals.inkCartridge.ink.yellow=Yellow
+tooltip.moarperipherals.inkCartridge.ink.black=Black
+tooltip.moarperipherals.inkCartridge.ink.empty=Empty
 
 # Config #
 moarperipherals.config.title=Настройки MoarPeripherals

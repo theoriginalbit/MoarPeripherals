@@ -33,9 +33,10 @@ import net.minecraftforge.client.IItemRenderer;
 import static org.lwjgl.opengl.GL11.*;
 
 public final class RendererKeyboard extends TileEntitySpecialRenderer implements IItemRenderer {
-    private static final ResourceLocation textureMac = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/blocks/keyboard/Keyboard_0_Off.png");
-    private static final ResourceLocation texturePc = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/blocks/keyboard/Keyboard_1_Off.png");
-    private static final ModelBase pc = new ModelKeyboardPc(), mac = new ModelKeyboardMac();
+    private static final ResourceLocation TEXTURE_MAC = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/blocks/keyboard/Keyboard_0_Off.png");
+    private static final ResourceLocation TEXTURE_PC = new ResourceLocation(ModInfo.RESOURCE_DOMAIN, "textures/models/blocks/keyboard/Keyboard_1_Off.png");
+    private static final ModelBase KEYBOARD_PC = new ModelKeyboardPc();
+    private static final ModelBase KEYBOARD_MAC = new ModelKeyboardMac();
 
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTick) {
@@ -101,11 +102,11 @@ public final class RendererKeyboard extends TileEntitySpecialRenderer implements
     }
 
     private ResourceLocation getTexture(int meta) {
-        return meta == 1 ? texturePc : textureMac;
+        return meta == 1 ? TEXTURE_PC : TEXTURE_MAC;
     }
 
     private ModelBase getModel(int meta) {
-        return meta == 1 ? pc : mac;
+        return meta == 1 ? KEYBOARD_PC : KEYBOARD_MAC;
     }
 
     private void manipulateEntityRender() {
@@ -137,8 +138,7 @@ public final class RendererKeyboard extends TileEntitySpecialRenderer implements
     }
 
     private void adjustRotatePivotViaMeta(TileEntity tile) {
-        int meta = tile.getBlockMetadata();
-        switch (meta) {
+        switch (tile.getBlockMetadata()) {
             case 2: /* no rotate */
                 break;
             case 3:

@@ -13,30 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.common.block.container.slot;
+package com.theoriginalbit.moarperipherals.common.recipe;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.world.World;
 
 /**
  * @author theoriginalbit
- * @since 26/10/14
+ * @since 20/11/14
  */
-public class SlotReadOnly extends Slot {
-
-    public SlotReadOnly(IInventory inv, int index, int displayX, int displayY) {
-        super(inv, index, displayX, displayY);
-    }
-
+public class InkCartridgeRecipe implements IRecipe {
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean matches(InventoryCrafting p_77569_1_, World p_77569_2_) {
         return false;
     }
 
     @Override
-    public boolean canTakeStack(EntityPlayer player) {
-        return false;
+    public ItemStack getCraftingResult(InventoryCrafting p_77572_1_) {
+        return null;
+    }
+
+    @Override
+    public int getRecipeSize() {
+        return 0;
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        return null;
     }
 }

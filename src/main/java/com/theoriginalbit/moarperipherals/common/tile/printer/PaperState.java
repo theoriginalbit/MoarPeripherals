@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.client.gui;
+package com.theoriginalbit.moarperipherals.common.tile.printer;
 
-public enum GuiType {
+/**
+ * @author theoriginalbit
+ * @since 16/11/14
+ */
+public enum PaperState {
+    PAPER_NONE(2), PAPER_INPUT(3), PAPER_OUTPUT(4), PAPER_BOTH(5);
 
-    KEYBOARD, CRAFTER, PRINTER;
+    private final int textureId;
 
-    public static GuiType valueOf(int id) {
-        for (GuiType gui : values()) {
-            if (gui.ordinal() == id) {
-                return gui;
-            }
-        }
-        return null;
+    private PaperState(int id) {
+        textureId = id;
     }
-
+    
+    public int getTextureId() {
+        return textureId;
+    }
 }

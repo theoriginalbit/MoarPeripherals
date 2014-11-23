@@ -21,15 +21,28 @@ import net.minecraft.entity.Entity;
 
 public class ModelPrinter extends ModelBase {
 
-    protected ModelRenderer bodyLeft, bodyRight, bodyUpperMiddle, bodyLowerMiddle,
-            feederSlope, holePlug, backLowerLeft, backLowerRight,
-            backUpperLeft, backUpperRight, outputTray, paperFeeder, paper,
-            output;
+    ModelRenderer bodyLeft;
+    ModelRenderer bodyRight;
+    ModelRenderer bodyUpperMiddle;
+    ModelRenderer bodyLowerMiddle;
+    ModelRenderer feederSlope;
+    ModelRenderer holePlug;
+    ModelRenderer backLowerLeft;
+    ModelRenderer backLowerRight;
+    ModelRenderer backUpperLeft;
+    ModelRenderer backUpperRight;
+    ModelRenderer outputTray;
+    ModelRenderer paperFeeder;
+    ModelRenderer paper;
+    ModelRenderer output;
+    ModelRenderer display;
+    ModelRenderer buttonUp;
+    ModelRenderer buttonDown;
+    ModelRenderer buttonLeft;
+    ModelRenderer buttonRight;
+    ModelRenderer button1;
+    ModelRenderer button2;
     protected boolean hasPaper, hasPrintout;
-
-    public ModelPrinter() {
-        this(false, false);
-    }
 
     public ModelPrinter(boolean paperPresent, boolean printoutPresent) {
         textureWidth = 256;
@@ -109,22 +122,60 @@ public class ModelPrinter extends ModelBase {
         paperFeeder.setTextureSize(256, 128);
         paperFeeder.mirror = true;
         setRotation(paperFeeder, -0.3839724F, 0F, 0F);
-        if (hasPaper) {
-            paper = new ModelRenderer(this, 0, 87);
-            paper.addBox(-7.5F, -8F, -0.5F, 15, 17, 1);
-            paper.setRotationPoint(0F, -12F, 14F);
-            paper.setTextureSize(256, 128);
-            paper.mirror = true;
-            setRotation(paper, -0.3839724F, 0F, 0F);
-        }
-        if (hasPrintout) {
-            output = new ModelRenderer(this, 35, 88);
-            output.addBox(-7.5F, -1F, -13F, 15, 1, 26);
-            output.setRotationPoint(0F, 6F, -11F);
-            output.setTextureSize(256, 128);
-            output.mirror = true;
-            setRotation(output, 0F, 0F, 0F);
-        }
+        paper = new ModelRenderer(this, 0, 87);
+        paper.addBox(-7.5F, -8F, -0.5F, 15, 17, 1);
+        paper.setRotationPoint(0F, -12F, 14F);
+        paper.setTextureSize(256, 128);
+        paper.mirror = true;
+        setRotation(paper, -0.3839724F, 0F, 0F);
+        output = new ModelRenderer(this, 35, 88);
+        output.addBox(-7.5F, -1F, -13F, 15, 1, 26);
+        output.setRotationPoint(0F, 6.4F, -11F);
+        output.setTextureSize(256, 128);
+        output.mirror = true;
+        setRotation(output, 0F, 0F, 0F);
+        display = new ModelRenderer(this, 0, 109);
+        display.addBox(0F, 0F, 0F, 5, 1, 5);
+        display.setRotationPoint(8.5F, -6.9F, 2F);
+        display.setTextureSize(256, 128);
+        display.mirror = true;
+        setRotation(display, 1.047198F, 0F, 0F);
+        buttonUp = new ModelRenderer(this, 25, 106);
+        buttonUp.addBox(0F, 0F, 0F, 1, 1, 1);
+        buttonUp.setRotationPoint(10.5F, -7.2F, -1.5F);
+        buttonUp.setTextureSize(256, 128);
+        buttonUp.mirror = true;
+        setRotation(buttonUp, 0F, 0F, 0F);
+        buttonDown = new ModelRenderer(this, 25, 106);
+        buttonDown.addBox(0F, 0F, 0F, 1, 1, 1);
+        buttonDown.setRotationPoint(10.5F, -7.2F, -4.1F);
+        buttonDown.setTextureSize(256, 128);
+        buttonDown.mirror = true;
+        setRotation(buttonDown, 0F, 0F, 0F);
+        buttonLeft = new ModelRenderer(this, 25, 106);
+        buttonLeft.addBox(0F, 0F, -2F, 1, 1, 1);
+        buttonLeft.setRotationPoint(9.3F, -7.2F, -0.8F);
+        buttonLeft.setTextureSize(256, 128);
+        buttonLeft.mirror = true;
+        setRotation(buttonLeft, 0F, 0F, 0F);
+        buttonRight = new ModelRenderer(this, 25, 106);
+        buttonRight.addBox(0F, 0F, 0F, 1, 1, 1);
+        buttonRight.setRotationPoint(11.7F, -7.2F, -2.8F);
+        buttonRight.setTextureSize(256, 128);
+        buttonRight.mirror = true;
+        setRotation(buttonRight, 0F, 0F, 0F);
+        button1 = new ModelRenderer(this, 24, 110);
+        button1.addBox(0F, 0F, 0F, 2, 1, 1);
+        button1.setRotationPoint(8.7F, -7.2F, 0.2F);
+        button1.setTextureSize(256, 128);
+        button1.mirror = true;
+        setRotation(button1, 0F, 0F, 0F);
+        button2 = new ModelRenderer(this, 24, 113);
+        button2.addBox(0F, 0F, 0F, 2, 1, 1);
+        button2.setRotationPoint(11.3F, -7.2F, 0.2F);
+        button2.setTextureSize(256, 128);
+        button2.mirror = true;
+        setRotation(button2, 0F, 0F, 0F);
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -148,6 +199,13 @@ public class ModelPrinter extends ModelBase {
         if (hasPrintout) {
             output.render(f5);
         }
+        display.render(f5);
+        buttonUp.render(f5);
+        buttonDown.render(f5);
+        buttonLeft.render(f5);
+        buttonRight.render(f5);
+        button1.render(f5);
+        button2.render(f5);
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {

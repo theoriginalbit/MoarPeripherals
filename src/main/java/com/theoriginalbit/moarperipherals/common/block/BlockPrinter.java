@@ -19,6 +19,7 @@ import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockRotatable;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;
+import com.theoriginalbit.moarperipherals.common.tile.printer.PaperState;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -48,9 +49,28 @@ public class BlockPrinter extends BlockRotatable {
         icons[0] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":advPrinterTop");
         icons[1] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":advPrinterSide");
         icons[2] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":advPrinterFront");
-        icons[3] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":advPrinterFrontFeeder");
+        icons[3] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":advPrinterFrontInput");
         icons[4] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":advPrinterFrontOutput");
         icons[5] = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":advPrinterFrontBoth");
+    }
+
+    @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        // get the top/bottom icon
+        if (side == 0 || side == 1) {
+            return icons[0];
+        }
+        // get the side icon
+        if (side != world.getBlockMetadata(x, y, z)) {
+            return icons[1];
+        }
+        // get the face icon
+        final TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile != null && tile instanceof TilePrinter) {
+            final PaperState state = ((TilePrinter) tile).getPaperState();
+            return icons[state.ordinal()];
+        }
+        return icons[2];
     }
 
     @Override
@@ -59,7 +79,7 @@ public class BlockPrinter extends BlockRotatable {
         if (side == 0 || side == 1) {
             return icons[0];
         }
-        if (side == meta) {
+        if (side == 4) {
             return icons[2];
         }
         return icons[1];

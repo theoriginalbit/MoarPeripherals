@@ -123,7 +123,7 @@ public abstract class TileInventory extends TileMoarP implements ISidedInventory
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int slot) {
+    public int[] getAccessibleSlotsFromSide(int side) {
         return InventoryUtils.makeSlotArray(this);
     }
 

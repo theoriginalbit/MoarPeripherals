@@ -15,45 +15,28 @@
  */
 package com.theoriginalbit.moarperipherals.client.render;
 
-import com.theoriginalbit.moarperipherals.client.model.ModelPrinter;
-import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;
-import com.theoriginalbit.moarperipherals.common.tile.printer.PaperState;
-import com.theoriginalbit.moarperipherals.common.tile.printer.PrinterState;
+import com.theoriginalbit.moarperipherals.client.model.ModelInkCartridge;
+import com.theoriginalbit.moarperipherals.common.item.ItemInkCartridge;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class RendererPrinter extends TileEntitySpecialRenderer implements IItemRenderer {
-    private static final ModelBase PRINTER_EMPTY = new ModelPrinter(false, false);
-    private static final ModelBase PRINTER_INPUT = new ModelPrinter(true, false);
-    private static final ModelBase PRINTER_OUTPUT = new ModelPrinter(false, true);
-    private static final ModelBase PRINTER_BOTH = new ModelPrinter(true, true);
-
-    @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTick) {
-        final TilePrinter printer = (TilePrinter) tile;
-        glPushMatrix();
-        glTranslatef((float) x, (float) y, (float) z);
-        // manipulate the model
-        float scale = 0.5f;
-        glScalef(scale, scale, scale);
-        glRotatef(180, 0, 0, 1);
-        glTranslatef(-1f, -0.44f, 1f);
-        adjustRotatePivotViaMeta(tile);
-
-        glPushMatrix();
-        bindTexture(getTexture(printer.getPrinterState()));
-        getModel(printer.getPaperState()).render(null, 0F, 0F, 0f, 0f, 0f, 0.0625f);
-        glPopMatrix();
-        glPopMatrix();
-    }
+/**
+ * @author theoriginalbit
+ * @since 16/11/14
+ */
+public class RendererInkCartridge implements IItemRenderer {
+    private static final ModelBase modelCartridgeEmpty = new ModelInkCartridge(true);
+    private static final ModelBase modelCartridgeFilled = new ModelInkCartridge(false);
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -66,11 +49,11 @@ public class RendererPrinter extends TileEntitySpecialRenderer implements IItemR
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+    public final void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         glPushMatrix();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(PrinterState.IDLE.getTexture());
+        Minecraft.getMinecraft().getTextureManager().bindTexture(getTexture(stack));
 
-        final ModelBase model = getModel(PaperState.PAPER_BOTH);
+        final ModelBase model = selectModel(stack);
 
         switch (type) {
             case ENTITY:
@@ -97,19 +80,19 @@ public class RendererPrinter extends TileEntitySpecialRenderer implements IItemR
     }
 
     private void manipulateEntityRender() {
-        float scale = 0.9f;
+        float scale = 0.24f;
         glScalef(scale, scale, scale);
         glRotatef(180, 1, 0, 0);
         glTranslatef(0f, -0.5f, 0f);
     }
 
     private void manipulateThirdPersonRender() {
-        float scale = 0.8f;
+        float scale = 0.3f;
         glScalef(scale, scale, scale);
         glRotatef(120, 1, 0, 0);
-        glRotatef(-40, 0, 0, 1);
-        glRotatef(-100, 0, 1, 0);
-        glTranslatef(-1.8f, 0.5f, 0.5f);
+        glRotatef(-55, 0, 0, 1);
+        glRotatef(-40, 0, 1, 0);
+        glTranslatef(-3.2f, 2.1f, -1.7f);
     }
 
     private void manipulateFirstPersonRender() {
@@ -122,42 +105,34 @@ public class RendererPrinter extends TileEntitySpecialRenderer implements IItemR
     }
 
     private void manipulateInventoryRender() {
-        float scale = 0.5f;
+        float scale = 0.6f;
         glScalef(scale, scale, scale);
         glRotatef(180, 1, 0, 0);
-        glTranslatef(0f, 0.3f, 0f);
+        glTranslatef(0f, -0.5f, 0f);
     }
 
-    private ResourceLocation getTexture(PrinterState state) {
-        return state.getTexture();
-    }
-
-    private ModelBase getModel(PaperState state) {
-        switch (state) {
-            case PAPER_NONE:
-                return PRINTER_EMPTY;
-            case PAPER_INPUT:
-                return PRINTER_INPUT;
-            case PAPER_OUTPUT:
-                return PRINTER_OUTPUT;
-        }
-        return PRINTER_BOTH;
-    }
-
-    private void adjustRotatePivotViaMeta(TileEntity tile) {
-        switch (tile.getBlockMetadata()) {
-            case 2: /* no rotate */
+    private ResourceLocation getTexture(ItemStack stack) {
+        final Constants.TextureStore texture;
+        switch (stack.getItemDamage()) {
+            case 0:
+                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_C;
+                break;
+            case 1:
+                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_M;
+                break;
+            case 2:
+                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_Y;
                 break;
             case 3:
-                glRotatef(180, 0, 1, 0);
+                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_K;
                 break;
-            case 4:
-                glRotatef(-90, 0, 1, 0);
-                break;
-            case 5:
-                glRotatef(90, 0, 1, 0);
-                break;
+            default:
+                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_E;
         }
+        return texture.getResourceLocation();
     }
 
+    private ModelBase selectModel(ItemStack stack) {
+        return stack.getItemDamage() == 4 ? modelCartridgeEmpty : modelCartridgeFilled;
+    }
 }

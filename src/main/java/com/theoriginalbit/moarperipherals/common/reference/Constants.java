@@ -29,12 +29,20 @@ public final class Constants {
         public static final LocalisationStore KEYBOARD_EXIT = new LocalisationStore("moarperipherals.gui.keyboard.exit");
         public static final LocalisationStore FIREWORKS = new LocalisationStore("tile.moarperipherals:fireworks.name");
         public static final LocalisationStore CRAFTER = new LocalisationStore("tile.moarperipherals:crafter.name");
+        public static final LocalisationStore PRINTER = new LocalisationStore("tile.moarperipherals:printer.name");
     }
 
     public static final class TOOLTIPS {
         public static final LocalisationStore PAIRED = new LocalisationStore("tooltip.moarperipherals.pairable.paired");
         public static final LocalisationStore NOT_PAIRED = new LocalisationStore("tooltip.moarperipherals.pairable.notPaired");
         public static final LocalisationStore SHIFT_INFO = new LocalisationStore("tooltip.moarperipherals.generic.information");
+        public static final LocalisationStore INK_CONTENTS = new LocalisationStore("tooltip.moarperipherals.inkCartridge.contents");
+        public static final LocalisationStore INK_LEVEL = new LocalisationStore("tooltip.moarperipherals.inkCartridge.level");
+        public static final LocalisationStore INK_CYAN = new LocalisationStore("tooltip.moarperipherals.inkCartridge.ink.cyan");
+        public static final LocalisationStore INK_MAGENTA = new LocalisationStore("tooltip.moarperipherals.inkCartridge.ink.magenta");
+        public static final LocalisationStore INK_YELLOW = new LocalisationStore("tooltip.moarperipherals.inkCartridge.ink.yellow");
+        public static final LocalisationStore INK_BLACK = new LocalisationStore("tooltip.moarperipherals.inkCartridge.ink.black");
+        public static final LocalisationStore INK_EMPTY = new LocalisationStore("tooltip.moarperipherals.inkCartridge.ink.empty");
     }
 
     public static final class UPGRADE {
@@ -62,10 +70,11 @@ public final class Constants {
     }
 
     public static final class TEXTURES_MODEL {
-        public static final TextureStore PRINTER = new TextureStore("textures/models/blocks/printer/Printer_Printing");
-        public static final TextureStore PRINTER_IDLE = new TextureStore("textures/models/blocks/printer/Printer_Idle");
-        public static final TextureStore PRINTER_ERROR = new TextureStore("textures/models/blocks/printer/Printer_Error");
-        public static final TextureStore PRINTER_PRINT_ERROR = new TextureStore("textures/models/blocks/printer/Printer_Printing_Error");
+        public static final TextureStore INK_CARTRIDGE_C = new TextureStore("textures/models/items/inkCartridge/InkCartridgeC");
+        public static final TextureStore INK_CARTRIDGE_M = new TextureStore("textures/models/items/inkCartridge/InkCartridgeM");
+        public static final TextureStore INK_CARTRIDGE_Y = new TextureStore("textures/models/items/inkCartridge/InkCartridgeY");
+        public static final TextureStore INK_CARTRIDGE_K = new TextureStore("textures/models/items/inkCartridge/InkCartridgeK");
+        public static final TextureStore INK_CARTRIDGE_E = new TextureStore("textures/models/items/inkCartridge/InkCartridgeE");
         public static final TextureStore SONIC_10_0 = new TextureStore("textures/models/items/sonic/Sonic10_0");
         public static final TextureStore SONIC_10_1 = new TextureStore("textures/models/items/sonic/Sonic10_1");
         public static final TextureStore SONIC_10_TIPON = new TextureStore("textures/models/items/sonic/Sonic10_On");

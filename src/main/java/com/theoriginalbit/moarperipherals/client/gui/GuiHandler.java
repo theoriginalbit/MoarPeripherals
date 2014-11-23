@@ -15,9 +15,11 @@
  */
 package com.theoriginalbit.moarperipherals.client.gui;
 
-import com.theoriginalbit.moarperipherals.common.block.container.ContainerCrafter;
+import com.theoriginalbit.moarperipherals.common.inventory.ContainerCrafter;
+import com.theoriginalbit.moarperipherals.common.inventory.ContainerPrinter;
 import com.theoriginalbit.moarperipherals.common.tile.TileComputerCrafter;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
+import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -30,7 +32,9 @@ public class GuiHandler implements IGuiHandler {
         if (gui != null) {
             switch (gui) {
                 case CRAFTER:
-                    return new ContainerCrafter(player, (TileComputerCrafter) world.getTileEntity(x,y, z));
+                    return new ContainerCrafter(player, (TileComputerCrafter) world.getTileEntity(x, y, z));
+                case PRINTER:
+                    return new ContainerPrinter(player, (TilePrinter) world.getTileEntity(x, y, z));
             }
         }
         return null;
@@ -44,7 +48,9 @@ public class GuiHandler implements IGuiHandler {
                 case KEYBOARD:
                     return new GuiKeyboard((TileKeyboard) world.getTileEntity(x, y, z), player);
                 case CRAFTER:
-                    return new GuiComputerCrafter(new ContainerCrafter(player, (TileComputerCrafter) world.getTileEntity(x,y, z)));
+                    return new GuiCrafter(new ContainerCrafter(player, (TileComputerCrafter) world.getTileEntity(x, y, z)));
+                case PRINTER:
+                    return new GuiPrinter(new ContainerPrinter(player, (TilePrinter) world.getTileEntity(x, y, z)));
             }
         }
         return null;

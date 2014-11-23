@@ -42,7 +42,6 @@ import java.util.List;
 
 @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = Mods.BUILDCRAFT_CORE)
 public class ItemSonic extends ItemMoarP implements IToolWrench {
-
     private static final ImmutableSet<Class<? extends Block>> blacklist = ImmutableSet.of(BlockLever.class, BlockButton.class, BlockBed.class, BlockTorch.class);
     private IIcon iconTen;
     private IIcon iconEleven;

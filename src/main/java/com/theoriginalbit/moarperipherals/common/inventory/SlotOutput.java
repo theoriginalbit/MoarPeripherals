@@ -13,19 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.client.gui;
+package com.theoriginalbit.moarperipherals.common.inventory;
 
-public enum GuiType {
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
-    KEYBOARD, CRAFTER, PRINTER;
-
-    public static GuiType valueOf(int id) {
-        for (GuiType gui : values()) {
-            if (gui.ordinal() == id) {
-                return gui;
-            }
-        }
-        return null;
+/**
+ * @author theoriginalbit
+ * @since 17/11/14
+ */
+public class SlotOutput extends Slot {
+    public SlotOutput(IInventory iinventory, int slotIndex, int posX, int posY) {
+        super(iinventory, slotIndex, posX, posY);
     }
 
+    @Override
+    public boolean isItemValid(ItemStack itemstack) {
+        return false;
+    }
 }

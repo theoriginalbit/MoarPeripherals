@@ -104,7 +104,7 @@ public class ProxyClient extends ProxyCommon {
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockPrinter), rendererPrinter);
             ClientRegistry.bindTileEntitySpecialRenderer(TilePrinter.class, rendererPrinter);
             // ink cartridge
-//            MinecraftForgeClient.registerItemRenderer(ModItems.itemInkCartridge, new RendererItemInkCartridge());
+            MinecraftForgeClient.registerItemRenderer(ModItems.itemInkCartridge, new RendererInkCartridge());
         }
 
         if (ConfigHandler.isSonicEnabled() && ConfigHandler.enableSonicGfx) {

@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.common.block.container;
+package com.theoriginalbit.moarperipherals.common.inventory;
 
-import com.theoriginalbit.moarperipherals.common.block.abstracts.ContainerCommon;
-import com.theoriginalbit.moarperipherals.common.block.container.slot.SlotReadOnly;
+import com.theoriginalbit.moarperipherals.common.inventory.abstracts.ContainerMoarP;
 import com.theoriginalbit.moarperipherals.common.tile.TileComputerCrafter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryBasic;
@@ -28,12 +27,12 @@ import net.minecraft.item.crafting.CraftingManager;
  * @author theoriginalbit
  * @since 26/10/14
  */
-public class ContainerCrafter extends ContainerCommon {
+public class ContainerCrafter extends ContainerMoarP {
     private TileComputerCrafter crafter;
     private SlotReadOnly craftResult;
 
     public ContainerCrafter(EntityPlayer player, TileComputerCrafter inventory) {
-        super(player, inventory, 140);
+        super(inventory);
         crafter = inventory;
 
         for (int x = 0; x < 3; ++x) {
@@ -49,6 +48,8 @@ public class ContainerCrafter extends ContainerCommon {
                 addSlotToContainer(new Slot(crafter, x + y * 9, 8 + x * 18, 90 + y * 18));
             }
         }
+
+        bindPlayerInventory(player.inventory, 140);
     }
 
     @Override
@@ -58,15 +59,20 @@ public class ContainerCrafter extends ContainerCommon {
     }
 
     @Override
-    public ItemStack slotClick(int slot, int x, int y, EntityPlayer player) {
-        if (!player.worldObj.isRemote && slot == craftResult.slotNumber) {
-            try {
-                crafter.doCraft();
-            } catch (Exception ignored) {
-            }
-            detectAndSendChanges();
-        }
-        return super.slotClick(slot, x, y, player);
+    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+        return null;
     }
+
+//    @Override
+//    public ItemStack slotClick(int slot, int x, int y, EntityPlayer player) {
+//        if (!player.worldObj.isRemote && slot == craftResult.slotNumber) {
+//            try {
+//                crafter.doCraft();
+//            } catch (Exception ignored) {
+//            }
+//            detectAndSendChanges();
+//        }
+//        return super.slotClick(slot, x, y, player);
+//    }
 
 }

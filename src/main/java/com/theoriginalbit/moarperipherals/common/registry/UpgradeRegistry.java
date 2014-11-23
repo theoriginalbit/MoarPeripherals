@@ -16,7 +16,6 @@
 package com.theoriginalbit.moarperipherals.common.registry;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.moarperipherals.client.render.Icons;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.upgrade.*;
 import dan200.computercraft.api.ComputerCraftAPI;
