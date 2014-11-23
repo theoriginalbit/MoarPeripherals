@@ -23,6 +23,8 @@ import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
 import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradePeripheral;
 import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralSolar;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -56,6 +58,7 @@ public class UpgradeSolar extends UpgradePeripheral implements IUpgradeToolIcon 
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister register) {
         icon = register.registerIcon(ModInfo.RESOURCE_DOMAIN + ":upgradeSolar");
     }
