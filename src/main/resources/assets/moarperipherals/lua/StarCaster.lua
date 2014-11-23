@@ -8,8 +8,11 @@
 --[[   theoriginalbit   ]]--
 --[[ pastebin: mwdc6bK9 ]]--
 local scVer = "1.0.00"
---# Custom read, formatTime, newButton, newNumberPicker, pickerChanged, calculateMinMax, inventory filtering, and dyeToColor functions
---# (and LOTS of tutoring) courtesy of theoriginalbit (aka TheOriginalBIT)
+--# Custom read, formatTime, newButton,
+--# newNumberPicker, pickerChanged, calculateMinMax,
+--# inventory filtering, and dyeToColor functions,
+--# and LOTS of tutoring, courtesy of
+--# theoriginalbit (aka TheOriginalBIT)
 local tArgs = { ... }
 local termX, termY = term.getSize()
 local launcher, launchTimer, screenTimer
@@ -29,7 +32,7 @@ local readyRocketID, launchHeight, starColors, starShape, starEffect, numStars
 local rocketParts, starIDTable, rocketIDTable, errorLog = { }, { }, { }, { }
 local colorsList, effectsList, shapesList, guiElements = { }, { }, { }, { }
 local colorsAvailable, effectsAvailable, shapesAvailable = { }, { }, { }
---# the reference table for what we want, and what table it maps to
+--# reference table for what we want, and what table it maps to
 local inventoryCrossRef = {
     { "item.paper", rocketParts };
     { "item.sulphur", rocketParts };
@@ -111,7 +114,7 @@ local function newButton(x, y, w, h, text, bc, tc, action, name, b, callback)
     local hx = x + math.ceil((w - #text) / 2)
     local hy = y + math.ceil(h / 2) - 1
     local enabled = true
-    local dbc, dtc = colors.lightGray, colors.gray --# default is just the inverted of the normal
+    local dbc, dtc = colors.lightGray, colors.gray
     return {
         getType = function()
             return "button"
@@ -315,8 +318,7 @@ local function getNumRockets()
     term.setCursorPos(41,5)
     local oldNumRockets = tostring(numRockets)
     local newCount = tonumber(read(nil,nil,4))
-    newCount = newCount or numRockets
-    newCount = math.max(1, newCount)
+    newCount = newCount and math.max(1, newCount) or numRockets
     numRockets = math.min(1000, newCount)
     for _, element in pairs(guiElements.mainButtons) do
         if element.getType() == "button" and (element.getName() == "numRockets" or element.getName() == "rocketPop") then
@@ -335,8 +337,7 @@ local function getChance(which, posX, posY)
     term.setCursorPos(posX,posY)
     local newChance = tonumber(read(nil,nil,3))
     if which == "shape" then
-        newChance = newChance or shapeChance
-        newChance = math.max(0, newChance)
+        newChance = newChance and math.max(0, newChance) or shapeChance
         shapeChance = math.min(100, newChance)
         for _, element in pairs(guiElements.mainButtons) do
             if element.getType() == "button" and (element.getName() == "shapeChance" or element.getName() == "shapePop") then
@@ -346,8 +347,7 @@ local function getChance(which, posX, posY)
             end
         end
     elseif which == "effect" then
-        newChance = newChance or effectChance
-        newCount = math.max(0, newChance)
+        newChance = newChance and math.max(0, newChance) or effectChance
         effectChance = math.min(100, newChance)
         for _, element in pairs(guiElements.mainButtons) do
             if element.getType() == "button" and (element.getName() == "effectChance" or element.getName() == "effectPop") then
@@ -403,12 +403,12 @@ local function switchShowType()
     term.write("%")
 end
 
-local function drawPopUpBox(x,y,w,text)
+local function drawPopUpBox(x, y, w, text)
     term.setBackgroundColor(colors.white)
     term.setTextColor(colors.gray)
     for i = 1, 5 do --# draw the box
         term.setCursorPos(x, y + i)
-        term.write(string.rep(" ",w))
+        term.write(string.rep(" ", w))
     end
     for i = 1, 3 do --# write the text
         term.setCursorPos(x + 1, y + i + 1)
@@ -1549,7 +1549,7 @@ end
 local function logInput()
     local event, button, x, y = os.pullEvent()
     if event == "mouse_click" then
-        if x > 48 and x <= termX and y > 0 and y < 4 and button == 1 then --# exit button
+        if x > 48 and y < 4 and button == 1 then --# exit button
             operatingMode = "main"
             mainScreen()
             return
@@ -1588,27 +1588,27 @@ end
 local function mainInput()
     local event, button, x, y = os.pullEvent()
     if event == "mouse_click" then
-        if x > 48 and x <= termX and y > 0 and y < 4 and button == 1 and not popUp then --# big red X
-            if operatingMode == "main" and not gettingHelp then
+        if x > 48 and y < 4 and button == 1 and not popUp then    --# big red X
+            if not gettingHelp then                                 --# exit StarCaster
                 runMode = "stop"
                 return
-            elseif (operatingMode == "main" and gettingHelp) or operatingMode == "logs" then --# exit logs or help
+            elseif gettingHelp then                                 --# exit logs or help
                 gettingHelp = false
                 mainScreen()
                 return
             end
-        elseif x > 0 and x < 4 and y > 0 and y < 4  and button == 1 and operatingMode == "main" and not gettingHelp and not popUp then --# open logs
+        elseif x < 4 and y < 4  and button == 1 and not gettingHelp and not popUp then --# open logs
             operatingMode = "logs"
             drawHeader()
             logScreen()
             return
-        elseif y == 14 and button == 2 and not popUp then
+        elseif y == 14 and button == 2 and not gettingHelp and not popUp then
             if x > 19 and x < 24 then                               --# shapeChance popup
                 drawPopUp("shape")
             elseif x > 40 and x < 45 then                           --# effectChance popup
                 drawPopUp("effect")
             end
-        elseif y == 16 and x > 19 and x < 24 and not popUp then   --# showPacing (launch timing)
+        elseif y == 16 and x > 19 and x < 24 and not gettingHelp and not popUp then --# showPacing (launch timing)
             if button == 1 then
                 showPacing = not showPacing
                 term.setCursorPos(20,16)
@@ -1616,7 +1616,7 @@ local function mainInput()
             elseif button == 2 then
                 drawPopUp("pacing")
             end
-        elseif y == 18 and x > 19 and x < 24 and not popUp then   --# finaleMode
+        elseif y == 18 and x > 19 and x < 24 and not gettingHelp and not popUp then --# finaleMode
             if button == 1 then
                 finaleMode = not finaleMode
                 term.setCursorPos(20,18)
@@ -1624,14 +1624,14 @@ local function mainInput()
             elseif button == 2 then
                 drawPopUp("finale")
             end
-        elseif y > 7 and y < 15 and x == termX then               --# F1 Help
+        elseif y > 7 and y < 15 and x == termX and not gettingHelp and not popUp then --# F1 Help
             gettingHelp = true
             helpScreen()
         elseif popUp then
             popUp = false
             mainScreen()
         else
-            if operatingMode == "main" and not gettingHelp and not popUp then
+            if not gettingHelp and not popUp then
                 for _, click in pairs(guiElements.mainButtons) do     --# process buttons
                     click.processEvent(event, button, x, y)             --# carry out action for clicked button
                     if click.getType() == "picker" and operatingMode == "main" and not gettingHelp and not popUp then --# this second full sanity check is necessary since we've already processed the button event and things have changed
@@ -1641,7 +1641,7 @@ local function mainInput()
                 end
             end
         end
-    elseif event == "key" and button == keys.f1 and operatingMode == "main" then
+    elseif event == "key" and button == keys.f1 then
         gettingHelp = not gettingHelp
         if gettingHelp then
             helpScreen()
