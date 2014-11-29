@@ -30,7 +30,6 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 @LuaPeripheral("iron_note")
 @Computers.Mount(MountMoarP.class)
 public class TileIronNote extends TileMoarP {
-
     private static ImmutableList<String> INSTRUMENTS = ImmutableList.of("harp", "bd", "snare", "hat", "bassattack");
     private static final int MIN_INST = 0;
     private static final int MAX_INST = 4;
@@ -42,9 +41,9 @@ public class TileIronNote extends TileMoarP {
 
     @LuaFunction
     public void playNote(int instrument, int pitch) throws Exception {
-        Preconditions.checkArgument(instrument >= MIN_INST && instrument <= MAX_INST, "Expected instrument 0-4");
-        Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch 0-24");
-        Preconditions.checkArgument(notesCount++ < MAX_NOTES, "Too many notes (over " + MAX_NOTES + " per tick)");
+        Preconditions.checkArgument(instrument >= MIN_INST && instrument <= MAX_INST, "Expected instrument %d-%d", MIN_INST, MAX_INST);
+        Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch %d-%d", MIN_PITCH, MAX_PITCH);
+        Preconditions.checkArgument(notesCount++ < MAX_NOTES, "Too many notes (over %d per tick)", MAX_NOTES);
         Preconditions.checkArgument(ConfigHandler.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 
         if (message == null) {

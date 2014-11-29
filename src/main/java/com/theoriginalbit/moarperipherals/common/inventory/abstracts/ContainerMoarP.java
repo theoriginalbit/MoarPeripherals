@@ -26,7 +26,7 @@ import net.minecraft.item.ItemStack;
  * @author theoriginalbit
  * @since 26/10/14
  */
-public abstract class ContainerMoarP extends Container {
+public class ContainerMoarP extends Container {
     public TileInventory inventory;
 
     public ContainerMoarP(TileInventory tile) {
@@ -39,46 +39,107 @@ public abstract class ContainerMoarP extends Container {
     }
 
     @Override
-    public abstract ItemStack transferStackInSlot(EntityPlayer player, int slot);
+    public ItemStack transferStackInSlot(EntityPlayer player, int idx) {
+        ItemStack stack = null;
+        Slot slot = (Slot) inventorySlots.get(idx);
 
-    @Override
-    protected boolean mergeItemStack(ItemStack stack, int start, int end, boolean reverse) {
-        return mergeItemStack(stack, start, end);
-    }
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemStack = slot.getStack();
+            stack = itemStack.copy();
 
-    protected boolean mergeItemStack(ItemStack stack, int start, int end) {
-        // TODO: fix this funky code
-        for (int idx = start; idx < end; ++idx) {
-            final Slot slot = (Slot) inventorySlots.get(idx);
-            final int maxSize = Math.min(slot.getSlotStackLimit(), stack.getMaxStackSize());
-
-            // if the item cannot be accepted, don't bother trying
-            if (!slot.isItemValid(stack)) {
-                continue;
+            if (idx < inventory.getSizeInventory()) {
+                if (!mergeItemStack(itemStack, inventory.getSizeInventory(), inventorySlots.size(), true)) {
+                    return null;
+                }
+            } else if (!mergeItemStack(itemStack, 0, inventory.getSizeInventory(), false)) {
+                return null;
             }
 
-            final ItemStack itemStack = slot.getStack();
-            if (stack.isStackable() && itemStack != null && itemStack.stackSize <= maxSize) { // if the item is stack-able
-                int space = maxSize - itemStack.stackSize;
-                if (space >= stack.stackSize) {
-                    slot.putStack(stack.copy());
-                    slot.onSlotChanged();
-                    stack.stackSize = 0;
-                    return true;
-                } else if (space > 0) {
-                    stack.stackSize -= space;
-                    itemStack.stackSize += space;
-                    slot.onSlotChanged();
-                }
-            } else if (itemStack == null) { // if the item is not stack-able and there's nothing in the slot
-                slot.putStack(stack.copy());
+            if (itemStack.stackSize == 0) {
+                slot.putStack(null);
+            } else {
                 slot.onSlotChanged();
-                stack.stackSize = 0;
-                return true;
             }
         }
 
-        return false;
+        return stack;
+    }
+
+    /*
+     * Modified version of Minecraft's code that actually respects the Slot#isItemValid methods
+     */
+    @Override
+    protected boolean mergeItemStack(ItemStack stack, int start, int end, boolean reverse) {
+        boolean partialMerge = false;
+        int idx = (reverse ? end - 1 : start);
+
+        Slot slot;
+        ItemStack slotStack;
+
+        if (stack.isStackable()) {
+            while (stack.stackSize > 0 && (!reverse && idx < end || reverse && idx >= start)) {
+                slot = (Slot) inventorySlots.get(idx);
+
+                if (!slot.isItemValid(stack)) {
+                    idx += (reverse ? -1 : 1);
+                    continue;
+                }
+
+                slotStack = slot.getStack();
+
+                if (slotStack != null && slotStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == slotStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, slotStack)) {
+                    int total = slotStack.stackSize + stack.stackSize;
+
+                    if (total <= stack.getMaxStackSize() && total <= slot.getSlotStackLimit()) {
+                        stack.stackSize = 0;
+                        slotStack.stackSize = total;
+                        slot.onSlotChanged();
+                        partialMerge = true;
+                    } else if (slotStack.stackSize < stack.getMaxStackSize() && total < slot.getSlotStackLimit()) {
+                        stack.stackSize -= stack.getMaxStackSize() - slotStack.stackSize;
+                        slotStack.stackSize = stack.getMaxStackSize();
+                        slot.onSlotChanged();
+                        partialMerge = true;
+                    }
+                }
+
+                idx += (reverse ? -1 : 1);
+            }
+        }
+
+        if (stack.stackSize > 0) {
+            idx = (reverse ? end - 1 : start);
+
+            while (!reverse && idx < end || reverse && idx >= start) {
+                slot = (Slot) inventorySlots.get(idx);
+
+                if (!slot.isItemValid(stack)) {
+                    idx += (reverse ? -1 : 1);
+                    continue;
+                }
+
+                slotStack = slot.getStack();
+
+                if (slotStack == null) {
+                    if (stack.stackSize <= slot.getSlotStackLimit()) {
+                        slot.putStack(stack.copy());
+                        stack.stackSize = 0;
+                        slot.onSlotChanged();
+                        partialMerge = true;
+                        break;
+                    } else {
+                        putStackInSlot(idx, new ItemStack(stack.getItem(), slot.getSlotStackLimit(), stack.getItemDamage()));
+                        stack.stackSize -= slot.getSlotStackLimit();
+                        slot.onSlotChanged();
+                        partialMerge = true;
+                    }
+                }
+
+                idx += (reverse ? -1 : 1);
+            }
+        }
+
+        return partialMerge;
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventory, int offsetY) {

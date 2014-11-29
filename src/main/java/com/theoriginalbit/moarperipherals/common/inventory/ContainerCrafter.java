@@ -35,19 +35,22 @@ public class ContainerCrafter extends ContainerMoarP {
         super(inventory);
         crafter = inventory;
 
-        for (int x = 0; x < 3; ++x) {
-            for (int y = 0; y < 3; ++y) {
-                addSlotToContainer(new SlotReadOnly(inventory.craftingInv, x + y * 3, 30 + x * 18, 17 + y * 18));
+        // the crafting grid
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 3; ++col) {
+                addSlotToContainer(new SlotReadOnly(inventory.craftingInv, col + row * 3, 30 + col * 18, 17 + row * 18));
             }
         }
 
+        // the TE inventory
+        for (int row = 0; row < 2; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                addSlotToContainer(new Slot(crafter, col + row * 9, 8 + col * 18, 90 + row * 18));
+            }
+        }
+
+        // the fake output slot is so fake that it's not even stored in the TE
         addSlotToContainer(craftResult = new SlotReadOnly(new InventoryBasic("", false, 1), 0, 124, 35));
-
-        for (int x = 0; x < 9; ++x) {
-            for (int y = 0; y < 2; ++y) {
-                addSlotToContainer(new Slot(crafter, x + y * 9, 8 + x * 18, 90 + y * 18));
-            }
-        }
 
         bindPlayerInventory(player.inventory, 140);
     }
@@ -59,20 +62,15 @@ public class ContainerCrafter extends ContainerMoarP {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-        return null;
+    public ItemStack slotClick(int slot, int x, int y, EntityPlayer player) {
+        if (!player.worldObj.isRemote && slot == craftResult.slotNumber) {
+            try {
+                crafter.doCraft();
+            } catch (Exception ignored) {
+            }
+            detectAndSendChanges();
+        }
+        return super.slotClick(slot, x, y, player);
     }
-
-//    @Override
-//    public ItemStack slotClick(int slot, int x, int y, EntityPlayer player) {
-//        if (!player.worldObj.isRemote && slot == craftResult.slotNumber) {
-//            try {
-//                crafter.doCraft();
-//            } catch (Exception ignored) {
-//            }
-//            detectAndSendChanges();
-//        }
-//        return super.slotClick(slot, x, y, player);
-//    }
 
 }
