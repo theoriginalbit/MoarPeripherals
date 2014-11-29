@@ -165,7 +165,7 @@ public final class ConfigHandler {
         // Feature enabled
         enableSonic = getEnabled(CATEGORY_SONIC);
         enableChatBox = getEnabled(CATEGORY_CHAT_BOX);
-        enablePrinter = getEnabled(CATEGORY_PRINTER);
+        enablePrinter = false; // getEnabled(CATEGORY_PRINTER);
         enableKeyboard = getEnabled(CATEGORY_KEYBOARD);
         enableIronNote = getEnabled(CATEGORY_IRON_NOTE);
         enablePlayerDetector = getEnabled(CATEGORY_PLAYER_DETECTOR);
