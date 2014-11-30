@@ -41,6 +41,7 @@ public final class ConfigHandler {
     public static final String CATEGORY_TURTLE_TELEPORT = "Turtle Teleport";
     public static final String CATEGORY_MINI_ANTENNA = "Communications Antenna";
     public static final String CATEGORY_UPGRADE_FURNACE = "Furnace Turtle";
+    public static final String CATEGORY_UPGRADE_DENSITY = "Density Scanning Turtle";
 
     // Turtle Upgrade ID
     private static int startUpgradeID = 16384;
@@ -105,6 +106,8 @@ public final class ConfigHandler {
     // Upgrade Furnace Turtle
     public static int upgradeFurnaceFuelConsumption = 20;
 
+    public static String userDensityMappings = "";
+
     // Renderer enabled
     public static boolean enablePrinterGfx, enableSonicGfx;
 
@@ -162,6 +165,8 @@ public final class ConfigHandler {
     }
 
     private void doConfiguration() {
+        LogUtils.info("Loading MoarPeripherals configuration file");
+
         // Feature enabled
         enableSonic = getEnabled(CATEGORY_SONIC);
         enableChatBox = getEnabled(CATEGORY_CHAT_BOX);
@@ -178,12 +183,11 @@ public final class ConfigHandler {
         // Turtle upgrade settings
         enableUpgradeShears = getUpgradeEnabled("Shears Turtle");
         enableUpgradeCompass = getUpgradeEnabled("Compass Turtle");
-        enableUpgradeCompass = getUpgradeEnabled("Furnace Turtle");
         enableUpgradeSolar = getUpgradeEnabled("Solar Turtle");
         enableUpgradeIgniter = getUpgradeEnabled("Igniter Turtle");
-        enableUpgradeFurnace = getUpgradeEnabled("Furnace Turtle");
+        enableUpgradeFurnace = getUpgradeEnabled(CATEGORY_UPGRADE_FURNACE);
         enableUpgradeFeeder = getUpgradeEnabled("Feeding Turtle");
-        enableUpgradeOreScanner = getUpgradeEnabled("Ore Scanner Turtle");
+        enableUpgradeOreScanner = getUpgradeEnabled(CATEGORY_UPGRADE_DENSITY);
 
         // ChatBox settings
         displayChatBoxCoords = getBoolean(CATEGORY_CHAT_BOX, "displayCoords", false, "Show the x, y, and z coordinates of the ChatBox in chat messages");
@@ -219,6 +223,13 @@ public final class ConfigHandler {
         miniAntennaRange = getInt(CATEGORY_MINI_ANTENNA, "miniAntennaRange", miniAntennaRange, "The range in blocks the BitNet Mini Antenna can transmit");
         miniAntennaRangeStorm = getInt(CATEGORY_MINI_ANTENNA, "miniAntennaRangeStorm", miniAntennaRange, "The range in blocks the BitNet Mini Antenna can transmit during a storm");
         miniAntennaMessageDelay = getInt(CATEGORY_MINI_ANTENNA, "miniAntennaMessageDelay", miniAntennaMessageDelay, "The delay (in ticks) that the BitNet Mini Antenna takes to send a message per 100 block distance (rounded up).");
+
+        // Density Scanning settings
+        userDensityMappings = config.getString("customDensity", CATEGORY_UPGRADE_DENSITY, userDensityMappings,
+                "Add density mappings (semi-colon separated) for mod items to the Density Scanner in the format [modId]:[blockName]@[density]; " +
+                        "\nsingle mapping example: MoarPeripherals:blockIronNote@5.45" +
+                        "\nmulti-mapping example:  MoarPeripherals:blockIronNote@5.45;MoarPeripherals:blockChatBox@4.45"
+        ).trim();
 
         // Renderer enabled
         enablePrinterGfx = getBoolean(CATEGORY_RENDERER, "printerModel", false, "Whether or not to render items and blocks, related to the printer, normally or as models.");

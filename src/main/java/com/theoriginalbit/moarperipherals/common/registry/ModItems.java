@@ -72,8 +72,8 @@ public final class ModItems {
         }
 
         if (ConfigHandler.enableUpgradeOreScanner) {
-            itemUpgradeOreScanner = new ItemMoarP("oreScanner");
-            GameRegistry.registerItem(itemUpgradeOreScanner, "itemOreScanner");
+            itemUpgradeOreScanner = new ItemMoarP("densityScanner");
+            GameRegistry.registerItem(itemUpgradeOreScanner, "itemDensityScanner");
         }
     }
 

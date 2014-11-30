@@ -22,7 +22,7 @@ item.moarperipherals:keyboardPart.name=Часть клавиатуры
 item.moarperipherals:sonic.name=Звуковая отвёртка
 item.moarperipherals:monopolePart.name=Несимметричный вибратор
 item.moarperipherals:solarPanel.name=Солнечная панель
-item.moarperipherals:oreScanner.name=Ore Density Scanner
+item.moarperipherals:densityScanner.name=Density Scanner
 
 upgrade.moarperipherals:adjective.chatbox=Болтливая
 upgrade.moarperipherals:adjective.ironnote=Шумная
@@ -32,7 +32,7 @@ upgrade.moarperipherals:adjective.solar=Походная
 upgrade.moarperipherals:adjective.pyro=Пироманская
 upgrade.moarperipherals:adjective.furnace=Fiery
 upgrade.moarperipherals:adjective.feeder=Feeding
-upgrade.moarperipherals:adjective.orescanner=Ore Scanning
+upgrade.moarperipherals:adjective.densityscanner=Density Scanning
 
 moarperipherals.chat.paired=Привязана к компьютеру по координатам: %d %d %d
 moarperipherals.chat.notPaired=Устройство не связано с компьютером. Нажмите правой кнопкой мыши по нему, чтобы привязать.

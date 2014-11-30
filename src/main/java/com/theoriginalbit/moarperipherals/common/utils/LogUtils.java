@@ -32,42 +32,30 @@ public final class LogUtils {
         info("");
     }
 
-    public static void log(Level logLevel, Object object) {
-        FMLLog.log(ModInfo.NAME, logLevel, String.valueOf(object));
+    public static void log(Level logLevel, String message, Object... args) {
+        FMLLog.log(ModInfo.NAME, logLevel, " [MoarP]: " + message, args);
     }
 
-    public static void all(Object object) {
-        log(Level.ALL, object);
-    }
-
-    public static void debug(Object object) {
+    public static void debug(String message, Object... args) {
         if (ConfigHandler.debug) {
-            log(Level.DEBUG, object);
+            log(Level.INFO, message, args);
         }
     }
 
-    public static void error(Object object) {
-        log(Level.ERROR, object);
+    public static void info(String message, Object... args) {
+        log(Level.INFO, message, args);
     }
 
-    public static void fatal(Object object) {
-        log(Level.FATAL, object);
+    public static void warn(String message, Object... args) {
+        log(Level.WARN, message, args);
     }
 
-    public static void info(Object object) {
-        log(Level.INFO, object);
+    public static void error(String message, Object... args) {
+        log(Level.ERROR, message, args);
     }
 
-    public static void off(Object object) {
-        log(Level.OFF, object);
-    }
-
-    public static void trace(Object object) {
-        log(Level.TRACE, object);
-    }
-
-    public static void warn(Object object) {
-        log(Level.WARN, object);
+    public static void fatal(String message, Object... args) {
+        log(Level.FATAL, message, args);
     }
 
 }

@@ -22,7 +22,7 @@ import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
-import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralOreScanner;
+import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralDensityScanner;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -33,12 +33,12 @@ import net.minecraft.util.IIcon;
  * @author theoriginalbit
  * @since 15/11/14
  */
-public class UpgradeOreScanner extends UpgradePeripheral implements IUpgradeToolIcon {
+public class UpgradeDensityScanner extends UpgradePeripheral implements IUpgradeToolIcon {
     private static final ItemStack scanner = new ItemStack(ModItems.itemUpgradeOreScanner);
     private IIcon icon;
 
-    public UpgradeOreScanner() {
-        super(ConfigHandler.upgradeIdOreScanner, Constants.UPGRADE.ORESCANNER.getLocalised(), scanner);
+    public UpgradeDensityScanner() {
+        super(ConfigHandler.upgradeIdOreScanner, Constants.UPGRADE.DENSITYSCANNER.getLocalised(), scanner);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class UpgradeOreScanner extends UpgradePeripheral implements IUpgradeTool
 
     @Override
     protected WrapperComputer getPeripheralWrapper(ITurtleAccess access, TurtleSide side) {
-        return new WrapperComputer(new PeripheralOreScanner(access));
+        return new WrapperComputer(new PeripheralDensityScanner(access));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class UpgradeOreScanner extends UpgradePeripheral implements IUpgradeTool
 
     @Override
     public void registerIcons(IIconRegister register) {
-        icon = register.registerIcon(ModInfo.RESOURCE_DOMAIN + ":upgradeOreScanner");
+        icon = register.registerIcon(ModInfo.RESOURCE_DOMAIN + ":upgradeDensityScanner");
     }
 
 }

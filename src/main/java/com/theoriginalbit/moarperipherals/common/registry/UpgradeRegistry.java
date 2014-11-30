@@ -62,7 +62,7 @@ public class UpgradeRegistry {
             register(new UpgradeFeeder());
         }
         if (ConfigHandler.enableUpgradeOreScanner) {
-            register(new UpgradeOreScanner());
+            register(new UpgradeDensityScanner());
         }
     }
 
