@@ -57,7 +57,7 @@ public final class BitNetRegistry {
      * @param tile the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}
      *             {@link net.minecraft.tileentity.TileEntity} to register with the BitNet network
      * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant
-     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetMessage
+     * @see com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage
      */
     public static int registerCompliance(IBitNetCompliant tile) {
         LogUtils.debug("BitNet registerTower invoked, already contains tower: " + towers.contains(tile));

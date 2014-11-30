@@ -37,7 +37,7 @@ public class BlockTurtleTeleport extends BlockMoarP {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+    public TileEntity createNewTileEntity(World world, int par2) {
         return new TileTurtleTeleport();
     }
 

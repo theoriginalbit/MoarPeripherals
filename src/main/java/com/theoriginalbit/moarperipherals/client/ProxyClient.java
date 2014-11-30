@@ -44,6 +44,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.io.File;
+
 @SuppressWarnings("unused")
 public class ProxyClient extends ProxyCommon {
 
@@ -128,6 +130,11 @@ public class ProxyClient extends ProxyCommon {
     @Override
     public boolean isOp(EntityPlayer player) {
         return false;
+    }
+
+    @Override
+    public File getBase() {
+        return Minecraft.getMinecraft().mcDataDir;
     }
 
     @SubscribeEvent

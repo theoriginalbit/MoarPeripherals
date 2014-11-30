@@ -17,21 +17,21 @@ package com.theoriginalbit.moarperipherals;
 
 import com.theoriginalbit.moarperipherals.api.peripheral.LuaType;
 import com.theoriginalbit.moarperipherals.api.peripheral.PeripheralProvider;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
-import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
+import com.theoriginalbit.moarperipherals.client.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
+import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
+import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.converter.ConverterItemStack;
+import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
+import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
 import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
-import com.theoriginalbit.moarperipherals.client.CreativeTabMoarPeripherals;
-import com.theoriginalbit.moarperipherals.common.converter.ConverterItemStack;
-import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
-import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
-import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -73,7 +73,6 @@ public class MoarPeripherals {
     }
 
     @EventHandler
-    @SuppressWarnings("unused")
     public void init(FMLInitializationEvent event) {
         PacketHandler.init();
 
@@ -101,7 +100,6 @@ public class MoarPeripherals {
     }
 
     @EventHandler
-    @SuppressWarnings("unused")
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit();
         ComputerCraftInfo.init();
@@ -116,7 +114,6 @@ public class MoarPeripherals {
     }
 
     @EventHandler
-    @SuppressWarnings("unused")
     public void serverStopping(FMLServerStoppingEvent e) {
         isServerStopping = true;
     }

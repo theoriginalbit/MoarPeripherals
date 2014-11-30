@@ -23,9 +23,7 @@ import com.theoriginalbit.moarperipherals.common.utils.NBTUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -76,12 +74,6 @@ public class ItemInkCartridge extends ItemMoarP implements ITooltipInformer {
                 return iconInkK;
         }
         return iconInkE;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
-        // TODO: delete
     }
 
     private static final String CONTENTS = "%s: %s";

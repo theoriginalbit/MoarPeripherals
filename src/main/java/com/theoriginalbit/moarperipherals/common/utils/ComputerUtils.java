@@ -24,17 +24,17 @@ import java.lang.reflect.Method;
 public final class ComputerUtils {
 
     private static final Class<?> CLAZZ_TILECOMPUTERBASE = ReflectionUtils.getClass("dan200.computercraft.shared.computer.blocks.TileComputerBase");
-    private static final Method METHOD_GETCOMPUTER = ReflectionUtils.getMethod(CLAZZ_TILECOMPUTERBASE, "getComputer", new Class[0]);
+    private static final Method METHOD_GETCOMPUTER = ReflectionUtils.getMethod(CLAZZ_TILECOMPUTERBASE, "getComputer");
 
     private static final Class<?> CLAZZ_ICOMPUTER = ReflectionUtils.getClass("dan200.computercraft.shared.computer.core.IComputer");
-    private static final Method METHOD_QUEUEEVENT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "queueEvent", new Class[]{String.class, Object[].class});
-    private static final Method METHOD_ISON = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "isOn", new Class[0]);
-    private static final Method METHOD_TURNON = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "turnOn", new Class[0]);
-    private static final Method METHOD_SHUTDOWN = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "shutdown", new Class[0]);
-    private static final Method METHOD_REBOOT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "reboot", new Class[0]);
+    private static final Method METHOD_QUEUEEVENT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "queueEvent", String.class, Object[].class);
+    private static final Method METHOD_ISON = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "isOn");
+    private static final Method METHOD_TURNON = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "turnOn");
+    private static final Method METHOD_SHUTDOWN = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "shutdown");
+    private static final Method METHOD_REBOOT = ReflectionUtils.getMethod(CLAZZ_ICOMPUTER, "reboot");
 
     private static final Class<?> CLAZZ_ITURTLETILE = ReflectionUtils.getClass("dan200.computercraft.shared.turtle.blocks.ITurtleTile");
-    private static final Method METHOD_GETACCESS = ReflectionUtils.getMethod(CLAZZ_ITURTLETILE, "getAccess", new Class[0]);
+    private static final Method METHOD_GETACCESS = ReflectionUtils.getMethod(CLAZZ_ITURTLETILE, "getAccess");
 
     private static final String EVENT_TERMINATE = "terminate";
 

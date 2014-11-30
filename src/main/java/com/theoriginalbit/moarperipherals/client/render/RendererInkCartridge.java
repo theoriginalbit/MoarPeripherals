@@ -16,15 +16,11 @@
 package com.theoriginalbit.moarperipherals.client.render;
 
 import com.theoriginalbit.moarperipherals.client.model.ModelInkCartridge;
-import com.theoriginalbit.moarperipherals.common.item.ItemInkCartridge;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
