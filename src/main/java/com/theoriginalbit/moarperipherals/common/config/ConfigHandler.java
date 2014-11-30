@@ -230,6 +230,9 @@ public final class ConfigHandler {
                         "\nsingle mapping example: MoarPeripherals:blockIronNote@5.45" +
                         "\nmulti-mapping example:  MoarPeripherals:blockIronNote@5.45;MoarPeripherals:blockChatBox@4.45"
         ).trim();
+        if (userDensityMappings.toLowerCase().contains("minecraft:")) {
+            throw new RuntimeException("Minecraft blocks cannot have a custom density mapping");
+        }
 
         // Renderer enabled
         enablePrinterGfx = getBoolean(CATEGORY_RENDERER, "printerModel", false, "Whether or not to render items and blocks, related to the printer, normally or as models.");

@@ -41,7 +41,6 @@ import java.util.HashMap;
 @LuaPeripheral("ore_scanner")
 public class PeripheralDensityScanner {
     private static final HashMap<Block, Float> DENSITIES = Maps.newHashMap();
-    private static final String MINECRAFT = "minecraft";
     private static final int SCAN_DIAMETER = 5;
     private static final int MAX_DEPTH = 40;
     private final ITurtleAccess turtle;
@@ -90,9 +89,6 @@ public class PeripheralDensityScanner {
     }
 
     public static void addDensityMapping(String modid, String blockName, float density) {
-        if (modid.equalsIgnoreCase(MINECRAFT)) {
-            throw new RuntimeException("Minecraft blocks cannot have density mapping");
-        }
         final Block block = GameRegistry.findBlock(modid, blockName);
         if (block == null) {
             throw new RuntimeException(String.format("cannot find block %s:%s to apply a density mapping", modid, blockName));
@@ -102,45 +98,47 @@ public class PeripheralDensityScanner {
 
     public static void addDensityMapping(Block block, float density) {
         if (DENSITIES.containsKey(block)) {
-            throw new RuntimeException("attempting to override density mapping for " + block.getUnlocalizedName());
+            LogUtils.info("density mapping already exists for %s, skipping", block.getUnlocalizedName());
+            return;
         }
         if (density < 0.0f) {
             LogUtils.warn("density for %s was negative, changing to 0", block.getUnlocalizedName());
         }
+        LogUtils.info("added density mapping; " + block.getUnlocalizedName());
         DENSITIES.put(block, Math.max(density, 0.0f));
     }
 
     static {
         // densities of 'natural' vanilla blocks are taken from real specific gravities (g/cm^3)
-        addDensityMapping(Blocks.stone, 0.29f); // assumed stone is Bluestone which is a form of Basalt http://geology.about.com/cs/rock_types/a/aarockspecgrav.htm
-        addDensityMapping(Blocks.grass, 0.12f); // Loam is top-soil http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
-        addDensityMapping(Blocks.dirt, 0.12f); // http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
-        addDensityMapping(Blocks.water, 0.99f); // http://pubchem.ncbi.nlm.nih.gov
-        addDensityMapping(Blocks.flowing_water, 0.99f); // http://pubchem.ncbi.nlm.nih.gov
-        addDensityMapping(Blocks.lava, 2.72f); // http://en.wikipedia.org/wiki/Magma#Density
-        addDensityMapping(Blocks.flowing_lava, 2.72f); // http://en.wikipedia.org/wiki/Magma#Density
-        addDensityMapping(Blocks.sand, 0.15f); // http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
-        addDensityMapping(Blocks.gravel, 0.16f); // http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
-        addDensityMapping(Blocks.gold_ore, 19.30f);// http://en.wikipedia.org/wiki/Gold
-        addDensityMapping(Blocks.iron_ore, 7.87f); // http://en.wikipedia.org/wiki/Iron
-        addDensityMapping(Blocks.coal_ore, 1.25f); // http://geology.about.com/cs/rock_types/a/aarockspecgrav.htm
-        addDensityMapping(Blocks.log, 0.72f); // averaged of http://www.simetric.co.uk/si_wood.htm
-        addDensityMapping(Blocks.log2, 0.72f); // averaged of http://www.simetric.co.uk/si_wood.htm
-        addDensityMapping(Blocks.lapis_ore, 2.80f); // http://www.csgnetwork.com/gemchar.html
-        addDensityMapping(Blocks.sandstone, 0.25f); // http://geology.about.com/cs/rock_types/a/aarockspecgrav.htm
-        addDensityMapping(Blocks.web, 1.31f); // http://en.wikipedia.org/wiki/Spider_silk#Density
-        addDensityMapping(Blocks.obsidian, 2.60f); // http://www.rockcollector.co.uk/infocus/obsidian.php
-        addDensityMapping(Blocks.diamond_ore, 3.51f); // http://en.wikipedia.org/wiki/Carbon (diamond)
-        addDensityMapping(Blocks.redstone_ore, 5.20f); // redstone isn't real, so it has been weighted around iron and lapis
-        addDensityMapping(Blocks.lit_redstone_ore, 5.20f); // see above
-        addDensityMapping(Blocks.ice, 0.92f); // http://en.wikipedia.org/wiki/Ice
-        addDensityMapping(Blocks.clay, 0.16f); // http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
-        addDensityMapping(Blocks.netherrack, 0.20f); // assumed density between stone and dirt
-        addDensityMapping(Blocks.soul_sand, 0.16f); // assumed density of gravel
-        addDensityMapping(Blocks.mycelium, 0.12f); // assumed density of grass
-        addDensityMapping(Blocks.emerald_ore, 2.73f); // calculated from the density of Be3Al2(SiO3)6 and confirmed with http://www.csgnetwork.com/gemchar.html
-        addDensityMapping(Blocks.quartz_ore, 2.65f); // http://www.csgnetwork.com/gemchar.html
-        addDensityMapping(Blocks.packed_ice, 0.94f); // density between ice and water
+        DENSITIES.put(Blocks.stone, 0.29f); // assumed stone is Bluestone which is a form of Basalt http://geology.about.com/cs/rock_types/a/aarockspecgrav.htm
+        DENSITIES.put(Blocks.grass, 0.12f); // Loam is top-soil http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
+        DENSITIES.put(Blocks.dirt, 0.12f); // http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
+        DENSITIES.put(Blocks.water, 0.99f); // http://pubchem.ncbi.nlm.nih.gov
+        DENSITIES.put(Blocks.flowing_water, 0.99f); // http://pubchem.ncbi.nlm.nih.gov
+        DENSITIES.put(Blocks.lava, 2.72f); // http://en.wikipedia.org/wiki/Magma#Density
+        DENSITIES.put(Blocks.flowing_lava, 2.72f); // http://en.wikipedia.org/wiki/Magma#Density
+        DENSITIES.put(Blocks.sand, 0.15f); // http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
+        DENSITIES.put(Blocks.gravel, 0.16f); // http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
+        DENSITIES.put(Blocks.gold_ore, 19.30f);// http://en.wikipedia.org/wiki/Gold
+        DENSITIES.put(Blocks.iron_ore, 7.87f); // http://en.wikipedia.org/wiki/Iron
+        DENSITIES.put(Blocks.coal_ore, 1.25f); // http://geology.about.com/cs/rock_types/a/aarockspecgrav.htm
+        DENSITIES.put(Blocks.log, 0.72f); // averaged of http://www.simetric.co.uk/si_wood.htm
+        DENSITIES.put(Blocks.log2, 0.72f); // averaged of http://www.simetric.co.uk/si_wood.htm
+        DENSITIES.put(Blocks.lapis_ore, 2.80f); // http://www.csgnetwork.com/gemchar.html
+        DENSITIES.put(Blocks.sandstone, 0.25f); // http://geology.about.com/cs/rock_types/a/aarockspecgrav.htm
+        DENSITIES.put(Blocks.web, 1.31f); // http://en.wikipedia.org/wiki/Spider_silk#Density
+        DENSITIES.put(Blocks.obsidian, 2.60f); // http://www.rockcollector.co.uk/infocus/obsidian.php
+        DENSITIES.put(Blocks.diamond_ore, 3.51f); // http://en.wikipedia.org/wiki/Carbon (diamond)
+        DENSITIES.put(Blocks.redstone_ore, 5.20f); // redstone isn't real, so it has been weighted around iron and lapis
+        DENSITIES.put(Blocks.lit_redstone_ore, 5.20f); // see above
+        DENSITIES.put(Blocks.ice, 0.92f); // http://en.wikipedia.org/wiki/Ice
+        DENSITIES.put(Blocks.clay, 0.16f); // http://www.engineeringtoolbox.com/dirt-mud-densities-d_1727.html
+        DENSITIES.put(Blocks.netherrack, 0.20f); // assumed density between stone and dirt
+        DENSITIES.put(Blocks.soul_sand, 0.16f); // assumed density of gravel
+        DENSITIES.put(Blocks.mycelium, 0.12f); // assumed density of grass
+        DENSITIES.put(Blocks.emerald_ore, 2.73f); // calculated from the density of Be3Al2(SiO3)6 and confirmed with http://www.csgnetwork.com/gemchar.html
+        DENSITIES.put(Blocks.quartz_ore, 2.65f); // http://www.csgnetwork.com/gemchar.html
+        DENSITIES.put(Blocks.packed_ice, 0.94f); // density between ice and water
 
         // only build the custom mappings if the scanner is enabled and there are mappings
         if (ConfigHandler.enableUpgradeOreScanner && !ConfigHandler.userDensityMappings.isEmpty()) {
@@ -151,13 +149,10 @@ public class PeripheralDensityScanner {
                     final String[] block = map[0].split(":");
                     float density = Float.parseFloat(map[1]);
                     PeripheralDensityScanner.addDensityMapping(block[0], block[1], density);
-                    LogUtils.info("added density mapping; " + str);
                 } catch (NumberFormatException e) {
-                    LogUtils.warn("invalid density value found in config for mapping; " + str);
-                } catch (RuntimeException e) {
-                    throw new RuntimeException(e);
+                    LogUtils.warn("invalid density mapping, cannot parse density float; " + str);
                 } catch (Exception e) {
-                    LogUtils.warn("invalid input, unable to add density mapping; " + str);
+                    LogUtils.warn("invalid density mapping, unable to add mapping; " + str);
                     e.printStackTrace();
                 }
             }
