@@ -13,25 +13,33 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.6.4-1.63-1.4"
-group = "com.theoriginalbit.minecraft"
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+// Grab system env
+ext.env = System.getenv()
+
+version = "1.6.4-1.63-1.5"
+if (env.BUILD_NUMBER != null) {
+    version += "-snapshot-" + env.BUILD_NUMBER
+}
+group = "com.theoriginalbit.moarperipherals"
 archivesBaseName = "MoarPeripherals"
 
 minecraft {
     version = "1.6.4-9.11.1.964"
 
-    // replacing
     replace "@VERSION@", project.version
-    replaceIn "ModInfo.java"
-}
-
-jar {
-    from(sourceSets.api.output) {
-        include '**/*'
-    }
 }
 
 processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from('LICENSE')
+    from('CREDITS')
+
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'

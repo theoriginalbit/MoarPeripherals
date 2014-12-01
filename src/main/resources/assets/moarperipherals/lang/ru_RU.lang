@@ -1,0 +1,66 @@
+itemGroup.tabMoarPeripherals=MoarPeripherals
+
+tile.moarperipherals.playerdetector.name=Детектор игроков
+tile.moarperipherals.chatbox.name=ЧатБокс
+tile.moarperipherals.chatboxAdmin.name=ЧатБокс (администраторский)
+tile.moarperipherals.ironnote.name=Железный нотный блок
+tile.moarperipherals.keyboardMac.name=Клавиатура (Mac)
+tile.moarperipherals.keyboardPc.name=Клавиатура (PC)
+tile.moarperipherals.printer.name=Улучшенный принтер
+tile.moarperipherals.antenna.name=Коммуникационная башня BitNet (столб)
+tile.moarperipherals.antennaCell.name=Коммуникационная башня BitNet (ячейка)
+tile.moarperipherals.antennaMiniCell.name=Коммуникационная башня BitNet (мини ячейка)
+tile.moarperipherals.antennaController.name=Коммуникационная башня BitNet (контроллер)
+tile.moarperipherals.turtleTeleport.name=Телепорт для черепашек
+tile.moarperipherals.fireworks.name=Запускатель фейерверков
+tile.moarperipherals.fireworksCreative.name=Запускатель фейерверков (креативный)
+tile.moarperipherals.crafter.name=Крафтер
+tile.moarperipherals.miniAntenna.name=Мини антенна BitNet
+
+item.moarperipherals.inkCartridge.name=Картридж с чернилами
+item.moarperipherals.keyboardPart.name=Часть клавиатуры
+item.moarperipherals.sonic.name=Звуковая отвёртка
+item.moarperipherals.monopolePart.name=Несимметричный вибратор
+item.moarperipherals.solarPanel.name=Солнечная панель
+item.moarperipherals.densityScanner.name=Density Scanner
+
+upgrade.moarperipherals.adjective.chatbox=Болтливая
+upgrade.moarperipherals.adjective.ironnote=Шумная
+upgrade.moarperipherals.adjective.shears=Стригущая
+upgrade.moarperipherals.adjective.compass=Головокружительная
+upgrade.moarperipherals.adjective.solar=Походная
+upgrade.moarperipherals.adjective.pyro=Пироманская
+upgrade.moarperipherals.adjective.furnace=Fiery
+upgrade.moarperipherals.adjective.feeder=Feeding
+upgrade.moarperipherals.adjective.densityscanner=Density Scanning
+
+moarperipherals.chat.paired=Привязана к компьютеру по координатам. %d %d %d
+moarperipherals.chat.notPaired=Устройство не связано с компьютером. Нажмите правой кнопкой мыши по нему, чтобы привязать.
+
+# believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
+moarperipherals.chat.sonic.wood="It doesn't do wood!"
+
+moarperipherals.gui.keyboard.exit=Нажмите ESC для того, чтобы выйти.
+tooltip.moarperipherals.generic.information=Зажмите SHIFT для получения информации
+tooltip.moarperipherals.pairable.paired=Связанный
+tooltip.moarperipherals.pairable.notPaired=Несвязанный
+tooltip.moarperipherals.inkCartridge.contents=Contents
+tooltip.moarperipherals.inkCartridge.level=Ink Level
+tooltip.moarperipherals.inkCartridge.ink.cyan=Cyan
+tooltip.moarperipherals.inkCartridge.ink.magenta=Magenta
+tooltip.moarperipherals.inkCartridge.ink.yellow=Yellow
+tooltip.moarperipherals.inkCartridge.ink.black=Black
+tooltip.moarperipherals.inkCartridge.ink.empty=Empty
+
+# Config #
+moarperipherals.config.title=Настройки MoarPeripherals
+moarperipherals.config.category.sonicscrewdriver=Звуковая отвёртка
+moarperipherals.config.category.enabled=Включён
+moarperipherals.config.category.chatbox=ЧатБокс
+moarperipherals.config.category.printer=Принтер
+moarperipherals.config.category.render=Рендер
+moarperipherals.config.category.keyboard=Клавиатура
+moarperipherals.config.category.security=Безопасность
+moarperipherals.config.category.ironnote=Железный нотный блок
+moarperipherals.config.category.communicationstower=Коммуникационная башня
+moarperipherals.config.category.playerdetector=Детектор игроков

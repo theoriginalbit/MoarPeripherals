@@ -4,22 +4,35 @@ tile.moarperipherals.playerdetector.name=Player Detector
 tile.moarperipherals.chatbox.name=ChatBox
 tile.moarperipherals.chatboxAdmin.name=ChatBox (Admin)
 tile.moarperipherals.ironnote.name=Iron Note Block
-tile.moarperipherals.keyboard.name=Keyboard
+tile.moarperipherals.keyboardMac.name=Keyboard (Mac)
+tile.moarperipherals.keyboardPc.name=Keyboard (PC)
 tile.moarperipherals.printer.name=Advanced Printer
-tile.moarperipherals.itemDictionary.name=Item Dictionary
 tile.moarperipherals.antenna.name=BitNet Communication Tower (Pole)
 tile.moarperipherals.antennaCell.name=BitNet Communication Tower (Cell)
 tile.moarperipherals.antennaMiniCell.name=BitNet Communication Tower (Mini Cell)
 tile.moarperipherals.antennaController.name=BitNet Communication Tower (Controller)
+tile.moarperipherals.turtleTeleport.name=Turtle Teleport
+tile.moarperipherals.fireworks.name=Firework Launcher
+tile.moarperipherals.fireworksCreative.name=Firework Launcher (Creative)
+tile.moarperipherals.crafter.name=Computer Controlled Crafter
+tile.moarperipherals.miniAntenna.name=BitNet Mini Antenna
 
 item.moarperipherals.inkCartridge.name=Ink Cartridge
 item.moarperipherals.keyboardPart.name=Keyboard Part
 item.moarperipherals.sonic.name=Sonic Screwdriver
 item.moarperipherals.monopolePart.name=Monopole Antenna
+item.moarperipherals.solarPanel.name=Solar Panel
+item.moarperipherals.densityScanner.name=Density Scanner
 
 upgrade.moarperipherals.adjective.chatbox=Chatty
 upgrade.moarperipherals.adjective.ironnote=Noisy
-upgrade.moarperipherals.adjective.dictionary=Informed
+upgrade.moarperipherals.adjective.shears=Shearing
+upgrade.moarperipherals.adjective.compass=Dizzy
+upgrade.moarperipherals.adjective.solar=Outdoorsy
+upgrade.moarperipherals.adjective.pyro=Pyromaniac
+upgrade.moarperipherals.adjective.furnace=Fiery
+upgrade.moarperipherals.adjective.feeder=Feeding
+upgrade.moarperipherals.adjective.densityscanner=Density Scanning
 
 moarperipherals.chat.paired=Paired with Computer at %d %d %d
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.
@@ -29,14 +42,26 @@ moarperipherals.chat.sonic.wood=It doesn't do wood!
 
 moarperipherals.gui.keyboard.exit=Press ESC to exit the Keyboard
 
-moarperipherals.tooltip.generic.information=Hold SHIFT for information
-moarperipherals.tooltip.pairable.paired=Target
-moarperipherals.tooltip.pairable.notPaired=Not Paired
+tooltip.moarperipherals.generic.information=Hold SHIFT for information
+tooltip.moarperipherals.pairable.paired=Target
+tooltip.moarperipherals.pairable.notPaired=Not Paired
+tooltip.moarperipherals.inkCartridge.contents=Contents
+tooltip.moarperipherals.inkCartridge.level=Ink Level
+tooltip.moarperipherals.inkCartridge.ink.cyan=Cyan
+tooltip.moarperipherals.inkCartridge.ink.magenta=Magenta
+tooltip.moarperipherals.inkCartridge.ink.yellow=Yellow
+tooltip.moarperipherals.inkCartridge.ink.black=Black
+tooltip.moarperipherals.inkCartridge.ink.empty=Empty
 
-moarperipherals.tooltip.inkCartridge.contents=Ink Color
-moarperipherals.tooltip.inkCartridge.level=Ink Level
-moarperipherals.tooltip.printer.ink.cyan=Cyan
-moarperipherals.tooltip.printer.ink.magenta=Magenta
-moarperipherals.tooltip.printer.ink.yellow=Yellow
-moarperipherals.tooltip.printer.ink.black=Black
-moarperipherals.tooltip.printer.ink.empty=Empty
+# Config #
+moarperipherals.config.title=MoarPeripherals Configuration
+moarperipherals.config.category.sonicscrewdriver=Sonic Screwdriver
+moarperipherals.config.category.enabled=Enabled
+moarperipherals.config.category.chatbox=ChatBox
+moarperipherals.config.category.printer=Printer
+moarperipherals.config.category.render=Render
+moarperipherals.config.category.keyboard=Keyboard
+moarperipherals.config.category.security=Security
+moarperipherals.config.category.ironnote=Iron Note
+moarperipherals.config.category.communicationstower=Communications Tower
+moarperipherals.config.category.playerdetector=Player Detector

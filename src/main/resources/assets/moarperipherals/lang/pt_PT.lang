@@ -1,42 +1,67 @@
 itemGroup.tabMoarPeripherals=MoarPeripherals
 
-tile.moarperipherals.playerdetector.name=Detector de Jogadores
+tile.moarperipherals.playerdetector.name=Detector de Players
 tile.moarperipherals.chatbox.name=Caixa Falante
-tile.moarperipherals.chatboxAdmin.name=ChatBox (Admin)
+tile.moarperipherals.chatboxAdmin.name=Caixa Falante (Administrador)
 tile.moarperipherals.ironnote.name=Note block de Ferro
-tile.moarperipherals.keyboard.name=Teclado
+tile.moarperipherals.keyboardMac.name=Teclado (Mac)
+tile.moarperipherals.keyboardPc.name=Teclado (PC)
 tile.moarperipherals.printer.name=Impressora avançada
-tile.moarperipherals.itemDictionary.name=Dicionário de Itens.
 tile.moarperipherals.antenna.name=Torre de Comunicação BitNet (Mastro)
-tile.moarperipherals.antennaCell.name=Torre de comunicação BitNet (Celula)
-tile.moarperipherals.antennaMiniCell.name=BitNet Communication Tower (Mini Cell)
-tile.moarperipherals.antennaController.name=Torre de Comunicação BitNet(Controlador)
+tile.moarperipherals.antennaCell.name=Torre de Comunicação BitNet (Celula)
+tile.moarperipherals.antennaMiniCell.name=Torre de Comunicação BitNet (Mini Cell)
+tile.moarperipherals.antennaController.name=Torre de Comunicação BitNet (Controlador)
+tile.moarperipherals.turtleTeleport.name=Teleportador de Turtles
+tile.moarperipherals.fireworks.name=Lançador de Fogo de Artifício
+tile.moarperipherals.fireworksCreative.name=Lançador de Fogo de Artifício (Creativo)
+tile.moarperipherals.crafter.name=Computer Controlled Crafter
+tile.moarperipherals.miniAntenna.name=BitNet Mini Antena
 
 item.moarperipherals.inkCartridge.name=Cartucho para Tinta
 item.moarperipherals.keyboardPart.name=Parte de Teclado
 item.moarperipherals.sonic.name=Sonic Screwdriver
-item.moarperipherals.monopolePart.name=Monopole Antenna
+item.moarperipherals.monopolePart.name=Antena Monopola
+item.moarperipherals.solarPanel.name=Painél Solar
+item.moarperipherals.densityScanner.name=Density Scanner
 
-upgrade.moarperipherals.adjective.chatbox=Falante
+upgrade.moarperipherals.adjective.chatbox=Caixa Falante
 upgrade.moarperipherals.adjective.ironnote=Barulhento
-upgrade.moarperipherals.adjective.dictionary=Informado
+upgrade.moarperipherals.adjective.shears=Cortante
+upgrade.moarperipherals.adjective.compass=Nauseoso
+upgrade.moarperipherals.adjective.solar=Ao Ar livre
+upgrade.moarperipherals.adjective.pyro=Piromaníaco
+upgrade.moarperipherals.adjective.furnace=Fiery
+upgrade.moarperipherals.adjective.feeder=Feeding
+upgrade.moarperipherals.adjective.densityscanner=Density Scanning
 
 moarperipherals.chat.paired=Ligado ao computador em %d %d %d
 moarperipherals.chat.notPaired=Dispositivo não ligado. Pressione Shift+ Clique Direito para conectar a um computador
 
-# this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
+# believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
 moarperipherals.chat.sonic.wood=It doesn't do wood!
 
 moarperipherals.gui.keyboard.exit=Pressione ESC para sair do teclado
 
-moarperipherals.tooltip.generic.information=Carregue em Shift para mais informação
-moarperipherals.tooltip.pairable.paired=Alvo
-moarperipherals.tooltip.pairable.notPaired=Não Ligado
+tooltip.moarperipherals.generic.information=Carregue em Shift para mais informação
+tooltip.moarperipherals.pairable.paired=Alvo
+tooltip.moarperipherals.pairable.notPaired=Não Ligado
+tooltip.moarperipherals.inkCartridge.contents=Contents
+tooltip.moarperipherals.inkCartridge.level=Ink Level
+tooltip.moarperipherals.inkCartridge.ink.cyan=Cyan
+tooltip.moarperipherals.inkCartridge.ink.magenta=Magenta
+tooltip.moarperipherals.inkCartridge.ink.yellow=Yellow
+tooltip.moarperipherals.inkCartridge.ink.black=Black
+tooltip.moarperipherals.inkCartridge.ink.empty=Empty
 
-moarperipherals.tooltip.inkCartridge.contents=Cor da tinta
-moarperipherals.tooltip.inkCartridge.level=Nivel da tinta
-moarperipherals.tooltip.printer.ink.cyan=Ciano
-moarperipherals.tooltip.printer.ink.magenta=Magenta
-moarperipherals.tooltip.printer.ink.yellow=Amarelo
-moarperipherals.tooltip.printer.ink.black=Preto
-moarperipherals.tooltip.printer.ink.empty=Vazio
+# Config #
+moarperipherals.config.title=Configuração de MoarPeripherals
+moarperipherals.config.category.sonicscrewdriver=Sonic Screwdriver
+moarperipherals.config.category.enabled=Enabilitado
+moarperipherals.config.category.chatbox=Caixa Falante
+moarperipherals.config.category.printer=Impressora
+moarperipherals.config.category.render=Render
+moarperipherals.config.category.keyboard=Teclado
+moarperipherals.config.category.security=Segurança
+moarperipherals.config.category.ironnote=Nota de Ferro
+moarperipherals.config.category.communicationstower=Torre de Comunicação
+moarperipherals.config.category.playerdetector=Detector de Players
