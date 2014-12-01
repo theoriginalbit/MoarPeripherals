@@ -226,7 +226,7 @@ public final class ConfigHandler {
 
         // Density Scanning settings
         userDensityMappings = config.getString("customDensity", CATEGORY_UPGRADE_DENSITY, userDensityMappings,
-                "Add density mappings (semi-colon separated) for mod items to the Density Scanner in the format [modId]:[blockName]@[density]; " +
+                "Add density mappings (semi-colon separated) for mod blocks to the Density Scanner in the format [modId]:[blockName]@[density]; " +
                         "\nsingle mapping example: MoarPeripherals:blockIronNote@5.45" +
                         "\nmulti-mapping example:  MoarPeripherals:blockIronNote@5.45;MoarPeripherals:blockChatBox@4.45"
         ).trim();

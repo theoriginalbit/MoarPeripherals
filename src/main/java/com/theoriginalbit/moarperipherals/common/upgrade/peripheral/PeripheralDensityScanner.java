@@ -91,7 +91,8 @@ public class PeripheralDensityScanner {
     public static void addDensityMapping(String modid, String blockName, float density) {
         final Block block = GameRegistry.findBlock(modid, blockName);
         if (block == null) {
-            throw new RuntimeException(String.format("cannot find block %s:%s to apply a density mapping", modid, blockName));
+            LogUtils.warn(String.format("cannot find block %s:%s to apply a density mapping, skipping", modid, blockName));
+            return;
         }
         addDensityMapping(block, density);
     }
