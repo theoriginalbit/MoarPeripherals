@@ -5,7 +5,7 @@
         "description": "Adds a bunch of useful peripherals to ComputerCraft.",
         "version": "${version}",
         "mcversion" : "${mcversion}",
-        "url": "http://wiki.theoriginalbit.com/moarperipherals/",
+        "url": "http://moarperipherals.com",
         "authors": [
             "theoriginalbit"
         ],
