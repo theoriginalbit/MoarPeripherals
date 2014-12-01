@@ -76,8 +76,12 @@ public class PeripheralDensityScanner {
             for (int zPos = minZ; zPos <= maxZ; ++zPos) {
                 for (int yPos = minY; yPos <= maxY; ++yPos) {
                     final Block block = Block.blocksList[world.getBlockId(xPos, yPos, zPos)];
-                    // get the density of the block, if there is no density mapped we just pretend it is zero-density
-                    density += DENSITIES.containsKey(block) ? DENSITIES.get(block) : 0;
+                    /*
+                     * get the density of the block, if there is no density mapped we just make it 0.5,
+                     * there's just way too many blocks to map them all, so the main ones are mapped and
+                     * the rest are just assumed to be 0.5
+                     */
+                    density += DENSITIES.containsKey(block) ? DENSITIES.get(block) : 0.5f;
                 }
             }
         }
