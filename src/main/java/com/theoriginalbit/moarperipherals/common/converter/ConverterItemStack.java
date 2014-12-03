@@ -36,10 +36,15 @@ public class ConverterItemStack implements ITypeConverter {
             }
             String[] parts = ((String) m.get("id")).split(":");
             if (parts.length != 2) {
-                throw new LuaException("invalid item id should be mod:name");
+                throw new LuaException("invalid item id should be modId:blockName");
             }
 
             Item item = GameRegistry.findItem(parts[0], parts[1]);
+
+            if (item == null) {
+                throw new LuaException("cannot find item for " + m.get("id"));
+            }
+
             int quantity = getIntValue(m, "qty", 1);
             int dmg = getIntValue(m, "dmg", 0);
 
