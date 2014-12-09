@@ -23,6 +23,7 @@ import com.theoriginalbit.moarperipherals.common.utils.ResourceExtractingUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -37,6 +38,7 @@ public class ProxyCommon {
 
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(ChatBoxHandler.instance);
+        GameRegistry.registerPlayerTracker(ChatBoxHandler.instance);
         NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
     }
 
