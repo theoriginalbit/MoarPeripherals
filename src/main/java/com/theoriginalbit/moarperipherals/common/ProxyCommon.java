@@ -37,6 +37,7 @@ public class ProxyCommon {
 
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(ChatBoxHandler.instance);
+        FMLCommonHandler.instance().bus().register(ChatBoxHandler.instance);
         NetworkRegistry.INSTANCE.registerGuiHandler(MoarPeripherals.instance, new GuiHandler());
     }
 
