@@ -30,12 +30,12 @@ upgrade.moarperipherals:adjective.shears=Стригущая
 upgrade.moarperipherals:adjective.compass=Головокружительная
 upgrade.moarperipherals:adjective.solar=Походная
 upgrade.moarperipherals:adjective.pyro=Пироманская
-upgrade.moarperipherals:adjective.furnace=Fiery
-upgrade.moarperipherals:adjective.feeder=Feeding
-upgrade.moarperipherals:adjective.densityscanner=Density Scanning
+upgrade.moarperipherals:adjective.furnace=Огненная
+upgrade.moarperipherals:adjective.feeder=Кормящая
+upgrade.moarperipherals:adjective.densityscanner=Сканирующая плотность
 
 moarperipherals.chat.paired=Привязана к компьютеру по координатам: %d %d %d
-moarperipherals.chat.notPaired=Устройство не связано с компьютером. Нажмите правой кнопкой мыши по нему, чтобы привязать.
+moarperipherals.chat.notPaired=Устройство не связано с компьютером. Нажмите правой кнопкой мыши по компьютеру, чтобы связать.
 
 # believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
 moarperipherals.chat.sonic.wood="It doesn't do wood!"
@@ -44,13 +44,13 @@ moarperipherals.gui.keyboard.exit=Нажмите ESC для того, чтобы
 tooltip.moarperipherals.generic.information=Зажмите SHIFT для получения информации
 tooltip.moarperipherals.pairable.paired=Связанный
 tooltip.moarperipherals.pairable.notPaired=Несвязанный
-tooltip.moarperipherals.inkCartridge.contents=Contents
-tooltip.moarperipherals.inkCartridge.level=Ink Level
-tooltip.moarperipherals.inkCartridge.ink.cyan=Cyan
-tooltip.moarperipherals.inkCartridge.ink.magenta=Magenta
-tooltip.moarperipherals.inkCartridge.ink.yellow=Yellow
-tooltip.moarperipherals.inkCartridge.ink.black=Black
-tooltip.moarperipherals.inkCartridge.ink.empty=Empty
+tooltip.moarperipherals.inkCartridge.contents=Содержит
+tooltip.moarperipherals.inkCartridge.level=Уровень чернил
+tooltip.moarperipherals.inkCartridge.ink.cyan=Голубой
+tooltip.moarperipherals.inkCartridge.ink.magenta=Фиолетовый
+tooltip.moarperipherals.inkCartridge.ink.yellow=Жёлтый
+tooltip.moarperipherals.inkCartridge.ink.black=Чёрный
+tooltip.moarperipherals.inkCartridge.ink.empty=Пустой
 
 # Config #
 moarperipherals.config.title=Настройки MoarPeripherals
