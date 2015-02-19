@@ -1,7 +1,6 @@
 --[[   MoarPeripherals  ]]--
 --[[     StarCaster     ]]--
---[[         by         ]]--
---[[        Dog         ]]--
+--[[       by Dog       ]]--
 --[[        aka         ]]--
 --[[   HydrantHunter    ]]--
 --[[        and         ]]--
@@ -9,10 +8,10 @@
 --[[        aka         ]]--
 --[[   TheOriginalBIT   ]]--
 --[[ pastebin: mwdc6bK9 ]]--
-local scVer = "1.0.01"
---# Custom read, formatTime, newButton,
-  --# newNumberPicker, pickerChanged, calculateMinMax,
-  --# inventory filtering, and dyeToColor functions,
+local scVer = "1.0.02"
+--# Custom read, formatTime, newButton, 
+  --# newNumberPicker, pickerChanged, calculateMinMax, 
+  --# inventory filtering, and dyeToColor functions, 
   --# and LOTS of tutoring, courtesy of theoriginalbit
 local tArgs = { ... }
 local termX, termY = term.getSize()
@@ -20,7 +19,6 @@ local launcher, launchTimer, screenTimer
 local effectsLookup = { "No Effect", "Twinkle", "Trail" }
 local shapes = { "Small Ball", "Large Ball", "Star", "Creeper Head", "Burst", "None" }
 local effects = { "No Effect", "Twinkle", "Trail", "Twinkle & Trail" }
-local colorBurst = { [1] = "White", [2] = "Orange", [4] = "Magenta", [8] = "Light Blue", [16] = "Yellow", [32] = "Lime", [64] = "Pink", [128] = "Gray", [256] = "Light Gray", [512] = "Cyan", [1024] = "Purple", [2048] = "Blue", [4096] = "Brown", [8192] = "Green", [16384] = "Red", [32768] = "Black", }
 local runMode, operatingMode = "standard", "main"
 local showType, showPacing, finaleMode, goFinale = false, false, false, false
 local gettingHelp, wereDoneHere, popUp, badInventory, badWolf = false, false, false, false, false
@@ -306,18 +304,18 @@ end
 
 local function formatTime(time)
   local hour = math.floor(time)
-  local min = math.floor((time - hour)*60)
+  local min = math.floor((time - hour) * 60)
   return string.format("%02d:%02d", hour, min)
 end
 
 local function getNumRockets()
-  term.setCursorPos(41,5)
+  term.setCursorPos(41, 5)
   term.setBackgroundColor(colors.lightGray)
   term.setTextColor(colors.white)
   term.write("    ")
-  term.setCursorPos(41,5)
+  term.setCursorPos(41, 5)
   local oldNumRockets = tostring(numRockets)
-  local newCount = tonumber(read(nil,nil,4))
+  local newCount = tonumber(read(nil, nil, 4))
   newCount = newCount and math.max(1, newCount) or numRockets
   numRockets = math.min(1000, newCount)
   for _, element in pairs(guiElements.mainButtons) do
@@ -332,10 +330,10 @@ end
 local function getChance(which, posX, posY)
   term.setBackgroundColor(colors.lightGray)
   term.setTextColor(colors.white)
-  term.setCursorPos(posX,posY)
+  term.setCursorPos(posX, posY)
   term.write("   ")
-  term.setCursorPos(posX,posY)
-  local newChance = tonumber(read(nil,nil,3))
+  term.setCursorPos(posX, posY)
+  local newChance = tonumber(read(nil, nil, 3))
   if which == "shape" then
     newChance = newChance and math.max(0, newChance) or shapeChance
     shapeChance = math.min(100, newChance)
@@ -361,7 +359,7 @@ end
 
 local function switchShowType()
   showType = not showType
-  term.setCursorPos(17,5)
+  term.setCursorPos(17, 5)
   term.setBackgroundColor(colors.black)
   term.setTextColor(colors.orange)
   term.write(showType and "Fancy   " or "Standard")
@@ -397,9 +395,9 @@ local function switchShowType()
   end
   term.setBackgroundColor(colors.lightGray)
   term.setTextColor(showType and colors.white or colors.gray)
-  term.setCursorPos(23,14)
+  term.setCursorPos(23, 14)
   term.write("%")
-  term.setCursorPos(44,14)
+  term.setCursorPos(44, 14)
   term.write("%")
 end
 
@@ -419,17 +417,17 @@ end
 local function drawPopUp(which)
   popUp = true
   if which == "shape" then       --# Shape Chance popup
-    drawPopUpBox(4,8,23,{ "The percentage chance", "any star will have a", "special shape" })
+    drawPopUpBox(4, 8, 23, { "The percentage chance", "any star will have a", "special shape" })
   elseif which == "effect" then  --# Effect Chance popup
-    drawPopUpBox(24,8,23,{ "The percentage chance", "any star will have a", "special effect" })
+    drawPopUpBox(24, 8, 23, { "The percentage chance", "any star will have a", "special effect" })
   elseif which == "pacing" then  --# Launch Timing popup
-    drawPopUpBox(5,10,19,{ "When ON, launches", "the fireworks at", "a more rapid pace" })
+    drawPopUpBox(5, 10, 19, { "When ON, launches", "the fireworks at", "a more rapid pace" })
   elseif which == "finale" then  --# Finale Mode popup
-    drawPopUpBox(4,12,21,{ "When ON, launches", "the last 1/3 of the", "fireworks rapidly" })
+    drawPopUpBox(4, 12, 21, { "When ON, launches", "the last 1/3 of the", "fireworks rapidly" })
   elseif which == "type" then    --# Show Type popup
-    drawPopUpBox(18,5,19,{ "Fancy allows you", "to customize your", "firework show" })
+    drawPopUpBox(18, 5, 19, { "Fancy allows you", "to customize your", "firework show" })
   elseif which == "rockets" then --# Number of Fireworks popup
-    drawPopUpBox(31,5,18,{ "Choose to launch", "from 1 to 1000", "fireworks" })
+    drawPopUpBox(31, 5, 18, { "Choose to launch", "from 1 to 1000", "fireworks" })
   end
 end
 
@@ -444,43 +442,43 @@ local function drawHeader()
   clearScreen((operatingMode == "logs" or gettingHelp) and colors.white)
   local title = "StarCaster"
   if operatingMode == "show" then       --# Draw the header for active shows
-    term.setCursorPos(1,1)
+    term.setCursorPos(1, 1)
     term.setTextColor(colors.yellow)
     term.setBackgroundColor(colors.red)
-    term.write(string.rep(" ", math.floor(termX/2) - math.floor(#title/2)) .. title .. string.rep(" ", math.ceil(termX/2) - math.ceil(#title/2)))
-    term.setCursorPos(1,2)
+    term.write(string.rep(" ", math.floor(termX / 2) - math.floor(#title / 2)) .. title .. string.rep(" ", math.ceil(termX / 2) - math.ceil(#title / 2)))
+    term.setCursorPos(1, 2)
     term.setBackgroundColor(colors.gray)
     term.setTextColor(colors.lightGray)
     local session = (sessionNumber > 10 and "Show  # " or "Show # ") .. sessionNumber
-    term.write(string.rep(" ", math.floor(termX/2) - math.ceil(#session/2)) .. session .. string.rep(" ", math.ceil(termX/2) - math.floor(#session/2)))
-    term.setCursorPos(termX-9,2)
+    term.write(string.rep(" ", math.floor(termX / 2) - math.ceil(#session / 2)) .. session .. string.rep(" ", math.ceil(termX / 2) - math.floor(#session / 2)))
+    term.setCursorPos(termX - 9, 2)
     term.setBackgroundColor(colors.lightGray)
     term.setTextColor(colors.red)
     term.write(" Cancel ")
   else
     term.setTextColor(colors.white)
     for i = 1, 3 do                     --# Draw the main/help/log header with exit button
-      term.setCursorPos(1,i)
+      term.setCursorPos(1, i)
       term.setBackgroundColor(colors.blue)
-      term.write(string.rep(" ", termX-3))
-      term.setCursorPos(termX-2,i)
+      term.write(string.rep(" ", termX - 3))
+      term.setCursorPos(termX - 2, i)
       term.setBackgroundColor(colors.red)
       term.write(i == 2 and " X " or "   ")
     end
   end
-  if operatingMode == "main" and not gettingHelp then --# Draw the log-view burger on config screen
+  if operatingMode == "main" and not gettingHelp then --# Draw the log-view burger on main screen
     term.setTextColor(colors.white)
     term.setBackgroundColor(colors.lightBlue)
     for i = 1, 3 do
-      term.setCursorPos(1,i)
+      term.setCursorPos(1, i)
       term.write(" - ")
     end
-    term.setCursorPos(math.ceil(termX/2 - math.floor(#title/2) + 1),2)
+    term.setCursorPos(math.ceil(termX / 2 - math.floor(#title / 2) + 1), 2)
     term.setBackgroundColor(colors.blue)
     local nameColors = { colors.red, colors.yellow, colors.lime, colors.magenta }
     for i = 1, 4 do                     --# Main screen - write 'Star' with each letter in a different color
       term.setTextColor(nameColors[i])
-      term.write(title:sub(i,i))
+      term.write(title:sub(i, i))
     end
     term.setTextColor(colors.lightBlue)
     term.write("Caster")                --# Main screen - write 'Caster'
@@ -492,14 +490,14 @@ local function drawHeader()
     end
     term.setBackgroundColor(colors.blue)
     term.setTextColor(colors.lightBlue)
-    term.setCursorPos(math.ceil(termX/2 - math.floor(#title/2) + 1),2)
+    term.setCursorPos(math.ceil(termX / 2 - math.floor(#title / 2) + 1), 2)
     term.write(title)
   end
 end
 
 local function staticLaunchScreen()
   drawHeader()
-  term.setCursorPos(2,4)
+  term.setCursorPos(2, 4)
   term.setBackgroundColor(colors.black)
   term.setTextColor(colors.gray)
   term.write("Show Type ")
@@ -517,8 +515,8 @@ local function staticLaunchScreen()
   else
     local thisShow = "Fancy"
     for i = 1, 5 do
-      term.setTextColor(2 ^ math.random(0,14))
-      term.write(thisShow:sub(i,i))
+      term.setTextColor(2 ^ math.random(0, 14))
+      term.write(thisShow:sub(i, i))
     end
     if finaleMode then
       term.setTextColor(colors.white)
@@ -528,25 +526,25 @@ local function staticLaunchScreen()
     end
   end
   term.setTextColor(colors.gray)
-  term.setCursorPos(2,6)
+  term.setCursorPos(2, 6)
   term.write("Rocket #")
-  term.setCursorPos(2,8)
+  term.setCursorPos(2, 8)
   term.write("Height")
-  term.setCursorPos(2,10)
+  term.setCursorPos(2, 10)
   term.write("Stars")
   term.setTextColor(colors.white)
-  term.setCursorPos(25,6)
+  term.setCursorPos(25, 6)
   term.write("Errors")
   term.setTextColor(colors.gray)
-  term.setCursorPos(25,7)
+  term.setCursorPos(25, 7)
   term.write("Star")
-  term.setCursorPos(25,8)
+  term.setCursorPos(25, 8)
   term.write("Rocket")
-  term.setCursorPos(25,9)
+  term.setCursorPos(25, 9)
   term.write("Ready")
-  term.setCursorPos(25,10)
+  term.setCursorPos(25, 10)
   term.write("Launch")
-  term.setCursorPos(termX - 7,4)
+  term.setCursorPos(termX - 7, 4)
   term.setTextColor(colors.white)
   term.write("(")
   term.setTextColor(colors.gray)
@@ -558,90 +556,90 @@ end
 local function displayLaunchInfo()
   term.setBackgroundColor(colors.black)
   term.setTextColor(colors.white)
-  term.setCursorPos(12,6)
+  term.setCursorPos(12, 6)
   term.write(tostring(currentRocket)) --# current rocket
   term.setTextColor(colors.gray)
   term.write(" / ")
   term.setTextColor(colors.white)
   term.write(tostring(numRockets))   --# total # of rockets to launch (1-1000)
-  term.setCursorPos(12,8)
+  term.setCursorPos(12, 8)
   term.write(tostring(launchHeight)) --# this rocket's launch height (1-3)
   for tmpY = 12, termY do
-    term.setCursorPos(1,tmpY)
+    term.setCursorPos(1, tmpY)
     term.write(string.rep(" ", termX))
   end
   for i = 1, numStars do             --# display star attributes
-    term.setCursorPos(2,i+11)
+    term.setCursorPos(2, i + 11)
     term.setTextColor(colors.gray)
     term.write(tostring(i))          --# star #
-    term.setCursorPos(4,i+11)
+    term.setCursorPos(4, i + 11)
     term.setTextColor(colors.white)
-    if shapesList[i] then term.write(shapes[shapesList[i]+1]) end    --# shape
-    term.setCursorPos(18,i+11)
-    if effectsList[i] then term.write(effects[effectsList[i]+1]) end --# effects
-    term.setCursorPos(35,i+11)
+    if shapesList[i] then term.write(shapes[shapesList[i] + 1]) end    --# shape
+    term.setCursorPos(18, i + 11)
+    if effectsList[i] then term.write(effects[effectsList[i] + 1]) end --# effects
+    term.setCursorPos(35, i + 11)
     term.setTextColor(colors.gray)
     term.write("Colors  ")
     term.setTextColor(colors.white)
     term.write(tostring(colorsList[i]))                              --# colors
   end
   term.setTextColor(colors.red)
-  term.setCursorPos(32,7)
-  if starError then term.write(tostring(starError):sub(1,19)) end     --# error in star manufacturing
-  term.setCursorPos(32,8)
-  if buildError then term.write(tostring(buildError):sub(1,19)) end   --# error in rocket manufacturing
-  term.setCursorPos(32,9)
-  if readyError then term.write(tostring(readyError):sub(1,19)) end   --# launcher not ready
-  term.setCursorPos(32,10)
-  if launchError then term.write(tostring(launchError):sub(1,19)) end --# error in launch
+  term.setCursorPos(32, 7)
+  if starError then term.write(tostring(starError):sub(1, 19)) end     --# error in star manufacturing
+  term.setCursorPos(32, 8)
+  if buildError then term.write(tostring(buildError):sub(1, 19)) end   --# error in rocket manufacturing
+  term.setCursorPos(32, 9)
+  if readyError then term.write(tostring(readyError):sub(1, 19)) end   --# launcher not ready
+  term.setCursorPos(32, 10)
+  if launchError then term.write(tostring(launchError):sub(1, 19)) end --# error in launch
 end
 
 local function mainScreen()
   drawHeader()
-  term.setCursorPos(6,5)
+  term.setCursorPos(6, 5)
   term.setBackgroundColor(colors.black)
   term.setTextColor(colors.white)
   term.write("Show type: ")
   term.setTextColor(colors.orange)
   term.write(showType and "Fancy" or "Standard")
   term.setTextColor(colors.white)
-  term.setCursorPos(30,5)
+  term.setCursorPos(30, 5)
   term.write("Fireworks: ")
-  term.setCursorPos(6,8)
+  term.setCursorPos(6, 8)
   term.write("Rocket Height")
-  term.setCursorPos(6,10)
+  term.setCursorPos(6, 10)
   term.write("Stars/Rocket")
-  term.setCursorPos(6,12)
+  term.setCursorPos(6, 12)
   term.write("Colors/Star")
-  term.setCursorPos(6,14)
+  term.setCursorPos(6, 14)
   term.write("Shape Chance:")
-  term.setCursorPos(6,16)
+  term.setCursorPos(6, 16)
   term.write("Launch Timing")
-  term.setCursorPos(6,18)
+  term.setCursorPos(6, 18)
   term.write("Finale Mode")
-  term.setCursorPos(26,14)
+  term.setCursorPos(26, 14)
   term.write("Effect Chance:")
-  term.setCursorPos(22,7)
+  term.setCursorPos(22, 7)
   term.setTextColor(colors.gray)
   term.write("Minimum")
-  term.setCursorPos(36,7)
+  term.setCursorPos(36, 7)
   term.write("Maximum")
   term.setTextColor(colors.black)
   local word, counter = "F1 Help", 0
   for i = 8, 15 do            --# F1/Help text
     counter = counter + 1
-    term.setCursorPos(termX,i)
-    term.write(word:sub(counter,counter))
+    term.setCursorPos(termX, i)
+    term.write(word:sub(counter, counter))
   end
   term.setBackgroundColor(colors.lightGray)
   term.setTextColor(showType and colors.white or colors.gray)
-  term.setCursorPos(23,14)
+  term.setCursorPos(23, 14)
   term.write("%")             --# shapeChance
-  term.setCursorPos(44,14)
+  term.setCursorPos(44, 14)
   term.write("%")             --# effectChance
-  term.setCursorPos(20,16)
+  term.setCursorPos(20, 16)
   drawSwitch(showPacing)      --# launch timing switch
-  term.setCursorPos(20,18)
+  term.setCursorPos(20, 18)
   drawSwitch(finaleMode)      --# finale mode switch
   for _, element in pairs(guiElements.mainButtons) do
     if element.getType() == "button" then
@@ -656,7 +654,7 @@ end
 local function logScreen()
   term.setBackgroundColor(colors.white)
   for i = 4, termY do
-    term.setCursorPos(1,i)
+    term.setCursorPos(1, i)
     term.write(string.rep(" ", termX))
   end
   pageNum = math.min(pageNum, numPages)
@@ -665,15 +663,15 @@ local function logScreen()
     local currentEntry = ((pageNum - 1) * 12) + pageNum
     local yPos = 5
     for i = currentEntry, #errorLog do                 --# display log data
-      term.setCursorPos(1,yPos)
-      term.setTextColor(errorLog[i]:sub(1,1) == "[" and colors.gray or colors.black)
-      term.write(errorLog[i]:sub(1,7))
-      term.setTextColor(errorLog[i]:sub(1,1) == "[" and colors.lightGray or colors.black)
+      term.setCursorPos(1, yPos)
+      term.setTextColor(errorLog[i]:sub(1, 1) == "[" and colors.gray or colors.black)
+      term.write(errorLog[i]:sub(1, 7))
+      term.setTextColor(errorLog[i]:sub(1, 1) == "[" and colors.lightGray or colors.black)
       term.write(errorLog[i]:sub(8))
       yPos = yPos + 1
       if yPos == termY - 1 then break end
     end
-    term.setCursorPos(1,termY)                         --# bottom row (for page buttons)
+    term.setCursorPos(1, termY)                         --# bottom row (for page buttons)
     term.setBackgroundColor(colors.lightGray)
     term.write(string.rep(" ", termX))
     for _, element in pairs(guiElements.logButtons) do --# page buttons
@@ -681,10 +679,10 @@ local function logScreen()
     end
     term.setTextColor(colors.white)                    --# pageNum of numPages
     local pages = tostring(pageNum) .. " of " .. tostring(numPages)
-    term.setCursorPos(math.ceil(termX/2) - math.floor(#pages/2) + 1,termY)
+    term.setCursorPos(math.ceil(termX / 2) - math.floor(#pages / 2) + 1, termY)
     term.write(pages) 
   else
-    term.setCursorPos(2,5)
+    term.setCursorPos(2, 5)
     term.setTextColor(colors.black)
     term.write("No log to display")
   end
@@ -696,75 +694,75 @@ local function helpScreen()
   term.setBackgroundColor(colors.gray)
   term.setTextColor(colors.white)
   for i = 4, termY do
-    term.setCursorPos(1,i)
-    term.write(string.rep(" ",10))
+    term.setCursorPos(1, i)
+    term.write(string.rep(" ", 10))
   end
     --# Sidebar contents
-  term.setCursorPos(2,7)
+  term.setCursorPos(2, 7)
   term.write("Show")
-  term.setCursorPos(2,8)
+  term.setCursorPos(2, 8)
   term.write("  Types")
-  term.setCursorPos(2,12)
+  term.setCursorPos(2, 12)
   term.write("Launch")
-  term.setCursorPos(2,13)
+  term.setCursorPos(2, 13)
   term.write(" Timing")
-  term.setCursorPos(2,15)
+  term.setCursorPos(2, 15)
   term.write("Finale")
-  term.setCursorPos(2,16)
+  term.setCursorPos(2, 16)
   term.write("   Mode")
-  term.setCursorPos(2,18)
+  term.setCursorPos(2, 18)
   term.write("Chances")
     --# Help contents
   term.setBackgroundColor(colors.white)
   term.setTextColor(colors.black)
-  term.setCursorPos(15,6)
+  term.setCursorPos(15, 6)
   term.write("Standard   1-3 stars/firework")
-  term.setCursorPos(15,7)
+  term.setCursorPos(15, 7)
   term.setTextColor(colors.lightGray)
   term.write("(fixed)    ")
   term.setTextColor(colors.black)
   term.write("1-3 colors/star")
-  term.setCursorPos(15,9)
+  term.setCursorPos(15, 9)
   term.write("Fancy      1-7 stars/firework")
-  term.setCursorPos(15,10)
+  term.setCursorPos(15, 10)
   term.setTextColor(colors.lightGray)
   term.write("(custom)   ")
   term.setTextColor(colors.black)
   term.write("1-8 colors/star")
-  term.setCursorPos(15,12)
+  term.setCursorPos(15, 12)
   term.write("Red        Loose and lazy")
-  term.setCursorPos(15,13)
+  term.setCursorPos(15, 13)
   term.write("Green      Quick and tight")
-  term.setCursorPos(15,15)
+  term.setCursorPos(15, 15)
   term.write("Fires the last third of the")
-  term.setCursorPos(15,16)
+  term.setCursorPos(15, 16)
   term.write("fireworks in rapid succession")
-  term.setCursorPos(15,18)
+  term.setCursorPos(15, 18)
   term.write("% chance of special shape/effect")
 end
 
 local function commandLineHelp()
   clearScreen()
-  term.setCursorPos(2,2)
+  term.setCursorPos(2, 2)
   term.setTextColor(colors.lightBlue)
   term.write("StarCaster Commandline Help")
-  term.setCursorPos(2,4)
+  term.setCursorPos(2, 4)
   term.setTextColor(colors.white)
   term.write("The following command line options are available")
-  term.setCursorPos(2,7)
+  term.setCursorPos(2, 7)
   term.setTextColor(colors.lightGray)
   term.write("fancy  - start in 'Fancy' mode")
-  term.setCursorPos(2,9)
+  term.setCursorPos(2, 9)
   term.write("fast   - start with 'Quick' launch timing enabled")
-  term.setCursorPos(2,11)
+  term.setCursorPos(2, 11)
   term.write("finale - start with 'Finale Mode' enabled")
-  term.setCursorPos(2,13)
+  term.setCursorPos(2, 13)
   term.write("debug  - auto-start a fireworks show in debug mode")
-  term.setCursorPos(2,16)
+  term.setCursorPos(2, 16)
   term.setTextColor(colors.gray)
   term.write("Command line options may be combined")
   term.setTextColor(colors.white)
-  term.setCursorPos(1,termY - 1)
+  term.setCursorPos(1, termY - 1)
 end
 
 local function clearTables()
@@ -803,10 +801,10 @@ local function clearInventory()
 end
 
 local function clearErrors()
-  starError = "none" .. string.rep(" ",15)
-  buildError = "none" .. string.rep(" ",15)
-  readyError = "none" .. string.rep(" ",15)
-  launchError = "none" .. string.rep(" ",15)
+  starError = "none" .. string.rep(" ", 15)
+  buildError = "none" .. string.rep(" ", 15)
+  readyError = "none" .. string.rep(" ", 15)
+  launchError = "none" .. string.rep(" ", 15)
 end
 
 local function errorScreen()
@@ -816,58 +814,58 @@ local function errorScreen()
   term.setTextColor(colors.white)
   term.setBackgroundColor(colors.red)
   for i = 1, 3 do
-    term.setCursorPos(1,i)
+    term.setCursorPos(1, i)
     term.write(string.rep(" ", termX))
   end
-  term.setCursorPos(14,2)
+  term.setCursorPos(14, 2)
   term.write("StarCaster Critical Error")
   term.setTextColor(colors.red)
   term.setBackgroundColor(colors.white)
-  term.setCursorPos(2,5)
+  term.setCursorPos(2, 5)
   term.write("Firework show aborted.")
   if badInventory then
-    term.setCursorPos(2,7)
+    term.setCursorPos(2, 7)
     term.write("Missing critical components.")
     term.setTextColor(colors.gray)
-    term.setCursorPos(2,9)
+    term.setCursorPos(2, 9)
     term.write("Please ensure you have the following:")
     term.setTextColor(colors.black)
-    term.setCursorPos(2,11)
+    term.setCursorPos(2, 11)
     term.write("Gunpowder, paper, and dyes are required.")
     term.setTextColor(colors.gray)
-    term.setCursorPos(2,13)
+    term.setCursorPos(2, 13)
     term.write("Optional Items:")
     term.setTextColor(colors.black)
-    term.setCursorPos(2,15)
+    term.setCursorPos(2, 15)
     term.write("Effects: glowstone dust/diamonds")
-    term.setCursorPos(2,16)
+    term.setCursorPos(2, 16)
     term.write("Shapes: gold nugget/feather/mob head/fire charge") 
   else
     local num = (#errorLog > 0) and math.min(9, #errorLog) or 0
     if num > 0 then 
       term.setTextColor(colors.red)
-      term.setCursorPos(2,7)
+      term.setCursorPos(2, 7)
       term.write("The following are the last " .. num .. " log entries:")
       term.setTextColor(colors.black)
       local yPos = 9
       for i = #errorLog - (num - 1), #errorLog do
-        term.setCursorPos(2,yPos)
+        term.setCursorPos(2, yPos)
         term.write(errorLog[i])
         yPos = yPos + 1
       end
     else
-      term.setCursorPos(2,7)
+      term.setCursorPos(2, 7)
       term.write("There are no errors to display.")
     end
   end
   term.setTextColor(colors.lightGray)
-  term.setCursorPos(10,termY)
+  term.setCursorPos(10, termY)
   term.write("Click mouse button to continue")
 end
 
 local function postError()
   clearScreen()
-  term.setCursorPos(1,1)
+  term.setCursorPos(1, 1)
   badWolf = false
   badInventory = false
   currentRocket = 1
@@ -882,7 +880,7 @@ end
 local function drawTimer()
   term.setBackgroundColor(colors.black)
   term.setTextColor(colors.white)
-  term.setCursorPos(25,4)
+  term.setCursorPos(25, 4)
   term.setTextColor(colors.gray)
   term.write("Timer: ")
   term.setTextColor(colors.white)
@@ -893,12 +891,12 @@ local function adjustTimer()
     --# Set timing for next launch
   if currentRocket >= math.ceil(numRockets * 0.66) + 1 and finaleMode and not wereDoneHere and not goFinale then goFinale = true end
   if goFinale then
-    waitTime = 0.10 * math.random(3,5)     --# = 0.30
+    waitTime = 0.10 * math.random(3, 5)     --# = 0.30
   else
     if showPacing then
-      waitTime = 0.10 * math.random(7,12)  --# 5,10
+      waitTime = 0.10 * math.random(7, 12)  --# 5, 10
     else
-      waitTime = 0.10 * math.random(14,19) --# 12,17
+      waitTime = 0.10 * math.random(14, 19) --# 12, 17
     end
   end
 end
@@ -930,11 +928,7 @@ end
 
 local function notReady()
   clearTables()
-  if #rocketIDTable > 0 then --# if there are fireworks ready to launch...
-    readyError = "Launcher not ready"
-  else                       --# if there is no rocket...
-    readyError = "No Rocket to Launch"
-  end
+  readyError = #rocketIDTable > 0 and "Launcher not ready" or "No Rocket to Launch"
   if runMode == "debug" then
     print(readyError)
   else
@@ -955,28 +949,34 @@ local function inventoryStar(id)
   starColors = 0
   local thisStar
   local tmpEffects = { }
-  if type(id) == "table" then                   --# if 'id' is a table then it's from a firework
-    thisStar = id                               --# set thisStar to point to id table
-  else                                          --# otherwise 'id' is an actual id representing a physical star
-    thisStar = launcher.inspectFireworkStar(id) --# get info on the star
-    starIDTable[#starIDTable + 1] = id          --# add star's ID to starIDTable
+  local colorBurst = { [1] = "White", [2] = "Orange", [4] = "Magenta", [8] = "Light Blue", [16] = "Yellow", [32] = "Lime", [64] = "Pink", [128] = "Gray", [256] = "Light Gray", [512] = "Cyan", [1024] = "Purple", [2048] = "Blue", [4096] = "Brown", [8192] = "Green", [16384] = "Red", [32768] = "Black", }
+  if type(id) == "table" then                      --# if 'id' is a table then it's from a firework
+    thisStar = id                                  --# set thisStar to point to id table
+  else                                             --# otherwise 'id' is an actual id representing a physical star
+    thisStar = launcher.inspectFireworkStar(id)    --# get info on the star
+    starIDTable[#starIDTable + 1] = id             --# add star's ID to starIDTable
   end
-  local foundShape
-  for l, m in pairs(thisStar) do                --# Begin processing the star
-    for k, v in pairs(shapes) do                --# shapeLookup
-      if m:find(v:sub(1,4)) then                --# if a match is found...
-        shapesList[#shapesList + 1] = k - 1     --# ...add shape to shapesList table...
-        foundShape = true                       --# ...and indicate that we've found the shape
+  local foundShape = false
+  for l, m in pairs(thisStar) do                   --# Begin processing the star
+    if not foundShape then
+      for k, v in pairs(shapes) do                 --# shapeLookup
+        if m:find(v:sub(1, 4)) then                --# if a match is found...
+          shapesList[#shapesList + 1] = k - 1      --# ...add shape to shapesList table...
+          foundShape = true                        --# ...and indicate that we've found the shape
+          break
+        end
       end
     end
-    for k, v in pairs(colorBurst) do            --# color lookup
-      if m:find(v) then --# this will be inaccurate (Blue is in Light Blue, Gray is in Light Gray)
-        starColors = colors.combine(starColors, k) --# add any color found to starColors table
+    for k, v in pairs(colorBurst) do               --# color lookup
+      if m:lower():gsub("%s*", "") == v:lower():gsub("%s*", "") then --# if a matching color is found...
+        starColors = colors.combine(starColors, k) --# ...add it to the starColors table
+        break
       end
     end
-    for k, v in pairs(effectsLookup) do         --# effect lookup
-      if m:find(v) then                         --# if a match is found...
-        tmpEffects[#tmpEffects + 1] = k - 1     --# ...add effect to tmpEffects table
+    for k, v in pairs(effectsLookup) do            --# effect lookup
+      if m:find(v) then                            --# if a match is found...
+        tmpEffects[#tmpEffects + 1] = k - 1        --# ...add effect to tmpEffects table
+        break
       end
     end
   end
@@ -997,12 +997,12 @@ local function inventoryFirework(id)
   local thisFirework = launcher.inspectFireworkRocket(id) --# get info on the requested rocket id
   numStars = 0
   if thisFirework[1] then
-    launchHeight = tonumber(thisFirework[1]:sub(18,18))
-    for i = 2, #thisFirework do                  --# This looks for the defined shape of each firework
-      for k, v in pairs(shapes) do               --#   and creates a table of star index positions that
-        if thisFirework[i]:find(v:sub(1,4)) then --#     will allow us to parse the data 'star by star'.
-          fwStarEntries[#fwStarEntries + 1] = i  --# Store the line number of the main table entry as the
-          break                                  --#   next star entry index in fwStarEntries
+    launchHeight = tonumber(thisFirework[1]:sub(18, 18))
+    for i = 2, #thisFirework do                   --# This looks for the defined shape of each firework
+      for k, v in pairs(shapes) do                --#   and creates a table of star index positions that
+        if thisFirework[i]:find(v:sub(1, 4)) then --#     will allow us to parse the data 'star by star'.
+          fwStarEntries[#fwStarEntries + 1] = i   --# Store the line number of the main table entry as the
+          break                                   --#   next star entry index in fwStarEntries
         end
       end
     end
@@ -1040,7 +1040,7 @@ local function selectStarShape()
     if #shapeWheel < 1 then                       --# if there are no shapes available...
       starShape = 0                               --# ...set the shape to default (small ball)...
     else                                          --# ...otherwise randomize for a possible shape
-      starShape = math.random(1,100) <= shapeChance and math.random(1,#shapeWheel) or 0 --# chance of special shape
+      starShape = math.random(1, 100) <= shapeChance and math.random(1, #shapeWheel) or 0 --# chance of special shape
     end
     if starShape > 0 then             --# if the starShape is 'special' then...
       local newStarShape = 0          --# set temp shape to 'Small Ball' in case the inventory of the shape generated is exhausted
@@ -1075,7 +1075,7 @@ local function selectStarEffects()
     if #effectWheel < 1 then                        --# if there are no effects available...
       starEffect = 0                                --# ...set the effect to 'none'...
     else                                            --# ...otherwise randomize for a possible effect
-      starEffect = (math.random(1,100) <= effectChance) and math.random(1,#effectWheel + 1) or 0 --# chance to generate either trail, sparkle, both, or none
+      starEffect = (math.random(1, 100) <= effectChance) and math.random(1, #effectWheel + 1) or 0 --# chance to generate either trail, sparkle, both, or none
     end
     if #effectWheel < 2 then starEffect = math.min(starEffect, #effectWheel) end  --# ensure a valid value
     if starEffect > 0 and starEffect <= #effectWheel then --# if a starEffect is generated...
@@ -1106,7 +1106,7 @@ local function selectStarColors()
     local numColors = math.random(minColors, maxColors) --# ...choose a random color from the list
     local magicNumber = math.min(rocketParts["item.sulphur"] - launchHeight, colorsCount) --# set a base minimum based on gunpowder and # of colors available
     numColors = math.min(numColors, magicNumber)  --# adjust # of colors based on the magicNumber
-    local debit = 0  --# this tracks the number of crafting spaces required for shapes and effects
+    local debit = 0                               --# this tracks the number of crafting spaces required for shapes and effects
     if #shapesList > #colorsList then             --# if a special shape is assigned...
       debit = debit + 1                           --# ...increment debit counter to reduce number of colors used
     end
@@ -1124,7 +1124,7 @@ local function selectStarColors()
           colorWheel[#colorWheel + 1] = k         --# ...add the entry to the colorWheel for processing
         end
       end
-      local newColor = colorWheel[math.random(1,#colorWheel)]   --# generate a random color from the colorWheel
+      local newColor = colorWheel[math.random(1, #colorWheel)]  --# generate a random color from the colorWheel
       starColors = colors.combine(starColors, newColor)         --# add the color to the current list of colors for this star
       colorsAvailable[newColor] = colorsAvailable[newColor] - 1 --# decrement the inventory entry for the color
     end
@@ -1187,9 +1187,9 @@ local function assembleStars(numberToMake)
   end
   if starsMade > 1 then --# if the number of stars to be made is > 1...
     numStars = math.min(starsMade, numStars) --# ...set numStars equal to the lower value between starsMade and numStars
-    return true   --# if at least one star was made allow the rocket to be finished
+    return true         --# if at least one star was made allow the rocket to be finished
   else
-    return false  --# no stars made - complete failure
+    return false        --# no stars made - complete failure
   end
 end
 
@@ -1228,7 +1228,7 @@ local function assembleFirework()
           print("Rocket # " .. currentRocket .. " built")
         end
         return true
-      else                                           --# if the build was unsuccessful, log an error and return false
+      else                                          --# if the build was unsuccessful, log an error and return false
         if runMode == "debug" then
           print(buildError)
         else
@@ -1254,7 +1254,7 @@ local function launchFirework(id)
   local fireThatSucker
   if launcher.canLaunch() then
     if id then
-      fireThatSucker, launchError = launcher.launchSpecific(id)
+      fireThatSucker, launchError = pcall(launcher.launchSpecific, id)
     else
       fireThatSucker, launchError = pcall(launcher.launch)
     end
@@ -1288,9 +1288,9 @@ local function dyeToColor(stack)
 end
 
 local function filter(stock) --# filter out the listings of everything that is in the launcher to check for what we have that we want
-  for _,info in pairs(stock) do                 --# for all the items
-    for _,v in pairs(inventoryCrossRef) do      --# for all that we want
-      if info.raw:find(v[1]) then --# if the raw name contains what we're looking for i.e. item.dyepowder will be found in item.dyepowder.blue
+  for _, info in pairs(stock) do                --# for all the items
+    for _, v in pairs(inventoryCrossRef) do     --# for all that we want
+      if info.raw:find(v[1]) then               --# if the raw name contains what we're looking for i.e. item.dyepowder will be found in item.dyepowder.blue
         local ok, col = pcall(dyeToColor, info) --# attempt to convert it to a colour
         if ok then                              --# if converstion worked
           v[2][col] = (v[2][col] and v[2][col] or 0) + info.qty --# update the count of it
@@ -1358,10 +1358,10 @@ local function minRequirements()
   local newMinHeight = minHeight
   if goFinale then newMinHeight = math.max(2, minHeight) end --# if the finale has started, raise the minimum launch height to 2 if it is 1
   newMinHeight = math.min(newMinHeight, newMaxHeight)        --# adjust the minimum height down as necessary
-  launchHeight = math.random(newMinHeight,newMaxHeight)      --# set the launchHeight
-  numStars = math.random(minStars,maxStars)                  --# determine the number of stars for the firework
-  if launchHeight == 3 then numStars = math.min(numStars,5) end --# adjust number of stars down as for launchHeight
-  if launchHeight == 2 then numStars = math.min(numStars,6) end --# adjust number of stars down for launchHeight
+  launchHeight = math.random(newMinHeight, newMaxHeight)     --# set the launchHeight
+  numStars = math.random(minStars, maxStars)                 --# determine the number of stars for the firework
+  if launchHeight == 3 then numStars = math.min(numStars, 5) end --# adjust number of stars down as for launchHeight
+  if launchHeight == 2 then numStars = math.min(numStars, 6) end --# adjust number of stars down for launchHeight
   numStars = math.min(numStars, rocketParts["item.sulphur"] - launchHeight) --# adjust number of stars down if gunpowder is low
   numStars = math.min(numStars, countItems(colorsAvailable)) --# adjust number of stars down if colors are low 
   if numStars < 1 then                                       --# if the adjusted number of stars is < 1 error out
@@ -1461,15 +1461,15 @@ local function showControl()
       if runMode == "debug" then
         print("Timer Cycle")
       end
-      launchControl()               --# initiate the build/launch process
+      launchControl()        --# initiate the build/launch process
     end
-    launchTimer = os.startTimer(TIMER_GRANULARITY)       --# restart the timer
+    launchTimer = os.startTimer(TIMER_GRANULARITY)     --# restart the timer
   elseif event == "timer" and data == screenTimer then --# if the show is over return to the main screen
     operatingMode = "main"   --# this tells the main controller loop (scKernel) which functions to monitor
     waitTime = 0.10
     timerTicker = 0
     mainScreen()
-  elseif event == "mouse_click" and runMode ~= "debug" and y == 2 and x > termX-10 and x < termX-1 then --# if the user clicks 'cancel', end the show and return to the main screen
+  elseif event == "mouse_click" and runMode ~= "debug" and y == 2 and x > termX - 10 and x < termX - 1 then --# if the user clicks 'cancel', end the show and return to the main screen
     operatingMode = "main"   --# this tells the main controller loop (scKernel) which functions to monitor
     wereDoneHere = false
     goFinale = false
@@ -1492,8 +1492,8 @@ end
 local function startShow()
   sessionNumber = sessionNumber + 1 --# Increment the session number
   if runMode ~= "debug" then        --# Create and insert the show # log separator
-    local lastPart = (sessionNumber < 10 and string.rep("-", math.ceil(termX/2) - (5 + math.floor(#tostring(sessionNumber))))  or string.rep("-", math.ceil(termX/2) - (4 + math.floor(#tostring(sessionNumber)))))
-    local separator = string.rep("-", math.floor(termX/2) - (3 + math.ceil(#tostring(sessionNumber)/2))) .. " Show" .. (sessionNumber < 10 and "  " or " ") .. "#" .. tostring(sessionNumber) .. " " .. lastPart
+    local lastPart = (sessionNumber < 10 and string.rep("-", math.ceil(termX / 2) - (5 + math.floor(#tostring(sessionNumber))))  or string.rep("-", math.ceil(termX / 2) - (4 + math.floor(#tostring(sessionNumber)))))
+    local separator = string.rep("-", math.floor(termX / 2) - (3 + math.ceil(#tostring(sessionNumber) / 2))) .. " Show" .. (sessionNumber < 10 and "  " or " ") .. "#" .. tostring(sessionNumber) .. " " .. lastPart
     if sessionNumber > 99 and sessionNumber < 1000 then
       separator = "-" .. separator
     elseif sessionNumber > 999 then
@@ -1528,21 +1528,21 @@ end
 local function selectPage()
   term.setBackgroundColor(colors.gray)
   term.setTextColor(colors.lightGray)
-  for i = 1, 3 do                           --# draw the box
-    term.setCursorPos(math.ceil(termX/2)-3,termY-4+i)
-    term.write(string.rep(" ",8))
+  for i = 1, 3 do                             --# draw the box
+    term.setCursorPos(math.ceil(termX / 2) - 3, termY - 4 + i)
+    term.write(string.rep(" ", 8))
   end
-  term.setCursorPos(math.ceil(termX/2)-2,termY-3)
-  term.write("Page #")                      --# draw the 'title'
-  term.setCursorPos(math.ceil(termX/2)-2,termY-2)
+  term.setCursorPos(math.ceil(termX / 2) - 2, termY-3)
+  term.write("Page #")                        --# draw the 'title'
+  term.setCursorPos(math.ceil(termX / 2) - 2, termY-2)
   term.setBackgroundColor(colors.lightGray)
-  term.write(string.rep(" ",6))             --# draw the input area
-  term.setCursorPos(math.ceil(termX/2)-1,termY-2)
+  term.write(string.rep(" ", 6))              --# draw the input area
+  term.setCursorPos(math.ceil(termX / 2) - 1, termY-2)
   term.setTextColor(colors.white)
-  local newPage = tonumber(read(nil,nil,4)) --# get the selected page from the user
-  if not newPage then newPage = pageNum end --# if no input then stay on the same page
-  newPage = math.max(1, newPage)            --# make sure page # is 1 or higher
-  pageNum = math.min(newPage,numPages)      --# make sure page # is <= numPages
+  local newPage = tonumber(read(nil, nil, 4)) --# get the selected page from the user
+  if not newPage then newPage = pageNum end   --# if no input then stay on the same page
+  newPage = math.max(1, newPage)              --# make sure page # is 1 or higher
+  pageNum = math.min(newPage, numPages)       --# make sure page # is <= numPages
   drawHeader()
 end
 
@@ -1611,7 +1611,7 @@ local function mainInput()
     elseif y == 16 and x > 19 and x < 24 and not gettingHelp and not popUp then --# showPacing (launch timing)
       if button == 1 then
         showPacing = not showPacing
-        term.setCursorPos(20,16)
+        term.setCursorPos(20, 16)
         drawSwitch(showPacing)
       elseif button == 2 then
         drawPopUp("pacing")
@@ -1619,7 +1619,7 @@ local function mainInput()
     elseif y == 18 and x > 19 and x < 24 and not gettingHelp and not popUp then --# finaleMode
       if button == 1 then
         finaleMode = not finaleMode
-        term.setCursorPos(20,18)
+        term.setCursorPos(20, 18)
         drawSwitch(finaleMode)
       elseif button == 2 then
         drawPopUp("finale")
@@ -1671,7 +1671,7 @@ local function scKernel() --# this is the main loop
       if operatingMode ~= "debug" then
         clearScreen()
         term.setTextColor(colors.white)
-        term.setCursorPos(1,1)
+        term.setCursorPos(1, 1)
       end
       return
     end
@@ -1692,9 +1692,9 @@ local function initHardware()
   if notFind then
     clearScreen()
     term.setTextColor(colors.white)
-    term.setCursorPos(2,2)
+    term.setCursorPos(2, 2)
     write("StarCaster requires " .. perp)
-    term.setCursorPos(1,5)
+    term.setCursorPos(1, 5)
     return false
   end
   if not checkInventory() then
@@ -1702,7 +1702,7 @@ local function initHardware()
     errorScreen()
     os.pullEvent("mouse_click")
     clearScreen()
-    term.setCursorPos(1,1)
+    term.setCursorPos(1, 1)
     runMode = "stop"
     return false
   end
@@ -1712,7 +1712,7 @@ end
 if not initHardware() then return end
 
 if tArgs[1] then
-  if tArgs[1] == "?" or tArgs[1]:sub(1,1) == "/" or tArgs[1]:sub(1,1) == "-" then
+  if tArgs[1] == "?" or tArgs[1]:sub(1, 1) == "/" or tArgs[1]:sub(1, 1) == "-" then
     commandLineHelp()
     return
   else
@@ -1728,8 +1728,8 @@ if tArgs[1] then
       elseif string.lower(tArgs[i]) == "splash" then
         clearScreen()
         local splash = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 16, 16, 16, 16, 16, 32768, 0, 0, 0, 32, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 0, 8192, 0, 0, 2, 0, 2048, 0, 0, 0, 0, }, { 0, 0, 0, 16384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 32768, 32, 0, 32, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1024, 0, 32768, 0, 0, 1024, 0, 0, 0, 0, 1, 0, 0, }, { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2048, 0, 0, 8192, 0, 32768, 0, 0, 8192, }, { 0, 0, 0, 0, 0, 0, 0, 32768, 16384, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 32, 32, 32, 32, 32768, 0, 4, 0, 32768, 32768, 4, 0, 0, 0, 0, 0, 8192, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 512, 0, 0, }, { 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 32768, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 0, 0, 32768, 4, 0, 0, 0, 32768, 0, 0, 0, 32768, 32768, 1024, 0, 0, 512, 0, 2, 0, 0, 16, 0, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 8192, 0, 0, 0, 0, 1, 0, 32768, 0, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2048, 0, 0, 32768, 1024, 32768, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1024, 0, 2, 0, 32768, 8192, 0, 0, 0, }, { 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 32768, 0, 8, 0, 0, 0, 0, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 32768, 32768, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 32768, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 32768, 8, 0, 8, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 8, 8, 8, 32768, 0, 0, 0, 8, 32768, 0, 0, 8, 8, 8, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 8, 32768, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 32768, 8, 8, 8, 8, 8, 0, 8, 32768, 0, 0, 8, 0, 8, 8, 8, 8, 0, 0, 0, 32768, 8, 0, 0, 0, 8, 8, 8, 8, 8, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, }
-        paintutils.drawImage(splash,1,1)
-        term.setCursorPos(15,termY-1)
+        paintutils.drawImage(splash, 1, 1)
+        term.setCursorPos(15, termY - 1)
         term.setTextColor(colors.gray)
         term.write("By: Dog and TheOriginalBIT")
         sleep(1)
@@ -1747,8 +1747,8 @@ guiElements = {
                                 newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() switchShowType() end, "showType", 1);
                                 newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() drawPopUp("rockets") end, "rocketPop", 2);
                                 newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() getNumRockets() end, "numRockets", 1);
-                                newButton(20, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("shape",20,14) end, "shapeChance", 1);
-                                newButton(41, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("effect",41,14) end, "effectChance", 1);
+                                newButton(20, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("shape", 20, 14) end, "shapeChance", 1);
+                                newButton(41, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("effect", 41, 14) end, "effectChance", 1);
                                 newButton(26, 16, 19, 3, "Start  Show", colors.green, colors.white, function() startShow() end, "startShow", 1);
                                   --# add new buttons and pickers here, not at the end
                                 newNumberPicker(20, 8, 1, 1, 3, "minHeight", false, pickerChanged);  --# rocketHeight min
@@ -1757,20 +1757,20 @@ guiElements = {
                                 newNumberPicker(34, 10, maxStars, 1, 7, "maxStars", false, pickerChanged);  --# maxStars
                                 newNumberPicker(20, 12, 1, 1, 8, "minColors", false, pickerChanged); --# minColors
                                 newNumberPicker(34, 12, maxColors, 1, 8, "maxColors", false, pickerChanged); --# maxColors
-                              },
+                              }, 
                 logButtons = {
                                newButton(17, termY, 2, 1, "<<", colors.lightGray, colors.gray, function() pageNum = 1 logScreen() end, "home", 1);
                                newButton(20, termY, 1, 1, "<", colors.lightGray, colors.gray, function() pageNum = math.max(1, pageNum - 1) logScreen() end, "pageMinus", 1);
                                newButton(33, termY, 1, 1, ">", colors.lightGray, colors.gray, function() pageNum = math.min(numPages, pageNum + 1) logScreen() end, "pagePlus", 1);
                                newButton(35, termY, 2, 1, ">>", colors.lightGray, colors.gray, function() pageNum = numPages logScreen() end, "end", 1);
-                             },
+                             }, 
               }
 
 if runMode == "standard" then
   mainScreen()
 elseif runMode == "debug" then
   clearScreen()
-  term.setCursorPos(1,1)
+  term.setCursorPos(1, 1)
 end
 
 scKernel() --# start the program
