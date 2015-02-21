@@ -33,6 +33,6 @@ public final class ModInfo {
     public static final String PROXY_CLIENT = MOD_PACKAGE + ".client.ProxyClient";
     public static final String PROXY_SERVER = MOD_PACKAGE + ".common.ProxyCommon";
 
-    public static final String DEPENDENCIES = "required-after:ComputerCraft@1.64,);";
+    public static final String DEPENDENCIES = "required-after:ComputerCraft";
 
 }
