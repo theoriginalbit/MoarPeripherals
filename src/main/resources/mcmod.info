@@ -1,11 +1,11 @@
 [
     {
-        "modid": "MoarPeripherals",
-        "name": "MoarPeripherals",
-        "description": "Adds a bunch of useful peripherals to ComputerCraft.",
+        "modid": "${id}",
+        "name": "${name}",
+        "description": "${description}",
         "version": "${version}",
         "mcversion" : "${mcversion}",
-        "url": "http://moarperipherals.com",
+        "url": "${url}",
         "authors": [
             "theoriginalbit"
         ],

@@ -23,17 +23,19 @@ targetCompatibility = 1.7
 // Grab system env
 ext.env = System.getenv()
 
-version = "1.7.10-1.65-1.5"
+version = mc_version + "-" + cc_version + "-" + mod_version
 if (env.BUILD_NUMBER != null) {
     version += "-snapshot-" + env.BUILD_NUMBER
 }
-group = "com.theoriginalbit.moarperipherals"
-archivesBaseName = "MoarPeripherals"
+group= "com.theoriginalbit." + mod_id
+archivesBaseName = mod_name
 
 minecraft {
-    version = "1.7.10-10.13.2.1291"
+    version = mc_version + "-" + forge_version
     runDir = "eclipse"
 
+    replace "@ID@", mod_id
+    replace "@NAME@", mod_name
     replace "@VERSION@", project.version
 }
 
@@ -54,7 +56,7 @@ processResources {
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+        expand 'id':mod_id, 'name':mod_name, 'description':mod_desc, 'url':mod_url, 'version':project.version, 'mcversion':mc_version
     }
 
     // copy everything else, thats not the mcmod.info
