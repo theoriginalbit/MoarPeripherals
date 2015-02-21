@@ -19,6 +19,7 @@ import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
 import com.theoriginalbit.moarperipherals.common.utils.WorldUtils;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -37,9 +38,9 @@ public abstract class BlockPairable extends BlockRotatable {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
         ItemStack stack = createPairedItemStack(world, x, y, z);
-        return stack != null ? stack : super.getPickBlock(target, world, x, y, z);
+        return stack != null ? stack : super.getPickBlock(target, world, x, y, z, player);
     }
 
     private ItemStack createPairedItemStack(World world, int x, int y, int z) {
