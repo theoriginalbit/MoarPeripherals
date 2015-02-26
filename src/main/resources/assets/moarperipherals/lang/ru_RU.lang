@@ -34,15 +34,17 @@ upgrade.moarperipherals:adjective.furnace=Огненная
 upgrade.moarperipherals:adjective.feeder=Кормящая
 upgrade.moarperipherals:adjective.densityscanner=Сканирующая плотность
 
-moarperipherals.chat.paired=Привязана к компьютеру по координатам: %d %d %d
+moarperipherals.chat.paired=Привязана к компьютеру по координатам: %s
 moarperipherals.chat.notPaired=Устройство не связано с компьютером. Нажмите правой кнопкой мыши по компьютеру, чтобы связать.
+moarperipherals.chat.pairFailRejected=You cannot pair with this computer
+moarperipherals.chat.pairFailPowerOff=The computer must be turned on to pair keyboard
 
 # believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
 moarperipherals.chat.sonic.wood="It doesn't do wood!"
 
 moarperipherals.gui.keyboard.exit=Нажмите ESC для того, чтобы выйти.
 tooltip.moarperipherals.generic.information=Зажмите SHIFT для получения информации
-tooltip.moarperipherals.pairable.paired=Связанный
+tooltip.moarperipherals.pairable.paired=Paired Computer %s
 tooltip.moarperipherals.pairable.notPaired=Несвязанный
 tooltip.moarperipherals.inkCartridge.contents=Содержит
 tooltip.moarperipherals.inkCartridge.level=Уровень чернил

@@ -18,8 +18,7 @@ package com.theoriginalbit.moarperipherals.api.tile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public interface IPairableDevice {
-
+public interface IPairedDevice {
     /**
      * Setup the target information based on NBT data and
      * return success.

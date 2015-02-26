@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.block.abstracts;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
+import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
 import com.theoriginalbit.moarperipherals.common.utils.WorldUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,9 +26,9 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
-public abstract class BlockPairable extends BlockRotatable {
+public abstract class BlockPaired extends BlockRotatable {
 
-    public BlockPairable(Material material, String blockName) {
+    public BlockPaired(Material material, String blockName) {
         super(material, blockName);
     }
 
@@ -44,11 +44,8 @@ public abstract class BlockPairable extends BlockRotatable {
     }
 
     private ItemStack createPairedItemStack(World world, int x, int y, int z) {
-        IPairableDevice device = WorldUtils.getTileEntity(world, x, y, z, IPairableDevice.class);
-        if (device != null) {
-            return device.getPairedDrop();
-        }
-        return null;
+        IPairedDevice device = WorldUtils.getTileEntity(world, x, y, z, IPairedDevice.class);
+        return device != null ? device.getPairedDrop() : null;
     }
 
 }

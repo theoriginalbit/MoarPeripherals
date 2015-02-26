@@ -34,8 +34,10 @@ upgrade.moarperipherals:adjective.furnace=Fiery
 upgrade.moarperipherals:adjective.feeder=Feeding
 upgrade.moarperipherals:adjective.densityscanner=Density Scanning
 
-moarperipherals.chat.paired=Paired with Computer at %d %d %d
+moarperipherals.chat.paired=Paired with Computer %s
 moarperipherals.chat.notPaired=Device not paired. Right-click a computer to pair.
+moarperipherals.chat.pairFailRejected=You cannot pair with this computer
+moarperipherals.chat.pairFailPowerOff=The computer must be turned on to pair keyboard
 
 # believe it or not this is a quote from Doctor Who S05E08, if you translate, make sure to use the quote please
 moarperipherals.chat.sonic.wood=It doesn't do wood!
@@ -43,7 +45,7 @@ moarperipherals.chat.sonic.wood=It doesn't do wood!
 moarperipherals.gui.keyboard.exit=Press ESC to exit the Keyboard
 
 tooltip.moarperipherals.generic.information=Hold SHIFT for information
-tooltip.moarperipherals.pairable.paired=Target
+tooltip.moarperipherals.pairable.paired=Paired Computer %s
 tooltip.moarperipherals.pairable.notPaired=Not Paired
 tooltip.moarperipherals.inkCartridge.contents=Contents
 tooltip.moarperipherals.inkCartridge.level=Ink Level

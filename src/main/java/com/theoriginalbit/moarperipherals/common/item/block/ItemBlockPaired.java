@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.item.block;
 
-import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
+import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.utils.*;
 import cpw.mods.fml.relauncher.Side;
@@ -24,14 +24,17 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemBlockPairable extends ItemBlock {
+public class ItemBlockPaired extends ItemBlock {
 
-    public ItemBlockPairable(Block block) {
+    public ItemBlockPaired(Block block) {
         super(block);
         setMaxStackSize(1);
         setUnlocalizedName(block.getUnlocalizedName());
@@ -40,7 +43,7 @@ public class ItemBlockPairable extends ItemBlock {
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
         if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, meta)) {
-            IPairableDevice tile = getPairable(world, x, y, z);
+            IPairedDevice tile = WorldUtils.getTileEntity(world, x, y, z, IPairedDevice.class);
             setupTileEntity(stack, tile);
             return true;
         }
@@ -49,12 +52,31 @@ public class ItemBlockPairable extends ItemBlock {
 
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        // if this is the server, and the player wasn't sneaking
-        if (WorldUtils.isServer(world) && !player.isSneaking() && ComputerUtils.getTileComputerBase(world, x, y, z) != null) {
-            NBTUtils.setInteger(stack, Constants.NBT.TARGET_X, x);
-            NBTUtils.setInteger(stack, Constants.NBT.TARGET_Y, y);
-            NBTUtils.setInteger(stack, Constants.NBT.TARGET_Z, z);
-            ChatUtils.sendChatToPlayer(player.getDisplayName(), Constants.CHAT.CHAT_PAIRED.getFormattedLocalised(x, y, z));
+        final TileEntity tile = world.getTileEntity(x, y, z);
+
+        if (WorldUtils.isServer(world) && !player.isSneaking() && PairedUtils.isComputer(tile)) {
+            if (!PairedUtils.isPairAllowed(tile)) {
+                player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + Constants.CHAT.CHAT_REJECTED_PAIR.getLocalised()));
+                return true;
+            }
+
+            int instanceId = PairedUtils.getInstanceId(tile);
+
+            if (!PairedUtils.isOn(PairedUtils.getInstance(instanceId))) {
+                player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + Constants.CHAT.CHAT_PAIR_POWER_REQUIRED.getLocalised()));
+                return true;
+            }
+
+            // It is allowed to pair, and the computer is on
+            LogUtils.debug("Computer at %d, %d, %d has been right-clicked, getting computer information", x, y, z);
+            String desc = PairedUtils.getDescription(instanceId);
+            ChunkCoordinates coordinates = PairedUtils.getInstanceLocation(instanceId);
+
+            // Inform the user of the connection
+            ChatUtils.sendChatToPlayer(player.getDisplayName(), Constants.CHAT.CHAT_PAIRED.getFormattedLocalised(desc));
+
+            // Save the connection info in the ItemStack
+            NBTUtils.setInteger(stack, "instanceId", instanceId);
             return true;
         }
         return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
@@ -63,17 +85,12 @@ public class ItemBlockPairable extends ItemBlock {
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean debug) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean details) {
         if (KeyboardUtils.isShiftKeyDown()) {
             if (containsTargetInfo(stack)) {
-                int x = NBTUtils.getInteger(stack, Constants.NBT.TARGET_X);
-                int y = NBTUtils.getInteger(stack, Constants.NBT.TARGET_Y);
-                int z = NBTUtils.getInteger(stack, Constants.NBT.TARGET_Z);
-
-                list.add(EnumChatFormatting.ITALIC + Constants.TOOLTIPS.PAIRED.getLocalised());
-                list.add(EnumChatFormatting.ITALIC + "  X: " + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + x);
-                list.add(EnumChatFormatting.ITALIC + "  Y: " + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + y);
-                list.add(EnumChatFormatting.ITALIC + "  Z: " + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + z);
+                int instanceId = NBTUtils.getInteger(stack, "instanceId");
+                String desc = PairedUtils.getDescription(instanceId);
+                list.add(EnumChatFormatting.GRAY + Constants.TOOLTIPS.PAIRED.getFormattedLocalised(desc));
             } else {
                 list.add(EnumChatFormatting.ITALIC + Constants.TOOLTIPS.NOT_PAIRED.getLocalised());
             }
@@ -82,16 +99,12 @@ public class ItemBlockPairable extends ItemBlock {
         }
     }
 
-    private IPairableDevice getPairable(World world, int x, int y, int z) {
-        return WorldUtils.getTileEntity(world, x, y, z, IPairableDevice.class);
-    }
-
-    private boolean setupTileEntity(ItemStack stack, IPairableDevice tile) {
+    private boolean setupTileEntity(ItemStack stack, IPairedDevice tile) {
         return containsTargetInfo(stack) && tile.configureTargetFromNbt(NBTUtils.getItemTag(stack));
     }
 
     private boolean containsTargetInfo(ItemStack stack) {
-        return NBTUtils.hasTag(stack, Constants.NBT.TARGET_X) && NBTUtils.hasTag(stack, Constants.NBT.TARGET_Y) && NBTUtils.hasTag(stack, Constants.NBT.TARGET_Z);
+        return NBTUtils.hasTag(stack, "instanceId");
     }
 
 }

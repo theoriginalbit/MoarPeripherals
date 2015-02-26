@@ -16,9 +16,9 @@
 package com.theoriginalbit.moarperipherals.common.block;
 
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.moarperipherals.client.gui.GuiType;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
-import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockPairable;
+import com.theoriginalbit.moarperipherals.client.gui.GuiType;
+import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockPaired;
 import com.theoriginalbit.moarperipherals.common.item.ItemSonic;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class BlockKeyboardMac extends BlockPairable {
+public class BlockKeyboardMac extends BlockPaired {
     private static final Class<?> CLASS_ITOOLWRENCH = ReflectionUtils.getClass("buildcraft.api.tools.IToolWrench");
     private final ForgeDirection[] validDirections = new ForgeDirection[]{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST};
 
@@ -93,12 +93,14 @@ public class BlockKeyboardMac extends BlockPairable {
         if (tile instanceof TileKeyboard) {
             TileKeyboard keyboard = (TileKeyboard) tile;
             if (keyboard.hasConnection()) {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
-                    }
-                }, 1000);
+                if (keyboard.isTargetInRange()) {
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
+                        }
+                    }, 1000);
+                }
             } else if (!world.isRemote) {
                 String message = EnumChatFormatting.RED + Constants.CHAT.CHAT_NOT_PAIRED.getLocalised();
                 player.addChatComponentMessage(new ChatComponentText(message));

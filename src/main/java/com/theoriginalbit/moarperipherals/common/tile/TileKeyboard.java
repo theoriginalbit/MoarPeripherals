@@ -15,26 +15,25 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
+import com.google.common.base.Strings;
+import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.common.block.BlockKeyboardPc;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
-import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
-import com.theoriginalbit.moarperipherals.common.utils.ComputerUtils;
 import com.theoriginalbit.moarperipherals.common.utils.NBTUtils;
+import com.theoriginalbit.moarperipherals.common.utils.PairedUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 
-public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivateAwareTile {
-
-    private TileEntity targetTile;
-    private Integer nbtTargetX, nbtTargetY, nbtTargetZ;
+public class TileKeyboard extends TileMoarP implements IPairedDevice, IActivateAwareTile {
+    private int connectedInstanceId = -1;
+    private String connectedInstanceDesc;
+    private boolean connected;
 
     /**
      * Read the target information from NBT
@@ -51,28 +50,29 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        if (hasConnection()) {
-            tag.setInteger("targetX", targetTile.xCoord);
-            tag.setInteger("targetY", targetTile.yCoord);
-            tag.setInteger("targetZ", targetTile.zCoord);
+        tag.setInteger("instanceId", connectedInstanceId);
+        if (!Strings.isNullOrEmpty(connectedInstanceDesc)) {
+            tag.setString("instanceDesc", connectedInstanceDesc);
         }
     }
 
     @Override
     public void updateEntity() {
-        if (nbtTargetX != null && nbtTargetY != null && nbtTargetZ != null) {
-            targetTile = worldObj.getTileEntity(nbtTargetX, nbtTargetY, nbtTargetZ);
-            nbtTargetX = nbtTargetY = nbtTargetZ = null;
+        if (!connected) {
+            connected = PairedUtils.isRegisteredInstance(connectedInstanceId);
+        }
+
+        if (connected && PairedUtils.isRegisteredInstance(connectedInstanceId)) {
+            connectedInstanceDesc = PairedUtils.getDescription(connectedInstanceId);
         }
     }
 
     @Override
     public NBTTagCompound getDescriptionNBT() {
         final NBTTagCompound tag = super.getDescriptionNBT();
-        if (targetTile != null) {
-            tag.setInteger("targetX", targetTile.xCoord);
-            tag.setInteger("targetY", targetTile.yCoord);
-            tag.setInteger("targetZ", targetTile.zCoord);
+        tag.setInteger("instanceId", connectedInstanceId);
+        if (!Strings.isNullOrEmpty(connectedInstanceDesc)) {
+            tag.setString("instanceDesc", connectedInstanceDesc);
         }
         return tag;
     }
@@ -88,7 +88,7 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
      */
     @Override
     public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        ComputerUtils.turnOn(targetTile);
+        PairedUtils.turnOn(PairedUtils.getInstance(connectedInstanceId));
         return true;
     }
 
@@ -96,7 +96,7 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
      * Whether the keyboard has a valid connection or not
      */
     public final boolean hasConnection() {
-        return targetTile != null && ComputerUtils.isTileComputer(targetTile) && !targetTile.isInvalid();
+        return connectedInstanceId > -1;
     }
 
     /**
@@ -104,9 +104,9 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
      */
     public final ResourceLocation getTextureForRender() {
         final String state;
-        if (hasConnection() && targetInRange()) {
+        if (hasConnection() && isTargetInRange()) {
             state = "On";
-        } else if (targetTile != null || (hasConnection() && !targetInRange())) {
+        } else if (hasConnection() && !isTargetInRange()) {
             state = "Lost";
         } else {
             state = "Off";
@@ -120,56 +120,50 @@ public class TileKeyboard extends TileMoarP implements IPairableDevice, IActivat
 
     @Override
     public final boolean configureTargetFromNbt(NBTTagCompound tag) {
-        final String targetX = Constants.NBT.TARGET_X;
-        final String targetY = Constants.NBT.TARGET_Y;
-        final String targetZ = Constants.NBT.TARGET_Z;
-
-        if (tag.hasKey(targetX) && tag.hasKey(targetY) && tag.hasKey(targetZ)) {
-            nbtTargetX = tag.getInteger(targetX);
-            nbtTargetY = tag.getInteger(targetY);
-            nbtTargetZ = tag.getInteger(targetZ);
-            return true;
+        connectedInstanceId = tag.getInteger("instanceId");
+        if (tag.hasKey("instanceDesc")) {
+            connectedInstanceDesc = tag.getString("instanceDesc");
         }
-        return false;
+        return true;
     }
 
     @Override
     public ItemStack getPairedDrop() {
         ItemStack stack = new ItemStack(getBlockType(), 1);
-        if (targetTile != null) {
-            NBTUtils.setInteger(stack, Constants.NBT.TARGET_X, targetTile.xCoord);
-            NBTUtils.setInteger(stack, Constants.NBT.TARGET_Y, targetTile.yCoord);
-            NBTUtils.setInteger(stack, Constants.NBT.TARGET_Z, targetTile.zCoord);
+        if (connectedInstanceId > -1) {
+            NBTUtils.setInteger(stack, "instanceId", connectedInstanceId);
         }
         return stack;
     }
 
     public final void terminateTarget() {
-        if (targetInRange()) {
-            ComputerUtils.terminate(targetTile);
+        if (isTargetInRange()) {
+            PairedUtils.terminate(PairedUtils.getInstance(connectedInstanceId));
         }
     }
 
     public final void rebootTarget() {
-        if (targetInRange()) {
-            ComputerUtils.reboot(targetTile);
+        if (isTargetInRange()) {
+            PairedUtils.reboot(PairedUtils.getInstance(connectedInstanceId));
         }
     }
 
     public final void shutdownTarget() {
-        if (targetInRange()) {
-            ComputerUtils.shutdown(targetTile);
+        if (isTargetInRange()) {
+            PairedUtils.shutdown(PairedUtils.getInstance(connectedInstanceId));
         }
     }
 
     public final void queueEventToTarget(String event, Object... args) {
-        if (targetInRange()) {
-            ComputerUtils.queueEvent(targetTile, event, args);
+        if (isTargetInRange()) {
+            PairedUtils.queueEvent(PairedUtils.getInstance(connectedInstanceId), event, args);
         }
     }
 
-    private boolean targetInRange() {
-        return targetTile != null && MathHelper.sqrt_double(getDistanceFrom(targetTile.xCoord, targetTile.yCoord, targetTile.zCoord)) <= ConfigHandler.keyboardRange;
+    public boolean isTargetInRange() {
+        final ChunkCoordinates coord = new ChunkCoordinates(xCoord, yCoord, zCoord);
+        return PairedUtils.isRegisteredInstance(connectedInstanceId) &&
+                PairedUtils.distanceToComputer(connectedInstanceId, coord) <= ConfigHandler.keyboardRange;
     }
 
 }

@@ -15,39 +15,39 @@
  */
 package com.theoriginalbit.moarperipherals.common.utils;
 
+import com.google.common.base.Strings;
+
 import java.lang.reflect.Method;
 
 public final class ReflectionUtils {
-
     public static Class<?> getClass(String className) {
-        if (className == null || className.isEmpty()) {
-            return null;
-        }
+        if (Strings.isNullOrEmpty(className)) return null;
+
         try {
             return Class.forName(className);
         } catch (Exception ignored) {
         }
+
         return null;
     }
 
-    public static Method getMethod(Class<?> instance, String method, Class<?>... parameters) {
-        if (instance != null && method != null) {
-            try {
-                return instance.getMethod(method, parameters);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public static Method getMethod(Class<?> clazz, String method, Class<?>... parameters) {
+        if (clazz == null || Strings.isNullOrEmpty(method)) return null;
+
+        try {
+            return clazz.getMethod(method, parameters);
+        } catch (Exception ignored) {
         }
+
         return null;
     }
 
     public static Object callMethod(Object instance, Method method, Object... parameters) {
-        if (method != null) {
-            try {
-                return method.invoke(instance, parameters);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (method == null) return null;
+
+        try {
+            return method.invoke(instance, parameters);
+        } catch (Exception ignored) {
         }
         return null;
     }

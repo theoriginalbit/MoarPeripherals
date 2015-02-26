@@ -23,7 +23,7 @@ import com.theoriginalbit.moarperipherals.api.tile.aware.INeighborAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IPlaceAwareTile;
 import com.theoriginalbit.moarperipherals.api.tile.IHasGui;
 import com.theoriginalbit.moarperipherals.api.tile.IHasSpecialDrops;
-import com.theoriginalbit.moarperipherals.api.tile.IPairableDevice;
+import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
@@ -124,8 +124,8 @@ public abstract class BlockMoarP extends BlockContainer {
 
         final List<ItemStack> tileDrops = Lists.newArrayList();
 
-        if (tile instanceof IPairableDevice) {
-            ItemStack drop = ((IPairableDevice) tile).getPairedDrop();
+        if (tile instanceof IPairedDevice) {
+            ItemStack drop = ((IPairedDevice) tile).getPairedDrop();
             tileDrops.add(drop);
         }
         if (tile instanceof IHasSpecialDrops) {

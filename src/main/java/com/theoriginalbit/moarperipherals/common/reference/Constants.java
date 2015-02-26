@@ -60,13 +60,9 @@ public final class Constants {
     public static final class CHAT {
         public static final LocalisationStore CHAT_PAIRED = new LocalisationStore("moarperipherals.chat.paired");
         public static final LocalisationStore CHAT_NOT_PAIRED = new LocalisationStore("moarperipherals.chat.notPaired");
+        public static final LocalisationStore CHAT_REJECTED_PAIR = new LocalisationStore("moarperipherals.chat.pairFailRejected");
+        public static final LocalisationStore CHAT_PAIR_POWER_REQUIRED = new LocalisationStore("moarperipherals.chat.pairFailPowerOff");
         public static final LocalisationStore SONIC_WOOD = new LocalisationStore("moarperipherals.chat.sonic.wood");
-    }
-
-    public static final class NBT {
-        public static final String TARGET_X = "targetX";
-        public static final String TARGET_Y = "targetY";
-        public static final String TARGET_Z = "targetZ";
     }
 
     public static final class TEXTURES_MODEL {

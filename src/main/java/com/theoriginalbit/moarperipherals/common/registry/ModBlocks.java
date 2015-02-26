@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.registry;
 
 import com.theoriginalbit.moarperipherals.common.block.*;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
-import com.theoriginalbit.moarperipherals.common.item.block.ItemBlockPairable;
+import com.theoriginalbit.moarperipherals.common.item.block.ItemBlockPaired;
 import com.theoriginalbit.moarperipherals.common.tile.*;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -74,8 +74,8 @@ public final class ModBlocks {
         if (ConfigHandler.enableKeyboard) {
             blockKeyboardMac = new BlockKeyboardMac();
             blockKeyboardPc = new BlockKeyboardPc();
-            GameRegistry.registerBlock(blockKeyboardMac, ItemBlockPairable.class, "blockKeyboardMac");
-            GameRegistry.registerBlock(blockKeyboardPc, ItemBlockPairable.class, "blockKeyboardPc");
+            GameRegistry.registerBlock(blockKeyboardMac, ItemBlockPaired.class, "blockKeyboardMac");
+            GameRegistry.registerBlock(blockKeyboardPc, ItemBlockPaired.class, "blockKeyboardPc");
             GameRegistry.registerTileEntity(TileKeyboard.class, "tileKeyboard");
         }
 
