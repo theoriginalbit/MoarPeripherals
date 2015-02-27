@@ -148,7 +148,7 @@ public class BlockKeyboardMac extends BlockPaired {
     }
 
     private static boolean isItemWrench(Item item) {
-        return item.getClass().isAssignableFrom(CLASS_ITOOLWRENCH) || item instanceof ItemSonic;
+        return (CLASS_ITOOLWRENCH != null && item.getClass().isAssignableFrom(CLASS_ITOOLWRENCH)) || item instanceof ItemSonic;
     }
 
 }
