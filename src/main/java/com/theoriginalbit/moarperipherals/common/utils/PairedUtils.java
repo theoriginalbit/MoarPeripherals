@@ -155,7 +155,7 @@ public final class PairedUtils {
     }
 
     private static boolean instanceOf(Class<?> tile, Class<?> other) {
-        return other.isAssignableFrom(tile);
+        return other != null && other.isAssignableFrom(tile);
     }
 
     static {
