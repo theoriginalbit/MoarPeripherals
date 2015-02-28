@@ -8,7 +8,7 @@
 --[[        aka         ]]--
 --[[   TheOriginalBIT   ]]--
 --[[ pastebin: mwdc6bK9 ]]--
-local scVer = "1.0.02"
+local scVer = "1.0.01"
 --# Custom read, formatTime, newButton, 
   --# newNumberPicker, pickerChanged, calculateMinMax, 
   --# inventory filtering, and dyeToColor functions, 
