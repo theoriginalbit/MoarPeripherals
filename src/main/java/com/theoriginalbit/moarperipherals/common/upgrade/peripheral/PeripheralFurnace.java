@@ -15,8 +15,8 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade.peripheral;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxSmelt;
@@ -27,6 +27,7 @@ import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -37,47 +38,69 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 @LuaPeripheral("furnace")
 public class PeripheralFurnace {
+    private static final int FURNACE_SLOT_INPUT = 0;
+    private static final int FURNACE_SLOT_OUTPUT = 2;
+    private final IInventory inv;
     private final ITurtleAccess turtle;
     private final boolean upgradeOnLeft;
-    private final IInventory inv;
+    private final TileEntityFurnace furnace;
 
     public PeripheralFurnace(ITurtleAccess access, TurtleSide periphSide) {
         turtle = access;
         upgradeOnLeft = periphSide == TurtleSide.Left;
         inv = turtle.getInventory();
+        furnace = new TileEntityFurnace();
     }
 
     @LuaFunction
     public Object[] smelt(int slot, int amount) {
+        // make sure the supplied slot is valid
         if (slot < 1 || slot > inv.getSizeInventory()) {
             return new Object[]{false, "slot number " + slot + " out of range"};
         }
-        // convert from Lua indexes that start at 1
-        --slot;
-        final ItemStack input = inv.getStackInSlot(slot);
-        // make sure there was an item
+
+        // make sure the supplied amount is valid
+        if (amount < 1 || amount > 64) {
+            return new Object[]{false, "invalid amount, should be between 1 and 64"};
+        }
+
+        // make sure there's an item in the Turtle's inventory
+        final ItemStack input = inv.getStackInSlot(slot + 1);
         if (input == null || input.stackSize == 0) {
             return new Object[]{false, "nothing to smelt"};
         }
+
         // find how many we CAN smelt
         amount = Math.min(amount, input.stackSize);
-        // make sure that it can smelt to something
-        final ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(input);
-        if (result == null) {
+
+        // Put the items in the furnace
+        final ItemStack furnaceInput = input.copy();
+        furnaceInput.stackSize = amount;
+        furnace.setInventorySlotContents(FURNACE_SLOT_INPUT, furnaceInput);
+
+        // make sure the item can be smelted
+        if (!canSmelt()) {
             return new Object[]{false, "item in slot number " + slot + " cannot be smelted"};
         }
+
         // make sure there is enough fuel in the furnace
-        int fuelNeeded = amount * ConfigHandler.upgradeFurnaceFuelConsumption;
+        final int fuelNeeded = amount * ConfigHandler.upgradeFurnaceFuelConsumption;
         if (turtle.isFuelNeeded() && turtle.getFuelLevel() < fuelNeeded) {
             return new Object[]{false, "not enough fuel to smelt", fuelNeeded - turtle.getFuelLevel()};
         }
-        // update how many there will be after the smelt
-        result.stackSize = Math.max(1, result.stackSize); // makes sure it's never 0
-        result.stackSize *= amount;
+
+        // get the result from the 'smelt' of the item
+        for (int i = 0; i < amount; ++i) {
+            furnace.smeltItem();
+        }
+        final ItemStack result = furnace.getStackInSlot(FURNACE_SLOT_OUTPUT);
+        furnace.setInventorySlotContents(FURNACE_SLOT_OUTPUT, null);
+
         // make sure the result can be stored in the inventory
         if (!InventoryUtils.canStoreItem(inv, result)) {
             return new Object[]{false, "not enough space in inventory"};
         }
+
         // perform the 'smelt' by removing the item(s) and consuming the fuel
         input.stackSize -= amount;
         if (input.stackSize == 0) {
@@ -86,12 +109,21 @@ public class PeripheralFurnace {
         turtle.consumeFuel(fuelNeeded);
 
         final World world = turtle.getWorld();
-        final ChunkCoordinates coords = turtle.getPosition();
+        final ChunkCoordinates position = turtle.getPosition();
+
         // store the item, it should never drop it, we've made sure there WAS space
-        InventoryUtils.storeOrDropItemStack(inv, result, world, coords);
+        InventoryUtils.storeOrDropItemStack(inv, result, world, position);
+
         // smelting effects
-        doSmeltFX(world, coords, ForgeDirection.getOrientation(turtle.getDirection()));
+        doSmeltFX(world, position, ForgeDirection.getOrientation(turtle.getDirection()));
+
+        // return success and how many items were smelted
         return new Object[]{true, amount};
+    }
+
+    private boolean canSmelt() {
+        final ItemStack input = furnace.getStackInSlot(FURNACE_SLOT_INPUT);
+        return input != null && FurnaceRecipes.smelting().getSmeltingResult(input) != null;
     }
 
     private void doSmeltFX(World worldObj, ChunkCoordinates coords, ForgeDirection dir) {
