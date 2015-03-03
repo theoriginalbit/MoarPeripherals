@@ -101,7 +101,7 @@ public class TileComputerCrafter extends TileInventory implements IHasGui {
     @LuaFunction
     public ItemStack getCraftingSlot(int slot) throws LuaException {
         --slot; // convert from Lua indexes that start at 1
-        if (slot >= 0 || slot <= craftingInv.getSizeInventory()) {
+        if (slot >= 0 && slot < craftingInv.getSizeInventory()) {
             return craftingInv.getStackInSlot(slot);
         }
         return null;
