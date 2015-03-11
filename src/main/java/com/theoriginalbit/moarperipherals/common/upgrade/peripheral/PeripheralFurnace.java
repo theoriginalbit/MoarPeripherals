@@ -54,9 +54,12 @@ public class PeripheralFurnace {
 
     @LuaFunction
     public Object[] smelt(int slot, int amount) {
+        // convert from Lua indexes to Java indexes
+        --slot;
+
         // make sure the supplied slot is valid
-        if (slot < 1 || slot > inv.getSizeInventory()) {
-            return new Object[]{false, "slot number " + slot + " out of range"};
+        if (slot < 0 || slot >= inv.getSizeInventory()) {
+            return new Object[]{false, "slot number " + (slot + 1) + " out of range"};
         }
 
         // make sure the supplied amount is valid
@@ -65,7 +68,7 @@ public class PeripheralFurnace {
         }
 
         // make sure there's an item in the Turtle's inventory
-        final ItemStack input = inv.getStackInSlot(slot + 1);
+        final ItemStack input = inv.getStackInSlot(slot);
         if (input == null || input.stackSize == 0) {
             return new Object[]{false, "nothing to smelt"};
         }
@@ -80,7 +83,7 @@ public class PeripheralFurnace {
 
         // make sure the item can be smelted
         if (!canSmelt()) {
-            return new Object[]{false, "item in slot number " + slot + " cannot be smelted"};
+            return new Object[]{false, "item in slot number " + (slot + 1) + " cannot be smelted"};
         }
 
         // make sure there is enough fuel in the furnace

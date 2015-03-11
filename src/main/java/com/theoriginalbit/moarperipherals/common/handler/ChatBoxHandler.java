@@ -27,7 +27,6 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
@@ -36,35 +35,19 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public final class ChatBoxHandler {
-
     public static final ChatBoxHandler instance = new ChatBoxHandler();
 
     public static void init() {
         if (Loader.isModLoaded(Mods.OPENPERIPHERALADDON)) {
             LogUtils.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command as a ChatBox command so it is ignored by ChatBoxes.");
-            try {
-                instance.addCommandListener(new ICommandListener() {
-                    private static final String OPENPCOMMAND = "$$";
-
-                    @Override
-                    public String getToken() {
-                        return OPENPCOMMAND;
-                    }
-
-                    @Override
-                    public void onServerChatEvent(String message, EntityPlayer player) {
-                    }
-                });
-            } catch (Exception e) {
-                LogUtils.debug("Failed to register OpenPeripheral-Addon ChatBox command listener");
-                e.printStackTrace();
-            }
+            instance.commandBlacklist.add("$$");
         }
     }
 
     private final ArrayList<IChatListener> chatListeners = Lists.newArrayList();
     private final ArrayList<IDeathListener> deathListeners = Lists.newArrayList();
     private final ArrayList<IPlayerEventListener> playerListeners = Lists.newArrayList();
+    private final ArrayList<String> commandBlacklist = Lists.newArrayList();
     private final HashMap<String, ArrayList<ICommandListener>> commandListeners = Maps.newHashMap();
 
     public void addChatListener(IChatListener listener) {
@@ -137,29 +120,31 @@ public final class ChatBoxHandler {
     }
 
     @SubscribeEvent
-    @SuppressWarnings("unused")
     public void onServerChatEvent(ServerChatEvent event) {
         // lets just ignore canceled events
         if (event.isCanceled()) {
             return;
         }
 
-        // check if it was a command first, if it is, chat listeners shouldn't get this!
+        // make sure we ignore any chat messages that we don't want visible to the ChatBoxes
+        for (String token : commandBlacklist) {
+            if (event.message.startsWith(token)) {
+                return;
+            }
+        }
+
+        // check if it is a registered command, if it is, chat listeners shouldn't get this!
         synchronized (commandListeners) {
             for (Entry<String, ArrayList<ICommandListener>> entry : commandListeners.entrySet()) {
                 final String token = entry.getKey();
                 if (event.message.startsWith(token)) {
                     for (ICommandListener listener : entry.getValue()) {
                         listener.onServerChatEvent(event.message.substring(token.length()).trim(), event.player);
-                        event.setCanceled(true);
                     }
+                    event.setCanceled(true);
+                    return;
                 }
             }
-        }
-
-        // the event was once valid, but a ICommandListener used the event
-        if (event.isCanceled()) {
-            return;
         }
 
         // it wasn't a command, IChatListeners can have it now
@@ -171,7 +156,6 @@ public final class ChatBoxHandler {
     }
 
     @SubscribeEvent
-    @SuppressWarnings("unused")
     public void onLivingDeathEvent(LivingDeathEvent event) {
         synchronized (deathListeners) {
             for (IDeathListener listener : deathListeners) {
