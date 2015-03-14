@@ -19,6 +19,7 @@ import com.google.common.base.Strings;
 import com.theoriginalbit.moarperipherals.common.reference.Mods;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
@@ -161,7 +162,12 @@ public final class PairedUtils {
     static {
         try {
             final Class<?> computerCraft = ReflectionUtils.getClass("dan200.computercraft.ComputerCraft");
-            final Field registryField = computerCraft.getDeclaredField("serverComputerRegistry");
+            final Field registryField;
+            if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+                registryField = computerCraft.getDeclaredField("clientComputerRegistry");
+            } else {
+                registryField = computerCraft.getDeclaredField("serverComputerRegistry");
+            }
             final ModContainer container = FMLCommonHandler.instance().findContainerFor(Mods.COMPUTERCRAFT);
             final Object registryObject = registryField.get(container);
             final Field computerField = registryObject.getClass().getSuperclass().getDeclaredField("m_computers");
