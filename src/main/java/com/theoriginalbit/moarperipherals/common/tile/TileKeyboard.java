@@ -19,7 +19,6 @@ import com.google.common.base.Strings;
 import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.common.block.BlockKeyboardPc;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.NBTUtils;
@@ -27,7 +26,6 @@ import com.theoriginalbit.moarperipherals.common.utils.PairedUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 
 public class TileKeyboard extends TileMoarP implements IPairedDevice, IActivateAwareTile {
@@ -161,9 +159,10 @@ public class TileKeyboard extends TileMoarP implements IPairedDevice, IActivateA
     }
 
     public boolean isTargetInRange() {
-        final ChunkCoordinates coord = new ChunkCoordinates(xCoord, yCoord, zCoord);
-        return PairedUtils.isRegisteredInstance(connectedInstanceId) &&
-                PairedUtils.distanceToComputer(connectedInstanceId, coord) <= ConfigHandler.keyboardRange;
+        return PairedUtils.isRegisteredInstance(connectedInstanceId);
+//        final ChunkCoordinates coord = new ChunkCoordinates(xCoord, yCoord, zCoord);
+//        return PairedUtils.isRegisteredInstance(connectedInstanceId) &&
+//                PairedUtils.distanceToComputer(connectedInstanceId, coord) <= ConfigHandler.keyboardRange;
     }
 
 }
