@@ -31,7 +31,7 @@ group= "com.theoriginalbit." + mod_id
 archivesBaseName = mod_name
 
 minecraft {
-    version = mc_version + "-" + forge_version
+    version = mc_version + "-" + forge_version + "-" + mc_version
     runDir = "eclipse"
 
     replace "@ID@", mod_id
