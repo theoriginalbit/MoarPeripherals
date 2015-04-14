@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.mount;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.interfaces.IPFMount;
+import com.theoriginalbit.framework.peripheral.interfaces.IPFMount;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 
 import java.io.File;

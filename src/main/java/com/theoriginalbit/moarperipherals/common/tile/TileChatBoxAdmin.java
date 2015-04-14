@@ -15,11 +15,11 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.Computers;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.listener.IPlayerEventListener;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
+import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;

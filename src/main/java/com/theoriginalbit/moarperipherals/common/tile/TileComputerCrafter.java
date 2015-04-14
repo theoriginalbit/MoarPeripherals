@@ -16,9 +16,9 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.collect.Maps;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.api.tile.IHasGui;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;

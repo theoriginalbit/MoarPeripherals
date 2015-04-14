@@ -16,8 +16,8 @@
 package com.theoriginalbit.moarperipherals.common.upgrade.peripheral;
 
 import com.google.common.collect.Maps;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxOreScanner;

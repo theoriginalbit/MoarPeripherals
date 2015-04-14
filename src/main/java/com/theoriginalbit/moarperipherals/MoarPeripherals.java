@@ -15,8 +15,8 @@
  */
 package com.theoriginalbit.moarperipherals;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.LuaType;
-import com.theoriginalbit.moarperipherals.api.peripheral.PeripheralProvider;
+import com.theoriginalbit.framework.peripheral.LuaType;
+import com.theoriginalbit.framework.peripheral.PeripheralProvider;
 import com.theoriginalbit.moarperipherals.client.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
 import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;

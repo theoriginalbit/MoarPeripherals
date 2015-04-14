@@ -15,9 +15,9 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.MultiReturn;
+import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxTeleport;

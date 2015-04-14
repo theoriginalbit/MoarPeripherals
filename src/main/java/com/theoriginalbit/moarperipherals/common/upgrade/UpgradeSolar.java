@@ -15,13 +15,13 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.wrapper.WrapperComputer;
+import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
-import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradePeripheral;
+import com.theoriginalbit.framework.peripheral.turtle.UpgradePeripheral;
 import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralSolar;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;

@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.converter;
 
 import com.google.common.collect.Maps;
-import com.theoriginalbit.moarperipherals.api.peripheral.converter.ITypeConverter;
+import com.theoriginalbit.framework.peripheral.converter.ITypeConverter;
 import cpw.mods.fml.common.registry.GameRegistry;
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.item.Item;

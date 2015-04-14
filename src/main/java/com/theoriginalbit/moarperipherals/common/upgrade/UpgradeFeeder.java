@@ -15,9 +15,9 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.exception.TurtleFailureAttack;
-import com.theoriginalbit.moarperipherals.api.peripheral.exception.TurtleFailureDig;
-import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradeTool;
+import com.theoriginalbit.framework.peripheral.exception.TurtleFailureAttack;
+import com.theoriginalbit.framework.peripheral.exception.TurtleFailureDig;
+import com.theoriginalbit.framework.peripheral.turtle.UpgradeTool;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import dan200.computercraft.api.turtle.ITurtleAccess;

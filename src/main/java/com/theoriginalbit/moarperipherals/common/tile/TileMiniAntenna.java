@@ -16,9 +16,9 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.Computers;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.Computers;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;

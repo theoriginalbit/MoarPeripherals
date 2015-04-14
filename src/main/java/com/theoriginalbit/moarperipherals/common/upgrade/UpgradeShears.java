@@ -18,7 +18,7 @@ package com.theoriginalbit.moarperipherals.common.upgrade;
 import com.google.common.collect.ImmutableList;
 import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.api.peripheral.turtle.UpgradeTool;
+import com.theoriginalbit.framework.peripheral.turtle.UpgradeTool;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.block.Block;

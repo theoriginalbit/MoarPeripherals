@@ -15,8 +15,8 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade.peripheral;
 
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.api.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
