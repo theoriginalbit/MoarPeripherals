@@ -4,9 +4,8 @@
  */
 package com.theoriginalbit.moarperipherals.api;
 
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
-
-import java.lang.reflect.Method;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetNode;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRegistry;
 
 /**
  * The main API access for MoarPeripherals. Use this to get access to various systems of MoarPeripherals at runtime.
@@ -14,88 +13,24 @@ import java.lang.reflect.Method;
  * @author Joshua Asbury (@theoriginalbit)
  */
 public class MoarPeripheralsAPI {
-
-    private static boolean searched = false;
-
-    private static Class<?> bitNetRegistry;
-    private static Method bitNetRegisterCompliance;
-    private static Method bitNetDeregisterCompliance;
-    private static Method bitNetTransmit;
+    private static IBitNetRegistry bitNetRegistry = null;
 
     /**
-     * Registers a {@link net.minecraft.tileentity.TileEntity}, which implements the
-     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}, interface
-     * with the BitNet network so that it may receive BitNet messages.
+     * Gets the {@link IBitNetRegistry} instance so that {@link IBitNetNode}s can be added/removed from the network
+     * in order to be able to send and receive {@link com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage}s
      *
-     * @param tile the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}
-     *              {@link net.minecraft.tileentity.TileEntity} to register with the BitNet network
-     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant
-     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetMessage
+     * @return the BitNetRegistry instance
      */
-    public static void registerBitNetCompliance(IBitNetCompliant tile) {
-        findBitNet();
+    public static IBitNetRegistry getBitNetRegistry() {
+        return bitNetRegistry;
+    }
+
+    static {
         try {
-            bitNetRegisterCompliance.invoke(null, tile);
-        } catch (Exception e) {
-            System.out.println("MoarPeripheralsAPI: Failed to register BitNet compliant TileEntity");
+            Class<?> clazz = Class.forName("com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry");
+            bitNetRegistry = (IBitNetRegistry) clazz.getField("INSTANCE").get(clazz);
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
-
-    /**
-     * De-registers a {@link net.minecraft.tileentity.TileEntity}, which implements the
-     * {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}, interface
-     * with the BitNet network so that it no longer receives BitNet messages.
-     *
-     * @param tile the {@link com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant}
-     *              {@link net.minecraft.tileentity.TileEntity} to de-register with the BitNet network
-     * @see com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant
-     */
-    public static void deregisterBitNetCompliance(IBitNetCompliant tile) {
-        findBitNet();
-        try {
-            bitNetDeregisterCompliance.invoke(null, tile);
-        } catch (Exception e) {
-            System.out.println("MoarPeripheralsAPI: Failed to register BitNet compliant TileEntity");
-        }
-    }
-
-    /**
-     * Sends a BitNet message across the network
-     *
-     * @param tile   the sending tower
-     * @param payload the object to send
-     */
-    public static void sendBitNetMessage(IBitNetCompliant tile, Object payload) {
-        findBitNet();
-        try {
-            bitNetTransmit.invoke(null, tile, payload);
-        } catch (Exception e) {
-            System.out.println("MoarPeripheralsAPI: Failed to transmit message via BitNet");
-        }
-    }
-
-    private static void findBitNet() {
-        if (!searched) {
-            try {
-                bitNetRegistry = Class.forName("com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry");
-                bitNetRegisterCompliance = findBitNetMethod("registerCompliance", new Class[]{IBitNetCompliant.class});
-                bitNetDeregisterCompliance = findBitNetMethod("deregisterCompliance", new Class[]{IBitNetCompliant.class});
-                bitNetTransmit = findBitNetMethod("transmit", new Class[]{IBitNetCompliant.class, Object.class});
-            } catch (Exception e) {
-                System.err.println("MoarPeripheralsAPI: BitNetRegistry not found.");
-            } finally {
-                searched = true;
-            }
-        }
-    }
-
-    private static Method findBitNetMethod(String name, Class[] args) {
-        try {
-            return bitNetRegistry.getMethod(name, args);
-        } catch (Exception e) {
-            System.err.println("MoarPeripheralsAPI: BitNet Method " + name + " not found.");
-            return null;
-        }
-    }
-
 }

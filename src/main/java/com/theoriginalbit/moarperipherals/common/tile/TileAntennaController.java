@@ -21,7 +21,7 @@ import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetNode;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntenna;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaCell;
@@ -37,8 +37,6 @@ import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -53,7 +51,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @LuaPeripheral("bitnet_tower")
-public class TileAntennaController extends TileMoarP implements IBitNetCompliant, IChunkLoader {
+public class TileAntennaController extends TileMoarP implements IBitNetNode, IChunkLoader {
 
     private static final String EVENT_BITNET = "bitnet_message";
     private final ArrayList<UUID> receivedMessages = Lists.newArrayList();
@@ -136,7 +134,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetCompliant
     @MultiReturn
     public Object[] transmit(Object payload) {
         if (isTowerComplete()) {
-            BitNetRegistry.transmit(this, new BitNetMessage(payload));
+            BitNetRegistry.INSTANCE.transmit(this, new BitNetMessage(payload));
             return new Object[]{true};
         }
         return new Object[]{false, "BitNet Communications Tower incomplete."};
@@ -183,12 +181,17 @@ public class TileAntennaController extends TileMoarP implements IBitNetCompliant
         return Vec3.createVectorHelper(xCoord, yCoord, zCoord);
     }
 
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.ANTENNA;
+    }
+
     /**
      * Invoked when this tower is in range of a BitNet message
      */
     @Override
     public void receive(BitNetMessage message) {
-        if (!receivedMessages.contains(message.getMessageId())) {
+        if (!receivedMessages.contains(message.getId())) {
             // there is a computer connected, let it handle the message
             if (computers != null && computers.size() > 0) {
                 LogUtils.debug(String.format("BitNet Comms Tower at %d %d %d has computer(s) connected, queueing BitNet message for them to handle...", xCoord, yCoord, zCoord));
@@ -198,22 +201,12 @@ public class TileAntennaController extends TileMoarP implements IBitNetCompliant
                 // there was no connected computer, this is now a repeating tower
             } else {
                 LogUtils.debug(String.format("BitNet Comms Tower at %d %d %d has no computer(s) connected, acting as a repeating tower...", xCoord, yCoord, zCoord));
-                BitNetRegistry.transmit(this, message);
+                BitNetRegistry.INSTANCE.transmit(this, message);
             }
-            receivedMessages.add(message.getMessageId());
+            receivedMessages.add(message.getId());
         } else {
             LogUtils.debug(String.format("BitNet Communications Tower at %d %d %d received a previously received message...", xCoord, yCoord, zCoord));
         }
-    }
-
-    @Override
-    public int getReceiveRange() {
-        return ConfigData.antennaRange;
-    }
-
-    @Override
-    public int getReceiveRangeDuringStorm() {
-        return ConfigData.antennaRangeStorm;
     }
 
     /*
@@ -253,7 +246,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetCompliant
 
     private void registerTower() {
         if (!worldObj.isRemote) {
-            BitNetRegistry.registerCompliance(this);
+            BitNetRegistry.INSTANCE.add(this);
             if (ConfigData.antennaKeepsChunkLoaded && chunkTicket == null) {
                 chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
                 if (chunkTicket == null) {
@@ -273,7 +266,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetCompliant
 
     private void unregisterTower() {
         if (!worldObj.isRemote) {
-            BitNetRegistry.deregisterCompliance(this);
+            BitNetRegistry.INSTANCE.remove(this);
             // if there was a chunk loading ticket and the server isn't just stopping
             if (ConfigData.antennaKeepsChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
                 LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));

@@ -87,7 +87,7 @@ public class MoarPeripherals {
 
         if (ConfigData.enableAntenna) {
             LogUtils.debug("Registering BitNet tick handler");
-            FMLCommonHandler.instance().bus().register(new BitNetRegistry());
+            FMLCommonHandler.instance().bus().register(BitNetRegistry.INSTANCE);
         }
 
         if (TickHandler.shouldRegister()) {

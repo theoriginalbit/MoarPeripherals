@@ -20,8 +20,7 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
-import com.theoriginalbit.moarperipherals.common.config.ConfigData;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetNode;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
@@ -37,7 +36,7 @@ import java.util.UUID;
  * @since 13/10/2014
  */
 @LuaPeripheral("bitnet_antenna")
-public class TileMiniAntenna extends TileMoarP implements IBitNetCompliant {
+public class TileMiniAntenna extends TileMoarP implements IBitNetNode {
     private static final String EVENT_BITNET = "bitnet_message";
     private static final float ROTATION_SPEED = 1.0f;
     private static final float BOB_MULTIPLIER = 0.02f;
@@ -70,7 +69,7 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetCompliant {
 
     @LuaFunction
     public void transmit(Object payload) {
-        BitNetRegistry.transmit(this, new BitNetMessage(payload));
+        BitNetRegistry.INSTANCE.transmit(this, new BitNetMessage(payload));
     }
 
     @Override
@@ -84,33 +83,29 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetCompliant {
     }
 
     @Override
+    public NodeType getNodeType() {
+        return NodeType.MINI_ANTENNA;
+    }
+
+    @Override
     public void receive(BitNetMessage payload) {
-        if (!receivedMessages.contains(payload.getMessageId())) {
+        if (!receivedMessages.contains(payload.getId())) {
             if (computers != null && computers.size() > 0) {
                 LogUtils.debug(String.format("BitNet Mini Antenna at %d %d %d has computer(s) connected, queueing BitNet message.", xCoord, yCoord, zCoord));
                 for (IComputerAccess comp : computers) {
                     comp.queueEvent(EVENT_BITNET, new Object[]{comp.getAttachmentName(), payload.getPayload(), payload.getDistanceTravelled()});
                 }
             }
-            receivedMessages.add(payload.getMessageId());
+            receivedMessages.add(payload.getId());
         } else {
-            LogUtils.debug(String.format("BitNet Mini Antenna at %d %d %d received a previously received message.", xCoord, yCoord, zCoord));
+            LogUtils.debug(String.format("BitNet Mini Antenna at %d %d %d received a previously received message.",
+                    xCoord, yCoord, zCoord));
         }
-    }
-
-    @Override
-    public int getReceiveRange() {
-        return ConfigData.miniAntennaRange;
-    }
-
-    @Override
-    public int getReceiveRangeDuringStorm() {
-        return ConfigData.miniAntennaRangeStorm;
     }
 
     private void registerTower() {
         if (!worldObj.isRemote) {
-            BitNetRegistry.registerCompliance(this);
+            BitNetRegistry.INSTANCE.add(this);
         }
         registered = true;
     }

@@ -17,12 +17,12 @@ public class BitNetMessage {
     }
 
     public BitNetMessage(BitNetMessage other) {
-        messageId = other.getMessageId();
+        messageId = other.getId();
         payload = other.getPayload();
         distanceTravelled = other.getDistanceTravelled();
     }
 
-    public UUID getMessageId() {
+    public UUID getId() {
         return messageId;
     }
 
