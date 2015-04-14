@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.block;
 
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
+import com.theoriginalbit.moarperipherals.api.event.IBlockEventHandler;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
 import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockPaired;
 import com.theoriginalbit.moarperipherals.common.item.ItemSonic;
@@ -105,7 +105,7 @@ public class BlockKeyboardMac extends BlockPaired {
                 String message = EnumChatFormatting.RED + Constants.CHAT.CHAT_NOT_PAIRED.getLocalised();
                 player.addChatComponentMessage(new ChatComponentText(message));
             }
-            return ((IActivateAwareTile) tile).onActivated(player, side, hitX, hitY, hitZ);
+            return ((IBlockEventHandler) tile).blockActivated(player, side, hitX, hitY, hitZ);
         }
 
         return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);

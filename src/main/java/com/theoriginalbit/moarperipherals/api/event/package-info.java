@@ -1,5 +1,5 @@
-/**
- * Copyright 2014 Joshua Asbury (@theoriginalbit)
+/*
+ * Copyright 2015 Joshua Asbury (@theoriginalbit)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@API(apiVersion = "@VERSION@", owner = "MoarPeripherals", provides = "MoarPeripherals|API|Tile|Aware")
-package com.theoriginalbit.moarperipherals.api.tile.aware;
+/**
+ * @author Joshua Asbury (@theoriginalbit)
+ */
+@API(apiVersion = "@VERSION@", owner = "MoarPeripherals", provides = "MoarPeripherals|API|Event")
+package com.theoriginalbit.moarperipherals.api.event;
 
 import cpw.mods.fml.common.API;

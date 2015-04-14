@@ -15,13 +15,15 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile.abstracts;
 
+import com.theoriginalbit.moarperipherals.api.event.IBlockEventHandler;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileMoarP extends TileEntity {
+public class TileMoarP extends TileEntity implements IBlockEventHandler {
 
     private String owner = "[NONE]";
 
@@ -48,6 +50,26 @@ public class TileMoarP extends TileEntity {
         readDescriptionNBT(tag);
     }
 
+    @Override
+    public void blockPlaced() {
+        // no-op
+    }
+
+    @Override
+    public void blockBroken(int x, int y, int z) {
+        // no-op
+    }
+
+    @Override
+    public void neighborChanged() {
+        // no-op
+    }
+
+    @Override
+    public boolean blockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        return false; // no-op
+    }
+
     protected NBTTagCompound getDescriptionNBT() {
         final NBTTagCompound tag = new NBTTagCompound();
         tag.setString("owner", owner);
@@ -65,5 +87,4 @@ public class TileMoarP extends TileEntity {
     public final String getOwner() {
         return owner;
     }
-
 }

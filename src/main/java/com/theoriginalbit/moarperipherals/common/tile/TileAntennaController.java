@@ -32,8 +32,6 @@ import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.chunk.TicketManager;
 import com.theoriginalbit.moarperipherals.common.chunk.IChunkLoader;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IPlaceAwareTile;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
@@ -55,7 +53,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @LuaPeripheral("bitnet_tower")
-public class TileAntennaController extends TileMoarP implements IPlaceAwareTile, IBreakAwareTile, IBitNetCompliant, IChunkLoader {
+public class TileAntennaController extends TileMoarP implements IBitNetCompliant, IChunkLoader {
 
     private static final String EVENT_BITNET = "bitnet_message";
     private final ArrayList<UUID> receivedMessages = Lists.newArrayList();
@@ -149,7 +147,7 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
      */
 
     @Override
-    public void onPlaced(EntityLivingBase entity, ItemStack stack, int x, int y, int z) {
+    public void blockPlaced() {
         onBlockAdded();
     }
 
@@ -158,7 +156,7 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
      */
 
     @Override
-    public void onBreak(int x, int y, int z) {
+    public void blockBroken(int x, int y, int z) {
         onBlockRemoved();
     }
 

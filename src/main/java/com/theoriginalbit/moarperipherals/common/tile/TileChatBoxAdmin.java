@@ -22,7 +22,6 @@ import com.theoriginalbit.moarperipherals.api.listener.IPlayerEventListener;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
 import com.theoriginalbit.moarperipherals.api.listener.ICommandListener;
 import com.theoriginalbit.moarperipherals.api.listener.IDeathListener;
@@ -49,7 +48,7 @@ import java.util.ArrayList;
  * @since 12/10/2014
  */
 @LuaPeripheral("chatbox_admin")
-public class TileChatBoxAdmin extends TileMoarP implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener, IPlayerEventListener {
+public class TileChatBoxAdmin extends TileMoarP implements IChatListener, IDeathListener, ICommandListener, IPlayerEventListener {
     private static final String EVENT_CHAT = "chat_message";
     private static final String EVENT_DEATH = "death_message";
     private static final String EVENT_JOIN = "player_join";
@@ -130,7 +129,7 @@ public class TileChatBoxAdmin extends TileMoarP implements IBreakAwareTile, ICha
     }
 
     @Override
-    public void onBreak(int x, int y, int z) {
+    public void blockBroken(int x, int y, int z) {
         unload();
     }
 

@@ -17,7 +17,6 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +25,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 
 @LuaPeripheral("player_detector")
-public class TilePlayerDetector extends TileMoarP implements IActivateAwareTile {
+public class TilePlayerDetector extends TileMoarP {
 
     private static final String EVENT_PLAYER = "player";
 
@@ -34,7 +33,7 @@ public class TilePlayerDetector extends TileMoarP implements IActivateAwareTile 
     public ArrayList<IComputerAccess> computers;
 
     @Override
-    public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
             return false;
         }

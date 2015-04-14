@@ -17,7 +17,6 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.base.Strings;
 import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
 import com.theoriginalbit.moarperipherals.common.block.BlockKeyboardPc;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
@@ -28,7 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-public class TileKeyboard extends TileMoarP implements IPairedDevice, IActivateAwareTile {
+public class TileKeyboard extends TileMoarP implements IPairedDevice {
     private int connectedInstanceId = -1;
     private String connectedInstanceDesc;
     private boolean connected;
@@ -85,7 +84,7 @@ public class TileKeyboard extends TileMoarP implements IPairedDevice, IActivateA
      * When the Keyboard is right-clicked, it shall turn on the target computer if it is not on
      */
     @Override
-    public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         PairedUtils.turnOn(PairedUtils.getInstance(connectedInstanceId));
         return true;
     }

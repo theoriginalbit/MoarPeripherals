@@ -38,7 +38,7 @@ public class TileFireworksCreative extends TileFireworks {
      * We don't want the buffers returned on the creative launcher, the player shouldn't get free resources
      */
     @Override
-    public void onBreak(int x, int y, int z) {
+    public void blockBroken(int x, int y, int z) {
         // NO-OP
     }
 

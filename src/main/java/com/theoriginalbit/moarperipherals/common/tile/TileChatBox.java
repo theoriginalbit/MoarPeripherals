@@ -21,9 +21,9 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
+import com.theoriginalbit.moarperipherals.api.event.IBlockEventHandler;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
 import com.theoriginalbit.moarperipherals.api.listener.ICommandListener;
 import com.theoriginalbit.moarperipherals.api.listener.IDeathListener;
@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @LuaPeripheral("chatbox")
-public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatListener, IDeathListener, ICommandListener {
+public class TileChatBox extends TileMoarP implements IChatListener, IDeathListener, ICommandListener {
 
     private static final String ERROR_TOO_MANY = "too many messages (max %d per second)";
     private static final String ERROR_RANGE_FORMAT = "range must be between -1 (infinite) and %d inclusive";
@@ -206,7 +206,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
     }
 
     @Override
-    public void onBreak(int x, int y, int z) {
+    public void blockBroken(int x, int y, int z) {
         unload();
     }
 
@@ -317,5 +317,4 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
     private String buildMessage(String msg, boolean pm) {
         return "[" + (label.isEmpty() ? "ChatBox" : label) + (ConfigData.displayChatBoxCoordinate ? String.format(" (%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "] " + (pm ? "[PM] " : "") + msg;
     }
-
 }

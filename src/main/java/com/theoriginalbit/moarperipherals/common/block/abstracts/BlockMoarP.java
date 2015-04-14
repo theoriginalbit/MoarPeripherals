@@ -17,10 +17,7 @@ package com.theoriginalbit.moarperipherals.common.block.abstracts;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
-import com.theoriginalbit.moarperipherals.api.tile.aware.INeighborAwareTile;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IPlaceAwareTile;
+import com.theoriginalbit.moarperipherals.api.event.IBlockEventHandler;
 import com.theoriginalbit.moarperipherals.api.tile.IHasGui;
 import com.theoriginalbit.moarperipherals.api.tile.IHasSpecialDrops;
 import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
@@ -82,8 +79,8 @@ public abstract class BlockMoarP extends BlockContainer {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
         final TileEntity tile = world.getTileEntity(x, y, z);
 
-        if (tile instanceof IPlaceAwareTile) {
-            ((IPlaceAwareTile) tile).onPlaced(entity, stack, x, y, z);
+        if (tile instanceof IBlockEventHandler) {
+            ((IBlockEventHandler) tile).blockPlaced();
         }
 
         if (tile != null && entity instanceof EntityPlayer) {
@@ -100,15 +97,16 @@ public abstract class BlockMoarP extends BlockContainer {
             return true;
         }
 
-        return tile instanceof IActivateAwareTile && ((IActivateAwareTile) tile).onActivated(player, side, hitX, hitY, hitZ);
+        return tile instanceof IBlockEventHandler && ((IBlockEventHandler) tile).blockActivated(player, side, hitX,
+                hitY, hitZ);
     }
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
         final TileEntity tile = world.getTileEntity(x, y, z);
 
-        if (tile instanceof IBreakAwareTile) {
-            ((IBreakAwareTile) tile).onBreak(x, y, z);
+        if (tile instanceof IBlockEventHandler) {
+            ((IBlockEventHandler) tile).blockBroken(x, y, z);
         }
 
         if (tile instanceof IInventory) {
@@ -143,8 +141,8 @@ public abstract class BlockMoarP extends BlockContainer {
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
         final TileEntity tile = world.getTileEntity(x, y, z);
 
-        if (tile instanceof INeighborAwareTile) {
-            ((INeighborAwareTile) tile).onNeighbourChanged();
+        if (tile instanceof IBlockEventHandler) {
+            ((IBlockEventHandler) tile).neighborChanged();
         }
 
         super.onNeighborBlockChange(world, x, y, z, block);

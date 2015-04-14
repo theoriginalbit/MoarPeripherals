@@ -21,8 +21,6 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IActivateAwareTile;
-import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
 import com.theoriginalbit.moarperipherals.common.tile.firework.LauncherTube;
 import com.theoriginalbit.moarperipherals.common.tile.firework.QueueBuffer;
@@ -49,7 +47,7 @@ import java.util.List;
  */
 @LuaPeripheral("firework_launcher")
 @Computers.Mount(MountMoarP.class)
-public class TileFireworks extends TileInventory implements IActivateAwareTile, IBreakAwareTile {
+public class TileFireworks extends TileInventory {
     private static final ImmutableList<ItemStack> ITEM_SHAPES = ImmutableList.of(
             new ItemStack(Items.fire_charge),
             new ItemStack(Items.gold_nugget),
@@ -98,7 +96,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     @Override
-    public boolean onActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         if (!isCreativeLauncher()) {
             player.displayGUIChest(this);
             return true;
@@ -107,7 +105,7 @@ public class TileFireworks extends TileInventory implements IActivateAwareTile, 
     }
 
     @Override
-    public void onBreak(int x, int y, int z) {
+    public void blockBroken(int x, int y, int z) {
         // explode the buffers, they spent good resources to have those rockets!
         bufferRocket.explodeBuffer(worldObj, x, y, z);
         bufferStar.explodeBuffer(worldObj, x, y, z);
