@@ -13,7 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@API(apiVersion = "@VERSION@", owner = "MoarPeripherals", provides = "MoarPeripherals|API|Upgrade")
-package com.theoriginalbit.moarperipherals.api.upgrade;
+package com.theoriginalbit.moarperipherals.client.upgrade;
 
-import cpw.mods.fml.common.API;
+import net.minecraft.client.renderer.texture.IIconRegister;
+
+/**
+ * @author theoriginalbit
+ * @since 14/10/2014
+ */
+public interface IUpgradeToolIcon {
+
+    public void registerIcons(IIconRegister register);
+
+}

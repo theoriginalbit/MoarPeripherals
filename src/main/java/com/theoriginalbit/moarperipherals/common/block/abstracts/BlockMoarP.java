@@ -18,9 +18,9 @@ package com.theoriginalbit.moarperipherals.common.block.abstracts;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.event.IBlockEventHandler;
-import com.theoriginalbit.moarperipherals.api.tile.IHasGui;
-import com.theoriginalbit.moarperipherals.api.tile.IHasSpecialDrops;
-import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
+import com.theoriginalbit.moarperipherals.client.gui.IHasGui;
+import com.theoriginalbit.moarperipherals.api.hook.IBlockDropHook;
+import com.theoriginalbit.moarperipherals.api.hook.IPairedDeviceHook;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
@@ -122,12 +122,8 @@ public abstract class BlockMoarP extends BlockContainer {
 
         final List<ItemStack> tileDrops = Lists.newArrayList();
 
-        if (tile instanceof IPairedDevice) {
-            ItemStack drop = ((IPairedDevice) tile).getPairedDrop();
-            tileDrops.add(drop);
-        }
-        if (tile instanceof IHasSpecialDrops) {
-            ((IHasSpecialDrops) tile).addDrops(tileDrops);
+        if (tile instanceof IBlockDropHook) {
+            ((IBlockDropHook) tile).addDrops(tileDrops);
         }
 
         for (ItemStack stack : tileDrops) {

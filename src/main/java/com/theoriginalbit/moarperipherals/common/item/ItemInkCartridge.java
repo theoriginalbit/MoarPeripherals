@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.item;
 
-import com.theoriginalbit.moarperipherals.api.ITooltipInformer;
+import com.theoriginalbit.moarperipherals.api.hook.ITooltipHook;
 import com.theoriginalbit.moarperipherals.common.item.abstracts.ItemMoarP;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author theoriginalbit
  * @since 16/11/14
  */
-public class ItemInkCartridge extends ItemMoarP implements ITooltipInformer {
+public class ItemInkCartridge extends ItemMoarP implements ITooltipHook {
     private IIcon iconInkC;
     private IIcon iconInkM;
     private IIcon iconInkY;
@@ -81,7 +81,7 @@ public class ItemInkCartridge extends ItemMoarP implements ITooltipInformer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformativeTooltip(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
+    public void addToTooltip(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
         final int inkColor = getInkColor(stack);
         final String inkName = getInkName(inkColor);
 

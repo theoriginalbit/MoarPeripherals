@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Joshua Asbury (@theoriginalbit)
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,6 @@ package com.theoriginalbit.moarperipherals.common.handler;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
-import com.theoriginalbit.moarperipherals.api.listener.ICommandListener;
-import com.theoriginalbit.moarperipherals.api.listener.IDeathListener;
-import com.theoriginalbit.moarperipherals.api.listener.IPlayerEventListener;
 import com.theoriginalbit.moarperipherals.common.reference.Mods;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import cpw.mods.fml.common.Loader;
@@ -39,18 +35,19 @@ public final class ChatBoxHandler {
 
     public static void init() {
         if (Loader.isModLoaded(Mods.OPENPERIPHERALADDON)) {
-            LogUtils.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command as a ChatBox command so it is ignored by ChatBoxes.");
+            LogUtils.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command as a " +
+                    "ChatBox command so it is ignored by ChatBoxes.");
             instance.commandBlacklist.add("$$");
         }
     }
 
-    private final ArrayList<IChatListener> chatListeners = Lists.newArrayList();
-    private final ArrayList<IDeathListener> deathListeners = Lists.newArrayList();
-    private final ArrayList<IPlayerEventListener> playerListeners = Lists.newArrayList();
+    private final ArrayList<IChatHook> chatListeners = Lists.newArrayList();
+    private final ArrayList<IDeathHook> deathListeners = Lists.newArrayList();
+    private final ArrayList<IPlayerEventHook> playerListeners = Lists.newArrayList();
     private final ArrayList<String> commandBlacklist = Lists.newArrayList();
-    private final HashMap<String, ArrayList<ICommandListener>> commandListeners = Maps.newHashMap();
+    private final HashMap<String, ArrayList<ICommandHook>> commandListeners = Maps.newHashMap();
 
-    public void addChatListener(IChatListener listener) {
+    public void addChatHook(IChatHook listener) {
         synchronized (chatListeners) {
             if (!chatListeners.contains(listener)) {
                 chatListeners.add(listener);
@@ -58,7 +55,7 @@ public final class ChatBoxHandler {
         }
     }
 
-    public void removeChatListener(IChatListener listener) {
+    public void removeChatHook(IChatHook listener) {
         synchronized (chatListeners) {
             if (chatListeners.contains(listener)) {
                 chatListeners.remove(listener);
@@ -66,7 +63,7 @@ public final class ChatBoxHandler {
         }
     }
 
-    public void addDeathListener(IDeathListener listener) {
+    public void addDeathHook(IDeathHook listener) {
         synchronized (deathListeners) {
             if (!deathListeners.contains(listener)) {
                 deathListeners.add(listener);
@@ -74,7 +71,7 @@ public final class ChatBoxHandler {
         }
     }
 
-    public void removeDeathListener(IDeathListener listener) {
+    public void removeDeathHook(IDeathHook listener) {
         synchronized (deathListeners) {
             if (deathListeners.contains(listener)) {
                 deathListeners.remove(listener);
@@ -82,7 +79,7 @@ public final class ChatBoxHandler {
         }
     }
 
-    public void addPlayerEventListener(IPlayerEventListener listener) {
+    public void addPlayerEventHook(IPlayerEventHook listener) {
         synchronized (playerListeners) {
             if (!playerListeners.contains(listener)) {
                 playerListeners.add(listener);
@@ -90,7 +87,7 @@ public final class ChatBoxHandler {
         }
     }
 
-    public void removePlayerEventListener(IPlayerEventListener listener) {
+    public void removePlayerEventHook(IPlayerEventHook listener) {
         synchronized (playerListeners) {
             if (playerListeners.contains(listener)) {
                 playerListeners.remove(listener);
@@ -98,18 +95,18 @@ public final class ChatBoxHandler {
         }
     }
 
-    public void addCommandListener(ICommandListener listener) throws Exception {
+    public void addCommandHook(ICommandHook listener) throws Exception {
         final String token = listener.getToken();
 
         synchronized (commandListeners) {
             if (!commandListeners.containsKey(token)) {
-                commandListeners.put(token, new ArrayList<ICommandListener>());
+                commandListeners.put(token, new ArrayList<ICommandHook>());
             }
             commandListeners.get(token).add(listener);
         }
     }
 
-    public void removeCommandListener(ICommandListener listener) {
+    public void removeCommandHook(ICommandHook listener) {
         final String token = listener.getToken();
 
         synchronized (commandListeners) {
@@ -135,10 +132,10 @@ public final class ChatBoxHandler {
 
         // check if it is a registered command, if it is, chat listeners shouldn't get this!
         synchronized (commandListeners) {
-            for (Entry<String, ArrayList<ICommandListener>> entry : commandListeners.entrySet()) {
+            for (Entry<String, ArrayList<ICommandHook>> entry : commandListeners.entrySet()) {
                 final String token = entry.getKey();
                 if (event.message.startsWith(token)) {
-                    for (ICommandListener listener : entry.getValue()) {
+                    for (ICommandHook listener : entry.getValue()) {
                         listener.onServerChatEvent(event.message.substring(token.length()).trim(), event.player);
                     }
                     event.setCanceled(true);
@@ -149,7 +146,7 @@ public final class ChatBoxHandler {
 
         // it wasn't a command, IChatListeners can have it now
         synchronized (chatListeners) {
-            for (IChatListener listener : chatListeners) {
+            for (IChatHook listener : chatListeners) {
                 listener.onServerChatEvent(event);
             }
         }
@@ -158,7 +155,7 @@ public final class ChatBoxHandler {
     @SubscribeEvent
     public void onLivingDeathEvent(LivingDeathEvent event) {
         synchronized (deathListeners) {
-            for (IDeathListener listener : deathListeners) {
+            for (IDeathHook listener : deathListeners) {
                 listener.onDeathEvent(event);
             }
         }
@@ -167,7 +164,7 @@ public final class ChatBoxHandler {
     @SubscribeEvent
     public void onPlayerJoin(PlayerLoggedInEvent event) {
         synchronized (playerListeners) {
-            for (IPlayerEventListener listener : playerListeners) {
+            for (IPlayerEventHook listener : playerListeners) {
                 listener.onPlayerJoin(event.player.getDisplayName());
             }
         }
@@ -176,7 +173,7 @@ public final class ChatBoxHandler {
     @SubscribeEvent
     public void onPlayerLeave(PlayerLoggedOutEvent event) {
         synchronized (playerListeners) {
-            for (IPlayerEventListener listener : playerListeners) {
+            for (IPlayerEventHook listener : playerListeners) {
                 listener.onPlayerLeave(event.player.getDisplayName());
             }
         }

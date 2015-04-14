@@ -15,8 +15,8 @@
  */
 package com.theoriginalbit.moarperipherals.client;
 
-import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeIcon;
-import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
+import com.theoriginalbit.moarperipherals.client.upgrade.IUpgradeIcon;
+import com.theoriginalbit.moarperipherals.client.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;

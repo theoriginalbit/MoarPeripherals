@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
-import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
+import com.theoriginalbit.moarperipherals.client.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.framework.peripheral.turtle.UpgradePeripheral;

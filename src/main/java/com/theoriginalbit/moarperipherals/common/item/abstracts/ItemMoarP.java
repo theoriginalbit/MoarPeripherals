@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.item.abstracts;
 
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.moarperipherals.api.ITooltipInformer;
+import com.theoriginalbit.moarperipherals.api.hook.ITooltipHook;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.utils.KeyboardUtils;
@@ -52,9 +52,9 @@ public class ItemMoarP extends Item {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
         Item item = stack.getItem();
-        if (item instanceof ITooltipInformer) {
+        if (item instanceof ITooltipHook) {
             if (KeyboardUtils.isShiftKeyDown()) {
-                ((ITooltipInformer) item).addInformativeTooltip(stack, player, list, bool);
+                ((ITooltipHook) item).addToTooltip(stack, player, list, bool);
             } else {
                 list.add(Constants.TOOLTIPS.SHIFT_INFO.getLocalised());
             }

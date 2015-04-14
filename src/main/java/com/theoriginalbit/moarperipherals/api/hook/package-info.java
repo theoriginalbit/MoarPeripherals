@@ -18,7 +18,7 @@
  *
  * @author Joshua Asbury (@theoriginalbit)
  */
-@API(apiVersion = "2.0", owner = "MoarPeripherals", provides = "MoarPeripheralsAPI|BitNet")
-package com.theoriginalbit.moarperipherals.api.bitnet;
+@API(apiVersion = "2.0", owner = "MoarPeripherals", provides = "MoarPeripheralsAPI|Hook")
+package com.theoriginalbit.moarperipherals.api.hook;
 
 import cpw.mods.fml.common.API;

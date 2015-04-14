@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.item.block;
 
-import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
+import com.theoriginalbit.moarperipherals.api.hook.IPairedDeviceHook;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.utils.*;
 import cpw.mods.fml.relauncher.Side;
@@ -43,7 +43,7 @@ public class ItemBlockPaired extends ItemBlock {
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
         if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, meta)) {
-            IPairedDevice tile = WorldUtils.getTileEntity(world, x, y, z, IPairedDevice.class);
+            IPairedDeviceHook tile = WorldUtils.getTileEntity(world, x, y, z, IPairedDeviceHook.class);
             setupTileEntity(stack, tile);
             return true;
         }
@@ -99,7 +99,7 @@ public class ItemBlockPaired extends ItemBlock {
         }
     }
 
-    private boolean setupTileEntity(ItemStack stack, IPairedDevice tile) {
+    private boolean setupTileEntity(ItemStack stack, IPairedDeviceHook tile) {
         return containsTargetInfo(stack) && tile.configureTargetFromNbt(NBTUtils.getItemTag(stack));
     }
 

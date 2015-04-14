@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.base.Strings;
-import com.theoriginalbit.moarperipherals.api.tile.IPairedDevice;
+import com.theoriginalbit.moarperipherals.api.hook.IPairedDeviceHook;
 import com.theoriginalbit.moarperipherals.common.block.BlockKeyboardPc;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
@@ -27,7 +27,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-public class TileKeyboard extends TileMoarP implements IPairedDevice {
+import java.util.List;
+
+public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
     private int connectedInstanceId = -1;
     private String connectedInstanceDesc;
     private boolean connected;
@@ -125,12 +127,12 @@ public class TileKeyboard extends TileMoarP implements IPairedDevice {
     }
 
     @Override
-    public ItemStack getPairedDrop() {
-        ItemStack stack = new ItemStack(getBlockType(), 1);
+    public void addDrops(List<ItemStack> dropsList) {
+        final ItemStack stack = new ItemStack(getBlockType(), 1);
         if (connectedInstanceId > -1) {
             NBTUtils.setInteger(stack, "instanceId", connectedInstanceId);
         }
-        return stack;
+        dropsList.add(stack);
     }
 
     public final void terminateTarget() {
@@ -163,5 +165,4 @@ public class TileKeyboard extends TileMoarP implements IPairedDevice {
 //        return PairedUtils.isRegisteredInstance(connectedInstanceId) &&
 //                PairedUtils.distanceToComputer(connectedInstanceId, coord) <= ConfigData.keyboardRange;
     }
-
 }

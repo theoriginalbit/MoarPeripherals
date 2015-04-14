@@ -21,12 +21,11 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.api.event.IBlockEventHandler;
+import com.theoriginalbit.moarperipherals.common.handler.IChatHook;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
-import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
-import com.theoriginalbit.moarperipherals.api.listener.ICommandListener;
-import com.theoriginalbit.moarperipherals.api.listener.IDeathListener;
+import com.theoriginalbit.moarperipherals.common.handler.ICommandHook;
+import com.theoriginalbit.moarperipherals.common.handler.IDeathHook;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.ChatUtils;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
@@ -47,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @LuaPeripheral("chatbox")
-public class TileChatBox extends TileMoarP implements IChatListener, IDeathListener, ICommandListener {
+public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICommandHook {
 
     private static final String ERROR_TOO_MANY = "too many messages (max %d per second)";
     private static final String ERROR_RANGE_FORMAT = "range must be between -1 (infinite) and %d inclusive";
@@ -187,10 +186,10 @@ public class TileChatBox extends TileMoarP implements IChatListener, IDeathListe
         }
 
         if (!worldObj.isRemote && !registered) {
-            ChatBoxHandler.instance.addChatListener(this);
-            ChatBoxHandler.instance.addDeathListener(this);
+            ChatBoxHandler.instance.addChatHook(this);
+            ChatBoxHandler.instance.addDeathHook(this);
             try {
-                ChatBoxHandler.instance.addCommandListener(this);
+                ChatBoxHandler.instance.addCommandHook(this);
             } catch (Exception e) {
                 LogUtils.info(String.format("Failed to register command listener for ChatBox at %d %d %d", xCoord, yCoord, zCoord));
                 e.printStackTrace();
@@ -210,16 +209,12 @@ public class TileChatBox extends TileMoarP implements IChatListener, IDeathListe
         unload();
     }
 
-    // IChatListener
-
     @Override
     public void onServerChatEvent(ServerChatEvent event) {
         if (rangeRead < 0 || entityInRange(event.player, rangeRead)) {
             computerQueueEvent(EVENT_CHAT, event.player.getDisplayName(), event.message);
         }
     }
-
-    // IDeathListener
 
     @Override
     public void onDeathEvent(LivingDeathEvent event) {
@@ -237,8 +232,6 @@ public class TileChatBox extends TileMoarP implements IChatListener, IDeathListe
             }
         }
     }
-
-    // ICommandListener
 
     @Override
     public String getToken() {
@@ -266,9 +259,9 @@ public class TileChatBox extends TileMoarP implements IChatListener, IDeathListe
     private void unload() {
         // remove the ChatBox to the ChatListener
         if (!worldObj.isRemote) {
-            ChatBoxHandler.instance.removeChatListener(this);
-            ChatBoxHandler.instance.removeDeathListener(this);
-            ChatBoxHandler.instance.removeCommandListener(this);
+            ChatBoxHandler.instance.removeChatHook(this);
+            ChatBoxHandler.instance.removeDeathHook(this);
+            ChatBoxHandler.instance.removeCommandHook(this);
         }
     }
 

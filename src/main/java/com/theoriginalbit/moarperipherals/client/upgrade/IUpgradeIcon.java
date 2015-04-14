@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.api.tile;
+package com.theoriginalbit.moarperipherals.client.upgrade;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.client.renderer.texture.IIconRegister;
 
-public interface IPairedDevice {
-    /**
-     * Setup the target information based on NBT data and
-     * return success.
-     */
-    public boolean configureTargetFromNbt(NBTTagCompound tag);
+/**
+ * @author theoriginalbit
+ * @since 14/10/2014
+ */
+public interface IUpgradeIcon {
 
-    public ItemStack getPairedDrop();
+    public void registerIcons(IIconRegister register);
+
 }

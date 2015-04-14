@@ -18,13 +18,13 @@ package com.theoriginalbit.moarperipherals.common.tile;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.api.listener.IPlayerEventListener;
+import com.theoriginalbit.moarperipherals.common.handler.IPlayerEventHook;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
-import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
-import com.theoriginalbit.moarperipherals.api.listener.ICommandListener;
-import com.theoriginalbit.moarperipherals.api.listener.IDeathListener;
+import com.theoriginalbit.moarperipherals.common.handler.IChatHook;
+import com.theoriginalbit.moarperipherals.common.handler.ICommandHook;
+import com.theoriginalbit.moarperipherals.common.handler.IDeathHook;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.ChatUtils;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
@@ -48,7 +48,7 @@ import java.util.ArrayList;
  * @since 12/10/2014
  */
 @LuaPeripheral("chatbox_admin")
-public class TileChatBoxAdmin extends TileMoarP implements IChatListener, IDeathListener, ICommandListener, IPlayerEventListener {
+public class TileChatBoxAdmin extends TileMoarP implements IChatHook, IDeathHook, ICommandHook, IPlayerEventHook {
     private static final String EVENT_CHAT = "chat_message";
     private static final String EVENT_DEATH = "death_message";
     private static final String EVENT_JOIN = "player_join";
@@ -109,11 +109,11 @@ public class TileChatBoxAdmin extends TileMoarP implements IChatListener, IDeath
     @Override
     public void updateEntity() {
         if (!worldObj.isRemote && !registered) {
-            ChatBoxHandler.instance.addChatListener(this);
-            ChatBoxHandler.instance.addDeathListener(this);
-            ChatBoxHandler.instance.addPlayerEventListener(this);
+            ChatBoxHandler.instance.addChatHook(this);
+            ChatBoxHandler.instance.addDeathHook(this);
+            ChatBoxHandler.instance.addPlayerEventHook(this);
             try {
-                ChatBoxHandler.instance.addCommandListener(this);
+                ChatBoxHandler.instance.addCommandHook(this);
             } catch (Exception e) {
                 LogUtils.info(String.format("Failed to register command listener for ChatBox at %d %d %d", xCoord, yCoord, zCoord));
                 e.printStackTrace();
@@ -133,14 +133,10 @@ public class TileChatBoxAdmin extends TileMoarP implements IChatListener, IDeath
         unload();
     }
 
-    // IChatListener
-
     @Override
     public void onServerChatEvent(ServerChatEvent event) {
         computerQueueEvent(EVENT_CHAT, event.player.getDisplayName(), event.message);
     }
-
-    // IDeathListener
 
     @Override
     public void onDeathEvent(LivingDeathEvent event) {
@@ -157,7 +153,6 @@ public class TileChatBoxAdmin extends TileMoarP implements IChatListener, IDeath
         }
     }
 
-    // IPlayerEventListener
     @Override
     public void onPlayerJoin(String username) {
         computerQueueEvent(EVENT_JOIN, username);
@@ -167,8 +162,6 @@ public class TileChatBoxAdmin extends TileMoarP implements IChatListener, IDeath
     public void onPlayerLeave(String username) {
         computerQueueEvent(EVENT_LEAVE, username);
     }
-
-    // ICommandListener
 
     @Override
     public String getToken() {
@@ -194,10 +187,10 @@ public class TileChatBoxAdmin extends TileMoarP implements IChatListener, IDeath
     private void unload() {
         // remove the ChatBox to the ChatListener
         if (!worldObj.isRemote) {
-            ChatBoxHandler.instance.removeChatListener(this);
-            ChatBoxHandler.instance.removeDeathListener(this);
-            ChatBoxHandler.instance.removeCommandListener(this);
-            ChatBoxHandler.instance.removePlayerEventListener(this);
+            ChatBoxHandler.instance.removeChatHook(this);
+            ChatBoxHandler.instance.removeDeathHook(this);
+            ChatBoxHandler.instance.removeCommandHook(this);
+            ChatBoxHandler.instance.removePlayerEventHook(this);
         }
     }
 
