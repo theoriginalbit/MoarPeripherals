@@ -103,6 +103,14 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetNode {
         }
     }
 
+    @Override
+    public void blockBroken(int x, int y, int z) {
+        if (!worldObj.isRemote) {
+            BitNetRegistry.INSTANCE.remove(this);
+        }
+        registered = false;
+    }
+
     private void registerTower() {
         if (!worldObj.isRemote) {
             BitNetRegistry.INSTANCE.add(this);
