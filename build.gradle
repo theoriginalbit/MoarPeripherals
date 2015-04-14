@@ -40,7 +40,7 @@ minecraft {
 }
 
 dependencies {
-    compile 'com.mod-buildcraft:buildcraft:6.1.7:dev'
+    compile 'com.mod-buildcraft:buildcraft:6.4.11:dev'
 }
 
 processResources {
