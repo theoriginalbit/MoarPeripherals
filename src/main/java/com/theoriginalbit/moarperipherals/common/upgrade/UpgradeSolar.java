@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
@@ -37,7 +37,7 @@ public class UpgradeSolar extends UpgradePeripheral implements IUpgradeToolIcon 
     private IIcon icon;
 
     public UpgradeSolar() {
-        super(ConfigHandler.upgradeIdSolar, Constants.UPGRADE.SOLAR.getLocalised(), new ItemStack(ModItems.itemUpgradeSolar));
+        super(ConfigData.upgradeIdSolar, Constants.UPGRADE.SOLAR.getLocalised(), new ItemStack(ModItems.itemUpgradeSolar));
     }
 
     @Override

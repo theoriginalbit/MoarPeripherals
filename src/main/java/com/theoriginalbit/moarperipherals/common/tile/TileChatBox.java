@@ -21,7 +21,7 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
@@ -67,16 +67,16 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
 
     // user runtime configurable
     private String label = "";
-    private int rangeSay = ConfigHandler.chatRangeSay;
-    private int rangeTell = ConfigHandler.chatRangeTell;
-    private int rangeRead = ConfigHandler.chatRangeRead;
+    private int rangeSay = ConfigData.chatRangeSay;
+    private int rangeTell = ConfigData.chatRangeTell;
+    private int rangeRead = ConfigData.chatRangeRead;
 
     @Computers.List
     public ArrayList<IComputerAccess> computers;
 
     @LuaFunction
     public boolean say(String message) throws Exception {
-        Preconditions.checkArgument(count++ <= ConfigHandler.chatSayRate, ERROR_TOO_MANY, ConfigHandler.chatSayRate);
+        Preconditions.checkArgument(count++ <= ConfigData.chatSayRate, ERROR_TOO_MANY, ConfigData.chatSayRate);
 
         final String[] usernames = getPlayerUsernames();
         if (usernames.length == 0) {
@@ -89,7 +89,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
 
     @LuaFunction
     public boolean tell(String username, String message) throws Exception {
-        Preconditions.checkArgument(count++ <= ConfigHandler.chatSayRate, ERROR_TOO_MANY, ConfigHandler.chatSayRate);
+        Preconditions.checkArgument(count++ <= ConfigData.chatSayRate, ERROR_TOO_MANY, ConfigData.chatSayRate);
 
         ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
 
@@ -120,7 +120,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
     @LuaFunction
     @MultiReturn
     public Object[] setSayRange(int range) {
-        final Object[] valid = validateRange(range, ConfigHandler.chatRangeSay);
+        final Object[] valid = validateRange(range, ConfigData.chatRangeSay);
         // if the new range was accepted
         if ((Boolean) valid[0]) {
             rangeSay = range;
@@ -135,13 +135,13 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
 
     @LuaFunction
     public int getMaxSayRange() {
-        return ConfigHandler.chatRangeSay;
+        return ConfigData.chatRangeSay;
     }
 
     @LuaFunction
     @MultiReturn
     public Object[] setTellRange(int range) {
-        final Object[] valid = validateRange(range, ConfigHandler.chatRangeTell);
+        final Object[] valid = validateRange(range, ConfigData.chatRangeTell);
         // if the new range was accepted
         if ((Boolean) valid[0]) {
             rangeTell = range;
@@ -156,13 +156,13 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
 
     @LuaFunction
     public int getMaxTellRange() {
-        return ConfigHandler.chatRangeTell;
+        return ConfigData.chatRangeTell;
     }
 
     @LuaFunction
     @MultiReturn
     public Object[] setReadRange(int range) {
-        final Object[] valid = validateRange(range, ConfigHandler.chatRangeRead);
+        final Object[] valid = validateRange(range, ConfigData.chatRangeRead);
         // if the new range was accepted
         if ((Boolean) valid[0]) {
             rangeRead = range;
@@ -177,7 +177,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
 
     @LuaFunction
     public int getMaxReadRange() {
-        return ConfigHandler.chatRangeRead;
+        return ConfigData.chatRangeRead;
     }
 
     @Override
@@ -315,7 +315,7 @@ public class TileChatBox extends TileMoarP implements IBreakAwareTile, IChatList
     }
 
     private String buildMessage(String msg, boolean pm) {
-        return "[" + (label.isEmpty() ? "ChatBox" : label) + (ConfigHandler.displayChatBoxCoords ? String.format(" (%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "] " + (pm ? "[PM] " : "") + msg;
+        return "[" + (label.isEmpty() ? "ChatBox" : label) + (ConfigData.displayChatBoxCoordinate ? String.format(" (%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "] " + (pm ? "[PM] " : "") + msg;
     }
 
 }

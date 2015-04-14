@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.upgrade.peripheral;
 
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxSmelt;
 import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
@@ -87,7 +87,7 @@ public class PeripheralFurnace {
         }
 
         // make sure there is enough fuel in the furnace
-        final int fuelNeeded = amount * ConfigHandler.upgradeFurnaceFuelConsumption;
+        final int fuelNeeded = amount * ConfigData.upgradeFurnaceFuelConsumption;
         if (turtle.isFuelNeeded() && turtle.getFuelLevel() < fuelNeeded) {
             return new Object[]{false, "not enough fuel to smelt", fuelNeeded - turtle.getFuelLevel()};
         }

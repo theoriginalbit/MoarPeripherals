@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Joshua Asbury (@theoriginalbit)
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,8 @@ import com.theoriginalbit.framework.peripheral.PeripheralProvider;
 import com.theoriginalbit.moarperipherals.client.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
 import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.Config;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.converter.ConverterItemStack;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
@@ -46,7 +47,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeChunkManager;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES, guiFactory = ModInfo.GUI_FACTORY)
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
 public class MoarPeripherals {
 
     @Instance(ModInfo.ID)
@@ -64,8 +65,7 @@ public class MoarPeripherals {
     public void preInit(FMLPreInitializationEvent event) {
         LogUtils.init();
 
-        final ConfigHandler config = ConfigHandler.init(event.getSuggestedConfigurationFile());
-        FMLCommonHandler.instance().bus().register(config);
+        Config.init(event.getSuggestedConfigurationFile());
 
         proxy.preInit();
 
@@ -80,12 +80,12 @@ public class MoarPeripherals {
         ModBlocks.INSTANCE.register();
         UpgradeRegistry.INSTANCE.register();
 
-        if (ConfigHandler.shouldChunkLoad()) {
+        if (ConfigData.shouldChunkLoad()) {
             LogUtils.debug("Registering chunk loading callback");
             ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
         }
 
-        if (ConfigHandler.enableAntenna) {
+        if (ConfigData.enableAntenna) {
             LogUtils.debug("Registering BitNet tick handler");
             FMLCommonHandler.instance().bus().register(new BitNetRegistry());
         }

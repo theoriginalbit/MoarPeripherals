@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.registry;
 
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.item.ItemInkCartridge;
 import com.theoriginalbit.moarperipherals.common.item.abstracts.ItemMoarP;
 import com.theoriginalbit.moarperipherals.common.item.ItemSonic;
@@ -46,39 +46,39 @@ public final class ModItems {
     }
 
     public final void register() {
-        if (ConfigHandler.enablePrinter) {
+        if (ConfigData.enablePrinter) {
             itemInkCartridge = new ItemInkCartridge();
             GameRegistry.registerItem(itemInkCartridge, "itemInkCartridge");
         }
 
-        if (ConfigHandler.isSonicEnabled()) {
+        if (ConfigData.isSonicEnabled()) {
             itemSonic = new ItemSonic();
             GameRegistry.registerItem(itemSonic, "itemSonic");
         }
 
-        if (ConfigHandler.enableKeyboard) {
+        if (ConfigData.enableKeyboard) {
             itemKeyboardPart = new ItemMoarP("keyboardPart");
             GameRegistry.registerItem(itemKeyboardPart, "itemKeyboardPart");
         }
 
-        if (ConfigHandler.enableAntenna) {
+        if (ConfigData.enableAntenna) {
             itemMonopoleAntenna = new ItemMoarP("monopolePart");
             GameRegistry.registerItem(itemMonopoleAntenna, "itemMonopoleAntenna");
         }
 
-        if (ConfigHandler.enableUpgradeSolar) {
+        if (ConfigData.enableUpgradeSolar) {
             itemUpgradeSolar = new ItemMoarP("solarPanel");
             GameRegistry.registerItem(itemUpgradeSolar, "itemSolarPanel");
         }
 
-        if (ConfigHandler.enableUpgradeOreScanner) {
+        if (ConfigData.enableUpgradeOreScanner) {
             itemUpgradeOreScanner = new ItemMoarP("densityScanner");
             GameRegistry.registerItem(itemUpgradeOreScanner, "itemDensityScanner");
         }
     }
 
     public final void addRecipes() {
-        if (ConfigHandler.enablePrinter) {
+        if (ConfigData.enablePrinter) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemInkCartridge, 1, 4),
                     "SSS",
                     "SBS",
@@ -91,7 +91,7 @@ public final class ModItems {
             // TODO: make the Fake recipe stuff for loading ink cartridges
         }
 
-        if (ConfigHandler.isSonicEnabled()) {
+        if (ConfigData.isSonicEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemSonic, 1, 0),
                     "DIG",
                     "IRI",
@@ -116,7 +116,7 @@ public final class ModItems {
             ));
         }
 
-        if (ConfigHandler.enableKeyboard) {
+        if (ConfigData.enableKeyboard) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemKeyboardPart),
                     "BBB",
                     "RRR",
@@ -128,7 +128,7 @@ public final class ModItems {
             ));
         }
 
-        if (ConfigHandler.enableAntenna) {
+        if (ConfigData.enableAntenna) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemMonopoleAntenna, 4),
                     "M",
 
@@ -136,7 +136,7 @@ public final class ModItems {
             ));
         }
 
-        if (ConfigHandler.enableUpgradeSolar) {
+        if (ConfigData.enableUpgradeSolar) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgradeSolar),
                     "SSS",
                     "ICI",
@@ -147,7 +147,7 @@ public final class ModItems {
             ));
         }
 
-        if (ConfigHandler.enableUpgradeOreScanner) {
+        if (ConfigData.enableUpgradeOreScanner) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgradeOreScanner),
                     "III",
                     "DGS",

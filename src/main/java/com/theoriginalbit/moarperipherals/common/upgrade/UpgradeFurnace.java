@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.framework.peripheral.turtle.UpgradePeripheral;
 import com.theoriginalbit.moarperipherals.common.upgrade.peripheral.PeripheralFurnace;
@@ -36,7 +36,7 @@ public class UpgradeFurnace extends UpgradePeripheral implements IUpgradeToolIco
     private IIcon icon;
 
     public UpgradeFurnace() {
-        super(ConfigHandler.upgradeIdFurnace, Constants.UPGRADE.FURNACE.getLocalised(), new ItemStack(Blocks.furnace));
+        super(ConfigData.upgradeIdFurnace, Constants.UPGRADE.FURNACE.getLocalised(), new ItemStack(Blocks.furnace));
     }
 
     @Override

@@ -18,7 +18,7 @@ package com.theoriginalbit.moarperipherals.client;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeIcon;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
@@ -92,7 +92,7 @@ public class ProxyClient extends ProxyCommon {
     @Override
     public void registerRenderInfo() {
         // Register Keyboard renderers
-        if (ConfigHandler.enableKeyboard) {
+        if (ConfigData.enableKeyboard) {
             RendererKeyboard rendererKeyboard = new RendererKeyboard();
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockKeyboardMac), rendererKeyboard);
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockKeyboardPc), rendererKeyboard);
@@ -100,7 +100,7 @@ public class ProxyClient extends ProxyCommon {
         }
 
         // Register optional renders when enabled
-        if (ConfigHandler.enablePrinter && ConfigHandler.enablePrinterGfx) {
+        if (ConfigData.enablePrinter && ConfigData.enablePrinterGfx) {
             // printer
             RendererPrinter rendererPrinter = new RendererPrinter();
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockPrinter), rendererPrinter);
@@ -109,11 +109,11 @@ public class ProxyClient extends ProxyCommon {
             MinecraftForgeClient.registerItemRenderer(ModItems.itemInkCartridge, new RendererInkCartridge());
         }
 
-        if (ConfigHandler.isSonicEnabled() && ConfigHandler.enableSonicGfx) {
+        if (ConfigData.isSonicEnabled() && ConfigData.enableSonicGfx) {
             MinecraftForgeClient.registerItemRenderer(ModItems.itemSonic, new RendererItemSonic());
         }
 
-        if (ConfigHandler.enableAntenna) {
+        if (ConfigData.enableAntenna) {
             Constants.RENDER_ID.ANTENNA = RenderingRegistry.getNextAvailableRenderId();
             Constants.RENDER_ID.ANTENNA_CTRLR = RenderingRegistry.getNextAvailableRenderId();
             RenderingRegistry.registerBlockHandler(Constants.RENDER_ID.ANTENNA, new RendererAntenna());
@@ -121,7 +121,7 @@ public class ProxyClient extends ProxyCommon {
             ClientRegistry.bindTileEntitySpecialRenderer(TileAntennaController.class, new RendererTileAntenna());
         }
 
-        if (ConfigHandler.enableMiniAntenna) {
+        if (ConfigData.enableMiniAntenna) {
             RendererMiniAntenna rendererMiniAntenna = new RendererMiniAntenna();
             ClientRegistry.bindTileEntitySpecialRenderer(TileMiniAntenna.class, rendererMiniAntenna);
         }

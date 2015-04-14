@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.tile.TileIronNote;
@@ -30,7 +30,7 @@ import net.minecraft.util.IIcon;
 
 public class UpgradeIronNote extends UpgradePeripheral {
     public UpgradeIronNote() {
-        super(ConfigHandler.upgradeIdIronNote, Constants.UPGRADE.IRONNOTE.getLocalised(), new ItemStack(ModBlocks.blockIronNote));
+        super(ConfigData.upgradeIdIronNote, Constants.UPGRADE.IRONNOTE.getLocalised(), new ItemStack(ModBlocks.blockIronNote));
     }
 
     @Override

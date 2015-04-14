@@ -21,7 +21,7 @@ import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
@@ -100,12 +100,12 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetCompliant {
 
     @Override
     public int getReceiveRange() {
-        return ConfigHandler.miniAntennaRange;
+        return ConfigData.miniAntennaRange;
     }
 
     @Override
     public int getReceiveRangeDuringStorm() {
-        return ConfigHandler.miniAntennaRangeStorm;
+        return ConfigData.miniAntennaRangeStorm;
     }
 
     private void registerTower() {

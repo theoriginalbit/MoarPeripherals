@@ -20,7 +20,7 @@ import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.api.listener.IPlayerEventListener;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.api.tile.aware.IBreakAwareTile;
 import com.theoriginalbit.moarperipherals.api.listener.IChatListener;
@@ -203,7 +203,7 @@ public class TileChatBoxAdmin extends TileMoarP implements IBreakAwareTile, ICha
     }
 
     private String buildMessage(String msg, boolean pm) {
-        return "[" + (label.isEmpty() ? "ChatBox" : label) + (ConfigHandler.displayChatBoxCoords ? String.format(" (%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "] " + (pm ? "[PM] " : "") + msg;
+        return "[" + (label.isEmpty() ? "ChatBox" : label) + (ConfigData.displayChatBoxCoordinate ? String.format(" (%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "] " + (pm ? "[PM] " : "") + msg;
     }
 
 }

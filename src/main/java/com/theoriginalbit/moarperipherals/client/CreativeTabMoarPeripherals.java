@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.client;
 
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
@@ -40,9 +40,9 @@ public class CreativeTabMoarPeripherals extends CreativeTabs {
     public Item getTabIconItem() {
         final Block block;
 
-        if (ConfigHandler.enableAntenna) {
+        if (ConfigData.enableAntenna) {
             block = ModBlocks.blockAntennaController;
-        } else if (ConfigHandler.enablePlayerDetector) {
+        } else if (ConfigData.enablePlayerDetector) {
             block = ModBlocks.blockPlayerDetector;
         } else {
             block = null;

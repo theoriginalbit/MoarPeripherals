@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.api.upgrade.IUpgradeToolIcon;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.framework.peripheral.turtle.UpgradePeripheral;
@@ -37,7 +37,7 @@ public class UpgradeCompass extends UpgradePeripheral implements IUpgradeToolIco
     private IIcon icon;
 
     public UpgradeCompass() {
-        super(ConfigHandler.upgradeIdCompass, Constants.UPGRADE.COMPASS.getLocalised(), new ItemStack(Items.compass));
+        super(ConfigData.upgradeIdCompass, Constants.UPGRADE.COMPASS.getLocalised(), new ItemStack(Items.compass));
     }
 
     @Override

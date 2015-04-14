@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.framework.peripheral.turtle.UpgradeTool;
 import dan200.computercraft.api.turtle.ITurtleAccess;
@@ -40,7 +40,7 @@ public class UpgradeIgniter extends UpgradeTool {
     private final Random rand = new Random();
 
     public UpgradeIgniter() {
-        super(ConfigHandler.upgradeIdIgniter, Constants.UPGRADE.IGNITER.getLocalised(), new ItemStack(Items.flint_and_steel));
+        super(ConfigData.upgradeIdIgniter, Constants.UPGRADE.IGNITER.getLocalised(), new ItemStack(Items.flint_and_steel));
     }
 
     @Override

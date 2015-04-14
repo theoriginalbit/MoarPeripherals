@@ -18,7 +18,7 @@ package com.theoriginalbit.moarperipherals.common.tile;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxTeleport;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
@@ -91,7 +91,7 @@ public class TileTurtleTeleport extends TileMoarP {
         final ChunkCoordinates coords = turtle.getPosition();
         final double distance = Math.sqrt(coords.getDistanceSquared(x, y, z));
         // calculate the fuel required to get to this location
-        return (int) Math.ceil(distance * ConfigHandler.fuelMultiplier);
+        return (int) Math.ceil(distance * ConfigData.teleportFuelMultiplier);
     }
 
     private void doTeleportFX(ChunkCoordinates target) {

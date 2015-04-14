@@ -27,7 +27,7 @@ import com.theoriginalbit.moarperipherals.common.block.BlockAntenna;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaCell;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaController;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaMiniCell;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.chunk.TicketManager;
@@ -210,12 +210,12 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
 
     @Override
     public int getReceiveRange() {
-        return ConfigHandler.antennaRange;
+        return ConfigData.antennaRange;
     }
 
     @Override
     public int getReceiveRangeDuringStorm() {
-        return ConfigHandler.antennaRangeStorm;
+        return ConfigData.antennaRangeStorm;
     }
 
     /*
@@ -256,7 +256,7 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
     private void registerTower() {
         if (!worldObj.isRemote) {
             BitNetRegistry.registerCompliance(this);
-            if (ConfigHandler.antennaKeepsChunkLoaded && chunkTicket == null) {
+            if (ConfigData.antennaKeepsChunkLoaded && chunkTicket == null) {
                 chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
                 if (chunkTicket == null) {
                     LogUtils.info(String.format("Requesting chunk loading ticket for BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
@@ -277,7 +277,7 @@ public class TileAntennaController extends TileMoarP implements IPlaceAwareTile,
         if (!worldObj.isRemote) {
             BitNetRegistry.deregisterCompliance(this);
             // if there was a chunk loading ticket and the server isn't just stopping
-            if (ConfigHandler.antennaKeepsChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
+            if (ConfigData.antennaKeepsChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
                 LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
                 ForgeChunkManager.unforceChunk(chunkTicket, getChunkCoord());
                 TicketManager.releaseTicket(chunkTicket);

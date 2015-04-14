@@ -18,7 +18,7 @@ package com.theoriginalbit.moarperipherals.common.upgrade;
 import com.theoriginalbit.framework.peripheral.exception.TurtleFailureAttack;
 import com.theoriginalbit.framework.peripheral.exception.TurtleFailureDig;
 import com.theoriginalbit.framework.peripheral.turtle.UpgradeTool;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
@@ -43,7 +43,7 @@ public class UpgradeFeeder extends UpgradeTool {
     private static final ItemStack wheat = new ItemStack(Items.wheat);
 
     public UpgradeFeeder() {
-        super(ConfigHandler.upgradeIdFeeder, Constants.UPGRADE.FEEDER.getLocalised(), wheat);
+        super(ConfigData.upgradeIdFeeder, Constants.UPGRADE.FEEDER.getLocalised(), wheat);
     }
 
     @Override

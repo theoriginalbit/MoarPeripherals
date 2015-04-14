@@ -162,7 +162,7 @@ public class TileKeyboard extends TileMoarP implements IPairedDevice, IActivateA
         return PairedUtils.isRegisteredInstance(connectedInstanceId);
 //        final ChunkCoordinates coord = new ChunkCoordinates(xCoord, yCoord, zCoord);
 //        return PairedUtils.isRegisteredInstance(connectedInstanceId) &&
-//                PairedUtils.distanceToComputer(connectedInstanceId, coord) <= ConfigHandler.keyboardRange;
+//                PairedUtils.distanceToComputer(connectedInstanceId, coord) <= ConfigData.keyboardRange;
     }
 
 }

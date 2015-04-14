@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.google.common.collect.ImmutableList;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.framework.peripheral.turtle.UpgradeTool;
 import dan200.computercraft.api.turtle.ITurtleAccess;
@@ -41,7 +41,7 @@ public class UpgradeShears extends UpgradeTool {
     private static final ImmutableList<Block> SHEAR_DIG = ImmutableList.of(Blocks.wool, Blocks.web);
 
     public UpgradeShears() {
-        super(ConfigHandler.upgradeIdShears, Constants.UPGRADE.SHEARS.getLocalised(), new ItemStack(Items.shears));
+        super(ConfigData.upgradeIdShears, Constants.UPGRADE.SHEARS.getLocalised(), new ItemStack(Items.shears));
     }
 
     @Override

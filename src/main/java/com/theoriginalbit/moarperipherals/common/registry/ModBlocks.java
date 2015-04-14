@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.registry;
 
 import com.theoriginalbit.moarperipherals.common.block.*;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.item.block.ItemBlockPaired;
 import com.theoriginalbit.moarperipherals.common.tile.*;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
@@ -45,7 +45,7 @@ public final class ModBlocks {
             blockMiniAntenna, blockFireworks, blockFireworksCreative, blockComputerCrafter;
 
     public final void register() {
-        if (ConfigHandler.enablePlayerDetector) {
+        if (ConfigData.enablePlayerDetector) {
             blockPlayerDetector = new BlockPlayerDetector();
             GameRegistry.registerBlock(blockPlayerDetector, "blockPlayerDetector");
             GameRegistry.registerTileEntity(TilePlayerDetector.class, "tilePlayerDetector");
@@ -54,7 +54,7 @@ public final class ModBlocks {
             OreDictionary.registerOre("peripheralPlayerDetector", blockPlayerDetector);
         }
 
-        if (ConfigHandler.enableChatBox) {
+        if (ConfigData.enableChatBox) {
             // normal ChatBox
             blockChatBox = new BlockChatBox();
             GameRegistry.registerBlock(blockChatBox, "blockChatBox");
@@ -65,13 +65,13 @@ public final class ModBlocks {
             GameRegistry.registerTileEntity(TileChatBoxAdmin.class, "tileChatBoxAdmin");
         }
 
-        if (ConfigHandler.enableIronNote) {
+        if (ConfigData.enableIronNote) {
             blockIronNote = new BlockIronNote();
             GameRegistry.registerBlock(blockIronNote, "blockIronNote");
             GameRegistry.registerTileEntity(TileIronNote.class, "tileIronNote");
         }
 
-        if (ConfigHandler.enableKeyboard) {
+        if (ConfigData.enableKeyboard) {
             blockKeyboardMac = new BlockKeyboardMac();
             blockKeyboardPc = new BlockKeyboardPc();
             GameRegistry.registerBlock(blockKeyboardMac, ItemBlockPaired.class, "blockKeyboardMac");
@@ -79,13 +79,13 @@ public final class ModBlocks {
             GameRegistry.registerTileEntity(TileKeyboard.class, "tileKeyboard");
         }
 
-        if (ConfigHandler.enablePrinter) {
+        if (ConfigData.enablePrinter) {
             blockPrinter = new BlockPrinter();
             GameRegistry.registerBlock(blockPrinter, "blockPrinter");
             GameRegistry.registerTileEntity(TilePrinter.class, "tilePrinter");
         }
 
-        if (ConfigHandler.enableAntenna) {
+        if (ConfigData.enableAntenna) {
             blockAntenna = new BlockAntenna();
             GameRegistry.registerBlock(blockAntenna, "blockAntenna");
 
@@ -100,13 +100,13 @@ public final class ModBlocks {
             GameRegistry.registerTileEntity(TileAntennaController.class, "tileAntennaController");
         }
 
-        if (ConfigHandler.enableTurtleTeleport) {
+        if (ConfigData.enableTurtleTeleport) {
             blockTurtleTeleport = new BlockTurtleTeleport();
             GameRegistry.registerBlock(blockTurtleTeleport, "blockTurtleTeleport");
             GameRegistry.registerTileEntity(TileTurtleTeleport.class, "tileTurtleTeleport");
         }
 
-        if (ConfigHandler.enableFireworkLauncher) {
+        if (ConfigData.enableFireworkLauncher) {
             // standard firework launcher
             blockFireworks = new BlockFireworks();
             GameRegistry.registerBlock(blockFireworks, "blockFireworks");
@@ -117,13 +117,13 @@ public final class ModBlocks {
             GameRegistry.registerTileEntity(TileFireworksCreative.class, "tileFireworksCreative");
         }
 
-        if (ConfigHandler.enableMiniAntenna) {
+        if (ConfigData.enableMiniAntenna) {
             blockMiniAntenna = new BlockMiniAntenna();
             GameRegistry.registerBlock(blockMiniAntenna, "blockMiniAntenna");
             GameRegistry.registerTileEntity(TileMiniAntenna.class, "tileMiniAntenna");
         }
 
-        if (ConfigHandler.enableComputerCrafter) {
+        if (ConfigData.enableComputerCrafter) {
             blockComputerCrafter = new BlockComputerCrafter();
             GameRegistry.registerBlock(blockComputerCrafter, "blockComputerCrafter");
             GameRegistry.registerTileEntity(TileComputerCrafter.class, "tileComputerCrafter");
@@ -131,7 +131,7 @@ public final class ModBlocks {
     }
 
     public final void addRecipes() {
-        if (ConfigHandler.enablePlayerDetector) {
+        if (ConfigData.enablePlayerDetector) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockPlayerDetector),
                     "SBS",
                     "BPB",
@@ -144,7 +144,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enableChatBox) {
+        if (ConfigData.enableChatBox) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockChatBox),
                     "GGG",
                     "GNG",
@@ -156,7 +156,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enableIronNote) {
+        if (ConfigData.enableIronNote) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockIronNote),
                     "III",
                     "INI",
@@ -168,7 +168,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enableKeyboard) {
+        if (ConfigData.enableKeyboard) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockKeyboardMac),
                     "KKK",
                     " A ",
@@ -185,7 +185,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enablePrinter) {
+        if (ConfigData.enablePrinter) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockPrinter),
                     "GGG",
                     "GRG",
@@ -197,7 +197,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enableAntenna) {
+        if (ConfigData.enableAntenna) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAntenna, 4),
                     "ICI",
                     "ICI",
@@ -236,7 +236,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enableTurtleTeleport) {
+        if (ConfigData.enableTurtleTeleport) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockTurtleTeleport),
                     "IEI",
                     "EOE",
@@ -249,7 +249,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enableFireworkLauncher) {
+        if (ConfigData.enableFireworkLauncher) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockFireworks),
                     "DDD",
                     "WFW",
@@ -263,7 +263,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enableMiniAntenna) {
+        if (ConfigData.enableMiniAntenna) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMiniAntenna),
                     "MCM",
                     "MCM",
@@ -276,7 +276,7 @@ public final class ModBlocks {
             ));
         }
 
-        if (ConfigHandler.enableComputerCrafter) {
+        if (ConfigData.enableComputerCrafter) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockComputerCrafter),
                     "ITI",
                     "IWI",

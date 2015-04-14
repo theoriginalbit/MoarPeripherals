@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxIronNote;
@@ -44,7 +44,7 @@ public class TileIronNote extends TileMoarP {
         Preconditions.checkArgument(instrument >= MIN_INST && instrument <= MAX_INST, "Expected instrument %d-%d", MIN_INST, MAX_INST);
         Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch %d-%d", MIN_PITCH, MAX_PITCH);
         Preconditions.checkArgument(notesCount++ < MAX_NOTES, "Too many notes (over %d per tick)", MAX_NOTES);
-        Preconditions.checkArgument(ConfigHandler.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
+        Preconditions.checkArgument(ConfigData.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 
         if (message == null) {
             message = new MessageFxIronNote();
@@ -66,7 +66,7 @@ public class TileIronNote extends TileMoarP {
                     xCoord,
                     yCoord,
                     zCoord,
-                    ConfigHandler.noteRange
+                    ConfigData.noteRange
             ));
             message = null;
         }

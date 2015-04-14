@@ -29,7 +29,6 @@ public final class ModInfo {
     private static final String COM_PACKAGE = "com.theoriginalbit";
     private static final String MOD_PACKAGE = COM_PACKAGE + ".moarperipherals";
 
-    public static final String GUI_FACTORY = MOD_PACKAGE + ".common.config.ConfigFactoryMoarP";
     public static final String PROXY_CLIENT = MOD_PACKAGE + ".client.ProxyClient";
     public static final String PROXY_SERVER = MOD_PACKAGE + ".common.ProxyCommon";
 

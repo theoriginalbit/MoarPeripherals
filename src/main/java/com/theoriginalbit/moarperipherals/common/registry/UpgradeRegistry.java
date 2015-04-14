@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Joshua Asbury (@theoriginalbit)
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.registry;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.upgrade.*;
 import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
@@ -37,31 +37,31 @@ public class UpgradeRegistry {
     }
 
     public final void register() {
-        if (ConfigHandler.enableChatBox) {
+        if (ConfigData.enableChatBox) {
             register(new UpgradeChatBox());
         }
-        if (ConfigHandler.enableIronNote) {
+        if (ConfigData.enableIronNote) {
             register(new UpgradeIronNote());
         }
-        if (ConfigHandler.enableUpgradeShears) {
+        if (ConfigData.enableUpgradeShears) {
             register(new UpgradeShears());
         }
-        if (ConfigHandler.enableUpgradeCompass) {
+        if (ConfigData.enableUpgradeCompass) {
             register(new UpgradeCompass());
         }
-        if (ConfigHandler.enableUpgradeSolar) {
+        if (ConfigData.enableUpgradeSolar) {
             register(new UpgradeSolar());
         }
-        if (ConfigHandler.enableUpgradeIgniter) {
+        if (ConfigData.enableUpgradeIgniter) {
             register(new UpgradeIgniter());
         }
-        if (ConfigHandler.enableUpgradeFurnace) {
+        if (ConfigData.enableUpgradeFurnace) {
             register(new UpgradeFurnace());
         }
-        if (ConfigHandler.enableUpgradeFeeder) {
+        if (ConfigData.enableUpgradeFeeder) {
             register(new UpgradeFeeder());
         }
-        if (ConfigHandler.enableUpgradeOreScanner) {
+        if (ConfigData.enableUpgradeOreScanner) {
             register(new UpgradeDensityScanner());
         }
     }

@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.upgrade;
 
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.framework.peripheral.turtle.UpgradePeripheral;
@@ -31,7 +31,7 @@ import net.minecraft.util.IIcon;
 public class UpgradeChatBox extends UpgradePeripheral {
 
     public UpgradeChatBox() {
-        super(ConfigHandler.upgradeIdChatBox, Constants.UPGRADE.CHATBOX.getLocalised(), new ItemStack(ModBlocks.blockChatBox));
+        super(ConfigData.upgradeIdChatBox, Constants.UPGRADE.CHATBOX.getLocalised(), new ItemStack(ModBlocks.blockChatBox));
     }
 
     @Override

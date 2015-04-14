@@ -18,7 +18,7 @@ package com.theoriginalbit.moarperipherals.common.registry;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetCompliant;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -133,7 +133,7 @@ public final class BitNetRegistry {
             receiver = tower;
             payload = message;
             // calculate the cost to send this message
-            sendDelay = (int) (Math.ceil(distance / 100) * ConfigHandler.antennaMessageDelay);
+            sendDelay = (int) (Math.ceil(distance / 100) * ConfigData.bitNetMessageDelay);
             LogUtils.debug(String.format("Created %02d tick delayed message, payload=%s", sendDelay, payload.toString()));
         }
 

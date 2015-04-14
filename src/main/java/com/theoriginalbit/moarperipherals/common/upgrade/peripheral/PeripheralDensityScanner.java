@@ -18,7 +18,7 @@ package com.theoriginalbit.moarperipherals.common.upgrade.peripheral;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.moarperipherals.common.config.ConfigHandler;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxOreScanner;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
@@ -146,8 +146,8 @@ public class PeripheralDensityScanner {
         DENSITIES.put(Blocks.packed_ice, 0.94f); // density between ice and water
 
         // only build the custom mappings if the scanner is enabled and there are mappings
-        if (ConfigHandler.enableUpgradeOreScanner && !ConfigHandler.userDensityMappings.isEmpty()) {
-            final String[] mappings = ConfigHandler.userDensityMappings.split(";");
+        if (ConfigData.enableUpgradeOreScanner && !ConfigData.userDensityMappings.isEmpty()) {
+            final String[] mappings = ConfigData.userDensityMappings.split(";");
             for (String str : mappings) {
                 try {
                     final String[] map = str.split("@");
