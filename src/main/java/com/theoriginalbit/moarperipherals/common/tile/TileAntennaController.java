@@ -177,7 +177,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetNode, ICh
     }
 
     @Override
-    public Vec3 getWorldPosition() {
+    public Vec3 getPosition() {
         return Vec3.createVectorHelper(xCoord, yCoord, zCoord);
     }
 
@@ -246,7 +246,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetNode, ICh
 
     private void registerTower() {
         if (!worldObj.isRemote) {
-            BitNetRegistry.INSTANCE.add(this);
+            BitNetRegistry.INSTANCE.addNode(this);
             if (ConfigData.antennaKeepsChunkLoaded && chunkTicket == null) {
                 chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
                 if (chunkTicket == null) {
@@ -266,7 +266,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetNode, ICh
 
     private void unregisterTower() {
         if (!worldObj.isRemote) {
-            BitNetRegistry.INSTANCE.remove(this);
+            BitNetRegistry.INSTANCE.removeNode(this);
             // if there was a chunk loading ticket and the server isn't just stopping
             if (ConfigData.antennaKeepsChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
                 LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d", xCoord, yCoord, zCoord));

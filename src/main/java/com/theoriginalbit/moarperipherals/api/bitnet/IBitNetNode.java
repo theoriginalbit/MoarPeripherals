@@ -30,7 +30,7 @@ public interface IBitNetNode {
      *
      * @return the position within the world
      */
-    Vec3 getWorldPosition();
+    Vec3 getPosition();
 
     /**
      * Gets the type of this node on the network in order to determine range

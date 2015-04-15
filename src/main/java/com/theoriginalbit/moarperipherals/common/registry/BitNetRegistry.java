@@ -65,7 +65,7 @@ public final class BitNetRegistry implements IBitNetRegistry {
      * {@inheritDoc}
      */
     @Override
-    public void add(@NotNull IBitNetNode node) {
+    public void addNode(@NotNull IBitNetNode node) {
         if (!nodes.contains(node)) {
             nodes.add(node);
             // add a list to track the messages sent to this node, that way we don't
@@ -78,7 +78,7 @@ public final class BitNetRegistry implements IBitNetRegistry {
      * {@inheritDoc}
      */
     @Override
-    public void remove(@NotNull IBitNetNode node) {
+    public void removeNode(@NotNull IBitNetNode node) {
         if (nodes.contains(node)) {
             nodes.remove(node);
             // since this node is being removed we don't need to track messages
@@ -93,7 +93,7 @@ public final class BitNetRegistry implements IBitNetRegistry {
     @Override
     public void transmit(@NotNull IBitNetNode sender, @NotNull BitNetMessage payload) {
         final World world = sender.getWorld();
-        final Vec3 pos = sender.getWorldPosition();
+        final Vec3 pos = sender.getPosition();
         final int range = calculateTransmitRange(sender.getNodeType(), (world.isRaining() && world.isThundering()));
 
         // search all the nodes on the network
@@ -104,7 +104,7 @@ public final class BitNetRegistry implements IBitNetRegistry {
             // if this node isn't the sending node, and both nodes are in the same world
             if (!sender.equals(receiver) && world.equals(receiver.getWorld()) && !seen) {
                 // get the Euclidean distance between the two nodes
-                final double distance = Math.sqrt(pos.squareDistanceTo(receiver.getWorldPosition()));
+                final double distance = Math.sqrt(pos.squareDistanceTo(receiver.getPosition()));
                 // if the node is within range we send the message
                 if (distance > 0 && distance <= range) {
                     /*

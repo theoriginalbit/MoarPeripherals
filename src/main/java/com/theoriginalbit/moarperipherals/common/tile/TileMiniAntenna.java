@@ -78,7 +78,7 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetNode {
     }
 
     @Override
-    public Vec3 getWorldPosition() {
+    public Vec3 getPosition() {
         return Vec3.createVectorHelper(xCoord, yCoord, zCoord);
     }
 
@@ -106,14 +106,14 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetNode {
     @Override
     public void blockBroken(int x, int y, int z) {
         if (!worldObj.isRemote) {
-            BitNetRegistry.INSTANCE.remove(this);
+            BitNetRegistry.INSTANCE.removeNode(this);
         }
         registered = false;
     }
 
     private void registerTower() {
         if (!worldObj.isRemote) {
-            BitNetRegistry.INSTANCE.add(this);
+            BitNetRegistry.INSTANCE.addNode(this);
         }
         registered = true;
     }

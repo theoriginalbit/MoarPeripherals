@@ -18,7 +18,7 @@ public interface IBitNetRegistry {
      *
      * @param node the node to add to the network
      */
-    void add(@NotNull IBitNetNode node);
+    void addNode(@NotNull IBitNetNode node);
 
     /**
      * Removes a {@link IBitNetNode} from the network so that it may no longer receive {@link BitNetMessage}s, it is
@@ -26,7 +26,7 @@ public interface IBitNetRegistry {
      *
      * @param node the node to remove from the network
      */
-    void remove(@NotNull IBitNetNode node);
+    void removeNode(@NotNull IBitNetNode node);
 
     /**
      * Sends a {@link BitNetMessage} across the network. Any nodes that have been registered to the network will
