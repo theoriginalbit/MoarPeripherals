@@ -19,6 +19,7 @@ import com.theoriginalbit.framework.peripheral.LuaType;
 import com.theoriginalbit.framework.peripheral.PeripheralProvider;
 import com.theoriginalbit.moarperipherals.client.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
+import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
 import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.config.Config;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
@@ -28,7 +29,6 @@ import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.common.registry.BitNetRegistry;
 import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.registry.ModItems;
 import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
@@ -87,7 +87,7 @@ public class MoarPeripherals {
 
         if (ConfigData.enableAntenna) {
             LogUtils.debug("Registering BitNet tick handler");
-            FMLCommonHandler.instance().bus().register(BitNetRegistry.INSTANCE);
+            FMLCommonHandler.instance().bus().register(BitNetUniverse.UNIVERSE);
         }
 
         if (TickHandler.shouldRegister()) {
