@@ -105,7 +105,7 @@ public class ConfigData {
     @ConfigPropertyInteger(value = 64, comment = "The range at which the note can be heard. Note: Does not seem to work for audio, yet (?).")
     public static int noteRange;
 
-    @ConfigPropertyInteger(value = 16, comment = "The range that a keyboard can connect to a computer from. This cannot be infinite.")
+    @ConfigPropertyInteger(minValue = 0, value = 16, comment = "The range that a keyboard can connect to a computer from. This cannot be infinite.")
     public static int keyboardRange;
 
     @ConfigPropertyBoolean(comment = "Whether a BitNet Communications Tower should keep the chunk it resides in loaded")
@@ -129,7 +129,7 @@ public class ConfigData {
     @ConfigPropertyDouble(value = 1.5d, comment = "The multiplier for the fuel consumption to teleport the Turtle. Formula: Euclidean distance * multiplier")
     public static double teleportFuelMultiplier;
 
-    @ConfigPropertyInteger(value = 20, minValue = 10, comment = "The fuel consumption per item to smelt items in the Furnace Turtle Upgrade (Minimum value: 10)")
+    @ConfigPropertyInteger(minValue = 10, value = 20, comment = "The fuel consumption per item to smelt items in the Furnace Turtle Upgrade (Minimum value: 10)")
     public static int upgradeFurnaceFuelConsumption;
 
     @ConfigPropertyString(value = "", comment = "Add density mappings (semi-colon separated) for mod blocks to the Density Scanner in the format [modId]:[blockName]@[density];\nSingle mapping example: MoarPeripherals:blockIronNote@5.45\nMulti-mapping example:  MoarPeripherals:blockIronNote@5.45;MoarPeripherals:blockChatBox@4.45")
