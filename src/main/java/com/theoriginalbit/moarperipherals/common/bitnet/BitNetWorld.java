@@ -113,10 +113,10 @@ class BitNetWorld implements IBitNetWorld {
      */
     @Override
     public void addPortal(IBitNetPortal portal) {
-        if (world.equals(portal.getWorld())) {
-            portalSet.add(portal);
+        if (!world.equals(portal.getWorld())) {
+            throw new IllegalStateException("Portal attempting to register to a network that is not in the same world");
         }
-        throw new IllegalStateException("Portal attempting to register to a network that is not in the same world");
+        portalSet.add(portal);
     }
 
     /**
@@ -133,10 +133,10 @@ class BitNetWorld implements IBitNetWorld {
      */
     @Override
     public void addRelay(IBitNetRelay relay) {
-        if (world.equals(relay.getWorld())) {
-            relaySet.add(relay);
+        if (!world.equals(relay.getWorld())) {
+            throw new IllegalStateException("Relay attempting to register to a network that is not in the same world");
         }
-        throw new IllegalStateException("Relay attempting to register to a network that is not in the same world");
+        relaySet.add(relay);
     }
 
     /**
@@ -150,10 +150,10 @@ class BitNetWorld implements IBitNetWorld {
 
     @Override
     public boolean isChannelOpen(IBitNetRelay relay, int channel) {
-        if (relaySet.contains(relay)) {
-            return getRelaySet(channel).contains(relay);
+        if (!relaySet.contains(relay)) {
+            throw new IllegalStateException("Developer error. Relay that is trying to open channel is not registered");
         }
-        throw new IllegalStateException("Developer error. Relay that is trying to open channel is not registered.");
+        return getRelaySet(channel).contains(relay);
     }
 
     /**
@@ -161,10 +161,10 @@ class BitNetWorld implements IBitNetWorld {
      */
     @Override
     public boolean openChannel(IBitNetRelay relay, int channel) {
-        if (relaySet.contains(relay)) {
-            return getRelaySet(channel).add(relay);
+        if (!relaySet.contains(relay)) {
+            throw new IllegalStateException("Developer error. Relay that is trying to open channel is not registered");
         }
-        throw new IllegalStateException("Developer error. Relay that is trying to open channel is not registered.");
+        return getRelaySet(channel).add(relay);
     }
 
     /**
@@ -172,10 +172,10 @@ class BitNetWorld implements IBitNetWorld {
      */
     @Override
     public boolean closeChannel(IBitNetRelay relay, int channel) {
-        if (relaySet.contains(relay)) {
-            return getRelaySet(channel).remove(relay);
+        if (!relaySet.contains(relay)) {
+            throw new IllegalStateException("Developer error. Relay that is trying to close channel is not registered");
         }
-        throw new IllegalStateException("Developer error. Relay that is trying to close channel is not registered.");
+        return getRelaySet(channel).remove(relay);
     }
 
     /**
