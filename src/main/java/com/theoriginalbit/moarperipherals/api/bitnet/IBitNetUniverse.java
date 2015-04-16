@@ -4,7 +4,6 @@
  */
 package com.theoriginalbit.moarperipherals.api.bitnet;
 
-import com.sun.istack.internal.NotNull;
 import net.minecraft.world.World;
 
 /**
@@ -19,5 +18,5 @@ public interface IBitNetUniverse {
      * @param world the world to get the network for
      * @return the network
      */
-    IBitNetWorld getBitNetWorld(@NotNull World world);
+    IBitNetWorld getBitNetWorld(World world);
 }

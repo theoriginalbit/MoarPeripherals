@@ -16,7 +16,6 @@
 package com.theoriginalbit.moarperipherals.common.bitnet;
 
 import com.google.common.collect.Maps;
-import com.sun.istack.internal.NotNull;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetUniverse;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -47,7 +46,7 @@ public class BitNetUniverse implements IBitNetUniverse {
      * {@inheritDoc}
      */
     @Override
-    public IBitNetWorld getBitNetWorld(@NotNull World world) {
+    public IBitNetWorld getBitNetWorld(World world) {
         BitNetWorld bitNetWorld = networks.get(world);
         if (bitNetWorld == null) {
             networks.put(world, bitNetWorld = new BitNetWorld(this, world));

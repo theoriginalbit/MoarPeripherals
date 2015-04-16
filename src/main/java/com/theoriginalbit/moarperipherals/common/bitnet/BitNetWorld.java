@@ -17,7 +17,6 @@ package com.theoriginalbit.moarperipherals.common.bitnet;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.sun.istack.internal.NotNull;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetUniverse;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
@@ -25,7 +24,6 @@ import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetNode;
 import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetPortal;
 import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetRelay;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -114,7 +112,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public void addPortal(@NotNull IBitNetPortal portal) {
+    public void addPortal(IBitNetPortal portal) {
         if (world.equals(portal.getWorld())) {
             portalSet.add(portal);
         }
@@ -125,7 +123,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public void removePortal(@NotNull IBitNetPortal portal) {
+    public void removePortal(IBitNetPortal portal) {
         portalSet.remove(portal);
         seenMessages.remove(portal); // remove the seen messages, this node is disappearing from the network
     }
@@ -134,7 +132,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public void addRelay(@NotNull IBitNetRelay relay) {
+    public void addRelay(IBitNetRelay relay) {
         if (world.equals(relay.getWorld())) {
             relaySet.add(relay);
         }
@@ -145,13 +143,13 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public void removeRelay(@NotNull IBitNetRelay relay) {
+    public void removeRelay(IBitNetRelay relay) {
         relaySet.remove(relay);
         seenMessages.remove(relay); // remove the seen messages, this node is disappearing from the network
     }
 
     @Override
-    public boolean isChannelOpen(@NotNull IBitNetRelay relay, int channel) {
+    public boolean isChannelOpen(IBitNetRelay relay, int channel) {
         if (relaySet.contains(relay)) {
             return getRelaySet(channel).contains(relay);
         }
@@ -162,7 +160,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public boolean openChannel(@NotNull IBitNetRelay relay, int channel) {
+    public boolean openChannel(IBitNetRelay relay, int channel) {
         if (relaySet.contains(relay)) {
             return getRelaySet(channel).add(relay);
         }
@@ -173,7 +171,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public boolean closeChannel(@NotNull IBitNetRelay relay, int channel) {
+    public boolean closeChannel(IBitNetRelay relay, int channel) {
         if (relaySet.contains(relay)) {
             return getRelaySet(channel).remove(relay);
         }
@@ -198,7 +196,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public void transmit(@NotNull IBitNetRelay sender, @NotNull BitNetMessage payload) {
+    public void transmit(IBitNetRelay sender, BitNetMessage payload) {
         // get the max distance the message can be sent
         final int range = getTransmitRange(sender);
 
@@ -211,7 +209,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public void teleport(Vec3 pos, double distanceRemaining, @NotNull BitNetMessage payload) {
+    public void teleport(Vec3 pos, double distanceRemaining, BitNetMessage payload) {
         transmitImpl(pos, distanceRemaining, payload);
     }
 

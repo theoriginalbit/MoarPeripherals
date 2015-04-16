@@ -4,7 +4,6 @@
  */
 package com.theoriginalbit.moarperipherals.api.bitnet.node;
 
-import com.sun.istack.internal.NotNull;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 
 /**
@@ -26,7 +25,7 @@ public interface IBitNetRelay extends IBitNetNode {
      *
      * @param payload the message that was sent
      */
-    void receive(@NotNull BitNetMessage payload);
+    void receive(BitNetMessage payload);
 
     /**
      * The relay type. This is used to determine the maximum distance a message can be sent

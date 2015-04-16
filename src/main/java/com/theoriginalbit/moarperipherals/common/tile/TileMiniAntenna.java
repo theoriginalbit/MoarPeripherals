@@ -15,7 +15,6 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.sun.istack.internal.NotNull;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
@@ -106,7 +105,7 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetRelay {
     }
 
     @Override
-    public void receive(@NotNull BitNetMessage payload) {
+    public void receive(BitNetMessage payload) {
         if (computers != null && computers.size() > 0) {
             LogUtils.debug(String.format("BitNet Mini Antenna at %d %d %d queueing message.", xCoord, yCoord, zCoord));
             for (IComputerAccess c : computers) {

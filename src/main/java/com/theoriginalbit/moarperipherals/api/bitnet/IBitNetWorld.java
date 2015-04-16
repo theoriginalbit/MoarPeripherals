@@ -4,7 +4,6 @@
  */
 package com.theoriginalbit.moarperipherals.api.bitnet;
 
-import com.sun.istack.internal.NotNull;
 import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetPortal;
 import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetRelay;
 import net.minecraft.util.Vec3;
@@ -23,7 +22,7 @@ public interface IBitNetWorld {
      * @see #transmit(IBitNetRelay, BitNetMessage)
      * @see #teleport(Vec3, double, BitNetMessage)
      */
-    void addPortal(@NotNull IBitNetPortal portal);
+    void addPortal(IBitNetPortal portal);
 
     /**
      * Removes a {@link IBitNetPortal} from the network so that messages are no longer sent through them, this should
@@ -32,7 +31,7 @@ public interface IBitNetWorld {
      *
      * @param portal the portal to remove
      */
-    void removePortal(@NotNull IBitNetPortal portal);
+    void removePortal(IBitNetPortal portal);
 
     /**
      * Adds a {@link IBitNetRelay} to the network so that it may receive messages that have been sent. Simply
@@ -42,14 +41,14 @@ public interface IBitNetWorld {
      * @param relay the relay to add
      * @see #openChannel(IBitNetRelay, int)
      */
-    void addRelay(@NotNull IBitNetRelay relay);
+    void addRelay(IBitNetRelay relay);
 
     /**
      * Removes a {@link IBitNetRelay} from the network so that it no longer receive messages that have been sent
      *
      * @param relay the relay to remove
      */
-    void removeRelay(@NotNull IBitNetRelay relay);
+    void removeRelay(IBitNetRelay relay);
 
     /**
      * Gets whether the channel is open on the supplied relay
@@ -58,7 +57,7 @@ public interface IBitNetWorld {
      * @param channel the channel to check
      * @return if the channel is open
      */
-    boolean isChannelOpen(@NotNull IBitNetRelay relay, int channel);
+    boolean isChannelOpen(IBitNetRelay relay, int channel);
 
     /**
      * Notifies the network that the relay has the supplied channel open and can receive messages on that channel.
@@ -69,7 +68,7 @@ public interface IBitNetWorld {
      * @return whether the channel was opened
      * @see #addRelay(IBitNetRelay)
      */
-    boolean openChannel(@NotNull IBitNetRelay relay, int channel);
+    boolean openChannel(IBitNetRelay relay, int channel);
 
     /**
      * Notifies the network that the relay has closed the supplied channel and no longer wants to receive messages on
@@ -79,7 +78,7 @@ public interface IBitNetWorld {
      * @param channel the channel that has closed
      * @return whether the channel was closed
      */
-    boolean closeChannel(@NotNull IBitNetRelay relay, int channel);
+    boolean closeChannel(IBitNetRelay relay, int channel);
 
     /**
      * Sends a message over the network with the supplied distance. The distance is typically calculated one
@@ -87,7 +86,7 @@ public interface IBitNetWorld {
      * @param sender  where the message is being sent from
      * @param payload the message being sent
      */
-    void transmit(@NotNull IBitNetRelay sender, @NotNull BitNetMessage payload);
+    void transmit(IBitNetRelay sender, BitNetMessage payload);
 
     /**
      * Sends a message over the network which has come from another world through the supplied portal. The portal's
@@ -101,7 +100,7 @@ public interface IBitNetWorld {
      * @param distanceRemaining how far the message can be sent
      * @param payload           the message being sent
      */
-    void teleport(Vec3 pos, double distanceRemaining, @NotNull BitNetMessage payload);
+    void teleport(Vec3 pos, double distanceRemaining, BitNetMessage payload);
 
     /**
      * Used internally to inform the networks that they should send any messages that are in the queue that have
