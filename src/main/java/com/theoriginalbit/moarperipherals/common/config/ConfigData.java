@@ -39,7 +39,7 @@ public class ConfigData {
     @ConfigPropertyBoolean(category = "enabled", comment = "Enable the ChatBox")
     public static boolean enableChatBox;
 
-    @ConfigPropertyBoolean(category = "enabled", comment = "Enable the Printer")
+    @ConfigPropertyBoolean(category = "enabled", value = false, comment = "Enable the Printer")
     public static boolean enablePrinter;
 
     @ConfigPropertyBoolean(category = "enabled", comment = "Enable the Keyboard")
