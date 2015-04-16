@@ -173,7 +173,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
 
     @Override
     public Vec3 getPosition() {
-        return Vec3.createVectorHelper(xCoord, yCoord, zCoord);
+        return Vec3.createVectorHelper(xCoord, yCoord + 15, zCoord);
     }
 
     @Override
