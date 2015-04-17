@@ -18,7 +18,6 @@ package com.theoriginalbit.moarperipherals.common.tile;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
@@ -141,7 +140,6 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
     }
 
     @LuaFunction
-    @MultiReturn
     public boolean transmit(int sendChannel, int replyChannel, Object payload) throws LuaException {
         if (isTowerComplete()) {
             network.transmit(this, new BitNetMessage(sendChannel, replyChannel, payload));
