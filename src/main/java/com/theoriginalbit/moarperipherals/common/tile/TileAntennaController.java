@@ -126,17 +126,17 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
     }
 
     @LuaFunction
-    public boolean isOpen(int channel) {
+    public boolean isOpen(int channel) throws LuaException {
         return isTowerComplete() && network.isChannelOpen(this, channel);
     }
 
     @LuaFunction
-    public boolean open(int channel) {
+    public boolean open(int channel) throws LuaException {
         return isTowerComplete() && network.openChannel(this, channel);
     }
 
     @LuaFunction
-    public boolean close(int channel) {
+    public boolean close(int channel) throws LuaException {
         return isTowerComplete() && network.closeChannel(this, channel);
     }
 
@@ -189,7 +189,10 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
             }
         } else { // there was no connected computer, this is now a repeating tower
             LogUtils.debug(String.format("BitNet Comms Tower at %d %d %d repeating message.", xCoord, yCoord, zCoord));
-            network.transmit(this, payload);
+            try {
+                network.transmit(this, payload);
+            } catch (LuaException ignored) {
+            }
         }
     }
 

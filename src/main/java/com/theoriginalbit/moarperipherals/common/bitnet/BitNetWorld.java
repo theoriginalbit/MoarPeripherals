@@ -24,6 +24,7 @@ import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetNode;
 import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetPortal;
 import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetRelay;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
+import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -33,7 +34,21 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * @author Joshua Asbury (@theoriginalbit)
  */
-class BitNetWorld implements IBitNetWorld {
+public class BitNetWorld implements IBitNetWorld {
+    /**
+     * Makes sure that the supplied channel is between the specified range
+     *
+     * @param channel the channel to check
+     * @return the valid channel
+     * @throws LuaException if the channel is invalid an error will occur
+     */
+    public static int checkChannel(int channel) throws LuaException {
+        if (channel >= 0 && channel <= 65535) {
+            return channel;
+        }
+        throw new LuaException("Expected number in range 0-65535");
+    }
+
     /**
      * Gets the range a message can be transmitted from a node, the node type and whether the world is storming are
      * the factors which determine the distance.
@@ -149,7 +164,7 @@ class BitNetWorld implements IBitNetWorld {
     }
 
     @Override
-    public boolean isChannelOpen(IBitNetRelay relay, int channel) {
+    public boolean isChannelOpen(IBitNetRelay relay, int channel) throws LuaException {
         if (!relaySet.contains(relay)) {
             throw new IllegalStateException("Developer error. Relay that is trying to open channel is not registered");
         }
@@ -160,7 +175,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public boolean openChannel(IBitNetRelay relay, int channel) {
+    public boolean openChannel(IBitNetRelay relay, int channel) throws LuaException {
         if (!relaySet.contains(relay)) {
             throw new IllegalStateException("Developer error. Relay that is trying to open channel is not registered");
         }
@@ -171,7 +186,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public boolean closeChannel(IBitNetRelay relay, int channel) {
+    public boolean closeChannel(IBitNetRelay relay, int channel) throws LuaException {
         if (!relaySet.contains(relay)) {
             throw new IllegalStateException("Developer error. Relay that is trying to close channel is not registered");
         }
@@ -196,7 +211,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public void transmit(IBitNetRelay sender, BitNetMessage payload) {
+    public void transmit(IBitNetRelay sender, BitNetMessage payload) throws LuaException {
         // get the max distance the message can be sent
         final int range = getTransmitRange(sender);
 
@@ -209,7 +224,7 @@ class BitNetWorld implements IBitNetWorld {
      * {@inheritDoc}
      */
     @Override
-    public void teleport(Vec3 pos, double distanceRemaining, BitNetMessage payload) {
+    public void teleport(Vec3 pos, double distanceRemaining, BitNetMessage payload) throws LuaException {
         transmitImpl(pos, distanceRemaining, payload);
     }
 
@@ -226,7 +241,11 @@ class BitNetWorld implements IBitNetWorld {
      * @param distance       the max send distance
      * @param payload        the message to send
      */
-    private void transmitImpl(Vec3 senderPosition, double distance, BitNetMessage payload) {
+    private void transmitImpl(Vec3 senderPosition, double distance, BitNetMessage payload) throws LuaException {
+        // validate the channels
+        checkChannel(payload.getSendChannel());
+        checkChannel(payload.getReplyChannel());
+
         /*
          * Send to the relays that are registered to receive on the sending channel of the payload
          */
@@ -285,8 +304,8 @@ class BitNetWorld implements IBitNetWorld {
      * @param channel the send channel
      * @return the nodes receiving on this channel
      */
-    private Set<IBitNetRelay> getRelaySet(int channel) {
-        Set<IBitNetRelay> set = channelMap.get(channel);
+    private Set<IBitNetRelay> getRelaySet(int channel) throws LuaException {
+        Set<IBitNetRelay> set = channelMap.get(checkChannel(channel));
         if (set == null) {
             channelMap.put(channel, set = new HashSet<>());
         }

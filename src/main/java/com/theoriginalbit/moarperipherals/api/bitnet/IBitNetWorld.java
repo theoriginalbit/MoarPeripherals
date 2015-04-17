@@ -6,6 +6,7 @@ package com.theoriginalbit.moarperipherals.api.bitnet;
 
 import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetPortal;
 import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetRelay;
+import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.util.Vec3;
 
 /**
@@ -57,7 +58,7 @@ public interface IBitNetWorld {
      * @param channel the channel to check
      * @return if the channel is open
      */
-    boolean isChannelOpen(IBitNetRelay relay, int channel);
+    boolean isChannelOpen(IBitNetRelay relay, int channel) throws LuaException;
 
     /**
      * Notifies the network that the relay has the supplied channel open and can receive messages on that channel.
@@ -68,7 +69,7 @@ public interface IBitNetWorld {
      * @return whether the channel was opened
      * @see #addRelay(IBitNetRelay)
      */
-    boolean openChannel(IBitNetRelay relay, int channel);
+    boolean openChannel(IBitNetRelay relay, int channel) throws LuaException;
 
     /**
      * Notifies the network that the relay has closed the supplied channel and no longer wants to receive messages on
@@ -78,7 +79,7 @@ public interface IBitNetWorld {
      * @param channel the channel that has closed
      * @return whether the channel was closed
      */
-    boolean closeChannel(IBitNetRelay relay, int channel);
+    boolean closeChannel(IBitNetRelay relay, int channel) throws LuaException;
 
     /**
      * Sends a message over the network with the supplied distance. The distance is typically calculated one
@@ -86,7 +87,7 @@ public interface IBitNetWorld {
      * @param sender  where the message is being sent from
      * @param payload the message being sent
      */
-    void transmit(IBitNetRelay sender, BitNetMessage payload);
+    void transmit(IBitNetRelay sender, BitNetMessage payload) throws LuaException;
 
     /**
      * Sends a message over the network which has come from another world through the supplied portal. The portal's
@@ -100,7 +101,7 @@ public interface IBitNetWorld {
      * @param distanceRemaining how far the message can be sent
      * @param payload           the message being sent
      */
-    void teleport(Vec3 pos, double distanceRemaining, BitNetMessage payload);
+    void teleport(Vec3 pos, double distanceRemaining, BitNetMessage payload) throws LuaException;
 
     /**
      * Used internally to inform the networks that they should send any messages that are in the queue that have

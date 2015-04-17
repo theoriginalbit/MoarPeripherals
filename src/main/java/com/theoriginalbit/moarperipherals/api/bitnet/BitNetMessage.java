@@ -21,8 +21,8 @@ public final class BitNetMessage {
 
     public BitNetMessage(int send, int reply, Object message) throws LuaException {
         messageId = UUID.randomUUID();
-        sendChannel = checkChannel(send);
-        replyChannel = checkChannel(reply);
+        sendChannel = send;
+        replyChannel = reply;
         payload = message;
         distanceTravelled = 0;
     }
@@ -62,19 +62,5 @@ public final class BitNetMessage {
 
     public String toString() {
         return String.format("{type=BitNet Message, id=#%s payload=%s}", messageId, payload);
-    }
-
-    /**
-     * Makes sure that the supplied channel is between the specified range
-     *
-     * @param channel the channel to check
-     * @return the valid channel
-     * @throws LuaException if the channel is invalid an error will occur
-     */
-    private static int checkChannel(int channel) throws LuaException {
-        if (channel >= 0 && channel <= 65535) {
-            return channel;
-        }
-        throw new LuaException("Expected number in range 0-65535");
     }
 }

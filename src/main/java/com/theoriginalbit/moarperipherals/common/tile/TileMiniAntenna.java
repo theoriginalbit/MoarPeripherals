@@ -69,17 +69,17 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetRelay {
     public ArrayList<IComputerAccess> computers;
 
     @LuaFunction
-    public boolean isOpen(int channel) {
+    public boolean isOpen(int channel) throws LuaException {
         return network.isChannelOpen(this, channel);
     }
 
     @LuaFunction
-    public boolean open(int channel) {
+    public boolean open(int channel) throws LuaException {
         return network.openChannel(this, channel);
     }
 
     @LuaFunction
-    public boolean close(int channel) {
+    public boolean close(int channel) throws LuaException {
         return network.closeChannel(this, channel);
     }
 
