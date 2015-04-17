@@ -37,7 +37,7 @@ final class DelayedMessage {
         payload = message;
         // calculate the cost to send this message
         sendDelay = (int) (Math.ceil(distance / 100) * ConfigData.bitNetMessageDelay);
-        LogUtils.debug(String.format("Created delayed message, delay=%.2d payload=%s", sendDelay, payload));
+        LogUtils.debug(String.format("Created delayed message, delay=%d payload=%s", sendDelay, payload));
     }
 
     /**
