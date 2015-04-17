@@ -254,7 +254,9 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
 
     private void unregisterTower() {
         if (!worldObj.isRemote) {
-            network.removeRelay(this);
+            if (network != null) {
+                network.removeRelay(this);
+            }
             // if there was a chunk loading ticket and the server isn't just stopping
             if (ConfigData.antennaKeepsChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
                 LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d",
