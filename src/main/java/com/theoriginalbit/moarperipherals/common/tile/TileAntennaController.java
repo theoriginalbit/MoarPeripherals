@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Joshua Asbury (@theoriginalbit)
+ * Copyright 2014-2015 Joshua Asbury (@theoriginalbit)
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRelay;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
 import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntenna;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaCell;
