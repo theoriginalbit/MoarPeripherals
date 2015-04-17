@@ -21,7 +21,7 @@ import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
-import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetRelay;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRelay;
 import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntenna;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaCell;

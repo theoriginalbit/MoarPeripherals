@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.bitnet;
 
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
-import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetRelay;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRelay;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
 

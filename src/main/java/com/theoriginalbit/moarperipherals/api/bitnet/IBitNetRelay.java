@@ -2,9 +2,7 @@
  * This file is part of the official MoarPeripherals API. Please see the usage
  * guide and restrictions on use in the package-info file.
  */
-package com.theoriginalbit.moarperipherals.api.bitnet.node;
-
-import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
+package com.theoriginalbit.moarperipherals.api.bitnet;
 
 /**
  * The representation of a relay on the network, a relay is able to send and recieve messages through the network of

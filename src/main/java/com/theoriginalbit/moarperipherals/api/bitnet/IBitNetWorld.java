@@ -4,8 +4,6 @@
  */
 package com.theoriginalbit.moarperipherals.api.bitnet;
 
-import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetPortal;
-import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetRelay;
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.util.Vec3;
 

@@ -5,7 +5,7 @@
 package com.theoriginalbit.moarperipherals.api;
 
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetUniverse;
-import com.theoriginalbit.moarperipherals.api.bitnet.node.IBitNetNode;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetNode;
 
 /**
  * The main API access for MoarPeripherals. Use this to get access to various systems of MoarPeripherals at runtime.
