@@ -180,17 +180,9 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
 
     @Override
     public void receive(BitNetMessage payload) {
-        if (computers != null && computers.size() > 0) {
-            LogUtils.debug(String.format("BitNet Comms Tower at %d %d %d queueing message.", xCoord, yCoord, zCoord));
-            for (IComputerAccess c : computers) {
-                c.queueEvent(EVENT_BITNET, payload.getEventData(c));
-            }
-        } else { // there was no connected computer, this is now a repeating tower
-            LogUtils.debug(String.format("BitNet Comms Tower at %d %d %d repeating message.", xCoord, yCoord, zCoord));
-            try {
-                network.transmit(this, payload);
-            } catch (LuaException ignored) {
-            }
+        LogUtils.debug(String.format("BitNet Comms Tower at %d %d %d queueing message.", xCoord, yCoord, zCoord));
+        for (IComputerAccess c : computers) {
+            c.queueEvent(EVENT_BITNET, payload.getEventData(c));
         }
     }
 
