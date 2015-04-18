@@ -19,7 +19,7 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
+import com.theoriginalbit.moarperipherals.common.integration.mount.MountMoarP;
 import net.minecraft.item.ItemStack;
 
 /**

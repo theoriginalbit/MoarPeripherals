@@ -22,8 +22,8 @@ import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.client.gui.IHasGui;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileInventory;
-import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
+import com.theoriginalbit.moarperipherals.common.base.TileInventory;
+import com.theoriginalbit.moarperipherals.common.util.InventoryUtil;
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -78,14 +78,14 @@ public class TileComputerCrafter extends TileInventory implements IHasGui {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         // make sure the crafting inventory is persistent across world restarts
-        InventoryUtils.readInventoryFromNBT(craftingInv, tag.getTagList("craft", 10));
+        InventoryUtil.readInventoryFromNBT(craftingInv, tag.getTagList("craft", 10));
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         // make sure the crafting inventory is persistent across world restarts
-        tag.setTag("craft", InventoryUtils.writeInventoryToNBT(craftingInv));
+        tag.setTag("craft", InventoryUtil.writeInventoryToNBT(craftingInv));
     }
 
     @Override
@@ -171,7 +171,7 @@ public class TileComputerCrafter extends TileInventory implements IHasGui {
             final ItemStack itemStack = craftingInv.getStackInSlot(slot);
             if (itemStack != null) {
                 final Class<? extends Item> itemClass = itemStack.getItem().getClass();
-                if (InventoryUtils.findQtyOf(this, itemStack) < counts.get(itemClass)) {
+                if (InventoryUtil.findQtyOf(this, itemStack) < counts.get(itemClass)) {
                     throw new Exception("cannot craft, missing items");
                 }
             }
@@ -181,11 +181,11 @@ public class TileComputerCrafter extends TileInventory implements IHasGui {
         for (int slot = 0; slot < craftingInv.getSizeInventory(); ++slot) {
             final ItemStack itemStack = craftingInv.getStackInSlot(slot);
             if (itemStack != null) {
-                InventoryUtils.takeItems(this, itemStack, 1);
+                InventoryUtil.takeItems(this, itemStack, 1);
             }
         }
 
         // add the 'crafted' item to the inventory, or pop into the world
-        InventoryUtils.storeOrDropItemStack(this, result, worldObj, xCoord, yCoord, zCoord);
+        InventoryUtil.storeOrDropItemStack(this, result, worldObj, xCoord, yCoord, zCoord);
     }
 }

@@ -21,12 +21,12 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
+import com.theoriginalbit.moarperipherals.common.integration.mount.MountMoarP;
 import com.theoriginalbit.moarperipherals.common.tile.firework.LauncherTube;
 import com.theoriginalbit.moarperipherals.common.tile.firework.QueueBuffer;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileInventory;
-import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
+import com.theoriginalbit.moarperipherals.common.base.TileInventory;
+import com.theoriginalbit.moarperipherals.common.util.InventoryUtil;
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -578,7 +578,7 @@ public class TileFireworks extends TileInventory {
 
     protected int findQtyOf(ItemStack stack) {
         // if this is creative, we always have everything!
-        return isCreativeLauncher() ? 64 : InventoryUtils.findQtyOf(this, stack);
+        return isCreativeLauncher() ? 64 : InventoryUtil.findQtyOf(this, stack);
     }
 
     protected ItemStack extract(ItemStack stack) {
@@ -588,7 +588,7 @@ public class TileFireworks extends TileInventory {
             s.stackSize = 1;
             return s;
         }
-        return InventoryUtils.takeItems(this, stack, 1);
+        return InventoryUtil.takeItems(this, stack, 1);
     }
 
     private static boolean test(int colors, int color) {

@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.lang3.ArrayUtils;

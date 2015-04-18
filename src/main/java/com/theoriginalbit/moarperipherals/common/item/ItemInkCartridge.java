@@ -16,10 +16,10 @@
 package com.theoriginalbit.moarperipherals.common.item;
 
 import com.theoriginalbit.moarperipherals.api.hook.ITooltipHook;
-import com.theoriginalbit.moarperipherals.common.item.abstracts.ItemMoarP;
+import com.theoriginalbit.moarperipherals.common.base.ItemMoarP;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.common.utils.NBTUtils;
+import com.theoriginalbit.moarperipherals.common.util.NBTUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -129,7 +129,7 @@ public class ItemInkCartridge extends ItemMoarP implements ITooltipHook {
     }
 
     public static int getInkColor(ItemStack stack) {
-        final NBTTagCompound tag = NBTUtils.getItemTag(stack);
+        final NBTTagCompound tag = NBTUtil.getItemTag(stack);
         if (tag.hasKey("inkColor")) {
             return tag.getInteger("inkColor");
         }
@@ -138,7 +138,7 @@ public class ItemInkCartridge extends ItemMoarP implements ITooltipHook {
     }
 
     public static String getInkPercent(ItemStack stack) {
-        final NBTTagCompound tag = NBTUtils.getItemTag(stack);
+        final NBTTagCompound tag = NBTUtil.getItemTag(stack);
         if (tag.hasKey("inkLevel")) {
             float level = tag.getFloat("inkLevel");
             return (int) (level / FluidContainerRegistry.BUCKET_VOLUME * 100) + "%";

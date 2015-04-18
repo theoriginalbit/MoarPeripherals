@@ -26,9 +26,9 @@ import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.handler.ICommandHook;
 import com.theoriginalbit.moarperipherals.common.handler.IDeathHook;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
-import com.theoriginalbit.moarperipherals.common.utils.ChatUtils;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.util.ChatUtil;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,7 +82,7 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
             return false;
         }
 
-        ChatUtils.sendChatToPlayer(usernames, buildMessage(message, false));
+        ChatUtil.sendChatToPlayer(usernames, buildMessage(message, false));
         return true;
     }
 
@@ -96,7 +96,7 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
             return false;
         }
 
-        ChatUtils.sendChatToPlayer(username, buildMessage(message, true));
+        ChatUtil.sendChatToPlayer(username, buildMessage(message, true));
         return true;
     }
 
@@ -191,7 +191,8 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
             try {
                 ChatBoxHandler.instance.addCommandHook(this);
             } catch (Exception e) {
-                LogUtils.info(String.format("Failed to register command listener for ChatBox at %d %d %d", xCoord, yCoord, zCoord));
+                LogUtil.info(String.format("Failed to register command listener for ChatBox at %d %d %d", xCoord,
+                        yCoord, zCoord));
                 e.printStackTrace();
             }
             registered = true;

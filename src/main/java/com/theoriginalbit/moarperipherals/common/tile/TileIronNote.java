@@ -21,10 +21,10 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.mount.MountMoarP;
+import com.theoriginalbit.moarperipherals.common.integration.mount.MountMoarP;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxIronNote;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 @LuaPeripheral("iron_note")

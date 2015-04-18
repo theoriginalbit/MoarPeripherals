@@ -31,9 +31,9 @@ import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.chunk.IChunkLoader;
 import com.theoriginalbit.moarperipherals.common.chunk.TicketManager;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
-import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.util.BlockNotifyFlags;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.block.Block;
@@ -180,7 +180,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
 
     @Override
     public void receive(BitNetMessage payload) {
-        LogUtils.debug(String.format("BitNet Comms Tower at %d %d %d queueing message.", xCoord, yCoord, zCoord));
+        LogUtil.debug(String.format("BitNet Comms Tower at %d %d %d queueing message.", xCoord, yCoord, zCoord));
         for (IComputerAccess c : computers) {
             c.queueEvent(EVENT_BITNET, payload.getEventData(c));
         }
@@ -225,16 +225,16 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
             if (ConfigData.antennaKeepsChunkLoaded && chunkTicket == null) {
                 chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
                 if (chunkTicket == null) {
-                    LogUtils.info(String.format("Requesting chunk loading ticket for BitNet Communications Tower at " +
+                    LogUtil.info(String.format("Requesting chunk loading ticket for BitNet Communications Tower at " +
                             "%d %d %d", xCoord, yCoord, zCoord));
                     chunkTicket = TicketManager.requestTicket(worldObj, xCoord, yCoord, zCoord);
                     if (chunkTicket.isPlayerTicket()) {
-                        LogUtils.warn(String.format("The returned ticket is a player ticket for player %s",
+                        LogUtil.warn(String.format("The returned ticket is a player ticket for player %s",
                                 chunkTicket.getPlayerName()));
                     }
                     ForgeChunkManager.forceChunk(chunkTicket, getChunkCoord());
                 } else {
-                    LogUtils.info(String.format("A chunk loading ticket was found from server start for the BitNet " +
+                    LogUtil.info(String.format("A chunk loading ticket was found from server start for the BitNet " +
                             "Communications Tower at %d %d %d", xCoord, yCoord, zCoord));
                 }
             }
@@ -249,7 +249,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
             }
             // if there was a chunk loading ticket and the server isn't just stopping
             if (ConfigData.antennaKeepsChunkLoaded && chunkTicket != null && !MoarPeripherals.isServerStopping) {
-                LogUtils.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d",
+                LogUtil.info(String.format("Releasing Ticket for the BitNet Communications Tower at %d %d %d",
                         xCoord, yCoord, zCoord));
                 ForgeChunkManager.unforceChunk(chunkTicket, getChunkCoord());
                 TicketManager.releaseTicket(chunkTicket);

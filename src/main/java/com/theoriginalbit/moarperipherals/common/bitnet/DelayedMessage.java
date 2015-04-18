@@ -18,7 +18,7 @@ package com.theoriginalbit.moarperipherals.common.bitnet;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRelay;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 
 /**
  * A container class for a {@link com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage}, tracking how
@@ -37,7 +37,7 @@ final class DelayedMessage {
         payload = message;
         // calculate the cost to send this message
         sendDelay = (int) (Math.ceil(distance / 100) * ConfigData.bitNetMessageDelay);
-        LogUtils.debug(String.format("Created delayed message, delay=%d payload=%s", sendDelay, payload));
+        LogUtil.debug(String.format("Created delayed message, delay=%d payload=%s", sendDelay, payload));
     }
 
     /**
@@ -48,7 +48,7 @@ final class DelayedMessage {
      */
     public boolean tick() {
         if (--sendDelay <= 0) {
-            LogUtils.debug(String.format("Delay expired, sending message %s", payload));
+            LogUtil.debug(String.format("Delay expired, sending message %s", payload));
             receiver.receive(payload);
             return true;
         }

@@ -15,10 +15,10 @@
  */
 package com.theoriginalbit.moarperipherals.client.gui;
 
-import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
+import com.theoriginalbit.moarperipherals.common.init.ComputerCraft;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
-import com.theoriginalbit.moarperipherals.common.utils.KeyboardUtils;
+import com.theoriginalbit.moarperipherals.common.util.KeyboardUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatAllowedCharacters;
@@ -57,7 +57,7 @@ public class GuiKeyboard extends GuiScreen {
 
     @Override
     public void updateScreen() {
-        if (KeyboardUtils.isCtrlKeyDown()) {
+        if (KeyboardUtil.isCtrlKeyDown()) {
             // T
             if (++terminateTimer > 50 && Keyboard.isKeyDown(20)) {
                 tile.terminateTarget();
@@ -101,7 +101,7 @@ public class GuiKeyboard extends GuiScreen {
                         clipboard = clipboard.substring(0, 128);
                     }
 
-                    tile.queueEventToTarget(ComputerCraftInfo.EVENT.PASTE, clipboard);
+                    tile.queueEventToTarget(ComputerCraft.EVENT.PASTE, clipboard);
                 }
             }
             return;
@@ -111,9 +111,9 @@ public class GuiKeyboard extends GuiScreen {
             super.keyTyped(ch, keyCode);
         } else if (terminateTimer < 10 && shutdownTimer < 10 && rebootTimer < 10) {
             // A different key was pressed, queue it to the computer
-            tile.queueEventToTarget(ComputerCraftInfo.EVENT.KEY, keyCode);
+            tile.queueEventToTarget(ComputerCraft.EVENT.KEY, keyCode);
             if (ChatAllowedCharacters.isAllowedCharacter(ch) && ch < '\256') {
-                tile.queueEventToTarget(ComputerCraftInfo.EVENT.CHAR, Character.toString(ch));
+                tile.queueEventToTarget(ComputerCraft.EVENT.CHAR, Character.toString(ch));
             }
         }
     }

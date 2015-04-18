@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.inventory;
 
-import com.theoriginalbit.moarperipherals.common.inventory.abstracts.ContainerMoarP;
+import com.theoriginalbit.moarperipherals.common.base.ContainerMoarP;
 import com.theoriginalbit.moarperipherals.common.tile.TileComputerCrafter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryBasic;

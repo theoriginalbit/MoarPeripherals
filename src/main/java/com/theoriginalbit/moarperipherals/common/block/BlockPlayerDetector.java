@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockMoarP;
+import com.theoriginalbit.moarperipherals.common.base.BlockMoarP;
 import com.theoriginalbit.moarperipherals.common.tile.TilePlayerDetector;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

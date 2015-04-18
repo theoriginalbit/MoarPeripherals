@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockMoarP;
+import com.theoriginalbit.moarperipherals.common.base.BlockMoarP;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.TileTurtleTeleport;
 import cpw.mods.fml.relauncher.Side;

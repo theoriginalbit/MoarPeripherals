@@ -19,7 +19,7 @@ import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.client.gui.GuiHandler;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.common.utils.ResourceExtractingUtils;
+import com.theoriginalbit.moarperipherals.common.util.ResourceExtractingUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -86,9 +86,9 @@ public class ProxyCommon {
                 if (destFile.exists()) {
                     FileUtils.deleteDirectory(destFile);
                 }
-                ResourceExtractingUtils.copy(new File(modFile, ModInfo.LUA_PATH), destFile);
+                ResourceExtractingUtil.copy(new File(modFile, ModInfo.LUA_PATH), destFile);
             } else {
-                ResourceExtractingUtils.extractZipToLocation(modFile, ModInfo.LUA_PATH, ModInfo.EXTRACTED_LUA_PATH);
+                ResourceExtractingUtil.extractZipToLocation(modFile, ModInfo.LUA_PATH, ModInfo.EXTRACTED_LUA_PATH);
             }
         } catch (IOException ignored) {
         }

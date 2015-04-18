@@ -23,16 +23,16 @@ import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
 import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.config.Config;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.converter.ConverterItemStack;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
+import com.theoriginalbit.moarperipherals.common.integration.converter.ConverterItemStack;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
-import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
+import com.theoriginalbit.moarperipherals.common.init.ComputerCraft;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
-import com.theoriginalbit.moarperipherals.common.registry.ModItems;
-import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.init.ModBlocks;
+import com.theoriginalbit.moarperipherals.common.init.ModItems;
+import com.theoriginalbit.moarperipherals.common.integration.init.UpgradeRegistry;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -63,7 +63,7 @@ public class MoarPeripherals {
     @EventHandler
     @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
-        LogUtils.init();
+        LogUtil.init();
 
         Config.init(event.getSuggestedConfigurationFile());
 
@@ -81,17 +81,17 @@ public class MoarPeripherals {
         UpgradeRegistry.INSTANCE.register();
 
         if (ConfigData.shouldChunkLoad()) {
-            LogUtils.debug("Registering chunk loading callback");
+            LogUtil.debug("Registering chunk loading callback");
             ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
         }
 
         if (ConfigData.enableAntenna) {
-            LogUtils.debug("Registering BitNet tick handler");
+            LogUtil.debug("Registering BitNet tick handler");
             FMLCommonHandler.instance().bus().register(BitNetUniverse.UNIVERSE);
         }
 
         if (TickHandler.shouldRegister()) {
-            LogUtils.debug("Registering server tick handler");
+            LogUtil.debug("Registering server tick handler");
             FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);
         }
 
@@ -102,7 +102,7 @@ public class MoarPeripherals {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit();
-        ComputerCraftInfo.init();
+        ComputerCraft.init();
 
         ModItems.INSTANCE.addRecipes();
         ModBlocks.INSTANCE.addRecipes();

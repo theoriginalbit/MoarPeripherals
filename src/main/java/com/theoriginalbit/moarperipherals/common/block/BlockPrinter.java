@@ -15,7 +15,7 @@
  */
 package com.theoriginalbit.moarperipherals.common.block;
 
-import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockRotatable;
+import com.theoriginalbit.moarperipherals.common.base.BlockRotatable;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;

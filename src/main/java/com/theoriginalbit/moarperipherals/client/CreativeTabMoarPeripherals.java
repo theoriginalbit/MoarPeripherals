@@ -16,9 +16,9 @@
 package com.theoriginalbit.moarperipherals.client;
 
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.reference.ComputerCraftInfo;
-import com.theoriginalbit.moarperipherals.common.registry.ModBlocks;
-import com.theoriginalbit.moarperipherals.common.registry.UpgradeRegistry;
+import com.theoriginalbit.moarperipherals.common.init.ComputerCraft;
+import com.theoriginalbit.moarperipherals.common.init.ModBlocks;
+import com.theoriginalbit.moarperipherals.common.integration.init.UpgradeRegistry;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -57,14 +57,14 @@ public class CreativeTabMoarPeripherals extends CreativeTabs {
         super.displayAllReleventItems(list);
         // add the upgrades to the Normal Turtles
         for (final ITurtleUpgrade upgrade : UpgradeRegistry.UPGRADES) {
-            final ItemStack normal = ComputerCraftInfo.cc_turtle.copy();
+            final ItemStack normal = ComputerCraft.cc_turtle.copy();
             normal.stackTagCompound = new NBTTagCompound();
             normal.stackTagCompound.setShort(UPGRADE_LEFT, (short) upgrade.getUpgradeID());
             list.add(normal);
         }
         // add the upgrades to the Advanced Turtles
         for (final ITurtleUpgrade upgrade : UpgradeRegistry.UPGRADES) {
-            final ItemStack advanced = ComputerCraftInfo.cc_turtle_adv.copy();
+            final ItemStack advanced = ComputerCraft.cc_turtle_adv.copy();
             advanced.stackTagCompound = new NBTTagCompound();
             advanced.stackTagCompound.setShort(UPGRADE_LEFT, (short) upgrade.getUpgradeID());
             list.add(advanced);

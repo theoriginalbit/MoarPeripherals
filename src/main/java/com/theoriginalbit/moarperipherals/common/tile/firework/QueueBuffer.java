@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.tile.firework;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.moarperipherals.common.utils.InventoryUtils;
+import com.theoriginalbit.moarperipherals.common.util.InventoryUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -129,12 +129,12 @@ public class QueueBuffer {
     }
 
     public void insertOrExplode(IInventory inv, World world, int x, int y, int z, int id) {
-        InventoryUtils.storeOrDropItemStack(inv, getItemStackWithId(id), world, x, y, z);
+        InventoryUtil.storeOrDropItemStack(inv, getItemStackWithId(id), world, x, y, z);
     }
 
     public void explodeBuffer(World world, int x, int y, int z) {
         for (final ItemStackWrapper item : inventory) {
-            InventoryUtils.spawnItemStackInWorld(item.getItemStack(), world, x, y, z);
+            InventoryUtil.spawnItemStackInWorld(item.getItemStack(), world, x, y, z);
         }
     }
 

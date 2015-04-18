@@ -18,7 +18,7 @@ package com.theoriginalbit.moarperipherals.common.handler;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.moarperipherals.common.reference.Mods;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -35,7 +35,7 @@ public final class ChatBoxHandler {
 
     public static void init() {
         if (Loader.isModLoaded(Mods.OPENPERIPHERALADDON)) {
-            LogUtils.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command as a " +
+            LogUtil.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command as a " +
                     "ChatBox command so it is ignored by ChatBoxes.");
             instance.commandBlacklist.add("$$");
         }

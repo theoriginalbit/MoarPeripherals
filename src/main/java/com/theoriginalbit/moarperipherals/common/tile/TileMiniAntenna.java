@@ -22,8 +22,8 @@ import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRelay;
 import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.util.Vec3;
@@ -107,7 +107,7 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetRelay {
     @Override
     public void receive(BitNetMessage payload) {
         if (computers != null && computers.size() > 0) {
-            LogUtils.debug(String.format("BitNet Mini Antenna at %d %d %d queueing message.", xCoord, yCoord, zCoord));
+            LogUtil.debug(String.format("BitNet Mini Antenna at %d %d %d queueing message.", xCoord, yCoord, zCoord));
             for (IComputerAccess c : computers) {
                 c.queueEvent(EVENT_BITNET, payload.getEventData(c));
             }

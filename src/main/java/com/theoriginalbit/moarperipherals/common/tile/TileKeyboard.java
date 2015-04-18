@@ -19,9 +19,9 @@ import com.google.common.base.Strings;
 import com.theoriginalbit.moarperipherals.api.hook.IPairedDeviceHook;
 import com.theoriginalbit.moarperipherals.common.block.BlockKeyboardPc;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
-import com.theoriginalbit.moarperipherals.common.utils.NBTUtils;
-import com.theoriginalbit.moarperipherals.common.utils.PairedUtils;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.util.NBTUtil;
+import com.theoriginalbit.moarperipherals.common.util.PairedUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,11 +58,11 @@ public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
     @Override
     public void updateEntity() {
         if (!connected) {
-            connected = PairedUtils.isRegisteredInstance(connectedInstanceId);
+            connected = PairedUtil.isRegisteredInstance(connectedInstanceId);
         }
 
-        if (connected && PairedUtils.isRegisteredInstance(connectedInstanceId)) {
-            connectedInstanceDesc = PairedUtils.getDescription(connectedInstanceId);
+        if (connected && PairedUtil.isRegisteredInstance(connectedInstanceId)) {
+            connectedInstanceDesc = PairedUtil.getDescription(connectedInstanceId);
         }
     }
 
@@ -87,7 +87,7 @@ public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
      */
     @Override
     public boolean blockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        PairedUtils.turnOn(PairedUtils.getInstance(connectedInstanceId));
+        PairedUtil.turnOn(PairedUtil.getInstance(connectedInstanceId));
         return true;
     }
 
@@ -130,39 +130,39 @@ public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
     public void addDrops(List<ItemStack> dropsList) {
         final ItemStack stack = new ItemStack(getBlockType(), 1);
         if (connectedInstanceId > -1) {
-            NBTUtils.setInteger(stack, "instanceId", connectedInstanceId);
+            NBTUtil.setInteger(stack, "instanceId", connectedInstanceId);
         }
         dropsList.add(stack);
     }
 
     public final void terminateTarget() {
         if (isTargetInRange()) {
-            PairedUtils.terminate(PairedUtils.getInstance(connectedInstanceId));
+            PairedUtil.terminate(PairedUtil.getInstance(connectedInstanceId));
         }
     }
 
     public final void rebootTarget() {
         if (isTargetInRange()) {
-            PairedUtils.reboot(PairedUtils.getInstance(connectedInstanceId));
+            PairedUtil.reboot(PairedUtil.getInstance(connectedInstanceId));
         }
     }
 
     public final void shutdownTarget() {
         if (isTargetInRange()) {
-            PairedUtils.shutdown(PairedUtils.getInstance(connectedInstanceId));
+            PairedUtil.shutdown(PairedUtil.getInstance(connectedInstanceId));
         }
     }
 
     public final void queueEventToTarget(String event, Object... args) {
         if (isTargetInRange()) {
-            PairedUtils.queueEvent(PairedUtils.getInstance(connectedInstanceId), event, args);
+            PairedUtil.queueEvent(PairedUtil.getInstance(connectedInstanceId), event, args);
         }
     }
 
     public boolean isTargetInRange() {
-        return PairedUtils.isRegisteredInstance(connectedInstanceId);
+        return PairedUtil.isRegisteredInstance(connectedInstanceId);
 //        final ChunkCoordinates coord = new ChunkCoordinates(xCoord, yCoord, zCoord);
-//        return PairedUtils.isRegisteredInstance(connectedInstanceId) &&
-//                PairedUtils.distanceToComputer(connectedInstanceId, coord) <= ConfigData.keyboardRange;
+//        return PairedUtil.isRegisteredInstance(connectedInstanceId) &&
+//                PairedUtil.distanceToComputer(connectedInstanceId, coord) <= ConfigData.keyboardRange;
     }
 }

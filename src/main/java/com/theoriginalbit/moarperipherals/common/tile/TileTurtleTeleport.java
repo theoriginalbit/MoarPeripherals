@@ -21,8 +21,8 @@ import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxTeleport;
-import com.theoriginalbit.moarperipherals.common.tile.abstracts.TileMoarP;
-import com.theoriginalbit.moarperipherals.common.utils.TurtleUtils;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.util.TurtleUtil;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import net.minecraft.util.ChunkCoordinates;
@@ -38,7 +38,7 @@ public class TileTurtleTeleport extends TileMoarP {
     @MultiReturn
     public Object[] getTurtleLocation() {
         // look for the Turtle above
-        ITurtleAccess turtle = TurtleUtils.getITurtle(worldObj, xCoord, yCoord + 1, zCoord);
+        ITurtleAccess turtle = TurtleUtil.getITurtle(worldObj, xCoord, yCoord + 1, zCoord);
         // if there was a turtle
         if (turtle != null) {
             // get the turtle's location
@@ -54,7 +54,7 @@ public class TileTurtleTeleport extends TileMoarP {
     @MultiReturn
     public Object[] teleportTo(int x, int y, int z) {
         // look for the Turtle above
-        final ITurtleAccess turtle = TurtleUtils.getITurtle(worldObj, xCoord, yCoord + 1, zCoord);
+        final ITurtleAccess turtle = TurtleUtil.getITurtle(worldObj, xCoord, yCoord + 1, zCoord);
         // if there was a turtle
         if (turtle != null) {
             // make sure it can teleport there
@@ -80,7 +80,7 @@ public class TileTurtleTeleport extends TileMoarP {
     @LuaFunction
     public int requiredFuel(int x, int y, int z) {
         // look for the Turtle above
-        final ITurtleAccess turtle = TurtleUtils.getITurtle(worldObj, xCoord, yCoord + 1, zCoord);
+        final ITurtleAccess turtle = TurtleUtil.getITurtle(worldObj, xCoord, yCoord + 1, zCoord);
         // return the required fuel
         return requiredFuelInternal(turtle, x, y, z);
     }

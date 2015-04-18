@@ -17,11 +17,11 @@ package com.theoriginalbit.moarperipherals.common.item;
 
 import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.ImmutableSet;
-import com.theoriginalbit.moarperipherals.common.item.abstracts.ItemMoarP;
+import com.theoriginalbit.moarperipherals.common.base.ItemMoarP;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.reference.Mods;
-import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
+import com.theoriginalbit.moarperipherals.common.util.BlockNotifyFlags;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

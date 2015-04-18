@@ -17,7 +17,7 @@ package com.theoriginalbit.moarperipherals.common.chunk;
 
 import com.google.common.collect.Sets;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -31,7 +31,7 @@ public final class TicketManager {
     public static ForgeChunkManager.Ticket requestTicket(World world, int x, int y, int z) {
         ForgeChunkManager.Ticket ticket = null;
         if (!world.isRemote) {
-            LogUtils.debug(String.format("Requesting chunk loading ticket for TileEntity at %d %d %d", x, y, z));
+            LogUtil.debug(String.format("Requesting chunk loading ticket for TileEntity at %d %d %d", x, y, z));
             ticket = ForgeChunkManager.requestTicket(MoarPeripherals.instance, world, ForgeChunkManager.Type.NORMAL);
             if (ticket != null) {
                 tickets.add(ticket);
@@ -46,7 +46,7 @@ public final class TicketManager {
 
     public static void releaseTicket(ForgeChunkManager.Ticket ticket) {
         if (tickets.contains(ticket)) {
-            LogUtils.debug("Releasing chunk loading ticket.");
+            LogUtil.debug("Releasing chunk loading ticket.");
             tickets.remove(ticket);
         }
         ForgeChunkManager.releaseTicket(ticket);

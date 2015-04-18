@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.handler;
 
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
@@ -51,7 +51,7 @@ public class TickHandler {
                 try {
                     if (!isCancelled()) get();
                 } catch (Throwable t) {
-                    LogUtils.warn("Exception while executing callback! " + this);
+                    LogUtil.warn("Exception while executing callback! " + this);
                     t.printStackTrace();
                 }
             }

@@ -18,12 +18,12 @@ package com.theoriginalbit.moarperipherals.common.block;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.event.IBlockEventHandler;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
-import com.theoriginalbit.moarperipherals.common.block.abstracts.BlockPaired;
+import com.theoriginalbit.moarperipherals.common.base.BlockPaired;
 import com.theoriginalbit.moarperipherals.common.item.ItemSonic;
 import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
-import com.theoriginalbit.moarperipherals.common.utils.BlockNotifyFlags;
-import com.theoriginalbit.moarperipherals.common.utils.ReflectionUtils;
+import com.theoriginalbit.moarperipherals.common.util.BlockNotifyFlags;
+import com.theoriginalbit.moarperipherals.common.util.ReflectionUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,7 +41,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BlockKeyboardMac extends BlockPaired {
-    private static final Class<?> CLASS_ITOOLWRENCH = ReflectionUtils.getClass("buildcraft.api.tools.IToolWrench");
+    private static final Class<?> CLASS_ITOOLWRENCH = ReflectionUtil.getClass("buildcraft.api.tools.IToolWrench");
     private final ForgeDirection[] validDirections = new ForgeDirection[]{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST};
 
     public BlockKeyboardMac() {

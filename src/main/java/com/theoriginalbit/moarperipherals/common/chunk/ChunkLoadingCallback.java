@@ -16,7 +16,7 @@
 package com.theoriginalbit.moarperipherals.common.chunk;
 
 import com.google.common.collect.Maps;
-import com.theoriginalbit.moarperipherals.common.utils.LogUtils;
+import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -31,11 +31,11 @@ public class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
 
     @Override
     public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
-        LogUtils.debug("Previous chunk loading tickets exist, loading...");
+        LogUtil.debug("Previous chunk loading tickets exist, loading...");
         for (ForgeChunkManager.Ticket ticket : tickets) {
             try {
                 if (!ticketLoad(ticket, world)) {
-                    LogUtils.warn("Served an invalid chunk loading ticket. Releasing.");
+                    LogUtil.warn("Served an invalid chunk loading ticket. Releasing.");
                     TicketManager.releaseTicket(ticket);
                 }
             } catch (Exception e) {
@@ -53,12 +53,12 @@ public class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
         TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile == null) {
-            LogUtils.debug(String.format("No TileEntity at %d %d %d", x, y, z));
+            LogUtil.debug(String.format("No TileEntity at %d %d %d", x, y, z));
             return false;
         }
 
         if (!(tile instanceof IChunkLoader)) {
-            LogUtils.warn(String.format("Served ticket for TileEntity at %d %d %d that is not one of mine", x, y, z));
+            LogUtil.warn(String.format("Served ticket for TileEntity at %d %d %d that is not one of mine", x, y, z));
             return false;
         }
 

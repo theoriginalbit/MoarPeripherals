@@ -15,8 +15,8 @@
  */
 package com.theoriginalbit.moarperipherals.common.inventory;
 
-import com.theoriginalbit.moarperipherals.common.inventory.abstracts.ContainerMoarP;
-import com.theoriginalbit.moarperipherals.common.registry.ModItems;
+import com.theoriginalbit.moarperipherals.common.base.ContainerMoarP;
+import com.theoriginalbit.moarperipherals.common.init.ModItems;
 import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
