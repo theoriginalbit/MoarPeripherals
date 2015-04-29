@@ -16,167 +16,95 @@
 package com.theoriginalbit.moarperipherals.common.util;
 
 import com.google.common.base.Strings;
-import com.theoriginalbit.moarperipherals.common.reference.Mods;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.relauncher.Side;
+import com.theoriginalbit.moarperipherals.common.init.ComputerCraft;
+import dan200.computercraft.shared.computer.blocks.IComputerTile;
+import dan200.computercraft.shared.computer.blocks.TileCommandComputer;
+import dan200.computercraft.shared.computer.blocks.TileComputerBase;
+import dan200.computercraft.shared.computer.core.IComputer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author theoriginalbit
  */
-@SuppressWarnings("unchecked")
 public final class PairedUtil {
-    private static final Class<?> CLASS_COMPUTER_CMD = ReflectionUtil.getClass("dan200.computercraft.shared.computer" +
-            ".blocks.TileCommandComputer");
-    private static final Class<?> CLASS_COMPUTER_BASE = ReflectionUtil.getClass("dan200.computercraft.shared.computer" +
-            ".blocks.TileComputerBase");
-    private static final Class<?> CLASS_I_COMPUTER = ReflectionUtil.getClass("dan200.computercraft.shared.computer.core.IComputer");
-    private static final Method METHOD_QUEUE_EVENT = ReflectionUtil.getMethod(CLASS_I_COMPUTER, "queueEvent", String.class, Object[].class);
-    private static final Method METHOD_IS_ON = ReflectionUtil.getMethod(CLASS_I_COMPUTER, "isOn");
-    private static final Method METHOD_TURN_ON = ReflectionUtil.getMethod(CLASS_I_COMPUTER, "turnOn");
-    private static final Method METHOD_SHUTDOWN = ReflectionUtil.getMethod(CLASS_I_COMPUTER, "shutdown");
-    private static final Method METHOD_REBOOT = ReflectionUtil.getMethod(CLASS_I_COMPUTER, "reboot");
-    private static final String EVENT_TERMINATE = "terminate";
-
-    private static Map<Integer, Object> computerRegistry = new HashMap<>();
-
     public static boolean isComputer(TileEntity tile) {
-        if (tile == null) return false;
-        final Class<?> clazz = tile.getClass();
-        return instanceOf(clazz, CLASS_COMPUTER_BASE);
+        return tile instanceof TileComputerBase;
     }
 
     public static boolean isPairAllowed(TileEntity tile) {
-        if (tile == null) return false;
-        final Class<?> clazz = tile.getClass();
-        return isComputer(tile) && !instanceOf(clazz, CLASS_COMPUTER_CMD);
+        return tile instanceof TileComputerBase && !(tile instanceof TileCommandComputer);
     }
 
     public static int getInstanceId(TileEntity tile) {
-        if (tile == null) return -1;
-
-        try {
-            Field idField = CLASS_COMPUTER_BASE.getDeclaredField("m_instanceID");
-            idField.setAccessible(true);
-            int instanceId = (int) idField.get(tile);
-            idField.setAccessible(false);
-            return instanceId;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+        if (tile instanceof IComputerTile) {
+            IComputerTile computerTile = (IComputerTile) tile;
+            IComputer computer = computerTile.getComputer();
+            return computer.getInstanceID();
         }
 
         return -1;
     }
 
-    public static Object getInstance(int instanceId) {
-        if (!isRegisteredInstance(instanceId)) return null;
-        return computerRegistry.get(instanceId);
+    public static IComputer getInstance(int instanceId) {
+        return ComputerCraft.getComputer(instanceId);
     }
 
-    public static boolean isRegisteredInstance(int instanceId) {
-        return computerRegistry.containsKey(instanceId);
+    public static boolean isInstance(int instanceId) {
+        return getInstance(instanceId) != null;
     }
 
-    public static ChunkCoordinates getInstanceLocation(int instanceId) {
-        Object computer = getInstance(instanceId);
-        if (computer == null) return null;
-
-        try {
-            Field field = computer.getClass().getDeclaredField("m_position");
-            field.setAccessible(true);
-            return (ChunkCoordinates) field.get(computer);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+    public static void queueEvent(int instanceId, String event, Object... args) {
+        IComputer instance = getInstance(instanceId);
+        if (instance != null) {
+            instance.queueEvent(event, args);
         }
-        return null;
     }
 
-    public static void queueEvent(Object instance, String event, Object... args) {
-        if (instance == null || !CLASS_I_COMPUTER.isAssignableFrom(instance.getClass())) return;
-        ReflectionUtil.callMethod(instance, METHOD_QUEUE_EVENT, event, args);
+    public static boolean isOn(int instanceId) {
+        IComputer instance = getInstance(instanceId);
+        return instance != null && instance.isOn();
     }
 
-    public static boolean isOn(Object instance) {
-        if (instance == null || !CLASS_I_COMPUTER.isAssignableFrom(instance.getClass())) return false;
-        return (Boolean) ReflectionUtil.callMethod(instance, METHOD_IS_ON);
+    public static void turnOn(int instanceId) {
+        IComputer instance = getInstance(instanceId);
+        if (instance != null) {
+            instance.turnOn();
+        }
     }
 
-    public static void turnOn(Object instance) {
-        if (instance == null || !CLASS_I_COMPUTER.isAssignableFrom(instance.getClass())) return;
-        ReflectionUtil.callMethod(instance, METHOD_TURN_ON);
+    public static void shutdown(int instanceId) {
+        IComputer instance = getInstance(instanceId);
+        if (instance != null) {
+            instance.shutdown();
+        }
     }
 
-    public static void shutdown(Object instance) {
-        if (instance == null || !CLASS_I_COMPUTER.isAssignableFrom(instance.getClass())) return;
-        ReflectionUtil.callMethod(instance, METHOD_SHUTDOWN);
+    public static void reboot(int instanceId) {
+        IComputer instance = getInstance(instanceId);
+        if (instance != null) {
+            instance.reboot();
+        }
     }
 
-    public static void reboot(Object instance) {
-        if (instance == null || !CLASS_I_COMPUTER.isAssignableFrom(instance.getClass())) return;
-        ReflectionUtil.callMethod(instance, METHOD_REBOOT);
-    }
-
-    public static void terminate(Object instance) {
-        if (instance == null || !CLASS_I_COMPUTER.isAssignableFrom(instance.getClass())) return;
-        queueEvent(instance, EVENT_TERMINATE);
-    }
-
-    public static float distanceToComputer(int instanceId, ChunkCoordinates origin) {
-        ChunkCoordinates coordinates = getInstanceLocation(instanceId);
-        return coordinates != null ? MathHelper.sqrt_double(origin.getDistanceSquaredToChunkCoordinates(coordinates)) : 0f;
+    public static void terminate(int instanceId) {
+        queueEvent(instanceId, ComputerCraft.EVENT.TERMINATE);
     }
 
     public static String getDescription(int instanceId) {
-        if (!isRegisteredInstance(instanceId)) return "[missing]";
+        final IComputer computer = getInstance(instanceId);
 
-        Object computer = computerRegistry.get(instanceId);
-        try {
-            Method getIdMethod = CLASS_I_COMPUTER.getMethod("getID");
-            Method getLabelMethod = CLASS_I_COMPUTER.getMethod("getLabel");
-            int id = (int) getIdMethod.invoke(computer);
-            String label = (String) getLabelMethod.invoke(computer);
+        if (computer != null) {
+            final int id = computer.getID();
+            final String label = computer.getLabel();
 
             if (Strings.isNullOrEmpty(label)) {
                 return String.format("#%d", id);
             }
+
             return String.format("%s (#%d)", label, id);
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
         }
 
         return EnumChatFormatting.OBFUSCATED + "[error]";
-    }
-
-    private static boolean instanceOf(Class<?> tile, Class<?> other) {
-        return other != null && other.isAssignableFrom(tile);
-    }
-
-    static {
-        try {
-            final Class<?> computerCraft = ReflectionUtil.getClass("dan200.computercraft.ComputerCraft");
-            final Field registryField;
-            if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-                registryField = computerCraft.getDeclaredField("clientComputerRegistry");
-            } else {
-                registryField = computerCraft.getDeclaredField("serverComputerRegistry");
-            }
-            final ModContainer container = FMLCommonHandler.instance().findContainerFor(Mods.COMPUTERCRAFT);
-            final Object registryObject = registryField.get(container);
-            final Field computerField = registryObject.getClass().getSuperclass().getDeclaredField("m_computers");
-            computerField.setAccessible(true);
-            computerRegistry = (Map) computerField.get(registryObject);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 }

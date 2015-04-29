@@ -15,11 +15,10 @@
  */
 package com.theoriginalbit.moarperipherals.common.tile;
 
-import com.google.common.base.Strings;
 import com.theoriginalbit.moarperipherals.api.hook.IPairedDeviceHook;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.block.BlockKeyboardPc;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
-import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.util.NBTUtil;
 import com.theoriginalbit.moarperipherals.common.util.PairedUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +30,6 @@ import java.util.List;
 
 public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
     private int connectedInstanceId = -1;
-    private String connectedInstanceDesc;
     private boolean connected;
 
     /**
@@ -50,19 +48,12 @@ public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setInteger("instanceId", connectedInstanceId);
-        if (!Strings.isNullOrEmpty(connectedInstanceDesc)) {
-            tag.setString("instanceDesc", connectedInstanceDesc);
-        }
     }
 
     @Override
     public void updateEntity() {
         if (!connected) {
-            connected = PairedUtil.isRegisteredInstance(connectedInstanceId);
-        }
-
-        if (connected && PairedUtil.isRegisteredInstance(connectedInstanceId)) {
-            connectedInstanceDesc = PairedUtil.getDescription(connectedInstanceId);
+            connected = PairedUtil.isInstance(connectedInstanceId);
         }
     }
 
@@ -70,9 +61,6 @@ public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
     public NBTTagCompound getDescriptionNBT() {
         final NBTTagCompound tag = super.getDescriptionNBT();
         tag.setInteger("instanceId", connectedInstanceId);
-        if (!Strings.isNullOrEmpty(connectedInstanceDesc)) {
-            tag.setString("instanceDesc", connectedInstanceDesc);
-        }
         return tag;
     }
 
@@ -87,7 +75,7 @@ public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
      */
     @Override
     public boolean blockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        PairedUtil.turnOn(PairedUtil.getInstance(connectedInstanceId));
+        PairedUtil.turnOn(connectedInstanceId);
         return true;
     }
 
@@ -120,9 +108,6 @@ public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
     @Override
     public final boolean configureTargetFromNbt(NBTTagCompound tag) {
         connectedInstanceId = tag.getInteger("instanceId");
-        if (tag.hasKey("instanceDesc")) {
-            connectedInstanceDesc = tag.getString("instanceDesc");
-        }
         return true;
     }
 
@@ -137,30 +122,30 @@ public class TileKeyboard extends TileMoarP implements IPairedDeviceHook {
 
     public final void terminateTarget() {
         if (isTargetInRange()) {
-            PairedUtil.terminate(PairedUtil.getInstance(connectedInstanceId));
+            PairedUtil.terminate(connectedInstanceId);
         }
     }
 
     public final void rebootTarget() {
         if (isTargetInRange()) {
-            PairedUtil.reboot(PairedUtil.getInstance(connectedInstanceId));
+            PairedUtil.reboot(connectedInstanceId);
         }
     }
 
     public final void shutdownTarget() {
         if (isTargetInRange()) {
-            PairedUtil.shutdown(PairedUtil.getInstance(connectedInstanceId));
+            PairedUtil.shutdown(connectedInstanceId);
         }
     }
 
     public final void queueEventToTarget(String event, Object... args) {
         if (isTargetInRange()) {
-            PairedUtil.queueEvent(PairedUtil.getInstance(connectedInstanceId), event, args);
+            PairedUtil.queueEvent(connectedInstanceId, event, args);
         }
     }
 
     public boolean isTargetInRange() {
-        return PairedUtil.isRegisteredInstance(connectedInstanceId);
+        return PairedUtil.isInstance(connectedInstanceId);
 //        final ChunkCoordinates coord = new ChunkCoordinates(xCoord, yCoord, zCoord);
 //        return PairedUtil.isRegisteredInstance(connectedInstanceId) &&
 //                PairedUtil.distanceToComputer(connectedInstanceId, coord) <= ConfigData.keyboardRange;

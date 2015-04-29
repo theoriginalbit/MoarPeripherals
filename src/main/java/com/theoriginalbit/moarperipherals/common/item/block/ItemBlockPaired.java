@@ -26,7 +26,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
@@ -62,7 +61,7 @@ public class ItemBlockPaired extends ItemBlock {
 
             int instanceId = PairedUtil.getInstanceId(tile);
 
-            if (!PairedUtil.isOn(PairedUtil.getInstance(instanceId))) {
+            if (!PairedUtil.isOn(instanceId)) {
                 player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + Constants.CHAT.CHAT_PAIR_POWER_REQUIRED.getLocalised()));
                 return true;
             }
@@ -70,7 +69,6 @@ public class ItemBlockPaired extends ItemBlock {
             // It is allowed to pair, and the computer is on
             LogUtil.debug("Computer at %d, %d, %d has been right-clicked, getting computer information", x, y, z);
             String desc = PairedUtil.getDescription(instanceId);
-            ChunkCoordinates coordinates = PairedUtil.getInstanceLocation(instanceId);
 
             // Inform the user of the connection
             ChatUtil.sendChatToPlayer(player.getDisplayName(), Constants.CHAT.CHAT_PAIRED.getFormattedLocalised(desc));

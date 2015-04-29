@@ -16,12 +16,17 @@
 package com.theoriginalbit.moarperipherals.common.init;
 
 import com.theoriginalbit.moarperipherals.common.reference.Mods;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import dan200.computercraft.shared.computer.core.ClientComputerRegistry;
+import dan200.computercraft.shared.computer.core.IComputer;
+import dan200.computercraft.shared.computer.core.ServerComputerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public final class ComputerCraft {
-
+    private static ComputerRegistry computerRegistry;
     public static final Double REDNET_BROADCAST = 65535.0d;
     public static Block cc_blockComputer;
     public static Block cc_blockPeripheral;
@@ -33,12 +38,11 @@ public final class ComputerCraft {
     public static ItemStack cc_turtle_adv;
 
     public static class EVENT {
-
         public static final String MODEM = "modem_message";
         public static final String PASTE = "paste";
         public static final String KEY = "key";
         public static final String CHAR = "char";
-
+        public static final String TERMINATE = "terminate";
     }
 
     public static void init() {
@@ -51,6 +55,30 @@ public final class ComputerCraft {
         cc_cable = new ItemStack(cc_blockCable, 1, 0);
         cc_wiredModem = new ItemStack(cc_blockCable, 1, 1);
         cc_wirelessModem = new ItemStack(cc_blockPeripheral, 1, 1);
+
+        computerRegistry = new ComputerRegistry();
     }
 
+    public static IComputer getComputer(int instanceId) {
+        return computerRegistry.get(instanceId);
+    }
+
+    private static final class ComputerRegistry {
+        private final ClientComputerRegistry clientComputerRegistry;
+        private final ServerComputerRegistry serverComputerRegistry;
+        private final boolean isClient;
+
+        public ComputerRegistry() {
+            clientComputerRegistry = dan200.computercraft.ComputerCraft.clientComputerRegistry;
+            serverComputerRegistry = dan200.computercraft.ComputerCraft.serverComputerRegistry;
+            isClient = FMLCommonHandler.instance().getSide() == Side.CLIENT;
+        }
+
+        public IComputer get(int instanceId) {
+            if (isClient) {
+                return clientComputerRegistry.get(instanceId);
+            }
+            return serverComputerRegistry.get(instanceId);
+        }
+    }
 }
