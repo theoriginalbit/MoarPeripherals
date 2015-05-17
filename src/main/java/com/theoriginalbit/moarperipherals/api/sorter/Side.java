@@ -13,19 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.moarperipherals.client.gui;
+package com.theoriginalbit.moarperipherals.api.sorter;
 
-public enum GuiType {
-
-    KEYBOARD, CRAFTER, PRINTER, SINGLE_SLOT;
-
-    public static GuiType valueOf(int id) {
-        for (GuiType gui : values()) {
-            if (gui.ordinal() == id) {
-                return gui;
-            }
-        }
-        return null;
-    }
-
+/**
+ * @author Joshua Asbury (@theoriginalbit)
+ */
+public enum Side {
+    BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW
 }

@@ -39,9 +39,11 @@ public final class ModBlocks {
         // prevent other instances being constructed
     }
 
-    public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboardMac, blockKeyboardPc,
-            blockPrinter, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController, blockTurtleTeleport,
-            blockMiniAntenna, blockFireworks, blockFireworksCreative, blockComputerCrafter;
+    public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboardMac,
+            blockKeyboardPc,
+            blockPrinter, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController,
+            blockTurtleTeleport,
+            blockMiniAntenna, blockFireworks, blockFireworksCreative, blockComputerCrafter, blockInteractiveSorter;
 
     public final void register() {
         if (ConfigData.enablePlayerDetector) {
@@ -126,6 +128,12 @@ public final class ModBlocks {
             blockComputerCrafter = new BlockComputerCrafter();
             GameRegistry.registerBlock(blockComputerCrafter, "blockComputerCrafter");
             GameRegistry.registerTileEntity(TileComputerCrafter.class, "tileComputerCrafter");
+        }
+
+        if (ConfigData.enableInteractiveSorter) {
+            blockInteractiveSorter = new BlockInteractiveSorter();
+            GameRegistry.registerBlock(blockInteractiveSorter, "blockInteractiveSorter");
+            GameRegistry.registerTileEntity(TileInteractiveSorter.class, "tileInteractiveSorter");
         }
     }
 
@@ -285,6 +293,19 @@ public final class ModBlocks {
                     'T', Blocks.crafting_table,
                     'W', Blocks.chest,
                     'C', ComputerCraft.cc_cable
+            ));
+        }
+
+        if (ConfigData.enableInteractiveSorter) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInteractiveSorter),
+                    "SPS",
+                    "PHP",
+                    "SNS",
+
+                    'S', "stone",
+                    'H', Blocks.hopper,
+                    'P', Blocks.sticky_piston,
+                    'N', ComputerCraft.cc_cable
             ));
         }
     }

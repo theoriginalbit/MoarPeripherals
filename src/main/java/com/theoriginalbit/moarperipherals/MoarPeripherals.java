@@ -17,6 +17,7 @@ package com.theoriginalbit.moarperipherals;
 
 import com.theoriginalbit.framework.peripheral.LuaType;
 import com.theoriginalbit.framework.peripheral.PeripheralProvider;
+import com.theoriginalbit.moarperipherals.api.sorter.Side;
 import com.theoriginalbit.moarperipherals.client.CreativeTabMoarPeripherals;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
 import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
@@ -26,6 +27,7 @@ import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
 import com.theoriginalbit.moarperipherals.common.integration.converter.ConverterItemStack;
+import com.theoriginalbit.moarperipherals.common.integration.converter.ConverterSide;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.init.ComputerCraft;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
@@ -109,6 +111,8 @@ public class MoarPeripherals {
 
         LuaType.registerTypeConverter(new ConverterItemStack());
         LuaType.registerClassToNameMapping(ItemStack.class, "item");
+        LuaType.registerTypeConverter(new ConverterSide());
+        LuaType.registerClassToNameMapping(Side.class, "side");
 
         ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
     }

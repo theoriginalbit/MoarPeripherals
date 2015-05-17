@@ -16,6 +16,7 @@ tile.moarperipherals:fireworks.name=Запускатель фейерверко�
 tile.moarperipherals:fireworksCreative.name=Запускатель фейерверков (креативный)
 tile.moarperipherals:crafter.name=Крафтер
 tile.moarperipherals:miniAntenna.name=Мини антенна BitNet
+tile.moarperipherals:sorter.name=Interactive Sorter
 
 item.moarperipherals:inkCartridge.name=Картридж с чернилами
 item.moarperipherals:keyboardPart.name=Часть клавиатуры

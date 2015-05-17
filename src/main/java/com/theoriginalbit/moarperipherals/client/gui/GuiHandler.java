@@ -15,8 +15,10 @@
  */
 package com.theoriginalbit.moarperipherals.client.gui;
 
+import com.theoriginalbit.moarperipherals.common.base.TileInventory;
 import com.theoriginalbit.moarperipherals.common.inventory.ContainerCrafter;
 import com.theoriginalbit.moarperipherals.common.inventory.ContainerPrinter;
+import com.theoriginalbit.moarperipherals.common.inventory.ContainerSingleSlot;
 import com.theoriginalbit.moarperipherals.common.tile.TileComputerCrafter;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
 import com.theoriginalbit.moarperipherals.common.tile.TilePrinter;
@@ -35,6 +37,8 @@ public class GuiHandler implements IGuiHandler {
                     return new ContainerCrafter(player, (TileComputerCrafter) world.getTileEntity(x, y, z));
                 case PRINTER:
                     return new ContainerPrinter(player, (TilePrinter) world.getTileEntity(x, y, z));
+                case SINGLE_SLOT:
+                    return new ContainerSingleSlot(player, (TileInventory) world.getTileEntity(x, y, z));
             }
         }
         return null;
@@ -48,9 +52,11 @@ public class GuiHandler implements IGuiHandler {
                 case KEYBOARD:
                     return new GuiKeyboard((TileKeyboard) world.getTileEntity(x, y, z), player);
                 case CRAFTER:
-                    return new GuiCrafter(new ContainerCrafter(player, (TileComputerCrafter) world.getTileEntity(x, y, z)));
+                    return new GuiCrafter((ContainerCrafter) getServerGuiElement(id, player, world, x, y, z));
                 case PRINTER:
-                    return new GuiPrinter(new ContainerPrinter(player, (TilePrinter) world.getTileEntity(x, y, z)));
+                    return new GuiPrinter((ContainerPrinter) getServerGuiElement(id, player, world, x, y, z));
+                case SINGLE_SLOT:
+                    return new GuiSingleSlot((ContainerSingleSlot) getServerGuiElement(id, player, world, x, y, z));
             }
         }
         return null;

@@ -66,6 +66,9 @@ public class ConfigData {
     @ConfigPropertyBoolean(category = "enabled", comment = "Enable the Computer Crafter")
     public static boolean enableComputerCrafter;
 
+    @ConfigPropertyBoolean(category = "enabled", comment = "Enable the Interactive Sorter")
+    public static boolean enableInteractiveSorter;
+
     @ConfigPropertyBoolean(category = "enabled", comment = "Enable the Shears Turtle Upgrade")
     public static boolean enableUpgradeShears;
 

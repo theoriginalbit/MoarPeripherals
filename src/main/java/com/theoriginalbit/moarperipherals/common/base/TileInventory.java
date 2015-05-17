@@ -119,7 +119,7 @@ public abstract class TileInventory extends TileMoarP implements ISidedInventory
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return false;
+        return true;
     }
 
     @Override
@@ -129,7 +129,7 @@ public abstract class TileInventory extends TileMoarP implements ISidedInventory
 
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return false;
+        return true;
     }
 
     @Override

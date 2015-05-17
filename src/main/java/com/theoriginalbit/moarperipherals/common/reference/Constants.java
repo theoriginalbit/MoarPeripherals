@@ -30,6 +30,7 @@ public final class Constants {
         public static final LocalisationStore FIREWORKS = new LocalisationStore("tile.moarperipherals:fireworks.name");
         public static final LocalisationStore CRAFTER = new LocalisationStore("tile.moarperipherals:crafter.name");
         public static final LocalisationStore PRINTER = new LocalisationStore("tile.moarperipherals:printer.name");
+        public static final LocalisationStore SORTER = new LocalisationStore("tile.moarperipherals:sorter.name");
     }
 
     public static final class TOOLTIPS {
