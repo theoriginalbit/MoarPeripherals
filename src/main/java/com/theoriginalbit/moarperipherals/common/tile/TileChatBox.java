@@ -18,15 +18,15 @@ package com.theoriginalbit.moarperipherals.common.tile;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.common.handler.IChatHook;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
+import com.theoriginalbit.moarperipherals.common.handler.IChatHook;
 import com.theoriginalbit.moarperipherals.common.handler.ICommandHook;
 import com.theoriginalbit.moarperipherals.common.handler.IDeathHook;
-import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.util.ChatUtil;
 import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -59,6 +59,7 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
     private static final String COMMAND_TOKEN = "##";
     private static final int MAX_LABEL_LENGTH = 20;
     private static final int TICKER_INTERVAL = 20;
+    private static final int DEFAULT_VALUE = 16;
 
     private int ticker = 0;
     private int count = 0;
@@ -66,9 +67,9 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
 
     // user runtime configurable
     private String label = "";
-    private int rangeSay = ConfigData.chatRangeSay;
-    private int rangeTell = ConfigData.chatRangeTell;
-    private int rangeRead = ConfigData.chatRangeRead;
+    private int rangeSay = Math.min(DEFAULT_VALUE, ConfigData.chatRangeSay);
+    private int rangeTell = Math.min(DEFAULT_VALUE, ConfigData.chatRangeTell);
+    private int rangeRead = Math.min(DEFAULT_VALUE, ConfigData.chatRangeRead);
 
     @Computers.List
     public ArrayList<IComputerAccess> computers;
@@ -309,6 +310,7 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
     }
 
     private String buildMessage(String msg, boolean pm) {
-        return "[" + (label.isEmpty() ? "ChatBox" : label) + (ConfigData.displayChatBoxCoordinate ? String.format(" (%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "] " + (pm ? "[PM] " : "") + msg;
+        return "[" + (label.isEmpty() ? "ChatBox" : label) + (ConfigData.displayChatBoxCoordinate ? String.format(" " +
+                "(%d,%d,%d)", xCoord, yCoord, zCoord) : "") + "] " + (pm ? "[PM] " : "") + msg;
     }
 }
