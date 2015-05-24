@@ -70,29 +70,29 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
     }
 
     @LuaFunction
-    public boolean sort(Side side, int amount) {
+    public int sort(Side side, int amount) {
         // stop early if the amount is too low
-        if (amount <= 0) return false;
+        if (amount <= 0) return amount;
 
         // get the item in the sorter
         final ItemStack stack = getItem();
-        if (stack == null) return false;
+        if (stack == null) return 0;
 
         // validate the amount
         amount = Math.min(stack.stackSize, amount);
 
         // make sure the tile on that side is an inventory
         final IInventory inventory = getInventoryForSide(side);
-        if (inventory == null) return false;
+        if (inventory == null) return 0;
 
         // output the items
-        final ItemStack output = stack.splitStack(amount);
-        InventoryUtil.storeOrDropItemStack(inventory, output, worldObj, xCoord, yCoord, zCoord);
+        final ItemStack remainder = InventoryUtil.storeItemStack(inventory, stack.splitStack(amount));
 
         // remove or update the stack in the inventory sorter
         setInventorySlotContents(0, stack.stackSize > 0 ? stack : null);
 
-        return true;
+        // return how many items were sorted
+        return amount - remainder.stackSize;
     }
 
     @LuaFunction
