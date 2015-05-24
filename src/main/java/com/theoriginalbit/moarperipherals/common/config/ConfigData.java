@@ -93,14 +93,23 @@ public class ConfigData {
     @ConfigPropertyBoolean(comment = "Show the x, y, and z coordinates of the ChatBox in chat messages")
     public static boolean displayChatBoxCoordinate;
 
-    @ConfigPropertyInteger(value = 64, comment = "Range for the ChatBox peripheral's say function, set to -1 for infinite")
+    @ConfigPropertyInteger(value = 64, comment = "Max range for the ChatBox peripheral's say function, set to -1 for infinite")
     public static int chatRangeSay;
 
-    @ConfigPropertyInteger(value = 64, comment = "Range for the ChatBox peripheral's tell (private message) function, set to -1 for infinite")
+    @ConfigPropertyInteger(value = 64, comment = "Default range for the ChatBox peripheral's say function. NOTE: If the max range is smaller the default will not be used")
+    public static int defaultChatRangeSay;
+
+    @ConfigPropertyInteger(value = 64, comment = "Max range for the ChatBox peripheral's tell (private message) function, set to -1 for infinite")
     public static int chatRangeTell;
 
-    @ConfigPropertyInteger(value = -1, comment = "Range for the ChatBox peripheral's ability to 'hear' the chat, set to -1 for infinite")
+    @ConfigPropertyInteger(value = 64, comment = "Max range for the ChatBox peripheral's tell (private message) function. NOTE: If the max range is smaller the default will not be used")
+    public static int defaultChatRangeTell;
+
+    @ConfigPropertyInteger(value = -1, comment = "Max range for the ChatBox peripheral's ability to 'hear' the chat, set to -1 for infinite")
     public static int chatRangeRead;
+
+    @ConfigPropertyInteger(value = 64, comment = "Max range for the ChatBox peripheral's ability to 'hear' the chat. NOTE: If the max range is smaller the default will not be used")
+    public static int defaultChatRangeRead;
 
     @ConfigPropertyInteger(value = 1, comment = "Maximum number of messages per second a ChatBox peripheral can 'say'")
     public static int chatSayRate;

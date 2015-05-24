@@ -59,7 +59,6 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
     private static final String COMMAND_TOKEN = "##";
     private static final int MAX_LABEL_LENGTH = 20;
     private static final int TICKER_INTERVAL = 20;
-    private static final int DEFAULT_VALUE = 16;
 
     private int ticker = 0;
     private int count = 0;
@@ -67,9 +66,9 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
 
     // user runtime configurable
     private String label = "";
-    private int rangeSay = Math.min(DEFAULT_VALUE, ConfigData.chatRangeSay);
-    private int rangeTell = Math.min(DEFAULT_VALUE, ConfigData.chatRangeTell);
-    private int rangeRead = Math.min(DEFAULT_VALUE, ConfigData.chatRangeRead);
+    private int rangeSay = Math.min(ConfigData.defaultChatRangeSay, ConfigData.chatRangeSay);
+    private int rangeTell = Math.min(ConfigData.defaultChatRangeTell, ConfigData.chatRangeTell);
+    private int rangeRead = Math.min(ConfigData.defaultChatRangeRead, ConfigData.chatRangeRead);
 
     @Computers.List
     public ArrayList<IComputerAccess> computers;
