@@ -16,7 +16,6 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
@@ -30,9 +29,9 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 @LuaPeripheral("iron_note")
 @Computers.Mount(MountMoarP.class)
 public class TileIronNote extends TileMoarP {
-    private static ImmutableList<String> INSTRUMENTS = ImmutableList.of("harp", "bd", "snare", "hat", "bassattack");
+    private static final String[] INSTRUMENTS = new String[] { "harp", "bd", "snare", "hat", "bassattack", "pling", "bass" };
     private static final int MIN_INST = 0;
-    private static final int MAX_INST = 4;
+    private static final int MAX_INST = INSTRUMENTS.length - 1;
     private static final int MIN_PITCH = 0;
     private static final int MAX_PITCH = 24;
     private static final int MAX_NOTES = 5; // this is 5 notes per tick, allowing for 5 note chords
@@ -50,7 +49,7 @@ public class TileIronNote extends TileMoarP {
             message = new MessageFxIronNote();
         }
 
-        message.addNote("note." + INSTRUMENTS.get(instrument), pitch);
+        message.addNote("note." + INSTRUMENTS[instrument], pitch);
     }
 
     @Override
