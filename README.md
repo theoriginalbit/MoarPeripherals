@@ -13,6 +13,20 @@ Downloads can be found over at the wiki.
 
 <a href="http://moarperipherals.com/" target="_blank">Official Wiki</a> (it's even mobile device friendly)
 
+Contributing
+------------
+
+When contributing to this mod please make sure to tag (prefix) commits with one of the following:
+- *NEW*: New features
+- *ENHANCE*: Improvement to existing feature (Not purely visual, see _looks_.)
+- *FIX*: Fixed a bug
+- *LOOKS*: UI Refinement (Not for functionality change, see _enhance_.)
+- *SPEED*: Performance-related
+- *QUALITY*: Refactoring
+- *DOC*: Documentation
+- *CONFIG*: Config setting changed
+- *TEST*: Testing related addition or enhancement
+
 License
 -------
 
