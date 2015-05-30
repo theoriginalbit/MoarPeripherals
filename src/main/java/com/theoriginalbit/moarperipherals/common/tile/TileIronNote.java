@@ -29,9 +29,16 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 @LuaPeripheral("iron_note")
 @Computers.Mount(MountMoarP.class)
 public class TileIronNote extends TileMoarP {
-    private static final String[] INSTRUMENTS = new String[] { "harp", "bd", "snare", "hat", "bassattack", "pling", "bass" };
-    private static final int MIN_INST = 0;
-    private static final int MAX_INST = INSTRUMENTS.length - 1;
+    private static final String[] INST = new String[] {
+            "harp", "bd", "snare", "hat", "bassattack", "pling", "bass", // notes
+    };
+    private static final String[] SFX = new String[] {
+            "random.eat", "random.drink", "random.burp", "random.break",
+            "random.anvil_use", "random.anvil_break", "random.anvil_land",
+            "random.door_open", "random.door_close", "random.chestopen", "random.chestclosed",
+            "random.pop", "random.fizz", "random.splash", "random.orb", "random.levelup",
+            "random.bow", "random.bowhit", "random.explode", "random.click", "random.wood_click",
+    };
     private static final int MIN_PITCH = 0;
     private static final int MAX_PITCH = 24;
     private static final int MAX_NOTES = 5; // this is 5 notes per tick, allowing for 5 note chords
@@ -40,16 +47,30 @@ public class TileIronNote extends TileMoarP {
 
     @LuaFunction
     public void playNote(int instrument, int pitch) throws Exception {
-        Preconditions.checkArgument(instrument >= MIN_INST && instrument <= MAX_INST, "Expected instrument %d-%d", MIN_INST, MAX_INST);
+        Preconditions.checkArgument(instrument >= 0 && instrument < INST.length, "Expected instrument %d-%d", 0, INST.length);
         Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch %d-%d", MIN_PITCH, MAX_PITCH);
-        Preconditions.checkArgument(notesCount++ < MAX_NOTES, "Too many notes (over %d per tick)", MAX_NOTES);
+        Preconditions.checkArgument(notesCount++ < MAX_NOTES, "Too many sounds (over %d per tick)", MAX_NOTES);
         Preconditions.checkArgument(ConfigData.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
 
         if (message == null) {
             message = new MessageFxIronNote();
         }
 
-        message.addNote("note." + INSTRUMENTS[instrument], pitch);
+        message.addNote("note." + INST[instrument], pitch);
+    }
+
+    @LuaFunction
+    public void playSfx(int soundEffect, int pitch) throws Exception {
+        Preconditions.checkArgument(soundEffect >= 0 && soundEffect < SFX.length, "Expected sound effect %d-%d", 0, SFX.length);
+        Preconditions.checkArgument(pitch >= MIN_PITCH && pitch <= MAX_PITCH, "Expected pitch %d-%d", MIN_PITCH, MAX_PITCH);
+        Preconditions.checkArgument(notesCount++ < MAX_NOTES, "Too many sounds (over %d per tick)", MAX_NOTES);
+        Preconditions.checkArgument(ConfigData.noteRange > 0, "The Iron Note blocks range has been disabled, please contact your server owner");
+
+        if (message == null) {
+            message = new MessageFxIronNote();
+        }
+
+        message.addNote(SFX[soundEffect], pitch);
     }
 
     @Override
