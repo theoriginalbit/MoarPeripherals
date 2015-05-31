@@ -30,7 +30,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 @Computers.Mount(MountMoarP.class)
 public class TileIronNote extends TileMoarP {
     private static final String[] INST = new String[] {
-            "harp", "bd", "snare", "hat", "bassattack", "pling", "bass", // notes
+            "note.harp", "note.bd", "note.snare", "note.hat", "note.bassattack", "note.pling", "note.bass"
     };
     private static final String[] SFX = new String[] {
             "random.eat", "random.drink", "random.burp", "random.break",
@@ -56,7 +56,7 @@ public class TileIronNote extends TileMoarP {
             message = new MessageFxIronNote();
         }
 
-        message.addNote("note." + INST[instrument], pitch);
+        message.addNote(INST[instrument], pitch);
     }
 
     @LuaFunction
