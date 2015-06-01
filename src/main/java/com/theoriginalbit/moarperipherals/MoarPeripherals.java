@@ -63,11 +63,14 @@ public class MoarPeripherals {
     public static boolean isServerStopping = false;
 
     @EventHandler
-    @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
         LogUtil.init();
 
         Config.init(event.getSuggestedConfigurationFile());
+
+        ModItems.INSTANCE.register();
+        ModBlocks.INSTANCE.register();
+        UpgradeRegistry.INSTANCE.register();
 
         proxy.preInit();
 
@@ -77,10 +80,6 @@ public class MoarPeripherals {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         PacketHandler.init();
-
-        ModItems.INSTANCE.register();
-        ModBlocks.INSTANCE.register();
-        UpgradeRegistry.INSTANCE.register();
 
         if (ConfigData.shouldChunkLoad()) {
             LogUtil.debug("Registering chunk loading callback");
