@@ -15,11 +15,11 @@
  */
 package com.theoriginalbit.moarperipherals.common.integration.upgrade;
 
+import com.theoriginalbit.framework.peripheral.turtle.UpgradePeripheral;
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.init.ModBlocks;
-import com.theoriginalbit.framework.peripheral.turtle.UpgradePeripheral;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileChatBox;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;

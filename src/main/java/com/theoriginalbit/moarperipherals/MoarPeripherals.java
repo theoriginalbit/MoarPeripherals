@@ -26,14 +26,14 @@ import com.theoriginalbit.moarperipherals.common.config.Config;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
 import com.theoriginalbit.moarperipherals.common.handler.TickHandler;
-import com.theoriginalbit.moarperipherals.common.integration.converter.ConverterItemStack;
-import com.theoriginalbit.moarperipherals.common.integration.converter.ConverterSide;
-import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.init.ComputerCraft;
-import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.init.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.init.ModItems;
+import com.theoriginalbit.moarperipherals.common.integration.converter.ConverterItemStack;
+import com.theoriginalbit.moarperipherals.common.integration.converter.ConverterSide;
 import com.theoriginalbit.moarperipherals.common.integration.init.UpgradeRegistry;
+import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
+import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -51,9 +51,8 @@ import net.minecraftforge.common.ForgeChunkManager;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
 public class MoarPeripherals {
-
     @Instance(ModInfo.ID)
-    public static MoarPeripherals instance;
+    public static MoarPeripherals INSTANCE;
 
     @SidedProxy(clientSide = ModInfo.PROXY_CLIENT, serverSide = ModInfo.PROXY_SERVER)
     public static ProxyCommon proxy;
@@ -68,9 +67,9 @@ public class MoarPeripherals {
 
         Config.init(event.getSuggestedConfigurationFile());
 
-        ModItems.INSTANCE.register();
-        ModBlocks.INSTANCE.register();
-        UpgradeRegistry.INSTANCE.register();
+        ModItems.register();
+        ModBlocks.register();
+        UpgradeRegistry.register();
 
         proxy.preInit();
 
@@ -83,7 +82,7 @@ public class MoarPeripherals {
 
         if (ConfigData.shouldChunkLoad()) {
             LogUtil.debug("Registering chunk loading callback");
-            ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
+            ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, new ChunkLoadingCallback());
         }
 
         if (ConfigData.enableAntenna) {
@@ -105,8 +104,8 @@ public class MoarPeripherals {
         proxy.postInit();
         ComputerCraft.init();
 
-        ModItems.INSTANCE.addRecipes();
-        ModBlocks.INSTANCE.addRecipes();
+        ModItems.addRecipes();
+        ModBlocks.addRecipes();
 
         LuaType.registerTypeConverter(new ConverterItemStack());
         LuaType.registerClassToNameMapping(ItemStack.class, "item");
@@ -120,5 +119,4 @@ public class MoarPeripherals {
     public void serverStopping(FMLServerStoppingEvent e) {
         isServerStopping = true;
     }
-
 }

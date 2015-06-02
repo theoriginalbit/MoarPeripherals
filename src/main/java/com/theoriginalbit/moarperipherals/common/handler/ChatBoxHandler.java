@@ -31,21 +31,20 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public final class ChatBoxHandler {
-    public static final ChatBoxHandler instance = new ChatBoxHandler();
-
-    public static void init() {
-        if (Loader.isModLoaded(Mods.OPENPERIPHERALADDON)) {
-            LogUtil.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command as a " +
-                    "ChatBox command so it is ignored by ChatBoxes.");
-            instance.commandBlacklist.add("$$");
-        }
-    }
-
+    public static final ChatBoxHandler INSTANCE = new ChatBoxHandler();
     private final ArrayList<IChatHook> chatListeners = Lists.newArrayList();
     private final ArrayList<IDeathHook> deathListeners = Lists.newArrayList();
     private final ArrayList<IPlayerEventHook> playerListeners = Lists.newArrayList();
     private final ArrayList<String> commandBlacklist = Lists.newArrayList();
     private final HashMap<String, ArrayList<ICommandHook>> commandListeners = Maps.newHashMap();
+
+    public static void init() {
+        if (Loader.isModLoaded(Mods.OPENPERIPHERALADDON)) {
+            LogUtil.info("Detected OpenPeripheral-Addons installed. Registering the terminal glasses command as a " +
+                    "ChatBox command so it is ignored by ChatBoxes.");
+            INSTANCE.commandBlacklist.add("$$");
+        }
+    }
 
     public void addChatHook(IChatHook listener) {
         synchronized (chatListeners) {

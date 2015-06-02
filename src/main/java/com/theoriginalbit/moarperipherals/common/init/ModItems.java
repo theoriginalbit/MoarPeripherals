@@ -15,9 +15,9 @@
  */
 package com.theoriginalbit.moarperipherals.common.init;
 
+import com.theoriginalbit.moarperipherals.common.base.ItemMoarP;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.item.ItemInkCartridge;
-import com.theoriginalbit.moarperipherals.common.base.ItemMoarP;
 import com.theoriginalbit.moarperipherals.common.item.ItemSonic;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
@@ -31,20 +31,16 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  * @since 3/10/2014
  */
 public final class ModItems {
-
-    public static final ModItems INSTANCE = new ModItems();
-
     // custom items
     public static Item itemInkCartridge, itemSonic, itemMonopoleAntenna;
-
     // materials, don't need custom implementations
     public static Item itemKeyboardPart, itemUpgradeSolar, itemUpgradeOreScanner;
 
     private ModItems() {
-        // prevent other instances being constructed
+        // prevent instances
     }
 
-    public final void register() {
+    public static void register() {
         if (ConfigData.enablePrinter) {
             itemInkCartridge = new ItemInkCartridge();
             GameRegistry.registerItem(itemInkCartridge, "itemInkCartridge");
@@ -76,7 +72,7 @@ public final class ModItems {
         }
     }
 
-    public final void addRecipes() {
+    public static void addRecipes() {
         if (ConfigData.enablePrinter) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemInkCartridge, 1, 4),
                     "SSS",

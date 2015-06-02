@@ -26,8 +26,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public final class ComputerCraft {
-    private static ComputerRegistry computerRegistry;
-    public static final Double REDNET_BROADCAST = 65535.0d;
     public static Block cc_blockComputer;
     public static Block cc_blockPeripheral;
     public static Block cc_blockCable;
@@ -36,14 +34,7 @@ public final class ComputerCraft {
     public static ItemStack cc_wirelessModem;
     public static ItemStack cc_turtle;
     public static ItemStack cc_turtle_adv;
-
-    public static class EVENT {
-        public static final String MODEM = "modem_message";
-        public static final String PASTE = "paste";
-        public static final String KEY = "key";
-        public static final String CHAR = "char";
-        public static final String TERMINATE = "terminate";
-    }
+    private static ComputerRegistry computerRegistry;
 
     public static void init() {
         cc_blockComputer = GameRegistry.findBlock(Mods.COMPUTERCRAFT, "CC-Computer");
@@ -61,6 +52,14 @@ public final class ComputerCraft {
 
     public static IComputer getComputer(int instanceId) {
         return computerRegistry.get(instanceId);
+    }
+
+    public static class EVENT {
+        public static final String MODEM = "modem_message";
+        public static final String PASTE = "paste";
+        public static final String KEY = "key";
+        public static final String CHAR = "char";
+        public static final String TERMINATE = "terminate";
     }
 
     private static final class ComputerRegistry {

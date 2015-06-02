@@ -22,6 +22,7 @@ import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRelay;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntenna;
 import com.theoriginalbit.moarperipherals.common.block.BlockAntennaCell;
@@ -31,7 +32,6 @@ import com.theoriginalbit.moarperipherals.common.chunk.ChunkLoadingCallback;
 import com.theoriginalbit.moarperipherals.common.chunk.IChunkLoader;
 import com.theoriginalbit.moarperipherals.common.chunk.TicketManager;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.util.BlockNotifyFlags;
 import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import dan200.computercraft.api.lua.LuaException;
@@ -52,6 +52,8 @@ import java.util.ArrayList;
 @LuaPeripheral("bitnet_tower")
 public class TileAntennaController extends TileMoarP implements IBitNetRelay, IChunkLoader {
     private static final String EVENT_BITNET = "bitnet_message";
+    @Computers.List
+    public ArrayList<IComputerAccess> computers;
     private ForgeChunkManager.Ticket chunkTicket;
     private boolean registered = false;
     private boolean complete = false;
@@ -115,9 +117,6 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
 
         complete = false;
     }
-
-    @Computers.List
-    public ArrayList<IComputerAccess> computers;
 
     @LuaFunction
     public boolean isTowerComplete() {
@@ -223,7 +222,7 @@ public class TileAntennaController extends TileMoarP implements IBitNetRelay, IC
             network = BitNetUniverse.UNIVERSE.getBitNetWorld(worldObj);
             network.addRelay(this);
             if (ConfigData.antennaKeepsChunkLoaded && chunkTicket == null) {
-                chunkTicket = ChunkLoadingCallback.ticketList.remove(this);
+                chunkTicket = ChunkLoadingCallback.obtain(this);
                 if (chunkTicket == null) {
                     LogUtil.info(String.format("Requesting chunk loading ticket for BitNet Communications Tower at " +
                             "%d %d %d", xCoord, yCoord, zCoord));

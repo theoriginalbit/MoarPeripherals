@@ -19,10 +19,10 @@ import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRelay;
-import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
 import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse;
 import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -41,9 +41,10 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetRelay {
     private static final float ROTATION_SPEED = 1.0f;
     private static final float BOB_MULTIPLIER = 0.02f;
     private static final float BOB_SPEED = 16.0f;
+    @Computers.List
+    public ArrayList<IComputerAccess> computers;
     private boolean registered = false;
     private IBitNetWorld network;
-
     private float rotation = 0.0f;
     private float bob = 0.0f;
     private int tick = 0;
@@ -64,9 +65,6 @@ public class TileMiniAntenna extends TileMoarP implements IBitNetRelay {
         rotation = (rotation + ROTATION_SPEED) % 360f;
         bob = BOB_MULTIPLIER * (float) Math.sin(++tick / BOB_SPEED);
     }
-
-    @Computers.List
-    public ArrayList<IComputerAccess> computers;
 
     @LuaFunction
     public boolean isOpen(int channel) throws LuaException {

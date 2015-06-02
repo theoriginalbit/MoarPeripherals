@@ -15,15 +15,15 @@
  */
 package com.theoriginalbit.moarperipherals.client;
 
+import com.theoriginalbit.moarperipherals.client.render.*;
 import com.theoriginalbit.moarperipherals.client.upgrade.IUpgradeIcon;
 import com.theoriginalbit.moarperipherals.client.upgrade.IUpgradeToolIcon;
 import com.theoriginalbit.moarperipherals.common.ProxyCommon;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.init.ModBlocks;
 import com.theoriginalbit.moarperipherals.common.init.ModItems;
-import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.client.render.*;
 import com.theoriginalbit.moarperipherals.common.integration.init.UpgradeRegistry;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.TileAntennaController;
 import com.theoriginalbit.moarperipherals.common.tile.TileKeyboard;
 import com.theoriginalbit.moarperipherals.common.tile.TileMiniAntenna;
@@ -51,13 +51,13 @@ public class ProxyClient extends ProxyCommon {
 
     private final Minecraft mc;
 
+    public ProxyClient() {
+        mc = Minecraft.getMinecraft();
+    }
+
     @Override
     public void postInit() {
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    public ProxyClient() {
-        mc = Minecraft.getMinecraft();
     }
 
     @Override

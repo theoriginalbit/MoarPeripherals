@@ -32,8 +32,8 @@ public class LauncherTube {
     private static final int TICKS_COOL_DOWN = 20;
 
     private final QueueBuffer rocketBuffer;
-    private int tick = 0;
     private final double xOffset, yOffset, zOffset;
+    private int tick = 0;
     private boolean coolDownActive;
 
     public LauncherTube(QueueBuffer buffer, int position) {

@@ -80,11 +80,11 @@ public class TileMoarP extends TileEntity implements IBlockEventHandler {
         owner = tag.getString("owner");
     }
 
-    public final void setOwner(String username) {
-        owner = username;
-    }
-
     public final String getOwner() {
         return owner;
+    }
+
+    public final void setOwner(String username) {
+        owner = username;
     }
 }

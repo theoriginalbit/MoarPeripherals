@@ -15,8 +15,8 @@
  */
 package com.theoriginalbit.moarperipherals.common.integration.upgrade.peripheral;
 
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 

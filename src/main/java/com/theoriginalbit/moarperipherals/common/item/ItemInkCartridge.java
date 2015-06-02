@@ -36,6 +36,8 @@ import java.util.List;
  * @since 16/11/14
  */
 public class ItemInkCartridge extends ItemMoarP implements ITooltipHook {
+    private static final String CONTENTS = "%s: %s";
+    private static final String PERCENT = "%s: %s";
     private IIcon iconInkC;
     private IIcon iconInkM;
     private IIcon iconInkY;
@@ -48,63 +50,6 @@ public class ItemInkCartridge extends ItemMoarP implements ITooltipHook {
         setHasSubtypes(true);
         setMaxStackSize(1);
         setCreativeTab(null);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister registry) {
-        iconInkC = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeC");
-        iconInkM = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeM");
-        iconInkY = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeY");
-        iconInkK = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeK");
-        iconInkE = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeE");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int meta) {
-        switch (meta) {
-            case 0:
-                return iconInkC;
-            case 1:
-                return iconInkM;
-            case 2:
-                return iconInkY;
-            case 3:
-                return iconInkK;
-        }
-        return iconInkE;
-    }
-
-    private static final String CONTENTS = "%s: %s";
-    private static final String PERCENT = "%s: %s";
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addToTooltip(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
-        final int inkColor = getInkColor(stack);
-        final String inkName = getInkName(inkColor);
-
-        // if the ink cartridge has ink
-        if (inkColor > -1) {
-            // add the contents string
-            list.add(String.format(
-                    CONTENTS,
-                    Constants.TOOLTIPS.INK_CONTENTS.getLocalised(),
-                    inkName
-            ));
-            // add the ink level string when needed
-            final String percent = getInkPercent(stack);
-            if (percent != null) {
-                list.add(String.format(
-                        PERCENT,
-                        Constants.TOOLTIPS.INK_LEVEL.getLocalised(),
-                        percent
-                ));
-            }
-        } else {
-            list.add(inkName);
-        }
     }
 
     private static String getInkName(int inkColor) {
@@ -144,5 +89,59 @@ public class ItemInkCartridge extends ItemMoarP implements ITooltipHook {
             return (int) (level / FluidContainerRegistry.BUCKET_VOLUME * 100) + "%";
         }
         return null;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister registry) {
+        iconInkC = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeC");
+        iconInkM = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeM");
+        iconInkY = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeY");
+        iconInkK = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeK");
+        iconInkE = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeE");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromDamage(int meta) {
+        switch (meta) {
+            case 0:
+                return iconInkC;
+            case 1:
+                return iconInkM;
+            case 2:
+                return iconInkY;
+            case 3:
+                return iconInkK;
+        }
+        return iconInkE;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addToTooltip(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
+        final int inkColor = getInkColor(stack);
+        final String inkName = getInkName(inkColor);
+
+        // if the ink cartridge has ink
+        if (inkColor > -1) {
+            // add the contents string
+            list.add(String.format(
+                    CONTENTS,
+                    Constants.TOOLTIPS.INK_CONTENTS.getLocalised(),
+                    inkName
+            ));
+            // add the ink level string when needed
+            final String percent = getInkPercent(stack);
+            if (percent != null) {
+                list.add(String.format(
+                        PERCENT,
+                        Constants.TOOLTIPS.INK_LEVEL.getLocalised(),
+                        percent
+                ));
+            }
+        } else {
+            list.add(inkName);
+        }
     }
 }

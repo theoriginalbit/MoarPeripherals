@@ -26,23 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
-
-    public static final HashMap<IChunkLoader, ForgeChunkManager.Ticket> ticketList = Maps.newHashMap();
-
-    @Override
-    public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
-        LogUtil.debug("Previous chunk loading tickets exist, loading...");
-        for (ForgeChunkManager.Ticket ticket : tickets) {
-            try {
-                if (!ticketLoad(ticket, world)) {
-                    LogUtil.warn("Served an invalid chunk loading ticket. Releasing.");
-                    TicketManager.releaseTicket(ticket);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    private static final HashMap<IChunkLoader, ForgeChunkManager.Ticket> TICKET_LIST = Maps.newHashMap();
 
     private static boolean ticketLoad(ForgeChunkManager.Ticket ticket, World world) {
         final NBTTagCompound tag = ticket.getModData();
@@ -64,9 +48,27 @@ public class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
 
         ForgeChunkManager.forceChunk(ticket, ((IChunkLoader) tile).getChunkCoord());
 
-        ticketList.put((IChunkLoader) tile, ticket);
+        TICKET_LIST.put((IChunkLoader) tile, ticket);
 
         return true;
     }
 
+    public static ForgeChunkManager.Ticket obtain(IChunkLoader chunkLoader) {
+        return TICKET_LIST.remove(chunkLoader);
+    }
+
+    @Override
+    public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
+        LogUtil.debug("Previous chunk loading tickets exist, loading...");
+        for (ForgeChunkManager.Ticket ticket : tickets) {
+            try {
+                if (!ticketLoad(ticket, world)) {
+                    LogUtil.warn("Served an invalid chunk loading ticket. Releasing.");
+                    TicketManager.releaseTicket(ticket);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

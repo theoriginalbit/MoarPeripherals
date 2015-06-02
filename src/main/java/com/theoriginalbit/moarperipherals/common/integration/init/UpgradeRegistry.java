@@ -27,16 +27,14 @@ import java.util.ArrayList;
  * @author theoriginalbit
  * @since 13/10/2014
  */
-public class UpgradeRegistry {
-
-    public static final UpgradeRegistry INSTANCE = new UpgradeRegistry();
+public final class UpgradeRegistry {
     public static final ArrayList<ITurtleUpgrade> UPGRADES = Lists.newArrayList();
 
     private UpgradeRegistry() {
-        // prevent other instances being constructed
+        // prevent instances
     }
 
-    public final void register() {
+    public static void register() {
         if (ConfigData.enableChatBox) {
             register(new UpgradeChatBox());
         }
@@ -70,5 +68,4 @@ public class UpgradeRegistry {
         ComputerCraftAPI.registerTurtleUpgrade(upgrade);
         UPGRADES.add(upgrade);
     }
-
 }

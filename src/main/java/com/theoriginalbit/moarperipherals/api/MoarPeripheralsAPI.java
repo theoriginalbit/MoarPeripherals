@@ -4,8 +4,8 @@
  */
 package com.theoriginalbit.moarperipherals.api;
 
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetUniverse;
 import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetNode;
+import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetUniverse;
 
 /**
  * The main API access for MoarPeripherals. Use this to get access to various systems of MoarPeripherals at runtime.
@@ -16,6 +16,15 @@ import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetNode;
 public class MoarPeripheralsAPI {
     private static IBitNetUniverse bitNetUniverse = null;
 
+    static {
+        try {
+            Class<?> clazz = Class.forName("package com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse");
+            bitNetUniverse = (IBitNetUniverse) clazz.getField("UNIVERSE").get(clazz);
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Gets the {@link IBitNetUniverse} instance so that {@link IBitNetNode}s can be added/removed from the network
      * in order to be able to send and receive {@link com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage}s
@@ -24,14 +33,5 @@ public class MoarPeripheralsAPI {
      */
     public static IBitNetUniverse getBitNetRegistry() {
         return bitNetUniverse;
-    }
-
-    static {
-        try {
-            Class<?> clazz = Class.forName("package com.theoriginalbit.moarperipherals.common.bitnet.BitNetUniverse");
-            bitNetUniverse = (IBitNetUniverse) clazz.getField("UNIVERSE").get(clazz);
-        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 }

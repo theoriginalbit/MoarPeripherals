@@ -18,14 +18,14 @@ package com.theoriginalbit.moarperipherals.common.tile;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
+import com.theoriginalbit.moarperipherals.common.base.TileInventory;
 import com.theoriginalbit.moarperipherals.common.integration.mount.MountMoarP;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.firework.LauncherTube;
 import com.theoriginalbit.moarperipherals.common.tile.firework.QueueBuffer;
-import com.theoriginalbit.moarperipherals.common.reference.Constants;
-import com.theoriginalbit.moarperipherals.common.base.TileInventory;
 import com.theoriginalbit.moarperipherals.common.util.InventoryUtil;
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,11 +63,9 @@ public class TileFireworks extends TileInventory {
     // the temporary storage for crafted rockets and stars
     protected final QueueBuffer bufferRocket = new QueueBuffer("Rocket", 90);
     protected final QueueBuffer bufferStar = new QueueBuffer("Star", 90);
-
-    private final LauncherTube[] fireworkTubes = new LauncherTube[9];
-
     // the crafting manager
     final CraftingManager manager = CraftingManager.getInstance();
+    private final LauncherTube[] fireworkTubes = new LauncherTube[9];
 
     public TileFireworks() {
         this(54);
@@ -78,6 +76,177 @@ public class TileFireworks extends TileInventory {
 
         for (int i = 0; i < fireworkTubes.length; ++i) {
             fireworkTubes[i] = new LauncherTube(bufferRocket, i);
+        }
+    }
+
+    /**
+     * Explodes the supplied colour(s) from ComputerCraft into separate colours
+     *
+     * @param color the ComputerCraft colour(s)
+     * @return the list of colours
+     */
+    private static ArrayList<Integer> explodeColor(int color) {
+        final ArrayList<Integer> colors = Lists.newArrayList();
+
+        for (int i = 0; i < 16; ++i) {
+            if (test(color, (int) Math.pow(2, i))) {
+                colors.add(i);
+            }
+        }
+
+        return colors;
+    }
+
+    private static boolean test(int colors, int color) {
+        return (colors & color) == color;
+    }
+
+    private static boolean validColor(int color, boolean multi) {
+        if (color < 1 || (multi && color > 65535) || (!multi && color > 32768)) return false;
+        if (multi) return true;
+        double val = Math.log(color) / Math.log(2);
+        return val >= 0 && val <= 15 && val % 1 == 0;
+    }
+
+    private static ItemStack colorToDye(int color) {
+        return new ItemStack(Items.dye, 1, 15 - color);
+    }
+
+    private static ArrayList<String> getDescription(QueueBuffer buffer, int id) throws LuaException {
+        final ArrayList<String> info = Lists.newArrayList();
+        addInformation(buffer.peekItemStackWithId(id), info);
+        return info;
+    }
+
+    private static void addInformation(ItemStack stack, ArrayList<String> list) {
+        if (!stack.hasTagCompound()) {
+            return;
+        }
+        final Item item = stack.getItem();
+        if (item instanceof ItemFirework) {
+            addFireworkRocketInfo(stack.getTagCompound().getCompoundTag("Fireworks"), list);
+        } else if (item instanceof ItemFireworkCharge) {
+            addFireworkChargeInfo(stack.getTagCompound().getCompoundTag("Explosion"), list);
+        }
+    }
+
+    /*
+     * Code taken from the Minecraft class so that it may be used on Side.SERVER as well as Side.CLIENT
+     */
+    private static void addFireworkRocketInfo(NBTTagCompound tag, ArrayList<String> list) {
+        if (tag.hasKey("Flight", 99)) {
+            list.add(StatCollector.translateToLocal("item.fireworks.flight") + " " + tag.getByte("Flight"));
+        }
+
+        NBTTagList nbttaglist = tag.getTagList("Explosions", 10);
+
+        if (nbttaglist != null && nbttaglist.tagCount() > 0) {
+            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
+                final NBTTagCompound compound = nbttaglist.getCompoundTagAt(i);
+                final ArrayList<String> other = Lists.newArrayList();
+                addFireworkChargeInfo(compound, other);
+
+                if (other.size() > 0) {
+                    for (int j = 1; j < other.size(); ++j) {
+                        other.set(j, other.get(j));
+                    }
+
+                    list.addAll(other);
+                }
+            }
+        }
+    }
+
+    /*
+     * Code taken from the Minecraft class so that it may be used on Side.SERVER as well as Side.CLIENT
+     */
+    private static void addFireworkChargeInfo(NBTTagCompound tag, ArrayList<String> list) {
+        byte b0 = tag.getByte("Type");
+
+        if (b0 >= 0 && b0 <= 4) {
+            list.add(StatCollector.translateToLocal("item.fireworksCharge.type." + b0).trim());
+        } else {
+            list.add(StatCollector.translateToLocal("item.fireworksCharge.type").trim());
+        }
+
+        int[] aInt = tag.getIntArray("Colors");
+        int j, k;
+
+        if (aInt.length > 0) {
+            boolean flag = true;
+            String s = "";
+            int i = aInt.length;
+
+            for (j = 0; j < i; ++j) {
+                k = aInt[j];
+
+                if (!flag) {
+                    s = s + ", ";
+                }
+
+                flag = false;
+                boolean flag1 = false;
+
+                for (int l = 0; l < 16; ++l) {
+                    if (k == ItemDye.field_150922_c[l]) {
+                        flag1 = true;
+                        s = s + StatCollector.translateToLocal("item.fireworksCharge." + ItemDye.field_150923_a[l]);
+                        break;
+                    }
+                }
+
+                if (!flag1) {
+                    s = s + StatCollector.translateToLocal("item.fireworksCharge.customColor");
+                }
+            }
+
+            list.add(s);
+        }
+
+        int[] aint2 = tag.getIntArray("FadeColors");
+        boolean flag2;
+
+        if (aint2.length > 0) {
+            flag2 = true;
+            String s1 = StatCollector.translateToLocal("item.fireworksCharge.fadeTo") + " ";
+            j = aint2.length;
+
+            for (k = 0; k < j; ++k) {
+                int j1 = aint2[k];
+
+                if (!flag2) {
+                    s1 = s1 + ", ";
+                }
+
+                flag2 = false;
+                boolean flag4 = false;
+
+                for (int i1 = 0; i1 < 16; ++i1) {
+                    if (j1 == ItemDye.field_150922_c[i1]) {
+                        flag4 = true;
+                        s1 = s1 + StatCollector.translateToLocal("item.fireworksCharge." + ItemDye.field_150923_a[i1]);
+                        break;
+                    }
+                }
+
+                if (!flag4) {
+                    s1 = s1 + StatCollector.translateToLocal("item.fireworksCharge.customColor");
+                }
+            }
+
+            list.add(s1);
+        }
+
+        flag2 = tag.getBoolean("Trail");
+
+        if (flag2) {
+            list.add(StatCollector.translateToLocal("item.fireworksCharge.trail"));
+        }
+
+        boolean flag3 = tag.getBoolean("Flicker");
+
+        if (flag3) {
+            list.add(StatCollector.translateToLocal("item.fireworksCharge.flicker"));
         }
     }
 
@@ -161,7 +330,8 @@ public class TileFireworks extends TileInventory {
      * firework rocket launch queue. Or loads a Firework Star from the inventory into the star queue.
      *
      * @param slot the slot the rocket is in
-     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
+     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if
+     * crafting
      * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
      */
     @LuaFunction
@@ -208,9 +378,11 @@ public class TileFireworks extends TileInventory {
      * @param color    the <a href="http://computercraft.info/wiki/Colors_(API)">colour(s)</a> for the firework
      * @param shape    the <a href="http://minecraft.gamepedia.com/Firework_Rocket#Effects">shape/effect</a>
      *                 of the firework
-     * @param modifier the <a href="http://minecraft.gamepedia.com/Firework_Rocket#Additional_effects">modifier/additional effects</a>
+     * @param modifier the <a href="http://minecraft.gamepedia
+     *                 .com/Firework_Rocket#Additional_effects">modifier/additional effects</a>
      *                 of the firework
-     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
+     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if
+     * crafting
      * succeeded then it will return true and the ID (not session persistent) of the firework star
      */
     @LuaFunction
@@ -371,12 +543,14 @@ public class TileFireworks extends TileInventory {
 
     /**
      * Crafts a <a href="http://minecraft.gamepedia.com/Firework_Rocket">Firework Rocket</a> with a particular height,
-     * and firework stars. After crafting it will add the rocket to the launch queue. If there are not enough ingredients
+     * and firework stars. After crafting it will add the rocket to the launch queue. If there are not enough
+     * ingredients
      * to finalise the rocket, it will not craft or add the rocket to the queue.
      *
      * @param height  the height the rocket can travel
      * @param starIds the list of firework star IDs to include in the rocket
-     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
+     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if
+     * crafting
      * succeeded then it will return true and the ID (not session persistent) of the firework rocket
      */
     @LuaFunction
@@ -455,7 +629,8 @@ public class TileFireworks extends TileInventory {
     /**
      * Launches the rocket that is next in the launch queue
      *
-     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if crafting
+     * @return the result. if crafting failed it will return false, and a string message as to why it failed. if
+     * crafting
      * succeeded then it will return true, and how many more firework stars can be added to the firework rocket
      */
     @LuaFunction
@@ -558,24 +733,6 @@ public class TileFireworks extends TileInventory {
         return getDescription(bufferStar, id);
     }
 
-    /**
-     * Explodes the supplied colour(s) from ComputerCraft into separate colours
-     *
-     * @param color the ComputerCraft colour(s)
-     * @return the list of colours
-     */
-    private static ArrayList<Integer> explodeColor(int color) {
-        final ArrayList<Integer> colors = Lists.newArrayList();
-
-        for (int i = 0; i < 16; ++i) {
-            if (test(color, (int) Math.pow(2, i))) {
-                colors.add(i);
-            }
-        }
-
-        return colors;
-    }
-
     protected int findQtyOf(ItemStack stack) {
         // if this is creative, we always have everything!
         return isCreativeLauncher() ? 64 : InventoryUtil.findQtyOf(this, stack);
@@ -589,159 +746,6 @@ public class TileFireworks extends TileInventory {
             return s;
         }
         return InventoryUtil.takeItems(this, stack, 1);
-    }
-
-    private static boolean test(int colors, int color) {
-        return (colors & color) == color;
-    }
-
-    private static boolean validColor(int color, boolean multi) {
-        if (color < 1 || (multi && color > 65535) || (!multi && color > 32768)) return false;
-        if (multi) return true;
-        double val = Math.log(color) / Math.log(2);
-        return val >= 0 && val <= 15 && val % 1 == 0;
-    }
-
-    private static ItemStack colorToDye(int color) {
-        return new ItemStack(Items.dye, 1, 15 - color);
-    }
-
-    private static ArrayList<String> getDescription(QueueBuffer buffer, int id) throws LuaException {
-        final ArrayList<String> info = Lists.newArrayList();
-        addInformation(buffer.peekItemStackWithId(id), info);
-        return info;
-    }
-
-    private static void addInformation(ItemStack stack, ArrayList<String> list) {
-        if (!stack.hasTagCompound()) {
-            return;
-        }
-        final Item item = stack.getItem();
-        if (item instanceof ItemFirework) {
-            addFireworkRocketInfo(stack.getTagCompound().getCompoundTag("Fireworks"), list);
-        } else if (item instanceof ItemFireworkCharge) {
-            addFireworkChargeInfo(stack.getTagCompound().getCompoundTag("Explosion"), list);
-        }
-    }
-
-    /*
-     * Code taken from the Minecraft class so that it may be used on Side.SERVER as well as Side.CLIENT
-     */
-    private static void addFireworkRocketInfo(NBTTagCompound tag, ArrayList<String> list) {
-        if (tag.hasKey("Flight", 99)) {
-            list.add(StatCollector.translateToLocal("item.fireworks.flight") + " " + tag.getByte("Flight"));
-        }
-
-        NBTTagList nbttaglist = tag.getTagList("Explosions", 10);
-
-        if (nbttaglist != null && nbttaglist.tagCount() > 0) {
-            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                final NBTTagCompound compound = nbttaglist.getCompoundTagAt(i);
-                final ArrayList<String> other = Lists.newArrayList();
-                addFireworkChargeInfo(compound, other);
-
-                if (other.size() > 0) {
-                    for (int j = 1; j < other.size(); ++j) {
-                        other.set(j, other.get(j));
-                    }
-
-                    list.addAll(other);
-                }
-            }
-        }
-    }
-
-    /*
-     * Code taken from the Minecraft class so that it may be used on Side.SERVER as well as Side.CLIENT
-     */
-    private static void addFireworkChargeInfo(NBTTagCompound tag, ArrayList<String> list) {
-        byte b0 = tag.getByte("Type");
-
-        if (b0 >= 0 && b0 <= 4) {
-            list.add(StatCollector.translateToLocal("item.fireworksCharge.type." + b0).trim());
-        } else {
-            list.add(StatCollector.translateToLocal("item.fireworksCharge.type").trim());
-        }
-
-        int[] aInt = tag.getIntArray("Colors");
-        int j, k;
-
-        if (aInt.length > 0) {
-            boolean flag = true;
-            String s = "";
-            int i = aInt.length;
-
-            for (j = 0; j < i; ++j) {
-                k = aInt[j];
-
-                if (!flag) {
-                    s = s + ", ";
-                }
-
-                flag = false;
-                boolean flag1 = false;
-
-                for (int l = 0; l < 16; ++l) {
-                    if (k == ItemDye.field_150922_c[l]) {
-                        flag1 = true;
-                        s = s + StatCollector.translateToLocal("item.fireworksCharge." + ItemDye.field_150923_a[l]);
-                        break;
-                    }
-                }
-
-                if (!flag1) {
-                    s = s + StatCollector.translateToLocal("item.fireworksCharge.customColor");
-                }
-            }
-
-            list.add(s);
-        }
-
-        int[] aint2 = tag.getIntArray("FadeColors");
-        boolean flag2;
-
-        if (aint2.length > 0) {
-            flag2 = true;
-            String s1 = StatCollector.translateToLocal("item.fireworksCharge.fadeTo") + " ";
-            j = aint2.length;
-
-            for (k = 0; k < j; ++k) {
-                int j1 = aint2[k];
-
-                if (!flag2) {
-                    s1 = s1 + ", ";
-                }
-
-                flag2 = false;
-                boolean flag4 = false;
-
-                for (int i1 = 0; i1 < 16; ++i1) {
-                    if (j1 == ItemDye.field_150922_c[i1]) {
-                        flag4 = true;
-                        s1 = s1 + StatCollector.translateToLocal("item.fireworksCharge." + ItemDye.field_150923_a[i1]);
-                        break;
-                    }
-                }
-
-                if (!flag4) {
-                    s1 = s1 + StatCollector.translateToLocal("item.fireworksCharge.customColor");
-                }
-            }
-
-            list.add(s1);
-        }
-
-        flag2 = tag.getBoolean("Trail");
-
-        if (flag2) {
-            list.add(StatCollector.translateToLocal("item.fireworksCharge.trail"));
-        }
-
-        boolean flag3 = tag.getBoolean("Flicker");
-
-        if (flag3) {
-            list.add(StatCollector.translateToLocal("item.fireworksCharge.flicker"));
-        }
     }
 
     private enum Head {

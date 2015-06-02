@@ -19,20 +19,6 @@ package com.theoriginalbit.moarperipherals.common.config;
  * @author Joshua Asbury (@theoriginalbit)
  */
 public class ConfigData {
-    /*
-     * These don't go in the config, they need to be static
-     */
-    private static int startUpgradeID = 16384;
-    public static int upgradeIdChatBox = startUpgradeID++;
-    public static int upgradeIdIronNote = startUpgradeID++;
-    public static int upgradeIdCompass = startUpgradeID++;
-    public static int upgradeIdShears = startUpgradeID++;
-    public static int upgradeIdFurnace = startUpgradeID++;
-    public static int upgradeIdSolar = startUpgradeID++;
-    public static int upgradeIdIgniter = startUpgradeID++;
-    public static int upgradeIdFeeder = startUpgradeID++;
-    public static int upgradeIdOreScanner = startUpgradeID++;
-
     @ConfigPropertyBoolean(category = "enabled", comment = "Enable the Sonic Screwdriver")
     public static boolean enableSonic;
 
@@ -155,6 +141,20 @@ public class ConfigData {
 
     @ConfigPropertyBoolean(value = false, comment = "Print debugging messages to the console. WARNING: Spammy, only enable this if theoriginalbit has asked you to")
     public static boolean debug;
+
+    /*
+     * These don't go in the config, they need to be static
+     */
+    private static int startUpgradeID = 16384;
+    public static int upgradeIdChatBox = startUpgradeID++;
+    public static int upgradeIdIronNote = startUpgradeID++;
+    public static int upgradeIdCompass = startUpgradeID++;
+    public static int upgradeIdShears = startUpgradeID++;
+    public static int upgradeIdFurnace = startUpgradeID++;
+    public static int upgradeIdSolar = startUpgradeID++;
+    public static int upgradeIdIgniter = startUpgradeID++;
+    public static int upgradeIdFeeder = startUpgradeID++;
+    public static int upgradeIdOreScanner = startUpgradeID++;
 
     public static boolean isSonicEnabled() {
         /*

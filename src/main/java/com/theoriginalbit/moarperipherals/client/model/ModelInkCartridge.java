@@ -20,6 +20,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelInkCartridge extends ModelBase {
+    private final boolean cartridgeEmpty;
     ModelRenderer base;
     ModelRenderer nozzle;
     ModelRenderer clipBottom;
@@ -29,7 +30,6 @@ public class ModelInkCartridge extends ModelBase {
     ModelRenderer inkNozzle2;
     ModelRenderer inkNozzle3;
     ModelRenderer clipTop;
-    private final boolean cartridgeEmpty;
 
     public ModelInkCartridge(boolean empty) {
         textureWidth = 64;

@@ -26,33 +26,6 @@ import java.util.Map;
 
 public class ConverterItemStack implements ITypeConverter {
 
-    @Override
-    public Object fromLua(Object obj, Class<?> expected) throws LuaException {
-        if (expected == ItemStack.class && obj instanceof Map) {
-            Map<?, ?> m = (Map<?, ?>) obj;
-
-            if (!m.containsKey("id")) {
-                throw new LuaException("expected id for item");
-            }
-            String[] parts = ((String) m.get("id")).split(":");
-            if (parts.length != 2) {
-                throw new LuaException("invalid item id should be modId:blockName");
-            }
-
-            Item item = GameRegistry.findItem(parts[0], parts[1]);
-
-            if (item == null) {
-                throw new LuaException("cannot find item for " + m.get("id"));
-            }
-
-            int quantity = getIntValue(m, "qty", 1);
-            int dmg = getIntValue(m, "dmg", 0);
-
-            return new ItemStack(item, quantity, dmg);
-        }
-        return null;
-    }
-
     private static int getIntValue(Map<?, ?> map, String key, int _default) {
         final Object value = map.get(key);
 
@@ -61,14 +34,6 @@ public class ConverterItemStack implements ITypeConverter {
         }
 
         return _default;
-    }
-
-    @Override
-    public Object toLua(Object obj) throws LuaException {
-        if (obj instanceof ItemStack) {
-            return fillBasicProperties((ItemStack) obj);
-        }
-        return null;
     }
 
     private static Map<String, Object> fillBasicProperties(ItemStack stack) throws LuaException {
@@ -114,5 +79,40 @@ public class ConverterItemStack implements ITypeConverter {
         }
 
         return "unknown";
+    }
+
+    @Override
+    public Object fromLua(Object obj, Class<?> expected) throws LuaException {
+        if (expected == ItemStack.class && obj instanceof Map) {
+            Map<?, ?> m = (Map<?, ?>) obj;
+
+            if (!m.containsKey("id")) {
+                throw new LuaException("expected id for item");
+            }
+            String[] parts = ((String) m.get("id")).split(":");
+            if (parts.length != 2) {
+                throw new LuaException("invalid item id should be modId:blockName");
+            }
+
+            Item item = GameRegistry.findItem(parts[0], parts[1]);
+
+            if (item == null) {
+                throw new LuaException("cannot find item for " + m.get("id"));
+            }
+
+            int quantity = getIntValue(m, "qty", 1);
+            int dmg = getIntValue(m, "dmg", 0);
+
+            return new ItemStack(item, quantity, dmg);
+        }
+        return null;
+    }
+
+    @Override
+    public Object toLua(Object obj) throws LuaException {
+        if (obj instanceof ItemStack) {
+            return fillBasicProperties((ItemStack) obj);
+        }
+        return null;
     }
 }

@@ -34,16 +34,6 @@ public class TickHandler {
     public static final TickHandler INSTANCE = new TickHandler();
     private static final ConcurrentLinkedQueue<FutureTask> callbacks = new ConcurrentLinkedQueue<>();
 
-    @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.type == TickEvent.Type.SERVER) {
-            FutureTask callback;
-            while ((callback = callbacks.poll()) != null) {
-                callback.run();
-            }
-        }
-    }
-
     public static <T> Future<T> addTickCallback(Callable<T> callback) {
         FutureTask<T> task = new FutureTask<T>(callback) {
             @Override
@@ -65,5 +55,15 @@ public class TickHandler {
      */
     public static boolean shouldRegister() {
         return ConfigData.enableFireworkLauncher;
+    }
+
+    @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.type == TickEvent.Type.SERVER) {
+            FutureTask callback;
+            while ((callback = callbacks.poll()) != null) {
+                callback.run();
+            }
+        }
     }
 }

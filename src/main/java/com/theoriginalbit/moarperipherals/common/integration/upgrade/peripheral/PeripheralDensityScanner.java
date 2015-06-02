@@ -26,7 +26,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.turtle.ITurtleAccess;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
@@ -43,76 +43,6 @@ public class PeripheralDensityScanner {
     private static final HashMap<Block, Float> DENSITIES = Maps.newHashMap();
     private static final int SCAN_DIAMETER = 5;
     private static final int MAX_DEPTH = 40;
-    private final ITurtleAccess turtle;
-
-    public PeripheralDensityScanner(ITurtleAccess access) {
-        turtle = access;
-    }
-
-    @LuaFunction
-    public float getDensity() throws LuaException {
-        // get the turtle world and location
-        final World world = turtle.getWorld();
-        final ChunkCoordinates coords = turtle.getPosition();
-        final int x = coords.posX, y = coords.posY, z = coords.posZ;
-
-        // make sure the Turtle is on the ground-ish
-        final Block blockBelow = world.getBlock(x, y - 1, z);
-        if (blockBelow.getMaterial() == Material.air) {
-            throw new LuaException("Turtle not on the ground");
-        }
-
-        // send the effects packet
-        PacketHandler.INSTANCE.sendToAllAround(
-                new MessageFxOreScanner(world.provider.dimensionId, x, y, z),
-                new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 64d)
-        );
-
-        // figure out the scan area
-        int radius = (int) Math.floor(SCAN_DIAMETER / 2);
-        int maxX = x + radius, minX = x - radius;
-        int maxY = y - 1, minY = Math.max(maxY - MAX_DEPTH, 0);
-        int maxZ = z + radius, minZ = z - radius;
-
-        // scan the area
-        float density = 0.0f;
-        for (int xPos = minX; xPos <= maxX; ++xPos) {
-            for (int zPos = minZ; zPos <= maxZ; ++zPos) {
-                for (int yPos = minY; yPos <= maxY; ++yPos) {
-                    final Block block = world.getBlock(xPos, yPos, zPos);
-                    /*
-                     * get the density of the block, if there is no density mapped we just make it 0.5,
-                     * there's just way too many blocks to map them all, so the main ones are mapped and
-                     * the rest are just assumed to be 0.5
-                     */
-                    density += DENSITIES.containsKey(block) ? DENSITIES.get(block) : 0.5f;
-                }
-            }
-        }
-        return density;
-    }
-
-    public static void addDensityMapping(String modid, String blockName, float density) {
-        final Block block = GameRegistry.findBlock(modid, blockName);
-        if (block == null) {
-            LogUtil.warn(String.format("cannot find block %s:%s to apply a density mapping, skipping", modid,
-                    blockName));
-            return;
-        }
-        addDensityMapping(block, density);
-    }
-
-    public static void addDensityMapping(Block block, float density) {
-        if (DENSITIES.containsKey(block)) {
-            LogUtil.info("density mapping already exists for %s, skipping", block.getUnlocalizedName());
-            return;
-        }
-        if (density < 0.0f) {
-            LogUtil.warn("density for %s was negative, changing to 0", block.getUnlocalizedName());
-        }
-        LogUtil.info("added density mapping; " + block.getUnlocalizedName());
-        DENSITIES.put(block, Math.max(density, 0.0f));
-    }
 
     static {
         // densities of 'natural' vanilla blocks are taken from real specific gravities (g/cm^3)
@@ -165,5 +95,76 @@ public class PeripheralDensityScanner {
         } else {
             LogUtil.info("no custom density mappings in config");
         }
+    }
+
+    private final ITurtleAccess turtle;
+
+    public PeripheralDensityScanner(ITurtleAccess access) {
+        turtle = access;
+    }
+
+    public static void addDensityMapping(String modid, String blockName, float density) {
+        final Block block = GameRegistry.findBlock(modid, blockName);
+        if (block == null) {
+            LogUtil.warn(String.format("cannot find block %s:%s to apply a density mapping, skipping", modid,
+                    blockName));
+            return;
+        }
+        addDensityMapping(block, density);
+    }
+
+    public static void addDensityMapping(Block block, float density) {
+        if (DENSITIES.containsKey(block)) {
+            LogUtil.info("density mapping already exists for %s, skipping", block.getUnlocalizedName());
+            return;
+        }
+        if (density < 0.0f) {
+            LogUtil.warn("density for %s was negative, changing to 0", block.getUnlocalizedName());
+        }
+        LogUtil.info("added density mapping; " + block.getUnlocalizedName());
+        DENSITIES.put(block, Math.max(density, 0.0f));
+    }
+
+    @LuaFunction
+    public float getDensity() throws LuaException {
+        // get the turtle world and location
+        final World world = turtle.getWorld();
+        final ChunkCoordinates coords = turtle.getPosition();
+        final int x = coords.posX, y = coords.posY, z = coords.posZ;
+
+        // make sure the Turtle is on the ground-ish
+        final Block blockBelow = world.getBlock(x, y - 1, z);
+        if (blockBelow.getMaterial() == Material.air) {
+            throw new LuaException("Turtle not on the ground");
+        }
+
+        // send the effects packet
+        PacketHandler.INSTANCE.sendToAllAround(
+                new MessageFxOreScanner(world.provider.dimensionId, x, y, z),
+                new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 64d)
+        );
+
+        // figure out the scan area
+        int radius = (int) Math.floor(SCAN_DIAMETER / 2);
+        int maxX = x + radius, minX = x - radius;
+        int maxY = y - 1, minY = Math.max(maxY - MAX_DEPTH, 0);
+        int maxZ = z + radius, minZ = z - radius;
+
+        // scan the area
+        float density = 0.0f;
+        for (int xPos = minX; xPos <= maxX; ++xPos) {
+            for (int zPos = minZ; zPos <= maxZ; ++zPos) {
+                for (int yPos = minY; yPos <= maxY; ++yPos) {
+                    final Block block = world.getBlock(xPos, yPos, zPos);
+                    /*
+                     * get the density of the block, if there is no density mapped we just make it 0.5,
+                     * there's just way too many blocks to map them all, so the main ones are mapped and
+                     * the rest are just assumed to be 0.5
+                     */
+                    density += DENSITIES.containsKey(block) ? DENSITIES.get(block) : 0.5f;
+                }
+            }
+        }
+        return density;
     }
 }

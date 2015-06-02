@@ -16,16 +16,12 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.moarperipherals.common.handler.IPlayerEventHook;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.common.config.ConfigData;
-import com.theoriginalbit.moarperipherals.common.handler.ChatBoxHandler;
-import com.theoriginalbit.moarperipherals.common.handler.IChatHook;
-import com.theoriginalbit.moarperipherals.common.handler.ICommandHook;
-import com.theoriginalbit.moarperipherals.common.handler.IDeathHook;
 import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
+import com.theoriginalbit.moarperipherals.common.config.ConfigData;
+import com.theoriginalbit.moarperipherals.common.handler.*;
 import com.theoriginalbit.moarperipherals.common.util.ChatUtil;
 import com.theoriginalbit.moarperipherals.common.util.LogUtil;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -56,14 +52,11 @@ public class TileChatBoxAdmin extends TileMoarP implements IChatHook, IDeathHook
     private static final String EVENT_COMMAND = "chatbox_command";
     private static final String COMMAND_TOKEN = "##";
     private static final int MAX_LABEL_LENGTH = 20;
-
-    private boolean registered = false;
-
-    // user runtime configurable
-    private String label = "";
-
     @Computers.List
     public ArrayList<IComputerAccess> computers;
+    private boolean registered = false;
+    // user runtime configurable
+    private String label = "";
 
     @LuaFunction
     public boolean say(String message) throws Exception {
@@ -109,11 +102,11 @@ public class TileChatBoxAdmin extends TileMoarP implements IChatHook, IDeathHook
     @Override
     public void updateEntity() {
         if (!worldObj.isRemote && !registered) {
-            ChatBoxHandler.instance.addChatHook(this);
-            ChatBoxHandler.instance.addDeathHook(this);
-            ChatBoxHandler.instance.addPlayerEventHook(this);
+            ChatBoxHandler.INSTANCE.addChatHook(this);
+            ChatBoxHandler.INSTANCE.addDeathHook(this);
+            ChatBoxHandler.INSTANCE.addPlayerEventHook(this);
             try {
-                ChatBoxHandler.instance.addCommandHook(this);
+                ChatBoxHandler.INSTANCE.addCommandHook(this);
             } catch (Exception e) {
                 LogUtil.info(String.format("Failed to register command listener for ChatBox at %d %d %d", xCoord,
                         yCoord, zCoord));
@@ -188,10 +181,10 @@ public class TileChatBoxAdmin extends TileMoarP implements IChatHook, IDeathHook
     private void unload() {
         // remove the ChatBox to the ChatListener
         if (!worldObj.isRemote) {
-            ChatBoxHandler.instance.removeChatHook(this);
-            ChatBoxHandler.instance.removeDeathHook(this);
-            ChatBoxHandler.instance.removeCommandHook(this);
-            ChatBoxHandler.instance.removePlayerEventHook(this);
+            ChatBoxHandler.INSTANCE.removeChatHook(this);
+            ChatBoxHandler.INSTANCE.removeDeathHook(this);
+            ChatBoxHandler.INSTANCE.removeCommandHook(this);
+            ChatBoxHandler.INSTANCE.removePlayerEventHook(this);
         }
     }
 

@@ -20,7 +20,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelPrinter extends ModelBase {
-
+    protected boolean hasPaper, hasPrintout;
     ModelRenderer bodyLeft;
     ModelRenderer bodyRight;
     ModelRenderer bodyUpperMiddle;
@@ -42,7 +42,6 @@ public class ModelPrinter extends ModelBase {
     ModelRenderer buttonRight;
     ModelRenderer button1;
     ModelRenderer button2;
-    protected boolean hasPaper, hasPrintout;
 
     public ModelPrinter(boolean paperPresent, boolean printoutPresent) {
         textureWidth = 256;

@@ -27,7 +27,7 @@ public enum PaperState {
     private PaperState(int id) {
         textureId = id;
     }
-    
+
     public int getTextureId() {
         return textureId;
     }

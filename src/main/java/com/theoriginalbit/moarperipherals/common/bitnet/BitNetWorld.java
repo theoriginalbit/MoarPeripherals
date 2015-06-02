@@ -17,12 +17,7 @@ package com.theoriginalbit.moarperipherals.common.bitnet;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.theoriginalbit.moarperipherals.api.bitnet.BitNetMessage;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetUniverse;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetWorld;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetNode;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetPortal;
-import com.theoriginalbit.moarperipherals.api.bitnet.IBitNetRelay;
+import com.theoriginalbit.moarperipherals.api.bitnet.*;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.util.Vec3;
@@ -35,6 +30,42 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author Joshua Asbury (@theoriginalbit)
  */
 public class BitNetWorld implements IBitNetWorld {
+    /**
+     * The universe this network resides within, this reference is kept so that portals can work
+     */
+    private final IBitNetUniverse universe;
+    /**
+     * The world this network transmits in
+     */
+    private final World world;
+    /**
+     * A mapping of the relays on the channels
+     */
+    private final Map<Integer, Set<IBitNetRelay>> channelMap = Maps.newHashMap();
+    /**
+     * The {@link IBitNetRelay}s that are on the network
+     */
+    private final Set<IBitNetRelay> relaySet = Sets.newHashSet();
+    /**
+     * The {@link IBitNetPortal}s that are on the network
+     */
+    private final Set<IBitNetPortal> portalSet = Sets.newHashSet();
+    /**
+     * A mapping to track the messages that have been seen by particular nodes so that messages do not permanently
+     * get sent around the network when a node is working in an auto-repeating mode, or to prevent messages from
+     * travelling through portals multiple times.
+     */
+    private final Map<IBitNetNode, Set<UUID>> seenMessages = Maps.newHashMap();
+    /**
+     * The queue of {@link BitNetMessage}s to be sent
+     */
+    private final ConcurrentLinkedQueue<DelayedMessage> messageQueue = new ConcurrentLinkedQueue<>();
+
+    public BitNetWorld(BitNetUniverse universe, World world) {
+        this.universe = universe;
+        this.world = world;
+    }
+
     /**
      * Makes sure that the supplied channel is between the specified range
      *
@@ -79,48 +110,6 @@ public class BitNetWorld implements IBitNetWorld {
      */
     private static double getDistanceBetween(Vec3 origin, Vec3 target) {
         return Math.sqrt(origin.squareDistanceTo(target));
-    }
-
-    /**
-     * The universe this network resides within, this reference is kept so that portals can work
-     */
-    private final IBitNetUniverse universe;
-
-    /**
-     * The world this network transmits in
-     */
-    private final World world;
-
-    /**
-     * A mapping of the relays on the channels
-     */
-    private final Map<Integer, Set<IBitNetRelay>> channelMap = Maps.newHashMap();
-
-    /**
-     * The {@link IBitNetRelay}s that are on the network
-     */
-    private final Set<IBitNetRelay> relaySet = Sets.newHashSet();
-
-    /**
-     * The {@link IBitNetPortal}s that are on the network
-     */
-    private final Set<IBitNetPortal> portalSet = Sets.newHashSet();
-
-    /**
-     * A mapping to track the messages that have been seen by particular nodes so that messages do not permanently
-     * get sent around the network when a node is working in an auto-repeating mode, or to prevent messages from
-     * travelling through portals multiple times.
-     */
-    private final Map<IBitNetNode, Set<UUID>> seenMessages = Maps.newHashMap();
-
-    /**
-     * The queue of {@link BitNetMessage}s to be sent
-     */
-    private final ConcurrentLinkedQueue<DelayedMessage> messageQueue = new ConcurrentLinkedQueue<>();
-
-    public BitNetWorld(BitNetUniverse universe, World world) {
-        this.universe = universe;
-        this.world = world;
     }
 
     /**

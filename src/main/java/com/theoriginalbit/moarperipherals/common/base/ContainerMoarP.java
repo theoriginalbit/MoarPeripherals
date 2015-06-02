@@ -15,7 +15,6 @@
  */
 package com.theoriginalbit.moarperipherals.common.base;
 
-import com.theoriginalbit.moarperipherals.common.base.TileInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

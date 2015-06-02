@@ -42,7 +42,9 @@ import java.util.TimerTask;
 
 public class BlockKeyboardMac extends BlockPaired {
     private static final Class<?> CLASS_ITOOLWRENCH = ReflectionUtil.getClass("buildcraft.api.tools.IToolWrench");
-    private final ForgeDirection[] validDirections = new ForgeDirection[]{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST};
+    private final ForgeDirection[] validDirections = new ForgeDirection[]{
+            ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST
+    };
 
     public BlockKeyboardMac() {
         this("keyboardMac");
@@ -52,6 +54,17 @@ public class BlockKeyboardMac extends BlockPaired {
         super(Material.iron, name);
         setRotationMode(RotationMode.FOUR);
         setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f);
+    }
+
+    private static boolean isNeighborBlockSolid(World world, int x, int y, int z, ForgeDirection side) {
+        x += side.offsetX;
+        y += side.offsetY;
+        z += side.offsetZ;
+        return world.isSideSolid(x, y, z, side.getOpposite());
+    }
+
+    private static boolean isItemWrench(Item item) {
+        return (CLASS_ITOOLWRENCH != null && item.getClass().isAssignableFrom(CLASS_ITOOLWRENCH)) || item instanceof ItemSonic;
     }
 
     @Override
@@ -97,7 +110,7 @@ public class BlockKeyboardMac extends BlockPaired {
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            player.openGui(MoarPeripherals.instance, GuiType.KEYBOARD.ordinal(), world, x, y, z);
+                            player.openGui(MoarPeripherals.INSTANCE, GuiType.KEYBOARD.ordinal(), world, x, y, z);
                         }
                     }, 1000);
                 }
@@ -138,17 +151,6 @@ public class BlockKeyboardMac extends BlockPaired {
 
     private boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
         return side == ForgeDirection.DOWN && isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
-    }
-
-    private static boolean isNeighborBlockSolid(World world, int x, int y, int z, ForgeDirection side) {
-        x += side.offsetX;
-        y += side.offsetY;
-        z += side.offsetZ;
-        return world.isSideSolid(x, y, z, side.getOpposite());
-    }
-
-    private static boolean isItemWrench(Item item) {
-        return (CLASS_ITOOLWRENCH != null && item.getClass().isAssignableFrom(CLASS_ITOOLWRENCH)) || item instanceof ItemSonic;
     }
 
 }

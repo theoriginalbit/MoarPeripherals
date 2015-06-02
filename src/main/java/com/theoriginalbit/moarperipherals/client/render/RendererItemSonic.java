@@ -17,8 +17,8 @@ package com.theoriginalbit.moarperipherals.client.render;
 
 import com.theoriginalbit.moarperipherals.client.model.ModelSonic10;
 import com.theoriginalbit.moarperipherals.client.model.ModelSonic11;
-import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.client.render.abstracts.CustomItemRenderer;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;
@@ -98,6 +98,7 @@ public class RendererItemSonic extends CustomItemRenderer {
         GL11.glRotatef(175, 1, 0, 0);
         GL11.glTranslatef(0f, -3.5f, -4.5f);
     }
+
     @Override
     protected void manipulateFirstPersonRender(ItemStack stack) {
         float scale = 0.25f;

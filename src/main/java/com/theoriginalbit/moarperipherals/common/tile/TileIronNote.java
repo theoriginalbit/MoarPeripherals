@@ -17,22 +17,22 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import com.theoriginalbit.moarperipherals.common.config.ConfigData;
 import com.theoriginalbit.moarperipherals.common.integration.mount.MountMoarP;
 import com.theoriginalbit.moarperipherals.common.network.PacketHandler;
 import com.theoriginalbit.moarperipherals.common.network.message.MessageFxIronNote;
-import com.theoriginalbit.moarperipherals.common.base.TileMoarP;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 @LuaPeripheral("iron_note")
 @Computers.Mount(MountMoarP.class)
 public class TileIronNote extends TileMoarP {
-    private static final String[] INST = new String[] {
+    private static final String[] INST = new String[]{
             "note.harp", "note.bd", "note.snare", "note.hat", "note.bassattack", "note.pling", "note.bass"
     };
-    private static final String[] SFX = new String[] {
+    private static final String[] SFX = new String[]{
             "random.eat", "random.drink", "random.burp", "random.break",
             "random.anvil_use", "random.anvil_break", "random.anvil_land",
             "random.door_open", "random.door_close", "random.chestopen", "random.chestclosed",

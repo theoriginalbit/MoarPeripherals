@@ -16,8 +16,14 @@
 package com.theoriginalbit.moarperipherals.common.network;
 
 import com.google.common.collect.Sets;
-import com.theoriginalbit.moarperipherals.common.network.message.*;
-import com.theoriginalbit.moarperipherals.common.network.message.handler.*;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxIronNote;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxOreScanner;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxSmelt;
+import com.theoriginalbit.moarperipherals.common.network.message.MessageFxTeleport;
+import com.theoriginalbit.moarperipherals.common.network.message.handler.MessageHandlerFxIronNote;
+import com.theoriginalbit.moarperipherals.common.network.message.handler.MessageHandlerFxOreScanner;
+import com.theoriginalbit.moarperipherals.common.network.message.handler.MessageHandlerFxSmelt;
+import com.theoriginalbit.moarperipherals.common.network.message.handler.MessageHandlerFxTeleport;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;

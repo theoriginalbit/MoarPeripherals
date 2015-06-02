@@ -32,20 +32,17 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  * @since 3/10/2014.
  */
 public final class ModBlocks {
-
-    public static final ModBlocks INSTANCE = new ModBlocks();
-
-    private ModBlocks() {
-        // prevent other instances being constructed
-    }
-
     public static Block blockChatBox, blockChatBoxAdmin, blockPlayerDetector, blockIronNote, blockKeyboardMac,
             blockKeyboardPc,
             blockPrinter, blockAntenna, blockAntennaCell, blockAntennaMiniCell, blockAntennaController,
             blockTurtleTeleport,
             blockMiniAntenna, blockFireworks, blockFireworksCreative, blockComputerCrafter, blockInteractiveSorter;
 
-    public final void register() {
+    private ModBlocks() {
+        // prevent instances
+    }
+
+    public static void register() {
         if (ConfigData.enablePlayerDetector) {
             blockPlayerDetector = new BlockPlayerDetector();
             GameRegistry.registerBlock(blockPlayerDetector, "blockPlayerDetector");
@@ -137,7 +134,7 @@ public final class ModBlocks {
         }
     }
 
-    public final void addRecipes() {
+    public static void addRecipes() {
         if (ConfigData.enablePlayerDetector) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockPlayerDetector),
                     "SBS",

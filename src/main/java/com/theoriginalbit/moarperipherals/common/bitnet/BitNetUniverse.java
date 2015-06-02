@@ -39,7 +39,7 @@ public class BitNetUniverse implements IBitNetUniverse {
     private final Map<World, BitNetWorld> networks = Maps.newHashMap();
 
     private BitNetUniverse() {
-        // prevent private instances
+        // prevent instances
     }
 
     /**

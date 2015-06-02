@@ -16,13 +16,13 @@
 package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.google.common.collect.Maps;
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
 import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
-import com.theoriginalbit.moarperipherals.client.gui.IHasGui;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
-import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.client.gui.IHasGui;
 import com.theoriginalbit.moarperipherals.common.base.TileInventory;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.util.InventoryUtil;
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,14 +41,13 @@ import java.util.HashMap;
  */
 @LuaPeripheral("computer_crafter")
 public class TileComputerCrafter extends TileInventory implements IHasGui {
+    final CraftingManager manager = CraftingManager.getInstance();
     public InventoryCrafting craftingInv = new InventoryCrafting(new Container() {
         @Override
         public boolean canInteractWith(EntityPlayer player) {
             return true;
         }
     }, 3, 3);
-
-    final CraftingManager manager = CraftingManager.getInstance();
 
     public TileComputerCrafter() {
         super(18);

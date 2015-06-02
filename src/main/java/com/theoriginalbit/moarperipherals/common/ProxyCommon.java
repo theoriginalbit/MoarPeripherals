@@ -36,9 +36,9 @@ import java.io.IOException;
 public class ProxyCommon {
 
     public void preInit() {
-        MinecraftForge.EVENT_BUS.register(ChatBoxHandler.instance);
-        FMLCommonHandler.instance().bus().register(ChatBoxHandler.instance);
-        NetworkRegistry.INSTANCE.registerGuiHandler(MoarPeripherals.instance, new GuiHandler());
+        MinecraftForge.EVENT_BUS.register(ChatBoxHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(ChatBoxHandler.INSTANCE);
+        NetworkRegistry.INSTANCE.registerGuiHandler(MoarPeripherals.INSTANCE, new GuiHandler());
     }
 
     public void init() {
@@ -78,7 +78,7 @@ public class ProxyCommon {
      * Code modified from OpenCCSensors: https://github.com/Cloudhunter/OpenCCSensors
      */
     private boolean setupLuaFiles() {
-        final ModContainer container = FMLCommonHandler.instance().findContainerFor(MoarPeripherals.instance);
+        final ModContainer container = FMLCommonHandler.instance().findContainerFor(MoarPeripherals.INSTANCE);
         final File modFile = container.getSource();
         try {
             if (modFile.isDirectory()) {

@@ -18,8 +18,8 @@ package com.theoriginalbit.moarperipherals.common.base;
 import com.google.common.collect.Lists;
 import com.theoriginalbit.moarperipherals.MoarPeripherals;
 import com.theoriginalbit.moarperipherals.api.event.IBlockEventHandler;
-import com.theoriginalbit.moarperipherals.client.gui.IHasGui;
 import com.theoriginalbit.moarperipherals.api.hook.IBlockDropHook;
+import com.theoriginalbit.moarperipherals.client.gui.IHasGui;
 import com.theoriginalbit.moarperipherals.common.reference.ModInfo;
 import com.theoriginalbit.moarperipherals.common.util.InventoryUtil;
 import cpw.mods.fml.relauncher.Side;
@@ -91,7 +91,7 @@ public abstract class BlockMoarP extends BlockContainer {
         final TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile instanceof IHasGui) {
-            player.openGui(MoarPeripherals.instance, ((IHasGui) tile).getGuiId().ordinal(), world, x, y, z);
+            player.openGui(MoarPeripherals.INSTANCE, ((IHasGui) tile).getGuiId().ordinal(), world, x, y, z);
             return true;
         }
 

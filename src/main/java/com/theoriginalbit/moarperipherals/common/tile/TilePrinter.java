@@ -17,10 +17,10 @@ package com.theoriginalbit.moarperipherals.common.tile;
 
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.moarperipherals.client.gui.IHasGui;
 import com.theoriginalbit.moarperipherals.client.gui.GuiType;
-import com.theoriginalbit.moarperipherals.common.reference.Constants;
+import com.theoriginalbit.moarperipherals.client.gui.IHasGui;
 import com.theoriginalbit.moarperipherals.common.base.TileInventory;
+import com.theoriginalbit.moarperipherals.common.reference.Constants;
 import com.theoriginalbit.moarperipherals.common.tile.printer.PaperState;
 import com.theoriginalbit.moarperipherals.common.tile.printer.PrinterState;
 

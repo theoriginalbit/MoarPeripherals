@@ -32,7 +32,7 @@ public final class TicketManager {
         ForgeChunkManager.Ticket ticket = null;
         if (!world.isRemote) {
             LogUtil.debug(String.format("Requesting chunk loading ticket for TileEntity at %d %d %d", x, y, z));
-            ticket = ForgeChunkManager.requestTicket(MoarPeripherals.instance, world, ForgeChunkManager.Type.NORMAL);
+            ticket = ForgeChunkManager.requestTicket(MoarPeripherals.INSTANCE, world, ForgeChunkManager.Type.NORMAL);
             if (ticket != null) {
                 tickets.add(ticket);
                 NBTTagCompound tag = ticket.getModData();

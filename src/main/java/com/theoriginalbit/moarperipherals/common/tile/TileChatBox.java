@@ -59,19 +59,16 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
     private static final String COMMAND_TOKEN = "##";
     private static final int MAX_LABEL_LENGTH = 20;
     private static final int TICKER_INTERVAL = 20;
-
+    @Computers.List
+    public ArrayList<IComputerAccess> computers;
     private int ticker = 0;
     private int count = 0;
     private boolean registered = false;
-
     // user runtime configurable
     private String label = "";
     private int rangeSay = Math.min(ConfigData.defaultChatRangeSay, ConfigData.chatRangeSay);
     private int rangeTell = Math.min(ConfigData.defaultChatRangeTell, ConfigData.chatRangeTell);
     private int rangeRead = Math.min(ConfigData.defaultChatRangeRead, ConfigData.chatRangeRead);
-
-    @Computers.List
-    public ArrayList<IComputerAccess> computers;
 
     @LuaFunction
     public boolean say(String message) throws Exception {
@@ -186,10 +183,10 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
         }
 
         if (!worldObj.isRemote && !registered) {
-            ChatBoxHandler.instance.addChatHook(this);
-            ChatBoxHandler.instance.addDeathHook(this);
+            ChatBoxHandler.INSTANCE.addChatHook(this);
+            ChatBoxHandler.INSTANCE.addDeathHook(this);
             try {
-                ChatBoxHandler.instance.addCommandHook(this);
+                ChatBoxHandler.INSTANCE.addCommandHook(this);
             } catch (Exception e) {
                 LogUtil.info(String.format("Failed to register command listener for ChatBox at %d %d %d", xCoord,
                         yCoord, zCoord));
@@ -260,9 +257,9 @@ public class TileChatBox extends TileMoarP implements IChatHook, IDeathHook, ICo
     private void unload() {
         // remove the ChatBox to the ChatListener
         if (!worldObj.isRemote) {
-            ChatBoxHandler.instance.removeChatHook(this);
-            ChatBoxHandler.instance.removeDeathHook(this);
-            ChatBoxHandler.instance.removeCommandHook(this);
+            ChatBoxHandler.INSTANCE.removeChatHook(this);
+            ChatBoxHandler.INSTANCE.removeDeathHook(this);
+            ChatBoxHandler.INSTANCE.removeCommandHook(this);
         }
     }
 
