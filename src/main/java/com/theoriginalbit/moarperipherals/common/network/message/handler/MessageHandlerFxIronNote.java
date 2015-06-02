@@ -30,7 +30,7 @@ public class MessageHandlerFxIronNote implements IMessageHandler<MessageFxIronNo
     @Override
     public IMessage onMessage(MessageFxIronNote message, MessageContext ctx) {
         final int dimId = message.intData[0];
-        final int noteCount = message.intData[1];
+        final int soundCount = message.intData[1];
         final double xPos = message.doubleData[0];
         final double yPos = message.doubleData[1];
         final double zPos = message.doubleData[2];
@@ -41,21 +41,21 @@ public class MessageHandlerFxIronNote implements IMessageHandler<MessageFxIronNo
             return null;
         }
 
-        for (int i = 0; i < noteCount; ++i) {
+        for (int i = 0; i < soundCount; ++i) {
             final String name = message.stringData[i];
             final float pitch = message.floatData[i];
-            playNote(world, xPos, yPos, zPos, name, pitch);
+            playSound(world, xPos, yPos, zPos, name, pitch);
         }
 
         return null;
     }
 
-    private void playNote(World world, double xPos, double yPos, double zPos, String instrument, float pitch) {
+    private void playSound(World world, double xPos, double yPos, double zPos, String name, float pitch) {
         MoarPeripherals.proxy.playSound(
                 xPos + 0.5d,
                 yPos + 0.5d,
                 zPos + 0.5d,
-                instrument,
+                name,
                 3.0f,
                 (float) Math.pow(2d, (double) (pitch - 12) / 12d),
                 false

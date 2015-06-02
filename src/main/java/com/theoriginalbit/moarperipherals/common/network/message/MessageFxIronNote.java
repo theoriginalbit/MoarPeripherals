@@ -24,38 +24,38 @@ import java.util.ArrayList;
  * @since 9/11/14
  */
 public class MessageFxIronNote extends MessageGeneric {
-    private final ArrayList<PendingNote> notes = Lists.newArrayList();
+    private final ArrayList<PendingSound> sounds = Lists.newArrayList();
 
     public MessageFxIronNote() {
         // required empty constructor
     }
 
-    public void addNote(String instrument, int pitch) {
-        notes.add(new PendingNote(instrument, pitch));
+    public void addSound(String instrument, int pitch) {
+        sounds.add(new PendingSound(instrument, pitch));
     }
 
     public MessageFxIronNote pack(int dimensionId, int xPos, int yPos, int zPos) {
-        final int size = notes.size();
+        final int size = sounds.size();
         intData = new int[]{dimensionId, size};
         doubleData = new double[]{xPos, yPos, zPos};
 
         floatData = new float[size];
         stringData = new String[size];
         for (int i = 0; i < size; ++i) {
-            final PendingNote n = notes.get(i);
+            final PendingSound n = sounds.get(i);
             floatData[i] = n.pitch;
-            stringData[i] = n.instrument;
+            stringData[i] = n.name;
         }
 
         return this;
     }
 
-    class PendingNote {
-        public final String instrument;
+    class PendingSound {
+        public final String name;
         public final int pitch;
 
-        public PendingNote(String instrument, int pitch) {
-            this.instrument = instrument;
+        public PendingSound(String name, int pitch) {
+            this.name = name;
             this.pitch = pitch;
         }
     }
