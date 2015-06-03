@@ -20,6 +20,16 @@ apply plugin: 'forge'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+// mod properties
+def mod_id="moarperipherals"
+def mod_name="MoarPeripherals"
+def mod_version="1.53"
+def mod_desc="Adds a bunch of useful peripherals to ComputerCraft."
+def mod_url="http://moarperipherals.com"
+def cc_version="1.7"
+def mc_version="1.7.10"
+def forge_version="10.13.3.1370"
+
 // Grab system env
 ext.env = System.getenv()
 
@@ -27,7 +37,7 @@ version = mc_version + "-" + cc_version + "-" + mod_version
 if (env.BUILD_NUMBER != null) {
     version += "-snapshot-" + env.BUILD_NUMBER
 }
-group= "com.theoriginalbit." + mod_id
+group= "com." + mod_id
 archivesBaseName = mod_name
 
 minecraft {
