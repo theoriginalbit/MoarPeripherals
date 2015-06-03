@@ -19,11 +19,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 
 public final class ChatUtil {
+    private static final String PREFIX = "\\f";
 
     public static void sendChatToPlayer(String[] to, String message) {
+        // remove illegal characters
         message = ChatAllowedCharacters.filerAllowedCharacters(message);
+
+        // allow color, bold, italic, and underline formatting
+        for (EnumChatFormatting formatting : EnumChatFormatting.values()) {
+            message = message.replace(PREFIX + formatting.getFormattingCode(), formatting.toString());
+        }
+
         final ChatComponentText msg = new ChatComponentText(message);
         for (String user : to) {
             final EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(user);
