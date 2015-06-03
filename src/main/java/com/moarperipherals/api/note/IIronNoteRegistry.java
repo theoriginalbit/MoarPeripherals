@@ -15,20 +15,60 @@
  */
 package com.moarperipherals.api.note;
 
+import com.moarperipherals.api.MoarPeripheralsAPI;
+
 /**
+ * A registry containing all the notes {@link MoarPeripheralsAPI#getNoteRegistry()} and sound effects {@link
+ * MoarPeripheralsAPI#getSfxRegistry()} for an Iron Note block, allowing registration of extra sounds by mod authors.
+ *
  * @author Joshua Asbury (@theoriginalbit)
  */
 @SuppressWarnings("unused")
 public interface IIronNoteRegistry {
+    /**
+     * Registers a sound for use with Iron Note blocks, each sound can be accessed via their user accessible name or
+     * via a mapped index.
+     *
+     * @param name  the user accessible name e.g. chirp
+     * @param sound the sound name e.g. modid:chirp
+     * @return if registration was successfull
+     */
     boolean register(String name, String sound);
 
+    /**
+     * Returns whether the supplied user accessible name has a mapping in the registry.
+     *
+     * @param name the user accessible name e.g. chirp
+     * @return presence of the mapping
+     */
     boolean contains(String name);
 
+    /**
+     * Returns whether the supplied index has a mapping.
+     *
+     * @param index the index to check
+     * @return presence of the mapping
+     */
     boolean contains(int index);
 
+    /**
+     * Returns the name of the sound for the supplied user accessible name.
+     *
+     * @param name the user accessible name e.g. chirp
+     * @return the sound name e.g. modid:chirp
+     */
     String getSound(String name);
 
+    /**
+     * Returns the name of the sound for the supplied index mapping.
+     *
+     * @param index the index to check
+     * @return the sound name e.g. modid:chirp
+     */
     String getSound(int index);
 
+    /**
+     * @return the number of mappings in this registry
+     */
     int size();
 }
