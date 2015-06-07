@@ -15,12 +15,12 @@
  */
 package com.moarperipherals.integration.peripheral;
 
+import com.moarperipherals.config.ConfigData;
+import com.moarperipherals.network.MessageFxSmelt;
+import com.moarperipherals.network.PacketHandler;
+import com.moarperipherals.util.InventoryUtil;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
-import com.moarperipherals.config.ConfigData;
-import com.moarperipherals.network.PacketHandler;
-import com.moarperipherals.network.MessageFxSmelt;
-import com.moarperipherals.util.InventoryUtil;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
@@ -100,7 +100,7 @@ public class PeripheralFurnace {
         furnace.setInventorySlotContents(FURNACE_SLOT_OUTPUT, null);
 
         // make sure the result can be stored in the inventory
-        if (!InventoryUtil.canStoreItem(inv, result)) {
+        if (!InventoryUtil.canStoreItem(inv, result) && input.stackSize != result.stackSize) {
             return new Object[]{false, "not enough space in inventory"};
         }
 
