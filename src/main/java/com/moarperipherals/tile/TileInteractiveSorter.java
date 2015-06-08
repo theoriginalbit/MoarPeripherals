@@ -16,14 +16,17 @@
 package com.moarperipherals.tile;
 
 import com.google.common.collect.Lists;
+import com.moarperipherals.Constants;
+import com.moarperipherals.api.sorter.IInteractiveSorterOutput;
+import com.moarperipherals.api.sorter.IInteractiveSorterRegistry;
+import com.moarperipherals.client.gui.GuiType;
+import com.moarperipherals.client.gui.IHasGui;
+import com.moarperipherals.registry.InteractiveSorterRegistry;
+import com.moarperipherals.util.InventoryUtil;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
 import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
-import com.moarperipherals.tile.sorter.Side;
-import com.moarperipherals.client.gui.GuiType;
-import com.moarperipherals.client.gui.IHasGui;
-import com.moarperipherals.Constants;
-import com.moarperipherals.util.InventoryUtil;
+import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -38,6 +41,10 @@ import java.util.List;
 @LuaPeripheral("interactive_sorter")
 public class TileInteractiveSorter extends TileInventory implements IHasGui {
     private static final String EVENT_SORT = "sort";
+
+    static {
+        InteractiveSorterRegistry.INSTANCE.register(new DefaultSorterOutput());
+    }
 
     @Computers.List
     public ArrayList<IComputerAccess> computers;
@@ -80,25 +87,20 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
         // validate the amount
         amount = Math.min(stack.stackSize, amount);
 
-        // make sure the tile on that side is an inventory
-        final IInventory inventory = getInventoryForSide(side);
-        if (inventory == null) return 0;
+        final TileEntity tile = getTileForSide(side);
+        if (tile == null) return 0;
 
-        // output the items
-        final ItemStack remainder = InventoryUtil.storeItemStack(inventory, stack.splitStack(amount));
-
-        // remove or update the stack in the inventory sorter
-        setInventorySlotContents(0, stack.stackSize > 0 ? stack : null);
-
-        // return how many items were sorted
-        return amount - remainder.stackSize;
+        return sort(stack, amount, tile, this);
     }
 
     @LuaFunction
     public List<ItemStack> list(Side side) {
+        // check if there is an inventory
+        final TileEntity tile = getTileForSide(side);
+        if (!(tile instanceof IInventory)) return null;
+
         // make sure the tile on that side is an inventory
-        final IInventory inventory = getInventoryForSide(side);
-        if (inventory == null) return null;
+        final IInventory inventory = (IInventory) tile;
 
         // get each item in the inventory
         final List<ItemStack> items = Lists.newArrayList();
@@ -111,35 +113,34 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
     }
 
     @LuaFunction
-    public boolean extract(Side from, Side to, int slot, int amount) {
+    public int extract(Side from, Side to, int slot, int amount) throws LuaException {
         // reject the 'from' and 'to' being the same size
-        if (from == to) return false;
+        if (from == to) return 0;
         // stop early if the amount is too low
-        if (amount <= 0) return false;
+        if (amount <= 0) return 0;
 
-        // get the 'from' and 'to' inventories
-        final IInventory fromInv = getInventoryForSide(from);
-        final IInventory toInv = getInventoryForSide(to);
-        if (fromInv == null || toInv == null) return false;
+        // check if there is an inventory
+        final TileEntity fromTile = getTileForSide(from);
+        if (!(fromTile instanceof IInventory)) return 0;
+
+        // make sure the tile on that side is an inventory
+        final IInventory fromInv = (IInventory) fromTile;
 
         // validate the supplied slot is valid for the 'fromInv'
-        if (slot < 1 || slot > fromInv.getSizeInventory()) return false;
+        if (slot < 1 || slot > fromInv.getSizeInventory())
+            throw new LuaException("expected slot 1-" + fromInv.getSizeInventory());
 
         // get the stack from the origin
         final ItemStack stack = fromInv.getStackInSlot(--slot); // convert from Lua index to Java index
-        if (stack == null) return false;
+        if (stack == null) return 0;
 
         // validate the stack amount
         amount = Math.min(stack.stackSize, amount);
 
-        // add the item stack to the 'toInv' or explode it into the world
-        final ItemStack output = stack.splitStack(amount);
-        InventoryUtil.storeOrDropItemStack(toInv, output, worldObj, xCoord, yCoord, zCoord);
+        final TileEntity toTile = getTileForSide(to);
+        if (toTile == null) return 0;
 
-        // remove or update the origin stack
-        fromInv.setInventorySlotContents(slot, stack.stackSize > 0 ? stack : null);
-
-        return true;
+        return sort(stack, amount, toTile, fromInv);
     }
 
     @LuaFunction
@@ -147,15 +148,34 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
         return getStackInSlot(0);
     }
 
-    private IInventory getInventoryForSide(Side side) {
+    private TileEntity getTileForSide(Side side) {
         // get the location from the side
         int direction = side.ordinal();
         int x = xCoord + Facing.offsetsXForSide[direction];
         int y = yCoord + Facing.offsetsYForSide[direction];
         int z = zCoord + Facing.offsetsZForSide[direction];
         // get the tile for the offset
-        TileEntity tile = worldObj.getTileEntity(x, y, z);
-        return tile instanceof IInventory ? (IInventory) tile : null;
+        return worldObj.getTileEntity(x, y, z);
+    }
+
+    private int sort(ItemStack stack, int amount, TileEntity target, IInventory source) {
+        final IInteractiveSorterRegistry registry = InteractiveSorterRegistry.INSTANCE;
+
+        final ItemStack outputStack = stack.copy().splitStack(amount);
+
+        for (int i = 0; i < registry.size(); ++i) {
+            final IInteractiveSorterOutput output = registry.getSorterOutput(i);
+            int sorted = output.output(outputStack, target);
+            if (sorted > 0) {
+                stack.stackSize -= sorted;
+                // remove or update the stack in the inventory sorter
+                source.setInventorySlotContents(0, stack.stackSize > 0 ? stack : null);
+                // return how many items were sorted
+                return sorted;
+            }
+        }
+
+        return 0;
     }
 
     protected void queueEvent(String event, Object... args) {
@@ -163,6 +183,21 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
             for (IComputerAccess computer : computers) {
                 computer.queueEvent(event, ArrayUtils.add(args, 0, computer.getAttachmentName()));
             }
+        }
+    }
+
+    public enum Side {
+        BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW
+    }
+
+    private static class DefaultSorterOutput implements IInteractiveSorterOutput {
+        @Override
+        public int output(ItemStack stack, TileEntity tile) {
+            // make sure it's an inventory
+            if (!(tile instanceof IInventory)) return 0;
+            // try store the stack
+            ItemStack remainder = InventoryUtil.storeItemStack((IInventory) tile, stack);
+            return stack.stackSize - (remainder == null ? 0 : remainder.stackSize);
         }
     }
 }

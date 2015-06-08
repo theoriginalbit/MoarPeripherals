@@ -8,6 +8,7 @@ import com.moarperipherals.api.bitnet.BitNetMessage;
 import com.moarperipherals.api.bitnet.IBitNetNode;
 import com.moarperipherals.api.bitnet.IBitNetUniverse;
 import com.moarperipherals.api.note.IIronNoteRegistry;
+import com.moarperipherals.api.sorter.IInteractiveSorterRegistry;
 
 /**
  * The main API access for MoarPeripherals. Use this to get access to various systems of MoarPeripherals at runtime.
@@ -16,9 +17,11 @@ import com.moarperipherals.api.note.IIronNoteRegistry;
  */
 @SuppressWarnings("unused")
 public class MoarPeripheralsAPI {
+    private static final String REGISTRY_PACKAGE = "com.theoriginalbit.moarperipherals.common.registry.";
     private static IBitNetUniverse bitNetUniverse = null;
     private static IIronNoteRegistry noteRegistry = null;
     private static IIronNoteRegistry sfxRegistry = null;
+    private static IInteractiveSorterRegistry sorterRegistry = null;
 
     static {
         try {
@@ -29,9 +32,16 @@ public class MoarPeripheralsAPI {
         }
 
         try {
-            Class<?> clazz = Class.forName("com.theoriginalbit.moarperipherals.common.registry.IronNoteRegistry");
+            Class<?> clazz = Class.forName(REGISTRY_PACKAGE + "IronNoteRegistry");
             noteRegistry = (IIronNoteRegistry) clazz.getField("NOTE").get(clazz);
             sfxRegistry = (IIronNoteRegistry) clazz.getField("SFX").get(clazz);
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Class<?> clazz = Class.forName(REGISTRY_PACKAGE + "InteractiveSorterRegistry");
+            sorterRegistry = (IInteractiveSorterRegistry) clazz.getField("INSTANCE").get(clazz);
         } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -64,5 +74,15 @@ public class MoarPeripheralsAPI {
      */
     public static IIronNoteRegistry getSfxRegistry() {
         return sfxRegistry;
+    }
+
+    /**
+     * Gets the {@link IInteractiveSorterRegistry} instance so that you may register other sorter outputs in the
+     * event that the interactive sorter cannot output to a desired output.
+     *
+     * @return the InteractiveSorterRegistry instance
+     */
+    public static IInteractiveSorterRegistry getInteractiveSorterRegistry() {
+        return sorterRegistry;
     }
 }

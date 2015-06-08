@@ -97,8 +97,6 @@ public final class InventoryUtil {
                     inv.markDirty();
                     return null;
                 }
-
-                remainder = remainder.copy();
                 inv.setInventorySlotContents(slot, remainder.splitStack(space));
             } else if (areItemsStackable(contents, remainder)) {
                 int space = Math.min(contents.getMaxStackSize(), inv.getInventoryStackLimit()) - contents.stackSize;

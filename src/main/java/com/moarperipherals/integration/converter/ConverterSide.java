@@ -15,8 +15,8 @@
  */
 package com.moarperipherals.integration.converter;
 
+import com.moarperipherals.tile.TileInteractiveSorter.Side;
 import com.theoriginalbit.framework.peripheral.converter.ITypeConverter;
-import com.moarperipherals.tile.sorter.Side;
 import dan200.computercraft.api.lua.LuaException;
 
 /**

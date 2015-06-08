@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.moarperipherals.tile.sorter;
+package com.moarperipherals.api.sorter;
 
 /**
  * @author Joshua Asbury (@theoriginalbit)
  */
-public enum Side {
-    BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW
+public interface IInteractiveSorterRegistry {
+    boolean register(IInteractiveSorterOutput output);
+
+    IInteractiveSorterOutput getSorterOutput(int index);
+
+    int size();
 }

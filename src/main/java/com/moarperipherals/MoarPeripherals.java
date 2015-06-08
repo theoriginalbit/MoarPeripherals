@@ -15,25 +15,25 @@
  */
 package com.moarperipherals;
 
-import com.theoriginalbit.framework.peripheral.LuaType;
-import com.theoriginalbit.framework.peripheral.PeripheralProvider;
-import com.moarperipherals.tile.sorter.Side;
-import com.moarperipherals.creativetab.CreativeTabMoarPeripherals;
-import com.moarperipherals.proxy.ProxyCommon;
 import com.moarperipherals.bitnet.BitNetUniverse;
-import com.moarperipherals.world.chunk.ChunkLoadingCallback;
 import com.moarperipherals.config.Config;
 import com.moarperipherals.config.ConfigData;
+import com.moarperipherals.creativetab.CreativeTabMoarPeripherals;
 import com.moarperipherals.handler.ChatBoxHandler;
 import com.moarperipherals.handler.TickHandler;
-import com.moarperipherals.integration.init.ComputerCraft;
 import com.moarperipherals.init.ModBlocks;
 import com.moarperipherals.init.ModItems;
 import com.moarperipherals.integration.converter.ConverterItemStack;
 import com.moarperipherals.integration.converter.ConverterSide;
+import com.moarperipherals.integration.init.ComputerCraft;
 import com.moarperipherals.integration.registry.UpgradeRegistry;
 import com.moarperipherals.network.PacketHandler;
+import com.moarperipherals.proxy.ProxyCommon;
+import com.moarperipherals.tile.TileInteractiveSorter.Side;
 import com.moarperipherals.util.LogUtil;
+import com.moarperipherals.world.chunk.ChunkLoadingCallback;
+import com.theoriginalbit.framework.peripheral.LuaType;
+import com.theoriginalbit.framework.peripheral.PeripheralProvider;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
