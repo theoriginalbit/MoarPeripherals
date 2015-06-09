@@ -15,11 +15,12 @@
  */
 package com.moarperipherals.init;
 
-import com.moarperipherals.item.ItemMoarP;
 import com.moarperipherals.config.ConfigData;
-import com.moarperipherals.item.ItemInkCartridge;
-import com.moarperipherals.item.ItemSonic;
 import com.moarperipherals.integration.init.ComputerCraft;
+import com.moarperipherals.item.ItemComputerUpgrade;
+import com.moarperipherals.item.ItemInkCartridge;
+import com.moarperipherals.item.ItemMoarP;
+import com.moarperipherals.item.ItemSonic;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -33,7 +34,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  */
 public final class ModItems {
     // custom items
-    public static Item itemInkCartridge, itemSonic, itemMonopoleAntenna;
+    public static Item itemInkCartridge, itemSonic, itemMonopoleAntenna, itemComputerUpgrade;
     // materials, don't need custom implementations
     public static Item itemKeyboardPart, itemUpgradeSolar, itemUpgradeOreScanner;
 
@@ -70,6 +71,11 @@ public final class ModItems {
         if (ConfigData.enableUpgradeOreScanner) {
             itemUpgradeOreScanner = new ItemMoarP("densityScanner");
             GameRegistry.registerItem(itemUpgradeOreScanner, "itemDensityScanner");
+        }
+
+        if (ConfigData.enableComputerUpgrade) {
+            itemComputerUpgrade = new ItemComputerUpgrade();
+            GameRegistry.registerItem(itemComputerUpgrade, "itemComputerUpgrade");
         }
     }
 
@@ -155,6 +161,18 @@ public final class ModItems {
                     'S', "stone",
                     'E', Items.ender_eye,
                     'C', ComputerCraft.cc_cable
+            ));
+        }
+
+        if (ConfigData.enableComputerUpgrade) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemComputerUpgrade),
+                    "GSG",
+                    "SRS",
+                    "GSG",
+
+                    'S', "stone",
+                    'G', "ingotGold",
+                    'R', "dustRedstone"
             ));
         }
     }

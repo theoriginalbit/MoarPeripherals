@@ -24,6 +24,7 @@ item.moarperipherals:sonic.name=Sonic Screwdriver
 item.moarperipherals:monopolePart.name=Monopole Antenna
 item.moarperipherals:solarPanel.name=Solar Panel
 item.moarperipherals:densityScanner.name=Density Scanner
+item.moarperipherals:computerUpgrade.name=Computer Upgrade
 
 upgrade.moarperipherals:adjective.chatbox=Chatty
 upgrade.moarperipherals:adjective.ironnote=Noisy
