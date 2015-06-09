@@ -33,6 +33,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Facing;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
         final TileEntity tile = getTileForSide(side);
         if (tile == null) return 0;
 
-        return sort(stack, amount, tile, this);
+        return sort(stack, amount, tile, this, ForgeDirection.getOrientation(side.ordinal()));
     }
 
     @LuaFunction
@@ -140,7 +141,7 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
         final TileEntity toTile = getTileForSide(to);
         if (toTile == null) return 0;
 
-        return sort(stack, amount, toTile, fromInv);
+        return sort(stack, amount, toTile, fromInv, ForgeDirection.getOrientation(from.ordinal()));
     }
 
     @LuaFunction
@@ -158,14 +159,14 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
         return worldObj.getTileEntity(x, y, z);
     }
 
-    private int sort(ItemStack stack, int amount, TileEntity target, IInventory source) {
+    private int sort(ItemStack stack, int amount, TileEntity target, IInventory source, ForgeDirection direction) {
         final IInteractiveSorterRegistry registry = InteractiveSorterRegistry.INSTANCE;
 
         final ItemStack outputStack = stack.copy().splitStack(amount);
 
         for (int i = 0; i < registry.size(); ++i) {
             final IInteractiveSorterOutput output = registry.getSorterOutput(i);
-            int sorted = output.output(outputStack, target);
+            int sorted = output.output(outputStack, target, direction);
             if (sorted > 0) {
                 stack.stackSize -= sorted;
                 // remove or update the stack in the inventory sorter
@@ -192,7 +193,7 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
 
     private static class DefaultSorterOutput implements IInteractiveSorterOutput {
         @Override
-        public int output(ItemStack stack, TileEntity tile) {
+        public int output(ItemStack stack, TileEntity tile, ForgeDirection direction) {
             // make sure it's an inventory
             if (!(tile instanceof IInventory)) return 0;
             // try store the stack

@@ -23,6 +23,8 @@ import com.moarperipherals.handler.ChatBoxHandler;
 import com.moarperipherals.handler.TickHandler;
 import com.moarperipherals.init.ModBlocks;
 import com.moarperipherals.init.ModItems;
+import com.moarperipherals.integration.IModule;
+import com.moarperipherals.integration.buildcraft.ModuleBuildcraft;
 import com.moarperipherals.integration.converter.ConverterItemStack;
 import com.moarperipherals.integration.converter.ConverterSide;
 import com.moarperipherals.integration.init.ComputerCraft;
@@ -60,6 +62,10 @@ public class MoarPeripherals {
 
     public static boolean isServerStopping = false;
 
+    public static final IModule[] MODULES = new IModule[]{
+            new ModuleBuildcraft()
+    };
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         LogUtil.init();
@@ -73,6 +79,10 @@ public class MoarPeripherals {
         proxy.preInit();
 
         ChatBoxHandler.init();
+
+        for (IModule module : MODULES)
+            if (module.shouldLoad())
+                module.preInit();
     }
 
     @EventHandler
@@ -96,6 +106,10 @@ public class MoarPeripherals {
 
         proxy.init();
         proxy.registerRenderInfo();
+
+        for (IModule module : MODULES)
+            if (module.shouldLoad())
+                module.init();
     }
 
     @EventHandler
@@ -112,6 +126,10 @@ public class MoarPeripherals {
         LuaType.registerClassToNameMapping(Side.class, "side");
 
         ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
+
+        for (IModule module : MODULES)
+            if (module.shouldLoad())
+                module.postInit();
     }
 
     @EventHandler

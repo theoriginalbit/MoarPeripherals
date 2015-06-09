@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.moarperipherals.api.sorter;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+package com.moarperipherals.integration;
 
 /**
  * @author Joshua Asbury (@theoriginalbit)
  */
-public interface IInteractiveSorterOutput {
-    int output(ItemStack stack, TileEntity tile, ForgeDirection direction);
+public interface IModule {
+    boolean shouldLoad();
+
+    void preInit();
+
+    void init();
+
+    void postInit();
 }

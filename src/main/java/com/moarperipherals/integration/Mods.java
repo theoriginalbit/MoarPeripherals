@@ -19,4 +19,5 @@ public final class Mods {
     public static final String COMPUTERCRAFT = "ComputerCraft";
     public static final String OPENPERIPHERALADDON = "OpenPeripheral";
     public static final String BUILDCRAFT_CORE = "BuildCraft|Core";
+    public static final String BUILDCRAFT_TRANSPORT = "BuildCraft|Transport";
 }
