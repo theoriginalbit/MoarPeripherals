@@ -19,22 +19,31 @@ import com.moarperipherals.config.ConfigData;
 import com.moarperipherals.util.LogUtil;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraft.world.World;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author theoriginalbit
  * @since 15/10/2014
  */
 public class TickHandler {
-
     public static final TickHandler INSTANCE = new TickHandler();
-    private static final ConcurrentLinkedQueue<FutureTask> callbacks = new ConcurrentLinkedQueue<>();
+    private static Map<Integer, LinkedBlockingQueue<FutureTask>> callbacks = Collections.synchronizedMap(
+            new HashMap<Integer, LinkedBlockingQueue<FutureTask>>()
+    );
 
-    public static <T> Future<T> addTickCallback(Callable<T> callback) {
+    public static <T> Future<T> addTickCallback(World world, Callable<T> callback) {
+        if (!callbacks.containsKey(world.provider.dimensionId))
+            callbacks.put(world.provider.dimensionId, new LinkedBlockingQueue<FutureTask>());
+
         FutureTask<T> task = new FutureTask<T>(callback) {
             @Override
             protected void done() {
@@ -46,7 +55,12 @@ public class TickHandler {
                 }
             }
         };
-        callbacks.add(task);
+
+        try {
+            callbacks.get(world.provider.dimensionId).put(task);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return task;
     }
 
@@ -54,15 +68,18 @@ public class TickHandler {
      * Enabled when anything that uses it is needed.
      */
     public static boolean shouldRegister() {
-        return ConfigData.enableFireworkLauncher;
+        return ConfigData.enableFireworkLauncher || ConfigData.enableInteractiveSorter;
     }
 
     @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.type == TickEvent.Type.SERVER) {
-            FutureTask callback;
-            while ((callback = callbacks.poll()) != null) {
-                callback.run();
+    public void onServerTick(TickEvent.WorldTickEvent event) {
+        if (event.type == TickEvent.Type.WORLD) {
+            if (callbacks.containsKey(event.world.provider.dimensionId)) {
+                Queue<FutureTask> callbackList = callbacks.get(event.world.provider.dimensionId);
+                FutureTask callback;
+                while ((callback = callbackList.poll()) != null) {
+                    callback.run();
+                }
             }
         }
     }

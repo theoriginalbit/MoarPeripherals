@@ -59,7 +59,7 @@ public class LauncherTube {
         if (firework != null) {
             final EntityFireworkRocket rocket = new EntityFireworkRocket(world, x + xOffset, y + yOffset, z + zOffset, firework);
 
-            TickHandler.addTickCallback(new Callable<Object>() {
+            TickHandler.addTickCallback(world, new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
                     world.spawnEntityInWorld(rocket);

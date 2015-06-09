@@ -21,6 +21,7 @@ import com.moarperipherals.api.sorter.IInteractiveSorterOutput;
 import com.moarperipherals.api.sorter.IInteractiveSorterRegistry;
 import com.moarperipherals.client.gui.GuiType;
 import com.moarperipherals.client.gui.IHasGui;
+import com.moarperipherals.handler.TickHandler;
 import com.moarperipherals.registry.InteractiveSorterRegistry;
 import com.moarperipherals.util.InventoryUtil;
 import com.theoriginalbit.framework.peripheral.annotation.Computers;
@@ -38,6 +39,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 @LuaPeripheral("interactive_sorter")
 public class TileInteractiveSorter extends TileInventory implements IHasGui {
@@ -77,7 +80,7 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
     }
 
     @LuaFunction
-    public int sort(Side side, int amount) {
+    public int sort(Side side, int amount) throws Exception {
         // stop early if the amount is too low
         if (amount <= 0) return amount;
 
@@ -114,7 +117,7 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
     }
 
     @LuaFunction
-    public int extract(Side from, Side to, int slot, int amount) throws LuaException {
+    public int extract(Side from, Side to, int slot, int amount) throws Exception {
         // reject the 'from' and 'to' being the same size
         if (from == to) return 0;
         // stop early if the amount is too low
@@ -159,24 +162,32 @@ public class TileInteractiveSorter extends TileInventory implements IHasGui {
         return worldObj.getTileEntity(x, y, z);
     }
 
-    private int sort(ItemStack stack, int amount, TileEntity target, IInventory source, ForgeDirection direction) {
+    private int sort(final ItemStack stack, final int amount, final TileEntity target, final IInventory source,
+                     final ForgeDirection direction) throws Exception {
         final IInteractiveSorterRegistry registry = InteractiveSorterRegistry.INSTANCE;
 
-        final ItemStack outputStack = stack.copy().splitStack(amount);
+        Future<Integer> callback = TickHandler.addTickCallback(worldObj, new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                final ItemStack outputStack = stack.copy().splitStack(amount);
 
-        for (int i = 0; i < registry.size(); ++i) {
-            final IInteractiveSorterOutput output = registry.getSorterOutput(i);
-            int sorted = output.output(outputStack, target, direction);
-            if (sorted > 0) {
-                stack.stackSize -= sorted;
-                // remove or update the stack in the inventory sorter
-                source.setInventorySlotContents(0, stack.stackSize > 0 ? stack : null);
-                // return how many items were sorted
-                return sorted;
+                for (int i = 0; i < registry.size(); ++i) {
+                    final IInteractiveSorterOutput output = registry.getSorterOutput(i);
+                    int sorted = output.output(outputStack, target, direction);
+                    if (sorted > 0) {
+                        stack.stackSize -= sorted;
+                        // remove or update the stack in the inventory sorter
+                        source.setInventorySlotContents(0, stack.stackSize > 0 ? stack : null);
+                        // return how many items were sorted
+                        return sorted;
+                    }
+                }
+
+                return 0;
             }
-        }
+        });
 
-        return 0;
+        return callback.get();
     }
 
     protected void queueEvent(String event, Object... args) {
