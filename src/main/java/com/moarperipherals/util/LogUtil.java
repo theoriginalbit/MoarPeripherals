@@ -33,7 +33,7 @@ public final class LogUtil {
     }
 
     public static void log(Level logLevel, String message, Object... args) {
-        FMLLog.log(ModInfo.NAME, logLevel, " [MoarP]: " + message, args);
+        FMLLog.log(ModInfo.NAME, logLevel, " " + message, args);
     }
 
     public static void debug(String message, Object... args) {
