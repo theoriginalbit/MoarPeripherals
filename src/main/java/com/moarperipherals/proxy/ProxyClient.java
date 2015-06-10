@@ -15,14 +15,12 @@
  */
 package com.moarperipherals.proxy;
 
+import com.moarperipherals.Constants;
 import com.moarperipherals.client.render.*;
-import com.moarperipherals.client.render.IUpgradeIcon;
-import com.moarperipherals.client.render.IUpgradeToolIcon;
 import com.moarperipherals.config.ConfigData;
 import com.moarperipherals.init.ModBlocks;
 import com.moarperipherals.init.ModItems;
 import com.moarperipherals.integration.registry.UpgradeRegistry;
-import com.moarperipherals.Constants;
 import com.moarperipherals.tile.TileAntennaController;
 import com.moarperipherals.tile.TileKeyboard;
 import com.moarperipherals.tile.TileMiniAntenna;
@@ -104,7 +102,10 @@ public class ProxyClient extends ProxyCommon {
             RendererPrinter rendererPrinter = new RendererPrinter();
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockPrinter), rendererPrinter);
             ClientRegistry.bindTileEntitySpecialRenderer(TilePrinter.class, rendererPrinter);
-            // ink cartridge
+        }
+
+        // Register ink cartridge renderer
+        if (ConfigData.enablePrinter && ConfigData.enableInkCartridgeGfx) {
             MinecraftForgeClient.registerItemRenderer(ModItems.itemInkCartridge, new RendererInkCartridge());
         }
 

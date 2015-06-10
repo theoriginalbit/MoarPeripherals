@@ -33,13 +33,18 @@ public class ContainerPrinter extends ContainerMoarP {
         printer = tile;
 
         for (int x = 0; x < 4; ++x) {
-            addSlotToContainer(new SlotValidated(printer, x, 26 + (x * 36), 26, new ItemStack(ModItems.itemInkCartridge, 1, x)));
+            final ItemStack stack = new ItemStack(ModItems.itemInkCartridge, 1);
+            final int y = 26 + (x * 36);
+            addSlotToContainer(new SlotValidated(printer, x, y, 26, stack));
         }
 
         final ItemStack paper = new ItemStack(Items.paper);
         for (int row = 0; row < 2; ++row) {
             for (int col = 0; col < 5; ++col) {
-                addSlotToContainer(new SlotValidated(printer, 4 + (col + row * 5), 66 + col * 18, 57 + row * 18, paper));
+                final int index = 4 + (col + row * 5);
+                final int x = 66 + col * 18;
+                final int y = 57 + row * 18;
+                addSlotToContainer(new SlotValidated(printer, index, x, y, paper));
             }
         }
 

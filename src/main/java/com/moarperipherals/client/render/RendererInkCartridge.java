@@ -16,7 +16,8 @@
 package com.moarperipherals.client.render;
 
 import com.moarperipherals.client.model.ModelInkCartridge;
-import com.moarperipherals.Constants;
+import com.moarperipherals.item.ItemInkCartridge;
+import com.moarperipherals.tile.printer.CartridgeContents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
@@ -31,8 +32,8 @@ import static org.lwjgl.opengl.GL11.*;
  * @since 16/11/14
  */
 public class RendererInkCartridge implements IItemRenderer {
-    private static final ModelBase modelCartridgeEmpty = new ModelInkCartridge(true);
-    private static final ModelBase modelCartridgeFilled = new ModelInkCartridge(false);
+    private static final ModelBase modelEmpty = new ModelInkCartridge(true);
+    private static final ModelBase modelFilled = new ModelInkCartridge(false);
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -108,27 +109,10 @@ public class RendererInkCartridge implements IItemRenderer {
     }
 
     private ResourceLocation getTexture(ItemStack stack) {
-        final Constants.TextureStore texture;
-        switch (stack.getItemDamage()) {
-            case 0:
-                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_C;
-                break;
-            case 1:
-                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_M;
-                break;
-            case 2:
-                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_Y;
-                break;
-            case 3:
-                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_K;
-                break;
-            default:
-                texture = Constants.TEXTURES_MODEL.INK_CARTRIDGE_E;
-        }
-        return texture.getResourceLocation();
+        return ItemInkCartridge.getCartridgeContents(stack).getTexture();
     }
 
     private ModelBase selectModel(ItemStack stack) {
-        return stack.getItemDamage() == 4 ? modelCartridgeEmpty : modelCartridgeFilled;
+        return ItemInkCartridge.getCartridgeContents(stack) == CartridgeContents.EMPTY ? modelEmpty : modelFilled;
     }
 }

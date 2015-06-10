@@ -25,7 +25,7 @@ public class ConfigData {
     @ConfigPropertyBoolean(category = "enabled", comment = "Enable the ChatBox")
     public static boolean enableChatBox;
 
-    @ConfigPropertyBoolean(category = "enabled", value = false, comment = "Enable the Printer")
+    @ConfigPropertyBoolean(category = "enabled", comment = "Enable the Printer")
     public static boolean enablePrinter;
 
     @ConfigPropertyBoolean(category = "enabled", comment = "Enable the Keyboard")
@@ -136,8 +136,11 @@ public class ConfigData {
     @ConfigPropertyString(value = "", comment = "Add density mappings (semi-colon separated) for mod blocks to the Density Scanner in the format [modId]:[blockName]@[density];\nSingle mapping example: MoarPeripherals:blockIronNote@5.45\nMulti-mapping example:  MoarPeripherals:blockIronNote@5.45;MoarPeripherals:blockChatBox@4.45")
     public static String userDensityMappings;
 
-    @ConfigPropertyBoolean(comment = "Whether or not to render items and blocks, related to the printer, normally or as models.")
+    @ConfigPropertyBoolean(comment = "Whether or not to render the printer normally or as a model.", value = false)
     public static boolean enablePrinterGfx;
+
+    @ConfigPropertyBoolean(comment = "Whether or not to render the ink cartridge normally or as a model.")
+    public static boolean enableInkCartridgeGfx;
 
     @ConfigPropertyBoolean(comment = "Whether or not to render the Sonic Screwdriver normally or as a model")
     public static boolean enableSonicGfx;

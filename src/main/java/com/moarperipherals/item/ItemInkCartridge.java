@@ -15,16 +15,17 @@
  */
 package com.moarperipherals.item;
 
-import com.moarperipherals.block.ITooltipHook;
 import com.moarperipherals.Constants;
-import com.moarperipherals.ModInfo;
+import com.moarperipherals.block.ITooltipHook;
+import com.moarperipherals.tile.printer.CartridgeContents;
 import com.moarperipherals.util.NBTUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
@@ -36,94 +37,59 @@ import java.util.List;
  */
 public class ItemInkCartridge extends ItemMoarP implements ITooltipHook {
     private static final String CONTENTS = "%s: %s";
-    private static final String PERCENT = "%s: %s";
-    private IIcon iconInkC;
-    private IIcon iconInkM;
-    private IIcon iconInkY;
-    private IIcon iconInkK;
-    private IIcon iconInkE;
+    private static final String PERCENT = "%s: %.1f%%";
 
     public ItemInkCartridge() {
         super("inkCartridge");
 
         setHasSubtypes(true);
         setMaxStackSize(1);
-        setCreativeTab(null);
+        setMaxDamage(1000);
     }
 
-    private static String getInkName(int inkColor) {
-        final Constants.LocalisationStore name;
-        switch (inkColor) {
-            case 0:
-                name = Constants.TOOLTIPS.INK_CYAN;
-                break;
-            case 1:
-                name = Constants.TOOLTIPS.INK_MAGENTA;
-                break;
-            case 2:
-                name = Constants.TOOLTIPS.INK_YELLOW;
-                break;
-            case 3:
-                name = Constants.TOOLTIPS.INK_BLACK;
-                break;
-            default:
-                name = Constants.TOOLTIPS.INK_EMPTY;
-        }
-        return name.getLocalised();
+    public static float getInkPercent(ItemStack stack) {
+        return stack.getItemDamage() / FluidContainerRegistry.BUCKET_VOLUME * 100;
     }
 
-    public static int getInkColor(ItemStack stack) {
-        final NBTTagCompound tag = NBTUtil.getItemTag(stack);
-        if (tag.hasKey("inkColor")) {
-            return tag.getInteger("inkColor");
-        }
-        // wasn't a colour, therefore we assume it's empty
-        return -1;
-    }
-
-    public static String getInkPercent(ItemStack stack) {
-        final NBTTagCompound tag = NBTUtil.getItemTag(stack);
-        if (tag.hasKey("inkLevel")) {
-            float level = tag.getFloat("inkLevel");
-            return (int) (level / FluidContainerRegistry.BUCKET_VOLUME * 100) + "%";
-        }
-        return null;
+    public static CartridgeContents getCartridgeContents(ItemStack stack) {
+        int inkColor = NBTUtil.getInteger(stack, "inkColor");
+        return CartridgeContents.valueOf(inkColor);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister registry) {
-        iconInkC = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeC");
-        iconInkM = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeM");
-        iconInkY = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeY");
-        iconInkK = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeK");
-        iconInkE = registry.registerIcon(ModInfo.RESOURCE_DOMAIN + ":inkCartridgeE");
+        for (CartridgeContents color : CartridgeContents.values()) {
+            color.registerIcons(registry);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void getSubItems(Item item, CreativeTabs tab, List list) {
+        for (int i = 0; i < 5; ++i) {
+            list.add(NBTUtil.setFloat(new ItemStack(item, 1), "inkColor", i));
+        }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIconFromDamage(int meta) {
-        switch (meta) {
-            case 0:
-                return iconInkC;
-            case 1:
-                return iconInkM;
-            case 2:
-                return iconInkY;
-            case 3:
-                return iconInkK;
-        }
-        return iconInkE;
+        return CartridgeContents.EMPTY.getIcon();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconIndex(ItemStack stack) {
+        return getCartridgeContents(stack).getIcon();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addToTooltip(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
-        final int inkColor = getInkColor(stack);
-        final String inkName = getInkName(inkColor);
+        final CartridgeContents contents = getCartridgeContents(stack);
+        final String inkName = contents.getLocalisedName();
 
-        // if the ink cartridge has ink
-        if (inkColor > -1) {
+        if (contents != CartridgeContents.EMPTY) {
             // add the contents string
             list.add(String.format(
                     CONTENTS,
@@ -131,14 +97,12 @@ public class ItemInkCartridge extends ItemMoarP implements ITooltipHook {
                     inkName
             ));
             // add the ink level string when needed
-            final String percent = getInkPercent(stack);
-            if (percent != null) {
-                list.add(String.format(
-                        PERCENT,
-                        Constants.TOOLTIPS.INK_LEVEL.getLocalised(),
-                        percent
-                ));
-            }
+            final float percent = getInkPercent(stack);
+            list.add(String.format(
+                    PERCENT,
+                    Constants.TOOLTIPS.INK_LEVEL.getLocalised(),
+                    percent
+            ));
         } else {
             list.add(inkName);
         }

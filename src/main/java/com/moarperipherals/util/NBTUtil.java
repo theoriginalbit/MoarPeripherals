@@ -29,15 +29,17 @@ public final class NBTUtil {
         return stack != null && stack.stackTagCompound != null && stack.stackTagCompound.hasKey(key);
     }
 
-    public static void removeTag(ItemStack stack, String key) {
+    public static ItemStack removeTag(ItemStack stack, String key) {
         if (stack.stackTagCompound != null) {
             stack.stackTagCompound.removeTag(key);
         }
+        return stack;
     }
 
-    public static void setString(ItemStack stack, String key, String value) {
+    public static ItemStack setString(ItemStack stack, String key, String value) {
         initNBTTagCompound(stack);
         stack.stackTagCompound.setString(key, value);
+        return stack;
     }
 
     public static String getString(ItemStack stack, String key) {
@@ -48,9 +50,10 @@ public final class NBTUtil {
         return stack.stackTagCompound.getString(key);
     }
 
-    public static void setInteger(ItemStack stack, String key, int value) {
+    public static ItemStack setInteger(ItemStack stack, String key, int value) {
         initNBTTagCompound(stack);
         stack.stackTagCompound.setInteger(key, value);
+        return stack;
     }
 
     public static int getInteger(ItemStack stack, String key) {
@@ -59,6 +62,20 @@ public final class NBTUtil {
             setInteger(stack, key, 0);
         }
         return stack.stackTagCompound.getInteger(key);
+    }
+
+    public static ItemStack setFloat(ItemStack stack, String key, float value) {
+        initNBTTagCompound(stack);
+        stack.stackTagCompound.setFloat(key, value);
+        return stack;
+    }
+
+    public static float getFloat(ItemStack stack, String key) {
+        initNBTTagCompound(stack);
+        if (!hasTag(stack, key)) {
+            setFloat(stack, key, 0);
+        }
+        return stack.stackTagCompound.getFloat(key);
     }
 
     private static void initNBTTagCompound(ItemStack stack) {
