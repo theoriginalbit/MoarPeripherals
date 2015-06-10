@@ -24,19 +24,35 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileMoarP extends TileEntity implements IBlockEventHandler {
-
+    private int anim;
+    private boolean changed;
     private String owner = "[NONE]";
+
+    @Override
+    public synchronized void updateEntity() {
+        if(changed) {
+            updateBlock();
+            changed = false;
+        }
+
+    }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        owner = tag.getString("owner");
+        if (tag.hasKey("owner")) {
+            owner = tag.getString("owner");
+        }
+        if (tag.hasKey("anim")) {
+            anim = tag.getInteger("anim");
+        }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setString("owner", owner);
+        tag.setInteger("anim", anim);
     }
 
     @Override
@@ -70,14 +86,39 @@ public class TileMoarP extends TileEntity implements IBlockEventHandler {
         return false; // no-op
     }
 
+    public final synchronized int getAnim() {
+        return anim;
+    }
+
+    protected final synchronized void setAnim(int anim) {
+        if (this.anim != anim) {
+            this.anim = anim;
+            changed = true;
+        }
+    }
+
+    protected void updateAnim() {
+    }
+
+    protected final void updateBlock() {
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+    }
+
     protected NBTTagCompound getDescriptionNBT() {
         final NBTTagCompound tag = new NBTTagCompound();
         tag.setString("owner", owner);
+        tag.setInteger("anim", anim);
         return tag;
     }
 
     protected void readDescriptionNBT(NBTTagCompound tag) {
-        owner = tag.getString("owner");
+        if (tag.hasKey("owner")) {
+            owner = tag.getString("owner");
+        }
+        if (tag.hasKey("anim")) {
+            anim = tag.getInteger("anim");
+        }
     }
 
     public final String getOwner() {

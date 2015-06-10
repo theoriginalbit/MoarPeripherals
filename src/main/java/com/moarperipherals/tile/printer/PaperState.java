@@ -20,15 +20,5 @@ package com.moarperipherals.tile.printer;
  * @since 16/11/14
  */
 public enum PaperState {
-    PAPER_NONE(2), PAPER_INPUT(3), PAPER_OUTPUT(4), PAPER_BOTH(5);
-
-    private final int textureId;
-
-    private PaperState(int id) {
-        textureId = id;
-    }
-
-    public int getTextureId() {
-        return textureId;
-    }
+    PAPER_NONE, PAPER_INPUT, PAPER_OUTPUT, PAPER_BOTH
 }

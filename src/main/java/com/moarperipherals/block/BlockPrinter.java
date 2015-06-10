@@ -15,10 +15,9 @@
  */
 package com.moarperipherals.block;
 
-import com.moarperipherals.config.ConfigData;
 import com.moarperipherals.ModInfo;
+import com.moarperipherals.config.ConfigData;
 import com.moarperipherals.tile.TilePrinter;
-import com.moarperipherals.tile.printer.PaperState;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -66,8 +65,7 @@ public class BlockPrinter extends BlockRotatable {
         // get the face icon
         final TileEntity tile = world.getTileEntity(x, y, z);
         if (tile != null && tile instanceof TilePrinter) {
-            final PaperState state = ((TilePrinter) tile).getPaperState();
-            return icons[state.ordinal()];
+            return icons[2 + ((TilePrinter) tile).getAnim()];
         }
         return icons[2];
     }

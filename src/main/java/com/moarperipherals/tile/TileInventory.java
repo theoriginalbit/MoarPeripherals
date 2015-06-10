@@ -67,6 +67,7 @@ public abstract class TileInventory extends TileMoarP implements ISidedInventory
                 }
             }
             markDirty();
+            updateAnim();
         }
         return stack;
     }
@@ -77,6 +78,7 @@ public abstract class TileInventory extends TileMoarP implements ISidedInventory
         if (stack != null) {
             inventory[slot] = null;
         }
+        updateAnim();
         return stack;
     }
 
@@ -87,6 +89,7 @@ public abstract class TileInventory extends TileMoarP implements ISidedInventory
             stack.stackSize = getInventoryStackLimit();
         }
         markDirty();
+        updateAnim();
     }
 
     @Override

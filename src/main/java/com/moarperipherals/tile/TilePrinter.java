@@ -15,13 +15,14 @@
  */
 package com.moarperipherals.tile;
 
-import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
+import com.moarperipherals.Constants;
 import com.moarperipherals.client.gui.GuiType;
 import com.moarperipherals.client.gui.IHasGui;
-import com.moarperipherals.Constants;
 import com.moarperipherals.tile.printer.PaperState;
 import com.moarperipherals.tile.printer.PrinterState;
+import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
+import net.minecraft.item.ItemStack;
 
 @LuaPeripheral("advanced_printer")
 public class TilePrinter extends TileInventory implements IHasGui {
@@ -38,23 +39,28 @@ public class TilePrinter extends TileInventory implements IHasGui {
     }
 
     public PaperState getPaperState() {
-        if (hasPaperInput() && hasPaperOutput()) {
-            return PaperState.PAPER_BOTH;
-        } else if (hasPaperInput()) {
-            return PaperState.PAPER_INPUT;
-        } else if (hasPaperOutput()) {
-            return PaperState.PAPER_OUTPUT;
-        }
-        return PaperState.PAPER_NONE;
+        return PaperState.values()[getAnim()];
     }
 
     @LuaFunction("hasPaper")
     public boolean hasPaperInput() {
-        return true;
+        for (int slot : SLOTS_BOTTOM) {
+            final ItemStack stack = getStackInSlot(slot);
+            if (stack != null && stack.stackSize > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean hasPaperOutput() {
-        return true;
+        for (int slot : SLOTS_SIDE) {
+            final ItemStack stack = getStackInSlot(slot);
+            if (stack != null && stack.stackSize > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -81,5 +87,21 @@ public class TilePrinter extends TileInventory implements IHasGui {
                 return SLOTS_TOP;
         }
         return SLOTS_SIDE;
+    }
+
+    @Override
+    protected void updateAnim() {
+        int anim = 0;
+
+        boolean input = hasPaperInput(), output = hasPaperOutput();
+        if (input && output) {
+            anim += 3;
+        } else if (input) {
+            ++anim;
+        } else if (output) {
+            anim += 2;
+        }
+
+        setAnim(anim);
     }
 }
