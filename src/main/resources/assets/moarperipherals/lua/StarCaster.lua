@@ -4,18 +4,18 @@
 --[[        aka         ]]--
 --[[   HydrantHunter    ]]--
 --[[        and         ]]--
---[[   theoriginalbit   ]]--
---[[        aka         ]]--
 --[[   TheOriginalBIT   ]]--
 --[[ pastebin: mwdc6bK9 ]]--
-local scVer = "1.0.01"
+
+local scVer = "1.0.03"
 --# Custom read, formatTime, newButton, 
   --# newNumberPicker, pickerChanged, calculateMinMax, 
   --# inventory filtering, and dyeToColor functions, 
   --# and LOTS of tutoring, courtesy of theoriginalbit
+
 local tArgs = { ... }
 local termX, termY = term.getSize()
-local launcher, launchTimer, screenTimer
+local launcher, launchTimer, screenTimer, filter, selectStarShape, selectStarEffects, inventoryStar
 local effectsLookup = { "No Effect", "Twinkle", "Trail" }
 local shapes = { "Small Ball", "Large Ball", "Star", "Creeper Head", "Burst", "None" }
 local effects = { "No Effect", "Twinkle", "Trail", "Twinkle & Trail" }
@@ -31,18 +31,7 @@ local readyRocketID, launchHeight, starColors, starShape, starEffect, numStars
 local rocketParts, starIDTable, rocketIDTable, errorLog = { }, { }, { }, { }
 local colorsList, effectsList, shapesList, guiElements = { }, { }, { }, { }
 local colorsAvailable, effectsAvailable, shapesAvailable = { }, { }, { }
---# reference table for what we want, and what table it maps to
-local inventoryCrossRef = {
-                            { "item.paper", rocketParts };
-                            { "item.sulphur", rocketParts };
-                            { "item.dyepowder", colorsAvailable };
-                            { "item.yellowdust", effectsAvailable };
-                            { "item.diamond", effectsAvailable };
-                            { "item.goldnugget", shapesAvailable };
-                            { "item.fireball", shapesAvailable };
-                            { "item.feather", shapesAvailable };
-                            { "item.skull", shapesAvailable };
-                          }
+
 --# reference table for updating our values and variables as selected via picker
 local valueUpdate = {
                       { "minHeight", function() return minHeight end, function(value) minHeight = value end };
@@ -52,22 +41,9 @@ local valueUpdate = {
                       { "minColors", function() return minColors end, function(value) minColors = value end };
                       { "maxColors", function() return maxColors end, function(value) maxColors = value end };
                     }
---# lookup table for shape/effect selection and assignment
-local ingredientValues = {
-                           { "item.fireball", 1 };
-                           { "item.goldnugget", 2 };
-                           { "item.skull.skeleton", 3 };
-                           { "item.skull.wither", 3 };
-                           { "item.skull.zombie", 3 };
-                           { "item.skull.creeper", 3 };
-                           { "item.skull.char", 3 };
-                           { "item.feather", 4 };
-                           { "item.yellowdust", 1 };
-                           { "item.diamond", 2 };
-                         }
 
 local function clearScreen(bgColor)
-  term.setBackgroundColor(bgColor and bgColor or colors.black)
+  term.setBackgroundColor(bgColor or colors.black)
   term.clear()
 end
 
@@ -186,7 +162,7 @@ local function newNumberPicker(x, y, value, minVal, maxVal, name, enabled, callb
     end;
     render = function()
       minus.setEnabled(enabled and value > minVal) --# update enabled status, this is really a bad place to do it...
-      plus.setEnabled(enabled and value < maxVal)  --# ...but it's the only reliable place that gets called frequenty
+      plus.setEnabled(enabled and value < maxVal)  --# ...but it's the only reliable place that gets called frequently
       minus.render()                               --# draw the - and + buttons
       plus.render()
       term.setBackgroundColor(colors.white) 
@@ -216,7 +192,7 @@ local function read( _mask, _history, _limit, _noTerminate )
     error("Invalid parameter #3: Expected number, got "..type(_limit), 2)
   end
   if _noTerminate and type(_noTerminate) ~= "boolean" then
-    error("Invalid argument #3: Expected boolean, got "..nativeType(_noTerminate), 2)
+    error("Invalid argument #4: Expected boolean, got "..nativeType(_noTerminate), 2)
   end
   term.setCursorBlink(true)
   local input = ""
@@ -240,7 +216,10 @@ local function read( _mask, _history, _limit, _noTerminate )
     if event == "char" and (not _limit or #input < _limit) then
       input = input:sub(1, pos)..code..input:sub(pos+1)
       pos = pos + 1
-    elseif event == "paste" then
+    elseif event == "paste" and (not _limit or #input < _limit) then
+      if _limit and #input + #code > _limit then
+        code = code:sub(1, _limit - #input)
+      end
       input = input:sub(1, pos)..code..input:sub(pos+1)
       pos = pos + #code
     elseif event == "key" then
@@ -285,9 +264,7 @@ local function read( _mask, _history, _limit, _noTerminate )
         end
       end
     elseif event == "mouse_click" and (mX < sx or mX >= sx + _limit) or (mY ~= sy) then
-      term.scroll = nativeScroll
-      term.setCursorBlink(false)
-      return input
+      break
     end
     redraw(_mask)
   end
@@ -314,14 +291,11 @@ local function getNumRockets()
   term.setTextColor(colors.white)
   term.write("    ")
   term.setCursorPos(41, 5)
-  local oldNumRockets = tostring(numRockets)
   local newCount = tonumber(read(nil, nil, 4))
-  newCount = newCount and math.max(1, newCount) or numRockets
-  numRockets = math.min(1000, newCount)
+  numRockets = newCount and math.max(1, math.min(newCount, 1000)) or numRockets
   for _, element in pairs(guiElements.mainButtons) do
     if element.getType() == "button" and (element.getName() == "numRockets" or element.getName() == "rocketPop") then
-      local rockets = tostring(numRockets)
-      element.setText(rockets)
+      element.setText(tostring(numRockets))
       element.render()
     end
   end
@@ -339,8 +313,7 @@ local function getChance(which, posX, posY)
     shapeChance = math.min(100, newChance)
     for _, element in pairs(guiElements.mainButtons) do
       if element.getType() == "button" and (element.getName() == "shapeChance" or element.getName() == "shapePop") then
-        local sChance = tostring(shapeChance)
-        element.setText(sChance)
+        element.setText(tostring(shapeChance))
         element.render()
       end
     end
@@ -349,8 +322,7 @@ local function getChance(which, posX, posY)
     effectChance = math.min(100, newChance)
     for _, element in pairs(guiElements.mainButtons) do
       if element.getType() == "button" and (element.getName() == "effectChance" or element.getName() == "effectPop") then
-        local eChance = tostring(effectChance)
-        element.setText(eChance)
+        element.setText(tostring(effectChance))
         element.render()
       end
     end
@@ -381,11 +353,9 @@ local function switchShowType()
       if element.getName():find("show") then
         element.setText(showType and "::" or "..")
       elseif element.getName():find("shape") then
-        local sChance = tostring(shapeChance)
-        element.setText(sChance)
+        element.setText(tostring(shapeChance))
       elseif element.getName():find("effect") then
-        local eChance = tostring(effectChance)
-        element.setText(eChance)
+        element.setText(tostring(effectChance))
       end
       if element.getName():find("Chance") then
         element.setEnabled(showType)
@@ -561,17 +531,17 @@ local function displayLaunchInfo()
   term.setTextColor(colors.gray)
   term.write(" / ")
   term.setTextColor(colors.white)
-  term.write(tostring(numRockets))   --# total # of rockets to launch (1-1000)
+  term.write(tostring(numRockets))    --# total # of rockets to launch (1-1000)
   term.setCursorPos(12, 8)
-  term.write(tostring(launchHeight)) --# this rocket's launch height (1-3)
+  term.write(tostring(launchHeight))  --# this rocket's launch height (1-3)
   for tmpY = 12, termY do
     term.setCursorPos(1, tmpY)
     term.write(string.rep(" ", termX))
   end
-  for i = 1, numStars do             --# display star attributes
+  for i = 1, numStars do              --# display star attributes
     term.setCursorPos(2, i + 11)
     term.setTextColor(colors.gray)
-    term.write(tostring(i))          --# star #
+    term.write(tostring(i))           --# star #
     term.setCursorPos(4, i + 11)
     term.setTextColor(colors.white)
     if shapesList[i] then term.write(shapes[shapesList[i] + 1]) end    --# shape
@@ -581,7 +551,7 @@ local function displayLaunchInfo()
     term.setTextColor(colors.gray)
     term.write("Colors  ")
     term.setTextColor(colors.white)
-    term.write(tostring(colorsList[i]))                              --# colors
+    term.write(tostring(colorsList[i]))                                --# colors
   end
   term.setTextColor(colors.red)
   term.setCursorPos(32, 7)
@@ -624,7 +594,7 @@ local function mainScreen()
   term.write("Minimum")
   term.setCursorPos(36, 7)
   term.write("Maximum")
-  term.setTextColor(colors.black)
+  term.setTextColor(colors.gray)
   local word, counter = "F1 Help", 0
   for i = 8, 15 do            --# F1/Help text
     counter = counter + 1
@@ -643,9 +613,9 @@ local function mainScreen()
   drawSwitch(finaleMode)      --# finale mode switch
   for _, element in pairs(guiElements.mainButtons) do
     if element.getType() == "button" then
-        if element.getName():find("Chance") then
-          element.setEnabled(showType)
-        end
+      if element.getName():find("Chance") then
+        element.setEnabled(showType)
+      end
     end
     element.render()
   end
@@ -671,7 +641,7 @@ local function logScreen()
       yPos = yPos + 1
       if yPos == termY - 1 then break end
     end
-    term.setCursorPos(1, termY)                         --# bottom row (for page buttons)
+    term.setCursorPos(1, termY)                        --# bottom row (for page buttons)
     term.setBackgroundColor(colors.lightGray)
     term.write(string.rep(" ", termX))
     for _, element in pairs(guiElements.logButtons) do --# page buttons
@@ -690,14 +660,14 @@ end
 
 local function helpScreen()
   drawHeader()
-    --# Sidebar
+  --# Sidebar
   term.setBackgroundColor(colors.gray)
   term.setTextColor(colors.white)
   for i = 4, termY do
     term.setCursorPos(1, i)
     term.write(string.rep(" ", 10))
   end
-    --# Sidebar contents
+  --# Sidebar contents
   term.setCursorPos(2, 7)
   term.write("Show")
   term.setCursorPos(2, 8)
@@ -712,7 +682,7 @@ local function helpScreen()
   term.write("   Mode")
   term.setCursorPos(2, 18)
   term.write("Chances")
-    --# Help contents
+  --# Help contents
   term.setBackgroundColor(colors.white)
   term.setTextColor(colors.black)
   term.setCursorPos(15, 6)
@@ -758,27 +728,29 @@ local function commandLineHelp()
   term.write("finale - start with 'Finale Mode' enabled")
   term.setCursorPos(2, 13)
   term.write("debug  - auto-start a fireworks show in debug mode")
-  term.setCursorPos(2, 16)
+  term.setCursorPos(2, 15)
+  term.write("splash - display splash screen on startup")
+  term.setCursorPos(2, 17)
   term.setTextColor(colors.gray)
   term.write("Command line options may be combined")
   term.setTextColor(colors.white)
-  term.setCursorPos(1, termY - 1)
+  term.setCursorPos(1, termY)
 end
 
 local function clearTables()
-  for i = 1, #colorsList do
+  for i = #colorsList, 1, -1 do
     colorsList[i] = nil
   end
-  for i = 1, #shapesList do
+  for i = #shapesList, 1, -1 do
     shapesList[i] = nil
   end
-  for i = 1, #effectsList do
+  for i = #effectsList, 1, -1 do
     effectsList[i] = nil
   end
-  for i = 1, #starIDTable do
+  for i = #starIDTable, 1, -1 do
     starIDTable[i] = nil
   end
-  for i = 1, #rocketIDTable do
+  for i = #rocketIDTable, 1, -1 do
     rocketIDTable[i] = nil
   end
   starsMade = 0
@@ -801,10 +773,11 @@ local function clearInventory()
 end
 
 local function clearErrors()
-  starError = "none" .. string.rep(" ", 15)
-  buildError = "none" .. string.rep(" ", 15)
-  readyError = "none" .. string.rep(" ", 15)
-  launchError = "none" .. string.rep(" ", 15)
+  local spacer = string.rep(" ", 15)
+  starError = "none" .. spacer
+  buildError = "none" .. spacer
+  readyError = "none" .. spacer
+  launchError = "none" .. spacer
 end
 
 local function errorScreen()
@@ -842,9 +815,8 @@ local function errorScreen()
     term.write("Shapes: gold nugget/feather/mob head/fire charge") 
   else
     local num = (#errorLog > 0) and math.min(9, #errorLog) or 0
+    term.setCursorPos(2, 7)
     if num > 0 then 
-      term.setTextColor(colors.red)
-      term.setCursorPos(2, 7)
       term.write("The following are the last " .. num .. " log entries:")
       term.setTextColor(colors.black)
       local yPos = 9
@@ -854,7 +826,6 @@ local function errorScreen()
         yPos = yPos + 1
       end
     else
-      term.setCursorPos(2, 7)
       term.write("There are no errors to display.")
     end
   end
@@ -864,17 +835,13 @@ local function errorScreen()
 end
 
 local function postError()
-  clearScreen()
-  term.setCursorPos(1, 1)
-  badWolf = false
-  badInventory = false
-  currentRocket = 1
-  waitTime = 0.10
-  timerTicker = 0
+  badWolf, badInventory = false, false
+  currentRocket, abortCounter, timerTicker, waitTime = 1, 0, 0, 0.10
   operatingMode = "main"
-  abortCounter = 0
   clearTables()
   clearErrors()
+  clearScreen()
+  term.setCursorPos(1, 1)
 end
 
 local function drawTimer()
@@ -945,51 +912,59 @@ local function countItems(list)
   return count
 end
 
-local function inventoryStar(id)
-  starColors = 0
-  local thisStar
-  local tmpEffects = { }
-  local colorBurst = { [1] = "White", [2] = "Orange", [4] = "Magenta", [8] = "Light Blue", [16] = "Yellow", [32] = "Lime", [64] = "Pink", [128] = "Gray", [256] = "Light Gray", [512] = "Cyan", [1024] = "Purple", [2048] = "Blue", [4096] = "Brown", [8192] = "Green", [16384] = "Red", [32768] = "Black", }
-  if type(id) == "table" then                      --# if 'id' is a table then it's from a firework
-    thisStar = id                                  --# set thisStar to point to id table
-  else                                             --# otherwise 'id' is an actual id representing a physical star
-    thisStar = launcher.inspectFireworkStar(id)    --# get info on the star
-    starIDTable[#starIDTable + 1] = id             --# add star's ID to starIDTable
-  end
-  local foundShape = false
-  for l, m in pairs(thisStar) do                   --# Begin processing the star
-    if not foundShape then
-      for k, v in pairs(shapes) do                 --# shapeLookup
-        if m:find(v:sub(1, 4)) then                --# if a match is found...
-          shapesList[#shapesList + 1] = k - 1      --# ...add shape to shapesList table...
-          foundShape = true                        --# ...and indicate that we've found the shape
+do
+  local colorBurst = {
+                       [1] = "White", [2] = "Orange", [4] = "Magenta", [8] = "Light Blue",
+                       [16] = "Yellow", [32] = "Lime", [64] = "Pink", [128] = "Gray",
+                       [256] = "Light Gray", [512] = "Cyan", [1024] = "Purple", [2048] = "Blue",
+                       [4096] = "Brown", [8192] = "Green", [16384] = "Red", [32768] = "Black",
+                     }
+
+  inventoryStar = function(id)
+    starColors = 0
+    local thisStar
+    local tmpEffects = { }
+    if type(id) == "table" then                      --# if 'id' is a table then it's from a firework
+      thisStar = id                                  --# set thisStar to point to id table
+    else                                             --# otherwise 'id' is an actual id representing a physical star
+      thisStar = launcher.inspectFireworkStar(id)    --# get info on the star
+      starIDTable[#starIDTable + 1] = id             --# add star's ID to starIDTable
+    end
+    local foundShape = false
+    for _, element in pairs(thisStar) do             --# Begin processing the star
+      if not foundShape then
+        for k, v in pairs(shapes) do                 --# shapeLookup
+          if element:find(v:sub(1, 4)) then          --# if a match is found...
+            shapesList[#shapesList + 1] = k - 1      --# ...add shape to shapesList table...
+            foundShape = true                        --# ...and indicate that we've found the shape
+            break
+          end
+        end
+      end
+      for k, v in pairs(colorBurst) do               --# color lookup
+        if element:lower():gsub("%s*", "") == v:lower():gsub("%s*", "") then --# if a matching color is found...
+          starColors = colors.combine(starColors, k) --# ...add it to the starColors table
+          break
+        end
+      end
+      for k, v in pairs(effectsLookup) do            --# effect lookup
+        if element:find(v) then                      --# if a match is found...
+          tmpEffects[#tmpEffects + 1] = k - 1        --# ...add effect to tmpEffects table
           break
         end
       end
     end
-    for k, v in pairs(colorBurst) do               --# color lookup
-      if m:lower():gsub("%s*", "") == v:lower():gsub("%s*", "") then --# if a matching color is found...
-        starColors = colors.combine(starColors, k) --# ...add it to the starColors table
-        break
-      end
-    end
-    for k, v in pairs(effectsLookup) do            --# effect lookup
-      if m:find(v) then                            --# if a match is found...
-        tmpEffects[#tmpEffects + 1] = k - 1        --# ...add effect to tmpEffects table
-        break
-      end
-    end
+    if not foundShape then shapesList[#shapesList + 1] = 0 end --# ensure a valid shape
+    local newEffect
+    if #tmpEffects == 2 then                                   --# if the number of effects is 2...
+      newEffect = 3                                            --# ...set the effect to 'both'...
+    else
+      newEffect = tmpEffects[1]                                --# ...otherwise set the effect to the first (only)
+    end                                                        --#   tmpEffects table entry
+    if not newEffect or #tmpEffects < 1 then newEffect = 0 end --# ensure a valid effect
+    effectsList[#effectsList + 1] = newEffect                  --# add effect to effectsList table
+    colorsList[#colorsList + 1] = starColors                   --# add colors to colorsList table
   end
-  if not foundShape then shapesList[#shapesList + 1] = 0 end --# ensure a valid shape
-  local newEffect
-  if #tmpEffects == 2 then                                   --# if the number of effects is 2...
-    newEffect = 3                                            --# ...set the effect to 'both'...
-  else
-    newEffect = tmpEffects[1]                                --# ...otherwise set the effect to the first (only)
-  end                                                        --#   tmpEffects table entry
-  if not newEffect or #tmpEffects < 1 then newEffect = 0 end --# ensure a valid effect
-  effectsList[#effectsList + 1] = newEffect                  --# add effect to effectsList table
-  colorsList[#colorsList + 1] = starColors                   --# add colors to colorsList table
 end
 
 local function inventoryFirework(id)
@@ -1027,74 +1002,89 @@ local function inventoryFirework(id)
   end
 end
 
-local function selectStarShape()
-  starShape = 0
-  local shapeWheel = { }
-  local shapesCount = countItems(shapesAvailable) --# get the number of available shapes in inventory
-  if shapesCount > 0 then                         --# if there is at least 1 shape...
-    for k, v in pairs(shapesAvailable) do         --# ...go through the shapesAvailable table and...
-      if v > 0 then                               --# ...if there is at least 1 shape...
-        shapeWheel[#shapeWheel + 1] = k           --# ...add it to the shapeWheel table
-      end
-    end
-    if #shapeWheel < 1 then                       --# if there are no shapes available...
-      starShape = 0                               --# ...set the shape to default (small ball)...
-    else                                          --# ...otherwise randomize for a possible shape
-      starShape = math.random(1, 100) <= shapeChance and math.random(1, #shapeWheel) or 0 --# chance of special shape
-    end
-    if starShape > 0 then             --# if the starShape is 'special' then...
-      local newStarShape = 0          --# set temp shape to 'Small Ball' in case the inventory of the shape generated is exhausted
-      for i = 1, #ingredientValues do --#...find the shape in the ingredients list and decrement the inventory accordingly
-        if shapeWheel[starShape]:find(ingredientValues[i][1]) and shapesAvailable[ingredientValues[i][1]] > 0 then
-          shapesAvailable[ingredientValues[i][1]] = shapesAvailable[ingredientValues[i][1]] - 1
-          newStarShape = ingredientValues[i][2]   --# set the shape value
-          break
-        end
-      end
-      starShape = newStarShape                    --# commit to the new shape
-    end
-    shapesList[#shapesList + 1] = starShape       --# add shape entry to shapesList table
-  else
-    starShape = 0                                 --# no special star shape generated (use Small Ball)
-    shapesList[#shapesList + 1] = starShape       --# add shape entry to shapesList table
-  end
-  return true
-end
+do
+  --# lookup table for shape/effect selection and assignment
+  local ingredientValues = {
+                             { "item.fireball", 1 };
+                             { "item.goldnugget", 2 };
+                             { "item.skull.skeleton", 3 };
+                             { "item.skull.wither", 3 };
+                             { "item.skull.zombie", 3 };
+                             { "item.skull.creeper", 3 };
+                             { "item.skull.char", 3 };
+                             { "item.feather", 4 };
+                             { "item.yellowdust", 1 };
+                             { "item.diamond", 2 };
+                           }
 
-local function selectStarEffects()
-  starEffect = 0
-  local effectWheel = { }
-    --# generate the effect
-  local effectsCount = countItems(effectsAvailable) --# get the number of available effects in inventory
-  if effectsCount > 0 then                          --# if there's at least 1 effect...
-    for k, v in pairs(effectsAvailable) do          --# ...go through the effectsAvailalbe table and...
-      if v > 0 then                                 --# ...if there is at least 1 effect...
-        effectWheel[#effectWheel + 1] = k           --# ...add it to the effectWheel table
-      end
-    end
-    if #effectWheel < 1 then                        --# if there are no effects available...
-      starEffect = 0                                --# ...set the effect to 'none'...
-    else                                            --# ...otherwise randomize for a possible effect
-      starEffect = (math.random(1, 100) <= effectChance) and math.random(1, #effectWheel + 1) or 0 --# chance to generate either trail, sparkle, both, or none
-    end
-    if #effectWheel < 2 then starEffect = math.min(starEffect, #effectWheel) end  --# ensure a valid value
-    if starEffect > 0 and starEffect <= #effectWheel then --# if a starEffect is generated...
-      local newStarEffect = 0                             --# set temp effect to 'none' in case the inventory of the effect generated is exhausted
-      for i = 1, #ingredientValues do                     --# ...find the effect in the ingredients list and decrement the inventory accordingly
-        if effectWheel[starEffect]:find(ingredientValues[i][1]) and effectsAvailable[ingredientValues[i][1]] > 0 then
-          effectsAvailable[ingredientValues[i][1]] = effectsAvailable[ingredientValues[i][1]] - 1
-          newStarEffect = ingredientValues[i][2]    --# set the effect value
-          break
+  selectStarShape = function()
+    starShape = 0
+    local shapeWheel = { }
+    local shapesCount = countItems(shapesAvailable) --# get the number of available shapes in inventory
+    if shapesCount > 0 then                         --# if there is at least 1 shape...
+      for k, v in pairs(shapesAvailable) do         --# ...go through the shapesAvailable table and...
+        if v > 0 then                               --# ...if there is at least 1 shape...
+          shapeWheel[#shapeWheel + 1] = k           --# ...add it to the shapeWheel table
         end
       end
-      starEffect = newStarEffect                    --# commit to the new effect
+      if #shapeWheel < 1 then                       --# if there are no shapes available...
+        starShape = 0                               --# ...set the shape to default (small ball)...
+      else                                          --# ...otherwise randomize for a possible shape
+        starShape = math.random(1, 100) <= shapeChance and math.random(1, #shapeWheel) or 0 --# chance of special shape
+      end
+      if starShape > 0 then             --# if the starShape is 'special' then...
+        local newStarShape = 0          --# set temp shape to 'Small Ball' in case the inventory of the shape generated is exhausted
+        for i = 1, #ingredientValues do --#...find the shape in the ingredients list and decrement the inventory accordingly
+          if shapeWheel[starShape]:find(ingredientValues[i][1]) and shapesAvailable[ingredientValues[i][1]] > 0 then
+            shapesAvailable[ingredientValues[i][1]] = shapesAvailable[ingredientValues[i][1]] - 1
+            newStarShape = ingredientValues[i][2]   --# set the shape value
+            break
+          end
+        end
+        starShape = newStarShape                    --# commit to the new shape
+      end
+      shapesList[#shapesList + 1] = starShape       --# add shape entry to shapesList table
+    else
+      starShape = 0                                 --# no special star shape generated (use Small Ball)
+      shapesList[#shapesList + 1] = starShape       --# add shape entry to shapesList table
     end
-    effectsList[#effectsList + 1] = starEffect      --# add effect entry to effectsList table
-  else
-    starEffect = 0                                  --# no special star effect generated (use 'none')
-    effectsList[#effectsList + 1] = starEffect      --# add effect entry to effectsList table
+    return true
   end
-  return true
+
+  selectStarEffects = function()
+    starEffect = 0
+    local effectWheel = { }
+    local effectsCount = countItems(effectsAvailable) --# get the number of available effects in inventory
+    if effectsCount > 0 then                          --# if there's at least 1 effect...
+      for k, v in pairs(effectsAvailable) do          --# ...go through the effectsAvailalbe table and...
+        if v > 0 then                                 --# ...if there is at least 1 effect...
+          effectWheel[#effectWheel + 1] = k           --# ...add it to the effectWheel table
+        end
+      end
+      if #effectWheel < 1 then                        --# if there are no effects available...
+        starEffect = 0                                --# ...set the effect to 'none'...
+      else                                            --# ...otherwise randomize for a possible effect
+        starEffect = (math.random(1, 100) <= effectChance) and math.random(1, #effectWheel + 1) or 0 --# chance to generate either trail, sparkle, both, or none
+      end
+      if #effectWheel < 2 then starEffect = math.min(starEffect, #effectWheel) end  --# ensure a valid value
+      if starEffect > 0 and starEffect <= #effectWheel then --# if a starEffect is generated...
+        local newStarEffect = 0                             --# set temp effect to 'none' in case the inventory of the effect generated is exhausted
+        for i = 1, #ingredientValues do                     --# ...find the effect in the ingredients list and decrement the inventory accordingly
+          if effectWheel[starEffect]:find(ingredientValues[i][1]) and effectsAvailable[ingredientValues[i][1]] > 0 then
+            effectsAvailable[ingredientValues[i][1]] = effectsAvailable[ingredientValues[i][1]] - 1
+            newStarEffect = ingredientValues[i][2]    --# set the effect value
+            break
+          end
+        end
+        starEffect = newStarEffect                    --# commit to the new effect
+      end
+      effectsList[#effectsList + 1] = starEffect      --# add effect entry to effectsList table
+    else
+      starEffect = 0                                  --# no special star effect generated (use 'none')
+      effectsList[#effectsList + 1] = starEffect      --# add effect entry to effectsList table
+    end
+    return true
+  end
 end
 
 local function selectStarColors()
@@ -1162,7 +1152,7 @@ local function assembleStars(numberToMake)
       starNum = starNum + 1     --# which star the builder is currently working on
       starsMade = starsMade + 1 --# how many stars have been made
       if starsMade >= numberToMake then return true end --# if all stars are complete return true
-    else                        --# if the star isn't made for some reason, decrement the star counter for a retry and increment the fail counter
+    else                        --# if the star isn't made for some reason increment the fail counter
       if starID then
         starError = starID
         if starError:find("gunpowder") then
@@ -1185,7 +1175,7 @@ local function assembleStars(numberToMake)
   else
     logError("Make Star: " .. starFailures .. " failures")
   end
-  if starsMade > 1 then --# if the number of stars to be made is > 1...
+  if starsMade > 1 then --# if the number of stars made is > 1...
     numStars = math.min(starsMade, numStars) --# ...set numStars equal to the lower value between starsMade and numStars
     return true         --# if at least one star was made allow the rocket to be finished
   else
@@ -1250,14 +1240,10 @@ local function assembleFirework()
   return false
 end
 
-local function launchFirework(id)
+local function launchFirework()
   local fireThatSucker
   if launcher.canLaunch() then
-    if id then
-      fireThatSucker, launchError = pcall(launcher.launchSpecific, id)
-    else
-      fireThatSucker, launchError = pcall(launcher.launch)
-    end
+    fireThatSucker, launchError = pcall(launcher.launch)
   else
     notReady()
     return false
@@ -1287,15 +1273,30 @@ local function dyeToColor(stack)
   return 2 ^ (15 - stack.dmg) --# CC colours are the opposite to MC colours, so in CC white is 0, but in MC it is 15, so we must flip it
 end
 
-local function filter(stock) --# filter out the listings of everything that is in the launcher to check for what we have that we want
-  for _, info in pairs(stock) do                --# for all the items
-    for _, v in pairs(inventoryCrossRef) do     --# for all that we want
-      if info.raw:find(v[1]) then               --# if the raw name contains what we're looking for i.e. item.dyepowder will be found in item.dyepowder.blue
-        local ok, col = pcall(dyeToColor, info) --# attempt to convert it to a colour
-        if ok then                              --# if converstion worked
-          v[2][col] = (v[2][col] and v[2][col] or 0) + info.qty --# update the count of it
-        else
-          v[2][info.raw] = (v[2][info.raw] and v[2][info.raw] or 0) + info.qty --# update the count of the other item
+do
+  --# reference table for what we want, and what table it maps to
+  local inventoryCrossRef = {
+                              { "item.paper", rocketParts };
+                              { "item.sulphur", rocketParts };
+                              { "item.dyepowder", colorsAvailable };
+                              { "item.yellowdust", effectsAvailable };
+                              { "item.diamond", effectsAvailable };
+                              { "item.goldnugget", shapesAvailable };
+                              { "item.fireball", shapesAvailable };
+                              { "item.feather", shapesAvailable };
+                              { "item.skull", shapesAvailable };
+                            }
+
+  filter = function(stock) --# filter out the listings of everything that is in the launcher to check for what we have that we want
+    for _, info in pairs(stock) do                --# for all the items
+      for _, v in pairs(inventoryCrossRef) do     --# for all that we want
+        if info.raw:find(v[1]) then               --# if the raw name contains what we're looking for i.e. item.dyepowder will be found in item.dyepowder.blue
+          local ok, col = pcall(dyeToColor, info) --# attempt to convert it to a colour
+          if ok then                              --# if converstion worked
+            v[2][col] = (v[2][col] and v[2][col] or 0) + info.qty --# update the count of it
+          else
+            v[2][info.raw] = (v[2][info.raw] and v[2][info.raw] or 0) + info.qty --# update the count of the other item
+          end
         end
       end
     end
@@ -1316,7 +1317,7 @@ end
 local function checkInventory()
   clearInventory()
   if checkCreative() then return true end
-  local gp, gs, co = false, false, false
+  local gp, gs, co = false, false, false  --# gunpowder, paper, color (don't know why I used gs for paper)
   filter(takeStock()) --# at this point the item tables should contain everything that the inventory has, that we need
   for k, v in pairs(rocketParts) do
     if k:find("sulphur") and v > 1 then   --# need at least two GP - 1 for rocket, 1 for star
@@ -1337,7 +1338,7 @@ end
 
 local function minRequirements()
   local newMaxHeight = math.min(maxHeight, rocketParts["item.sulphur"] - 1) --# adjust max launchHeight downward to account for low gunpowder (leaving 1 gunpowder for a star)
-  if newMaxHeight < 1 then                      --# if there is < 1 gunpowder then error out
+  if newMaxHeight < 1 then                                   --# if there is < 1 gunpowder then error out
     if runMode == "debug" then
       print("Rocket: Insufficient gunpowder")
     else
@@ -1346,7 +1347,7 @@ local function minRequirements()
     end
     return false
   end
-  if rocketParts["item.paper"] < 1 then         --# if there is < 1 paper then error out
+  if rocketParts["item.paper"] < 1 then                      --# if there is < 1 paper then error out
     if runMode == "debug" then
       print("Rocket: Insufficient paper")
     else
@@ -1407,8 +1408,8 @@ end
 
 local function launchControl()
   if badWolf then return false end
-  local goTeam = workFlow()            --# process and launch the next firework
-  if goTeam then                       --# if the process was successful...
+  local launchSuccess = workFlow()     --# process and launch the next firework
+  if launchSuccess then                --# if the process was successful...
     if currentRocket > numRockets then --# ...check if the show is over then stop if it is
       if runMode == "debug" then
         runMode = "stop"
@@ -1575,10 +1576,10 @@ local function logInput()
     elseif button == keys["end"] then
       pageNum = numPages
       logScreen()
-    elseif button == keys.pageUp then    --# 201
+    elseif button == keys.pageUp then
       pageNum = math.min(numPages, pageNum + 1)
       logScreen()
-    elseif button == keys.pageDown then  --# 209
+    elseif button == keys.pageDown then
       pageNum = math.max(1, pageNum - 1)
       logScreen()
     end
@@ -1592,7 +1593,7 @@ local function mainInput()
       if not gettingHelp then                                 --# exit StarCaster
         runMode = "stop"
         return
-      elseif gettingHelp then                                 --# exit logs or help
+      elseif gettingHelp then                                 --# exit help
         gettingHelp = false
         mainScreen()
         return
@@ -1772,5 +1773,4 @@ elseif runMode == "debug" then
   clearScreen()
   term.setCursorPos(1, 1)
 end
-
 scKernel() --# start the program
