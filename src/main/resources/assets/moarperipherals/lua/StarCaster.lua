@@ -8,6 +8,7 @@
 --[[ pastebin: mwdc6bK9 ]]--
 
 local scVer = "1.0.03"
+
 --# Custom read, formatTime, newButton, 
   --# newNumberPicker, pickerChanged, calculateMinMax, 
   --# inventory filtering, and dyeToColor functions, 
@@ -34,13 +35,13 @@ local colorsAvailable, effectsAvailable, shapesAvailable = { }, { }, { }
 
 --# reference table for updating our values and variables as selected via picker
 local valueUpdate = {
-                      { "minHeight", function() return minHeight end, function(value) minHeight = value end };
-                      { "maxHeight", function() return maxHeight end, function(value) maxHeight = value end };
-                      { "minStars", function() return minStars end, function(value) minStars = value end };
-                      { "maxStars", function() return maxStars end, function(value) maxStars = value end };
-                      { "minColors", function() return minColors end, function(value) minColors = value end };
-                      { "maxColors", function() return maxColors end, function(value) maxColors = value end };
-                    }
+  { "minHeight", function() return minHeight end, function(value) minHeight = value end };
+  { "maxHeight", function() return maxHeight end, function(value) maxHeight = value end };
+  { "minStars", function() return minStars end, function(value) minStars = value end };
+  { "maxStars", function() return maxStars end, function(value) maxStars = value end };
+  { "minColors", function() return minColors end, function(value) minColors = value end };
+  { "maxColors", function() return maxColors end, function(value) maxColors = value end };
+}
 
 local function clearScreen(bgColor)
   term.setBackgroundColor(bgColor or colors.black)
@@ -70,7 +71,7 @@ local function pickerChanged()
   local btns = guiElements.mainButtons
   for i = #btns, 1, -2 do
     local e = btns[i]
-    local e2 = btns[i-1]
+    local e2 = btns[i - 1]
     if e.getType() == "picker" and e2.getType() == "picker" then
       e.setMinValue(e2.getValue())
       e2.setMaxValue(e.getValue())
@@ -214,32 +215,32 @@ local function read( _mask, _history, _limit, _noTerminate )
   while true do
     local event, code, mX, mY = pullEvent()
     if event == "char" and (not _limit or #input < _limit) then
-      input = input:sub(1, pos)..code..input:sub(pos+1)
+      input = input:sub(1, pos) .. code .. input:sub(pos + 1)
       pos = pos + 1
     elseif event == "paste" and (not _limit or #input < _limit) then
       if _limit and #input + #code > _limit then
         code = code:sub(1, _limit - #input)
       end
-      input = input:sub(1, pos)..code..input:sub(pos+1)
+      input = input:sub(1, pos) .. code .. input:sub(pos + 1)
       pos = pos + #code
     elseif event == "key" then
       if code == keys.enter or code == keys.numPadEnter then
         break
       elseif code == keys.backspace and pos > 0 then
         redraw(' ')
-        input = input:sub(1, math.max(pos-1, 0))..input:sub(pos+1)
-        pos = math.max(pos-1, 0)
+        input = input:sub(1, math.max(pos - 1, 0))..input:sub(pos + 1)
+        pos = math.max(pos - 1, 0)
       elseif code == keys.delete and pos < #input then
         redraw(' ')
-        input = input:sub(1, pos)..input:sub(pos+2)
+        input = input:sub(1, pos)..input:sub(pos + 2)
       elseif code == keys.home then
         pos = 0
       elseif code == keys["end"] then
         pos = #input
       elseif code == keys.left and pos > 0 then
-        pos = math.max(pos-1, 0)
+        pos = math.max(pos - 1, 0)
       elseif code == keys.right and pos < #input then
-        pos = math.min(pos+1, #input)
+        pos = math.min(pos + 1, #input)
       elseif _history and code == keys.up or code == keys.down then
         redraw(' ')
         if code == keys.up then
@@ -250,7 +251,7 @@ local function read( _mask, _history, _limit, _noTerminate )
           end
         else
           if historyPos ~= nil and historyPos < #_history then
-            historyPos = math.max(historyPos+1, #_history)
+            historyPos = math.max(historyPos + 1, #_history)
           elseif historyPos == #_history then
             historyPos = nil
           end
@@ -914,11 +915,11 @@ end
 
 do
   local colorBurst = {
-                       [1] = "White", [2] = "Orange", [4] = "Magenta", [8] = "Light Blue",
-                       [16] = "Yellow", [32] = "Lime", [64] = "Pink", [128] = "Gray",
-                       [256] = "Light Gray", [512] = "Cyan", [1024] = "Purple", [2048] = "Blue",
-                       [4096] = "Brown", [8192] = "Green", [16384] = "Red", [32768] = "Black",
-                     }
+    [1] = "White", [2] = "Orange", [4] = "Magenta", [8] = "Light Blue",
+    [16] = "Yellow", [32] = "Lime", [64] = "Pink", [128] = "Gray",
+    [256] = "Light Gray", [512] = "Cyan", [1024] = "Purple", [2048] = "Blue",
+    [4096] = "Brown", [8192] = "Green", [16384] = "Red", [32768] = "Black",
+  }
 
   inventoryStar = function(id)
     starColors = 0
@@ -1005,17 +1006,17 @@ end
 do
   --# lookup table for shape/effect selection and assignment
   local ingredientValues = {
-                             { "item.fireball", 1 };
-                             { "item.goldnugget", 2 };
-                             { "item.skull.skeleton", 3 };
-                             { "item.skull.wither", 3 };
-                             { "item.skull.zombie", 3 };
-                             { "item.skull.creeper", 3 };
-                             { "item.skull.char", 3 };
-                             { "item.feather", 4 };
-                             { "item.yellowdust", 1 };
-                             { "item.diamond", 2 };
-                           }
+    { "item.fireball", 1 };
+    { "item.goldnugget", 2 };
+    { "item.skull.skeleton", 3 };
+    { "item.skull.wither", 3 };
+    { "item.skull.zombie", 3 };
+    { "item.skull.creeper", 3 };
+    { "item.skull.char", 3 };
+    { "item.feather", 4 };
+    { "item.yellowdust", 1 };
+    { "item.diamond", 2 };
+  }
 
   selectStarShape = function()
     starShape = 0
@@ -1276,16 +1277,16 @@ end
 do
   --# reference table for what we want, and what table it maps to
   local inventoryCrossRef = {
-                              { "item.paper", rocketParts };
-                              { "item.sulphur", rocketParts };
-                              { "item.dyepowder", colorsAvailable };
-                              { "item.yellowdust", effectsAvailable };
-                              { "item.diamond", effectsAvailable };
-                              { "item.goldnugget", shapesAvailable };
-                              { "item.fireball", shapesAvailable };
-                              { "item.feather", shapesAvailable };
-                              { "item.skull", shapesAvailable };
-                            }
+    { "item.paper", rocketParts };
+    { "item.sulphur", rocketParts };
+    { "item.dyepowder", colorsAvailable };
+    { "item.yellowdust", effectsAvailable };
+    { "item.diamond", effectsAvailable };
+    { "item.goldnugget", shapesAvailable };
+    { "item.fireball", shapesAvailable };
+    { "item.feather", shapesAvailable };
+    { "item.skull", shapesAvailable };
+  }
 
   filter = function(stock) --# filter out the listings of everything that is in the launcher to check for what we have that we want
     for _, info in pairs(stock) do                --# for all the items
@@ -1542,8 +1543,7 @@ local function selectPage()
   term.setTextColor(colors.white)
   local newPage = tonumber(read(nil, nil, 4)) --# get the selected page from the user
   if not newPage then newPage = pageNum end   --# if no input then stay on the same page
-  newPage = math.max(1, newPage)              --# make sure page # is 1 or higher
-  pageNum = math.min(newPage, numPages)       --# make sure page # is <= numPages
+  pageNum = math.max(1, math.min(newPage, newPages)) --# make sure page # is valid
   drawHeader()
 end
 
@@ -1743,29 +1743,29 @@ if not showType then maxStars, maxColors = 3, 3 end
 
 --# x pos, y pos, width, height, text, background color, text color, function, name, button to activate (optional)
 guiElements = {
-                mainButtons = {
-                                newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() drawPopUp("type") end, "showPop", 2);
-                                newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() switchShowType() end, "showType", 1);
-                                newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() drawPopUp("rockets") end, "rocketPop", 2);
-                                newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() getNumRockets() end, "numRockets", 1);
-                                newButton(20, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("shape", 20, 14) end, "shapeChance", 1);
-                                newButton(41, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("effect", 41, 14) end, "effectChance", 1);
-                                newButton(26, 16, 19, 3, "Start  Show", colors.green, colors.white, function() startShow() end, "startShow", 1);
-                                  --# add new buttons and pickers here, not at the end
-                                newNumberPicker(20, 8, 1, 1, 3, "minHeight", false, pickerChanged);  --# rocketHeight min
-                                newNumberPicker(34, 8, 3, 1, 3, "maxHeight", false, pickerChanged);  --# rocketHeight max
-                                newNumberPicker(20, 10, 1, 1, 7, "minStars", false, pickerChanged);  --# minStars
-                                newNumberPicker(34, 10, maxStars, 1, 7, "maxStars", false, pickerChanged);  --# maxStars
-                                newNumberPicker(20, 12, 1, 1, 8, "minColors", false, pickerChanged); --# minColors
-                                newNumberPicker(34, 12, maxColors, 1, 8, "maxColors", false, pickerChanged); --# maxColors
-                              }, 
-                logButtons = {
-                               newButton(17, termY, 2, 1, "<<", colors.lightGray, colors.gray, function() pageNum = 1 logScreen() end, "home", 1);
-                               newButton(20, termY, 1, 1, "<", colors.lightGray, colors.gray, function() pageNum = math.max(1, pageNum - 1) logScreen() end, "pageMinus", 1);
-                               newButton(33, termY, 1, 1, ">", colors.lightGray, colors.gray, function() pageNum = math.min(numPages, pageNum + 1) logScreen() end, "pagePlus", 1);
-                               newButton(35, termY, 2, 1, ">>", colors.lightGray, colors.gray, function() pageNum = numPages logScreen() end, "end", 1);
-                             }, 
-              }
+  mainButtons = {
+    newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() drawPopUp("type") end, "showPop", 2);
+    newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() switchShowType() end, "showType", 1);
+    newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() drawPopUp("rockets") end, "rocketPop", 2);
+    newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() getNumRockets() end, "numRockets", 1);
+    newButton(20, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("shape", 20, 14) end, "shapeChance", 1);
+    newButton(41, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("effect", 41, 14) end, "effectChance", 1);
+    newButton(26, 16, 19, 3, "Start  Show", colors.green, colors.white, function() startShow() end, "startShow", 1);
+      --# add new buttons and pickers here, not at the end
+    newNumberPicker(20, 8, 1, 1, 3, "minHeight", false, pickerChanged);  --# rocketHeight min
+    newNumberPicker(34, 8, 3, 1, 3, "maxHeight", false, pickerChanged);  --# rocketHeight max
+    newNumberPicker(20, 10, 1, 1, 7, "minStars", false, pickerChanged);  --# minStars
+    newNumberPicker(34, 10, maxStars, 1, 7, "maxStars", false, pickerChanged);  --# maxStars
+    newNumberPicker(20, 12, 1, 1, 8, "minColors", false, pickerChanged); --# minColors
+    newNumberPicker(34, 12, maxColors, 1, 8, "maxColors", false, pickerChanged); --# maxColors
+  }, 
+  logButtons = {
+    newButton(17, termY, 2, 1, "<<", colors.lightGray, colors.gray, function() pageNum = 1 logScreen() end, "home", 1);
+    newButton(20, termY, 1, 1, "<", colors.lightGray, colors.gray, function() pageNum = math.max(1, pageNum - 1) logScreen() end, "pageMinus", 1);
+    newButton(33, termY, 1, 1, ">", colors.lightGray, colors.gray, function() pageNum = math.min(numPages, pageNum + 1) logScreen() end, "pagePlus", 1);
+    newButton(35, termY, 2, 1, ">>", colors.lightGray, colors.gray, function() pageNum = numPages logScreen() end, "end", 1);
+  }, 
+}
 
 if runMode == "standard" then
   mainScreen()
