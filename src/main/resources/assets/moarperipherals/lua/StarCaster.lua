@@ -556,13 +556,13 @@ local function displayLaunchInfo()
   end
   term.setTextColor(colors.red)
   term.setCursorPos(32, 7)
-  if starError then term.write(tostring(starError):sub(1, 19)) end     --# error in star manufacturing
+  if starError then term.write(starError:sub(1, 19)) end     --# error in star manufacturing
   term.setCursorPos(32, 8)
-  if buildError then term.write(tostring(buildError):sub(1, 19)) end   --# error in rocket manufacturing
+  if buildError then term.write(buildError:sub(1, 19)) end   --# error in rocket manufacturing
   term.setCursorPos(32, 9)
-  if readyError then term.write(tostring(readyError):sub(1, 19)) end   --# launcher not ready
+  if readyError then term.write(readyError:sub(1, 19)) end   --# launcher not ready
   term.setCursorPos(32, 10)
-  if launchError then term.write(tostring(launchError):sub(1, 19)) end --# error in launch
+  if launchError then term.write(launchError:sub(1, 19)) end --# error in launch
 end
 
 local function mainScreen()
@@ -774,11 +774,10 @@ local function clearInventory()
 end
 
 local function clearErrors()
-  local spacer = string.rep(" ", 15)
-  starError = "none" .. spacer
-  buildError = "none" .. spacer
-  readyError = "none" .. spacer
-  launchError = "none" .. spacer
+  starError = "none               "
+  buildError = "none               "
+  readyError = "none               "
+  launchError = "none               "
 end
 
 local function errorScreen()
@@ -1160,7 +1159,7 @@ local function assembleStars(numberToMake)
           badWolf, badInventory = true, true
         end
       else
-        starError = "Unknown failure"
+        starError = "Shape/Effect/Color failure"
       end
       if runMode == "debug" then
         print("Star#" .. starNum .. ": " .. starError)
@@ -1751,12 +1750,12 @@ guiElements = {
     newButton(20, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("shape", 20, 14) end, "shapeChance", 1);
     newButton(41, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("effect", 41, 14) end, "effectChance", 1);
     newButton(26, 16, 19, 3, "Start  Show", colors.green, colors.white, function() startShow() end, "startShow", 1);
-      --# add new buttons and pickers here, not at the end
-    newNumberPicker(20, 8, 1, 1, 3, "minHeight", false, pickerChanged);  --# rocketHeight min
-    newNumberPicker(34, 8, 3, 1, 3, "maxHeight", false, pickerChanged);  --# rocketHeight max
-    newNumberPicker(20, 10, 1, 1, 7, "minStars", false, pickerChanged);  --# minStars
-    newNumberPicker(34, 10, maxStars, 1, 7, "maxStars", false, pickerChanged);  --# maxStars
-    newNumberPicker(20, 12, 1, 1, 8, "minColors", false, pickerChanged); --# minColors
+    --# add new buttons and pickers here, not at the end
+    newNumberPicker(20, 8, 1, 1, 3, "minHeight", false, pickerChanged);          --# rocketHeight min
+    newNumberPicker(34, 8, 3, 1, 3, "maxHeight", false, pickerChanged);          --# rocketHeight max
+    newNumberPicker(20, 10, 1, 1, 7, "minStars", false, pickerChanged);          --# minStars
+    newNumberPicker(34, 10, maxStars, 1, 7, "maxStars", false, pickerChanged);   --# maxStars
+    newNumberPicker(20, 12, 1, 1, 8, "minColors", false, pickerChanged);         --# minColors
     newNumberPicker(34, 12, maxColors, 1, 8, "maxColors", false, pickerChanged); --# maxColors
   }, 
   logButtons = {
@@ -1773,4 +1772,5 @@ elseif runMode == "debug" then
   clearScreen()
   term.setCursorPos(1, 1)
 end
+
 scKernel() --# start the program
