@@ -1,3 +1,9 @@
+Development has stopped
+------------------------
+
+Yes the domain has expired. Yes the wiki is no longer online. [CurseForge](http://minecraft.curseforge.com/projects/moarperipherals) still has the main downloads, and if you want the latest and 'greatest' unreleased features grab it from the [Jenkins build server](http://thatcraniumguy.net:8081/). The mod is open source, do with it as you will, as long as you don't breach the license. I do not see myself doing development on this any time in the near future; a select few of you from the community know why this is the case and agreed with me that I took the best course of action.
+
+
 <p align="center">
   <img src="http://i.imgur.com/IY49GPE.png" alt="MoarPeripherals"/>
 </p>
