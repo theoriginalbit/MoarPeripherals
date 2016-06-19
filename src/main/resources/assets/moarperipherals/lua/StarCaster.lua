@@ -7,13 +7,12 @@
 --[[   TheOriginalBIT   ]]--
 --[[ pastebin: mwdc6bK9 ]]--
 
-local scVer = "1.0.03"
+local scVer = "1.0.05"
 
 --# Custom read, formatTime, newButton, 
   --# newNumberPicker, pickerChanged, calculateMinMax, 
   --# inventory filtering, and dyeToColor functions, 
   --# and LOTS of tutoring, courtesy of theoriginalbit
-
 local tArgs = { ... }
 local termX, termY = term.getSize()
 local launcher, launchTimer, screenTimer, filter, selectStarShape, selectStarEffects, inventoryStar
@@ -32,7 +31,6 @@ local readyRocketID, launchHeight, starColors, starShape, starEffect, numStars
 local rocketParts, starIDTable, rocketIDTable, errorLog = { }, { }, { }, { }
 local colorsList, effectsList, shapesList, guiElements = { }, { }, { }, { }
 local colorsAvailable, effectsAvailable, shapesAvailable = { }, { }, { }
-
 --# reference table for updating our values and variables as selected via picker
 local valueUpdate = {
   { "minHeight", function() return minHeight end, function(value) minHeight = value end };
@@ -48,9 +46,9 @@ local function clearScreen(bgColor)
   term.clear()
 end
 
-local function updateValue(n)
+local function updateValue(name)
   for _, v in pairs(valueUpdate) do
-    if v[1] == n then return v[2]() end
+    if v[1] == name then return v[2]() end
   end
 end
 
@@ -135,8 +133,8 @@ local function newNumberPicker(x, y, value, minVal, maxVal, name, enabled, callb
   local bw = 3
   minVal, maxVal = calculateMinMax(minVal, maxVal)
   enabled = enabled == true
-  local minus = newButton(x, y, bw, 1, '-', colors.gray, colors.white, function() value = math.max(value - 1, minVal) bPressed = "minus" end, name, 1, callback)
-  local plus  = newButton(x + bw + w + 2, y, bw, 1, '+', colors.gray, colors.white, function() value = math.min(value + 1, maxVal) bPressed = "plus" end, name, 1, callback)
+  local minus = newButton(x, y, bw, 1, '-', colors.gray, colors.red, function() value = math.max(value - 1, minVal) bPressed = "minus" end, name, 1, callback)
+  local plus  = newButton(x + bw + w + 2, y, bw, 1, '+', colors.gray, colors.green, function() value = math.min(value + 1, maxVal) bPressed = "plus" end, name, 1, callback)
   minus.setDisabledColors(colors.gray, colors.lightGray)
   plus.setDisabledColors(colors.gray, colors.lightGray)
   return {
@@ -282,8 +280,8 @@ end
 
 local function formatTime(time)
   local hour = math.floor(time)
-  local min = math.floor((time - hour) * 60)
-  return string.format("%02d:%02d", hour, min)
+  local minutes = math.floor((time - hour) * 60)
+  return string.format("%02d:%02d", hour, minute)
 end
 
 local function getNumRockets()
@@ -367,17 +365,18 @@ local function switchShowType()
   term.setBackgroundColor(colors.lightGray)
   term.setTextColor(showType and colors.white or colors.gray)
   term.setCursorPos(23, 14)
-  term.write("%")
+  term.write("%") --# Shape Chance
   term.setCursorPos(44, 14)
-  term.write("%")
+  term.write("%") --# Effect Chance
 end
 
 local function drawPopUpBox(x, y, w, text)
   term.setBackgroundColor(colors.white)
   term.setTextColor(colors.gray)
+  local line = string.rep(" ", w)
   for i = 1, 5 do --# draw the box
     term.setCursorPos(x, y + i)
-    term.write(string.rep(" ", w))
+    term.write(line)
   end
   for i = 1, 3 do --# write the text
     term.setCursorPos(x + 1, y + i + 1)
@@ -819,11 +818,11 @@ local function errorScreen()
     if num > 0 then 
       term.write("The following are the last " .. num .. " log entries:")
       term.setTextColor(colors.black)
-      local yPos = 9
+      local yPos = 8
       for i = #errorLog - (num - 1), #errorLog do
+        yPos = yPos + 1
         term.setCursorPos(2, yPos)
         term.write(errorLog[i])
-        yPos = yPos + 1
       end
     else
       term.write("There are no errors to display.")
@@ -960,7 +959,7 @@ do
       newEffect = 3                                            --# ...set the effect to 'both'...
     else
       newEffect = tmpEffects[1]                                --# ...otherwise set the effect to the first (only)
-    end                                                        --#   tmpEffects table entry
+    end                                                        --# vvv tmpEffects table entry vvv
     if not newEffect or #tmpEffects < 1 then newEffect = 0 end --# ensure a valid effect
     effectsList[#effectsList + 1] = newEffect                  --# add effect to effectsList table
     colorsList[#colorsList + 1] = starColors                   --# add colors to colorsList table
@@ -1476,7 +1475,7 @@ local function showControl()
     goFinale = false
     currentRocket = 1  
     mainScreen()
-  elseif event == "char" and (string.lower(data) == "q" or string.lower(data) == "c" or string.lower(data) == "x") then --# if the user types 'q', 'c', or 'x', end the show, and return to the main screen if not in debug mode
+  elseif event == "char" and (data:lower() == "q" or data:lower() == "c" or data:lower() == "x") then --# if the user types 'q', 'c', or 'x', end the show, and return to the main screen if not in debug mode
     if runMode == "debug" then
       operatingMode = "debug"
       runMode = "stop"
@@ -1709,6 +1708,7 @@ local function initHardware()
   return true
 end
 
+if not os.getComputerLabel() then os.setComputerLabel("StarCaster") end
 if not initHardware() then return end
 
 if tArgs[1] then
@@ -1743,13 +1743,13 @@ if not showType then maxStars, maxColors = 3, 3 end
 --# x pos, y pos, width, height, text, background color, text color, function, name, button to activate (optional)
 guiElements = {
   mainButtons = {
-    newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() drawPopUp("type") end, "showPop", 2);
-    newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() switchShowType() end, "showType", 1);
-    newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() drawPopUp("rockets") end, "rocketPop", 2);
-    newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() getNumRockets() end, "numRockets", 1);
-    newButton(20, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("shape", 20, 14) end, "shapeChance", 1);
-    newButton(41, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("effect", 41, 14) end, "effectChance", 1);
-    newButton(26, 16, 19, 3, "Start  Show", colors.green, colors.white, function() startShow() end, "startShow", 1);
+    newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() drawPopUp("type") end, "showPop", 2);                      --# showType popup
+    newButton(26, 5, 2, 1, "..", colors.gray, colors.white, function() switchShowType() end, "showType", 1);                      --# showType
+    newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() drawPopUp("rockets") end, "rocketPop", 2);            --# numRockets popup
+    newButton(41, 5, 4, 1, "25", colors.lightGray, colors.white, function() getNumRockets() end, "numRockets", 1);                --# numRockets
+    newButton(20, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("shape", 20, 14) end, "shapeChance", 1);   --# Shape percent chance
+    newButton(41, 14, 3, 1, "30", colors.lightGray, colors.white, function() getChance("effect", 41, 14) end, "effectChance", 1); --# Effect percent chance
+    newButton(26, 16, 19, 3, "Start  Show", colors.green, colors.white, function() startShow() end, "startShow", 1);              --# startShow
     --# add new buttons and pickers here, not at the end
     newNumberPicker(20, 8, 1, 1, 3, "minHeight", false, pickerChanged);          --# rocketHeight min
     newNumberPicker(34, 8, 3, 1, 3, "maxHeight", false, pickerChanged);          --# rocketHeight max
