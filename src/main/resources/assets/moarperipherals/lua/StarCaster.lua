@@ -460,7 +460,7 @@ local function drawHeader()
     end
     term.setBackgroundColor(colors.blue)
     term.setTextColor(colors.lightBlue)
-    term.setCursorPos(math.ceil(termX / 2 - math.floor(#title / 2) + 1), 2)
+    term.setCursorPos(math.ceil((termX / 2) - math.floor(#title / 2) + 1), 2)
     term.write(title)
   end
 end
