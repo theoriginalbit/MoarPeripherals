@@ -280,7 +280,7 @@ end
 
 local function formatTime(time)
   local hour = math.floor(time)
-  local minutes = math.floor((time - hour) * 60)
+  local minute = math.floor((time - hour) * 60)
   return string.format("%02d:%02d", hour, minute)
 end
 
