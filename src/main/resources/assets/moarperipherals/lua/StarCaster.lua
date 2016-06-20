@@ -5,7 +5,8 @@
 --[[   HydrantHunter    ]]--
 --[[        and         ]]--
 --[[   TheOriginalBIT   ]]--
---[[ pastebin: mwdc6bK9 ]]--
+--[[    pastebin:       ]]--
+--[[        mwdc6bK9    ]]--
 
 local scVer = "1.0.05"
 
@@ -13,9 +14,11 @@ local scVer = "1.0.05"
   --# newNumberPicker, pickerChanged, calculateMinMax, 
   --# inventory filtering, and dyeToColor functions, 
   --# and LOTS of tutoring, courtesy of theoriginalbit
+
 local tArgs = { ... }
 local termX, termY = term.getSize()
-local launcher, launchTimer, screenTimer, filter, selectStarShape, selectStarEffects, inventoryStar
+local launcher, launchTimer, screenTimer
+local filter, selectStarShape, selectStarEffects, inventoryStar, updateValue, updateVariable
 local effectsLookup = { "No Effect", "Twinkle", "Trail" }
 local shapes = { "Small Ball", "Large Ball", "Star", "Creeper Head", "Burst", "None" }
 local effects = { "No Effect", "Twinkle", "Trail", "Twinkle & Trail" }
@@ -31,32 +34,35 @@ local readyRocketID, launchHeight, starColors, starShape, starEffect, numStars
 local rocketParts, starIDTable, rocketIDTable, errorLog = { }, { }, { }, { }
 local colorsList, effectsList, shapesList, guiElements = { }, { }, { }, { }
 local colorsAvailable, effectsAvailable, shapesAvailable = { }, { }, { }
---# reference table for updating our values and variables as selected via picker
-local valueUpdate = {
-  { "minHeight", function() return minHeight end, function(value) minHeight = value end };
-  { "maxHeight", function() return maxHeight end, function(value) maxHeight = value end };
-  { "minStars", function() return minStars end, function(value) minStars = value end };
-  { "maxStars", function() return maxStars end, function(value) maxStars = value end };
-  { "minColors", function() return minColors end, function(value) minColors = value end };
-  { "maxColors", function() return maxColors end, function(value) maxColors = value end };
-}
 
 local function clearScreen(bgColor)
   term.setBackgroundColor(bgColor or colors.black)
   term.clear()
 end
 
-local function updateValue(name)
-  for _, v in pairs(valueUpdate) do
-    if v[1] == name then return v[2]() end
-  end
-end
+do
+  --# reference table for updating our values and variables as selected via picker
+  local valueUpdate = {
+    { "minHeight", function() return minHeight end, function(value) minHeight = value end };
+    { "maxHeight", function() return maxHeight end, function(value) maxHeight = value end };
+    { "minStars", function() return minStars end, function(value) minStars = value end };
+    { "maxStars", function() return maxStars end, function(value) maxStars = value end };
+    { "minColors", function() return minColors end, function(value) minColors = value end };
+    { "maxColors", function() return maxColors end, function(value) maxColors = value end };
+  }
 
-local function updateVariable(name, value)
-  for _, v in pairs(valueUpdate) do
-    if v[1] == name then
-      v[3](value)
-      break
+  updateValue = function(name)
+    for _, v in pairs(valueUpdate) do
+      if v[1] == name then return v[2]() end
+    end
+  end
+
+  updateVariable = function(name, value)
+    for _, v in pairs(valueUpdate) do
+      if v[1] == name then
+        v[3](value)
+        break
+      end
     end
   end
 end
@@ -913,10 +919,14 @@ end
 
 do
   local colorBurst = {
-    [1] = "White", [2] = "Orange", [4] = "Magenta", [8] = "Light Blue",
-    [16] = "Yellow", [32] = "Lime", [64] = "Pink", [128] = "Gray",
-    [256] = "Light Gray", [512] = "Cyan", [1024] = "Purple", [2048] = "Blue",
-    [4096] = "Brown", [8192] = "Green", [16384] = "Red", [32768] = "Black",
+    [1] = "White", [2] = "Orange",
+    [4] = "Magenta", [8] = "Light Blue",
+    [16] = "Yellow", [32] = "Lime",
+    [64] = "Pink", [128] = "Gray",
+    [256] = "Light Gray", [512] = "Cyan",
+    [1024] = "Purple", [2048] = "Blue",
+    [4096] = "Brown", [8192] = "Green",
+    [16384] = "Red", [32768] = "Black",
   }
 
   inventoryStar = function(id)
@@ -1561,24 +1571,14 @@ local function logInput()
       end
     end
   elseif event == "mouse_scroll" then
-    if button == 1 then
-      pageNum = math.min(numPages, pageNum + 1)
-    elseif button == -1 then
-      pageNum = math.max(1, pageNum - 1)
-    end
+    pageNum = button == 1 and math.min(numPages, pageNum + 1) or math.max(1, pageNum - 1)
     logScreen()
   elseif event == "key" then
-    if button == keys.home then
-      pageNum = 1
+    if button == keys.home or button == keys["end"] then
+      pageNum = button == keys.home and 1 or numPages
       logScreen()
-    elseif button == keys["end"] then
-      pageNum = numPages
-      logScreen()
-    elseif button == keys.pageUp then
-      pageNum = math.min(numPages, pageNum + 1)
-      logScreen()
-    elseif button == keys.pageDown then
-      pageNum = math.max(1, pageNum - 1)
+    elseif button == keys.pageUp or button == keys.pageDown then
+      pageNum = button == keys.pageUp and math.max(1, pageNum - 1) or math.min(numPages, pageNum + 1)
       logScreen()
     end
   end
@@ -1732,7 +1732,7 @@ if tArgs[1] then
         term.setCursorPos(15, termY - 1)
         term.setTextColor(colors.gray)
         term.write("By: Dog and TheOriginalBIT")
-        sleep(1)
+        sleep(2)
       end
     end
   end
