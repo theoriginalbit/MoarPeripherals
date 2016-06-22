@@ -1702,7 +1702,6 @@ local function initHardware()
     os.pullEvent("mouse_click")
     clearScreen()
     term.setCursorPos(1, 1)
-    runMode = "stop"
     return false
   end
   return true
@@ -1758,6 +1757,7 @@ guiElements = {
     newNumberPicker(20, 12, 1, 1, 8, "minColors", false, pickerChanged);         --# minColors
     newNumberPicker(34, 12, maxColors, 1, 8, "maxColors", false, pickerChanged); --# maxColors
   }, 
+
   logButtons = {
     newButton(17, termY, 2, 1, "<<", colors.lightGray, colors.gray, function() pageNum = 1 logScreen() end, "home", 1);
     newButton(20, termY, 1, 1, "<", colors.lightGray, colors.gray, function() pageNum = math.max(1, pageNum - 1) logScreen() end, "pageMinus", 1);
