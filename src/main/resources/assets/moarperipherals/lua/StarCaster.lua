@@ -8,7 +8,7 @@
 --[[    pastebin:       ]]--
 --[[        mwdc6bK9    ]]--
 
-local scVer = "1.0.05"
+local scVer = "1.1.00"
 
 --# Custom read, formatTime, newButton, 
   --# newNumberPicker, pickerChanged, calculateMinMax, 
@@ -314,8 +314,7 @@ local function getChance(which, posX, posY)
   term.setCursorPos(posX, posY)
   local newChance = tonumber(read(nil, nil, 3))
   if which == "shape" then
-    newChance = newChance and math.max(0, newChance) or shapeChance
-    shapeChance = math.min(100, newChance)
+    shapeChance = newChance and math.max(0, math.min(newChance, 100)) or shapeChance
     for _, element in pairs(guiElements.mainButtons) do
       if element.getType() == "button" and (element.getName() == "shapeChance" or element.getName() == "shapePop") then
         element.setText(tostring(shapeChance))
@@ -323,8 +322,7 @@ local function getChance(which, posX, posY)
       end
     end
   elseif which == "effect" then
-    newChance = newChance and math.max(0, newChance) or effectChance
-    effectChance = math.min(100, newChance)
+    effectChance = newChance and math.max(0, math.min(newChance, 100)) or effectChance
     for _, element in pairs(guiElements.mainButtons) do
       if element.getType() == "button" and (element.getName() == "effectChance" or element.getName() == "effectPop") then
         element.setText(tostring(effectChance))
@@ -425,7 +423,7 @@ local function drawHeader()
     term.setCursorPos(1, 2)
     term.setBackgroundColor(colors.gray)
     term.setTextColor(colors.lightGray)
-    local session = (sessionNumber > 10 and "Show  # " or "Show # ") .. sessionNumber
+    local session = (sessionNumber > 9 and "Show  # " or "Show # ") .. sessionNumber
     term.write(string.rep(" ", math.floor(termX / 2) - math.ceil(#session / 2)) .. session .. string.rep(" ", math.ceil(termX / 2) - math.floor(#session / 2)))
     term.setCursorPos(termX - 9, 2)
     term.setBackgroundColor(colors.lightGray)
@@ -1029,8 +1027,7 @@ do
   selectStarShape = function()
     starShape = 0
     local shapeWheel = { }
-    local shapesCount = countItems(shapesAvailable) --# get the number of available shapes in inventory
-    if shapesCount > 0 then                         --# if there is at least 1 shape...
+    if countItems(shapesAvailable) > 0 then         --# if there is at least 1 shape available in inventory...
       for k, v in pairs(shapesAvailable) do         --# ...go through the shapesAvailable table and...
         if v > 0 then                               --# ...if there is at least 1 shape...
           shapeWheel[#shapeWheel + 1] = k           --# ...add it to the shapeWheel table
@@ -1052,27 +1049,25 @@ do
         end
         starShape = newStarShape                    --# commit to the new shape
       end
-      shapesList[#shapesList + 1] = starShape       --# add shape entry to shapesList table
     else
       starShape = 0                                 --# no special star shape generated (use Small Ball)
-      shapesList[#shapesList + 1] = starShape       --# add shape entry to shapesList table
     end
+    shapesList[#shapesList + 1] = starShape         --# add shape entry to shapesList table
     return true
   end
 
   selectStarEffects = function()
     starEffect = 0
     local effectWheel = { }
-    local effectsCount = countItems(effectsAvailable) --# get the number of available effects in inventory
-    if effectsCount > 0 then                          --# if there's at least 1 effect...
-      for k, v in pairs(effectsAvailable) do          --# ...go through the effectsAvailalbe table and...
-        if v > 0 then                                 --# ...if there is at least 1 effect...
-          effectWheel[#effectWheel + 1] = k           --# ...add it to the effectWheel table
+    if countItems(effectsAvailable) > 0 then        --# if there's at least 1 effect available in inventory...
+      for k, v in pairs(effectsAvailable) do        --# ...go through the effectsAvailalbe table and...
+        if v > 0 then                               --# ...if there is at least 1 effect...
+          effectWheel[#effectWheel + 1] = k         --# ...add it to the effectWheel table
         end
       end
-      if #effectWheel < 1 then                        --# if there are no effects available...
-        starEffect = 0                                --# ...set the effect to 'none'...
-      else                                            --# ...otherwise randomize for a possible effect
+      if #effectWheel < 1 then                      --# if there are no effects available...
+        starEffect = 0                              --# ...set the effect to 'none'...
+      else                                          --# ...otherwise randomize for a possible effect
         starEffect = (math.random(1, 100) <= effectChance) and math.random(1, #effectWheel + 1) or 0 --# chance to generate either trail, sparkle, both, or none
       end
       if #effectWheel < 2 then starEffect = math.min(starEffect, #effectWheel) end  --# ensure a valid value
@@ -1081,17 +1076,16 @@ do
         for i = 1, #ingredientValues do                     --# ...find the effect in the ingredients list and decrement the inventory accordingly
           if effectWheel[starEffect]:find(ingredientValues[i][1]) and effectsAvailable[ingredientValues[i][1]] > 0 then
             effectsAvailable[ingredientValues[i][1]] = effectsAvailable[ingredientValues[i][1]] - 1
-            newStarEffect = ingredientValues[i][2]    --# set the effect value
+            newStarEffect = ingredientValues[i][2]  --# set the effect value
             break
           end
         end
-        starEffect = newStarEffect                    --# commit to the new effect
+        starEffect = newStarEffect                  --# commit to the new effect
       end
-      effectsList[#effectsList + 1] = starEffect      --# add effect entry to effectsList table
     else
-      starEffect = 0                                  --# no special star effect generated (use 'none')
-      effectsList[#effectsList + 1] = starEffect      --# add effect entry to effectsList table
+      starEffect = 0                                --# no special star effect generated (use 'none')
     end
+    effectsList[#effectsList + 1] = starEffect      --# add effect entry to effectsList table
     return true
   end
 end
@@ -1099,7 +1093,6 @@ end
 local function selectStarColors()
   starColors = 0
   local colorWheel = { }
-    --# generate the colors
   local colorsCount = countItems(colorsAvailable) --# determine the number of colors available
   if colorsCount > 0 then                         --# if there is at least 1 color available...
     local numColors = math.random(minColors, maxColors) --# ...choose a random color from the list
@@ -1708,6 +1701,7 @@ local function initHardware()
 end
 
 if not os.getComputerLabel() then os.setComputerLabel("StarCaster") end
+
 if not initHardware() then return end
 
 if tArgs[1] then
@@ -1726,7 +1720,13 @@ if tArgs[1] then
         runMode = "debug"
       elseif string.lower(tArgs[i]) == "splash" then
         clearScreen()
-        local splash = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 16, 16, 16, 16, 16, 32768, 0, 0, 0, 32, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 0, 8192, 0, 0, 2, 0, 2048, 0, 0, 0, 0, }, { 0, 0, 0, 16384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 32768, 32, 0, 32, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1024, 0, 32768, 0, 0, 1024, 0, 0, 0, 0, 1, 0, 0, }, { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2048, 0, 0, 8192, 0, 32768, 0, 0, 8192, }, { 0, 0, 0, 0, 0, 0, 0, 32768, 16384, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 32, 32, 32, 32, 32768, 0, 4, 0, 32768, 32768, 4, 0, 0, 0, 0, 0, 8192, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 512, 0, 0, }, { 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 32768, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 0, 0, 32768, 4, 0, 0, 0, 32768, 0, 0, 0, 32768, 32768, 1024, 0, 0, 512, 0, 2, 0, 0, 16, 0, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 8192, 0, 0, 0, 0, 1, 0, 32768, 0, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2048, 0, 0, 32768, 1024, 32768, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1024, 0, 2, 0, 32768, 8192, 0, 0, 0, }, { 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 32768, 0, 8, 0, 0, 0, 0, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 32768, 32768, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 32768, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 32768, 8, 0, 8, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 8, 8, 8, 32768, 0, 0, 0, 8, 32768, 0, 0, 8, 8, 8, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 8, 32768, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 32768, 8, 8, 8, 8, 8, 0, 8, 32768, 0, 0, 8, 0, 8, 8, 8, 8, 0, 0, 0, 32768, 8, 0, 0, 0, 8, 8, 8, 8, 8, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, }
+        local splash = {
+          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 16, 16, 16, 16, 16, 32768, 0, 0, 0, 32, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 0, 8192, 0, 0, 2, 0, 2048, 0, 0, 0, 0, }, { 0, 0, 0, 16384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 32768, 32, 0, 32, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1024, 0, 32768, 0, 0, 1024, 0, 0, 0, 0, 1, 0, 0, },
+          { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2048, 0, 0, 8192, 0, 32768, 0, 0, 8192, }, { 0, 0, 0, 0, 0, 0, 0, 32768, 16384, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 32, 32, 32, 32, 32768, 0, 4, 0, 32768, 32768, 4, 0, 0, 0, 0, 0, 8192, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 512, 0, 0, }, { 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 32768, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 0, 0, 32768, 4, 0, 0, 0, 32768, 0, 0, 0, 32768, 32768, 1024, 0, 0, 512, 0, 2, 0, 0, 16, 0, },
+          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 8192, 0, 0, 0, 0, 1, 0, 32768, 0, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2048, 0, 0, 32768, 1024, 32768, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1024, 0, 2, 0, 32768, 8192, 0, 0, 0, },
+          { 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 32768, 0, 8, 0, 0, 0, 0, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 32768, 32768, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 32768, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 32768, 8, 0, 8, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 8, 8, 8, 32768, 0, 0, 0, 8, 32768, 0, 0, 8, 8, 8, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+          { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 8, 32768, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 32768, 8, 8, 8, 8, 8, 0, 8, 32768, 0, 0, 8, 0, 8, 8, 8, 8, 0, 0, 0, 32768, 8, 0, 0, 0, 8, 8, 8, 8, 8, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+        }
         paintutils.drawImage(splash, 1, 1)
         term.setCursorPos(15, termY - 1)
         term.setTextColor(colors.gray)
