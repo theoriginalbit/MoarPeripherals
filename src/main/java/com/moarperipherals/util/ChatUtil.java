@@ -32,7 +32,11 @@ public final class ChatUtil {
         for (EnumChatFormatting formatting : EnumChatFormatting.values()) {
             message = message.replace(PREFIX + formatting.getFormattingCode(), formatting.toString());
         }
-
+        if (message.length() > 5000){
+            // too long, can crash a player, 
+            // and who is going to send a message that is over 5k characters
+            return;
+        }
         final ChatComponentText msg = new ChatComponentText(message);
         for (String user : to) {
             final EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(user);
