@@ -9,12 +9,10 @@
 --[[        mwdc6bK9    ]]--
 
 local scVer = "1.1.00"
-
 --# Custom read, formatTime, newButton, 
   --# newNumberPicker, pickerChanged, calculateMinMax, 
   --# inventory filtering, and dyeToColor functions, 
   --# and LOTS of tutoring, courtesy of theoriginalbit
-
 local tArgs = { ... }
 local termX, termY = term.getSize()
 local launcher, launchTimer, screenTimer
@@ -374,38 +372,35 @@ local function switchShowType()
   term.write("%") --# Effect Chance
 end
 
-local function drawPopUpBox(x, y, w, text)
+local function drawPopUpBox(x, y, text)
   term.setBackgroundColor(colors.white)
   term.setTextColor(colors.gray)
-  local line = string.rep(" ", w)
-  for i = 1, 5 do --# draw the box
-    term.setCursorPos(x, y + i)
-    term.write(line)
-  end
-  for i = 1, 3 do --# write the text
-    term.setCursorPos(x + 1, y + i + 1)
-    term.write(text[i])
+  local line = string.rep(" ", #text[1])
+  for i = 1, 5 do --# draw the box and write the text
+    term.setCursorPos(x, y + i - 1)
+    term.write((i == 1 or i == 5) and line or text[i - 1])
   end
 end
 
 local function drawPopUp(which)
   popUp = true
   if which == "shape" then       --# Shape Chance popup
-    drawPopUpBox(4, 8, 23, { "The percentage chance", "any star will have a", "special shape" })
+    drawPopUpBox(4, 9, { " The percentage chance ", " any star will have a  ", " special shape         " })
   elseif which == "effect" then  --# Effect Chance popup
-    drawPopUpBox(24, 8, 23, { "The percentage chance", "any star will have a", "special effect" })
+    drawPopUpBox(24, 9, { " The percentage chance ", " any star will have a  ", " special effect        " })
   elseif which == "pacing" then  --# Launch Timing popup
-    drawPopUpBox(5, 10, 19, { "When ON, launches", "the fireworks at", "a more rapid pace" })
+    drawPopUpBox(5, 11, { " When ON, launches ", " the fireworks at  ", " a more rapid pace " })
   elseif which == "finale" then  --# Finale Mode popup
-    drawPopUpBox(4, 12, 21, { "When ON, launches", "the last 1/3 of the", "fireworks rapidly" })
+    drawPopUpBox(4, 13, { " When ON, launches   ", " the last 1/3 of the ", " fireworks rapidly   " })
   elseif which == "type" then    --# Show Type popup
-    drawPopUpBox(18, 5, 19, { "Fancy allows you", "to customize your", "firework show" })
+    drawPopUpBox(18, 6, { " Fancy allows you  ", " to customize your ", " firework show     " })
   elseif which == "rockets" then --# Number of Fireworks popup
-    drawPopUpBox(31, 5, 18, { "Choose to launch", "from 1 to 1000", "fireworks" })
+    drawPopUpBox(31, 6, { " Choose to launch ", " from 1 to 1000   ", " fireworks        " })
   end
 end
 
-local function drawSwitch(state)
+local function drawSwitch(x, y, state)
+  term.setCursorPos(x, y)
   term.setBackgroundColor(state and colors.green or colors.gray)
   term.write("  ")
   term.setBackgroundColor(state and colors.gray or colors.red)
@@ -599,22 +594,19 @@ local function mainScreen()
   term.setCursorPos(36, 7)
   term.write("Maximum")
   term.setTextColor(colors.gray)
-  local word, counter = "F1 Help", 0
-  for i = 8, 15 do            --# F1/Help text
-    counter = counter + 1
+  local word = "F1 Help"
+  for i = 8, 15 do               --# F1/Help text
     term.setCursorPos(termX, i)
-    term.write(word:sub(counter, counter))
+    term.write(word:sub(i - 7, i - 7))
   end
   term.setBackgroundColor(colors.lightGray)
   term.setTextColor(showType and colors.white or colors.gray)
   term.setCursorPos(23, 14)
-  term.write("%")             --# shapeChance
+  term.write("%")                --# shapeChance
   term.setCursorPos(44, 14)
-  term.write("%")             --# effectChance
-  term.setCursorPos(20, 16)
-  drawSwitch(showPacing)      --# launch timing switch
-  term.setCursorPos(20, 18)
-  drawSwitch(finaleMode)      --# finale mode switch
+  term.write("%")                --# effectChance
+  drawSwitch(20, 16, showPacing) --# launch timing switch
+  drawSwitch(20, 18, finaleMode) --# finale mode switch
   for _, element in pairs(guiElements.mainButtons) do
     if element.getType() == "button" then
       if element.getName():find("Chance") then
@@ -858,7 +850,7 @@ local function drawTimer()
 end
 
 local function adjustTimer()
-    --# Set timing for next launch
+  --# Set timing for next launch
   if currentRocket >= math.ceil(numRockets * 0.66) + 1 and finaleMode and not wereDoneHere and not goFinale then goFinale = true end
   if goFinale then
     waitTime = 0.10 * math.random(3, 5)     --# = 0.30
@@ -989,7 +981,7 @@ local function inventoryFirework(id)
       end
     end
     numStars = #fwStarEntries                    --# the number of stars equals the number of star entries
-    for i = 1, #fwStarEntries do                 --# process each star in sequence
+    for i = 1, numStars do                       --# process each star in sequence
       local newStar = { }                        --# this table will hold the info for each star as it's inventoried
       local startEntry = fwStarEntries[i]        --# set the 'start' entry
       local stopEntry = fwStarEntries[i + 1] and fwStarEntries[i + 1] - 1 or #thisFirework --# set the 'stop' entry
@@ -1603,16 +1595,14 @@ local function mainInput()
     elseif y == 16 and x > 19 and x < 24 and not gettingHelp and not popUp then --# showPacing (launch timing)
       if button == 1 then
         showPacing = not showPacing
-        term.setCursorPos(20, 16)
-        drawSwitch(showPacing)
+        drawSwitch(20, 16, showPacing)
       elseif button == 2 then
         drawPopUp("pacing")
       end
     elseif y == 18 and x > 19 and x < 24 and not gettingHelp and not popUp then --# finaleMode
       if button == 1 then
         finaleMode = not finaleMode
-        term.setCursorPos(20, 18)
-        drawSwitch(finaleMode)
+        drawSwitch(20, 18, finaleMode)
       elseif button == 2 then
         drawPopUp("finale")
       end
@@ -1721,11 +1711,21 @@ if tArgs[1] then
       elseif string.lower(tArgs[i]) == "splash" then
         clearScreen()
         local splash = {
-          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 16, 16, 16, 16, 16, 32768, 0, 0, 0, 32, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 0, 8192, 0, 0, 2, 0, 2048, 0, 0, 0, 0, }, { 0, 0, 0, 16384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 32768, 32, 0, 32, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1024, 0, 32768, 0, 0, 1024, 0, 0, 0, 0, 1, 0, 0, },
-          { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2048, 0, 0, 8192, 0, 32768, 0, 0, 8192, }, { 0, 0, 0, 0, 0, 0, 0, 32768, 16384, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 32, 32, 32, 32, 32768, 0, 4, 0, 32768, 32768, 4, 0, 0, 0, 0, 0, 8192, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 512, 0, 0, }, { 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 32768, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 0, 0, 32768, 4, 0, 0, 0, 32768, 0, 0, 0, 32768, 32768, 1024, 0, 0, 512, 0, 2, 0, 0, 16, 0, },
-          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 8192, 0, 0, 0, 0, 1, 0, 32768, 0, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2048, 0, 0, 32768, 1024, 32768, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1024, 0, 2, 0, 32768, 8192, 0, 0, 0, },
-          { 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 32768, 0, 8, 0, 0, 0, 0, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 32768, 32768, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 32768, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 32768, 8, 0, 8, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 0, }, { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 8, 8, 8, 32768, 0, 0, 0, 8, 32768, 0, 0, 8, 8, 8, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-          { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 8, 32768, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 32768, 8, 8, 8, 8, 8, 0, 8, 32768, 0, 0, 8, 0, 8, 8, 8, 8, 0, 0, 0, 32768, 8, 0, 0, 0, 8, 8, 8, 8, 8, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+          { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 16, 16, 16, 16, 16, 32768, 0, 0, 0, 32, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 0, 8192, 0, 0, 2, 0, 2048, 0, 0, 0, 0, },
+          { 0, 0, 0, 16384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 32768, 32, 0, 32, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1024, 0, 32768, 0, 0, 1024, 0, 0, 0, 0, 1, 0, 0, },
+          { 0, 0, 0, 0, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2048, 0, 0, 8192, 0, 32768, 0, 0, 8192, },
+          { 0, 0, 0, 0, 0, 0, 0, 32768, 16384, 0, 0, 0, 0, 16, 0, 0, 0, 32768, 32, 32, 32, 32, 32, 32768, 0, 4, 0, 32768, 32768, 4, 0, 0, 0, 0, 0, 8192, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 512, 0, 0, },
+          { 0, 0, 0, 16384, 16384, 16384, 16384, 16384, 0, 0, 0, 0, 0, 16, 0, 0, 32768, 32768, 32, 0, 0, 0, 32, 0, 0, 4, 0, 0, 32768, 4, 0, 0, 0, 32768, 0, 0, 0, 32768, 32768, 1024, 0, 0, 512, 0, 2, 0, 0, 16, 0, },
+          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 8192, 0, 0, 0, 0, 1, 0, 32768, 0, },
+          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2048, 0, 0, 32768, 1024, 32768, },
+          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1024, 0, 2, 0, 32768, 8192, 0, 0, 0, },
+          { 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 32768, 0, 8, 0, 0, 0, 0, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 8, 32768, 8, 8, 8, 8, 32768, 32768, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 32768, 0, 32768, 0, },
+          { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 32768, 8, 0, 8, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 32768, 0, },
+          { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 8, 8, 8, 32768, 0, 0, 0, 8, 32768, 0, 0, 8, 8, 8, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+          { 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 8, 32768, 0, 0, 8, 0, 0, 0, 8, 32768, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+          { 0, 0, 0, 32768, 8, 8, 8, 8, 8, 0, 8, 32768, 0, 0, 8, 0, 8, 8, 8, 8, 0, 0, 0, 32768, 8, 0, 0, 0, 8, 8, 8, 8, 8, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+          { 0, 0, 0, 0, 32768, 32768, 32768, 32768, 32768, 32768, 32768, 0, 0, 0, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
         }
         paintutils.drawImage(splash, 1, 1)
         term.setCursorPos(15, termY - 1)
