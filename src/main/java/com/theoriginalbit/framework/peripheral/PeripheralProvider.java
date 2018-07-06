@@ -50,7 +50,7 @@ public final class PeripheralProvider implements IPeripheralProvider {
     public final IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
         TileEntity tile = world.getTileEntity(x, y, z);
 
-        if (tile.isInvalid()) {
+        if (tile == null || tile.isInvalid()) {
             return null;
         }
 
